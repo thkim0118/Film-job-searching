@@ -8,7 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -47,7 +49,7 @@ fun SplashScreen(
     ) {
         Image(
             modifier = Modifier.align(Alignment.Center),
-            painter = painterResource(id = R.drawable.splash_logo),
+            imageVector = ImageVector.vectorResource(id = R.drawable.splash_fone_logo),
             contentDescription = null
         )
     }

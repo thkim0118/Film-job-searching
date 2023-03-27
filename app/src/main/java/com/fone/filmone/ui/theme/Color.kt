@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 object FColor {
     val White = Color(0xFFFFFFFF)
     val Black = Color(0xFF000000)
+    val Transparent = Color.Transparent
 
     val Gray900 = Color(0xFF161616)
     val Gray700 = Color(0xFF555555)
@@ -74,4 +75,13 @@ object FColor {
     val Error = RC400
     val DimColorThin = Color(red = 0f, green = 0f, blue = 0f, alpha = 0.3f)
     val DimColorBasic = Color(red = 0f, green = 0f, blue = 0f, alpha = 0.5f)
+
+    val Kakao = Color(0xFFFEE500)
+    val Naver = Color(0xFF03C75A)
+
+    val ColorF5F5F5 = Color(0xFFF5F5F5)
+    val Color9E9E9E = Color(0xFF9E9E9E)
+    val Color757575 = Color(0xFF757575)
+    val Color666666 = Color(0xFF666666)
+    val Color3C3C3C = Color(0xFF3C3C3C)
 }

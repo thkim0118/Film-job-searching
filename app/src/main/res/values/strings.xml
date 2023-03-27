@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">FilmOne</string>
+
+    <!--    login-->
+    <string name="login_title">간편 로그인으로 F-ONE을\n즐겨보세요!</string>
+    <string name="login_kakao_title">카카오톡으로 로그인</string>
+    <string name="login_naver_title">네이버로 로그인</string>
+    <string name="login_google_title">구글로 로그인</string>
+    <string name="login_apple_title">Apple로 로그인</string>
+    <string name="login_inquiry_title">다른 질문이 있으신가요?</string>
+    <string name="login_inquiry_text">문의하기</string>
+
 </resources>
