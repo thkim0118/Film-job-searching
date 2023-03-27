@@ -10,6 +10,8 @@ private val DarkColorPalette = darkColors(
 )
 
 private val LightColorPalette = lightColors(
+    primary = FColor.Red300,
+    secondary = FColor.Violet500,
 )
 
 @Composable
