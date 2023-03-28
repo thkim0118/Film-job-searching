@@ -1,4 +1,4 @@
-package com.fone.filmone.ui.common.ext
+package com.fone.filmone.ui.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -9,16 +9,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fone.filmone.R
+import com.fone.filmone.ui.common.ext.fTextStyle
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
-import com.fone.filmone.ui.theme.Pretendard
 
 @Composable
 fun TitleBar(
@@ -51,8 +50,7 @@ fun TitleBar(
         Text(
             modifier = Modifier.weight(1f),
             text = titleText,
-            style = TextStyle(
-                fontFamily = Pretendard,
+            style = fTextStyle(
                 fontWeight = FontWeight.W700,
                 fontSize = 19.sp,
                 lineHeight = 26.sp,
