@@ -50,7 +50,6 @@ fun SignUpFirstScreen(
             modifier = Modifier
                 .padding(horizontal = 20.dp)
         ) {
-
             Spacer(modifier = Modifier.height(40.dp))
 
             SignUpIndicator(indicatorType = IndicatorType.First)
@@ -84,9 +83,7 @@ fun SignUpFirstScreen(
 
             FavoriteTags()
 
-            Spacer(
-                modifier = Modifier.weight(1f)
-            )
+            Spacer(modifier = Modifier.height(203.dp))
 
             FButton(
                 title = stringResource(id = R.string.sign_up_next_title),

@@ -33,4 +33,16 @@
     <string name="sign_up_first_choice_favorite_promotion_viral">홍보 / 바이럴</string>
     <string name="sign_up_first_choice_favorite_etc">기타</string>
 
+    <string name="sign_up_second_title">기본 정보를 입력해 주세요</string>
+    <string name="sign_up_second_nickname_title">닉네임</string>
+    <string name="sign_up_second_nickname_hint">3~8자리의 숫자, 영어, 한글만 가능합니다.</string>
+    <string name="sign_up_second_nickname_check_duplicate">중복확인</string>
+    <string name="sign_up_second_birthday_sex_title">생년월일 및 성별</string>
+    <string name="sign_up_second_birthday_sex_subtitle">성별과 생년월일의 정보는 변경이 불가능합니다.</string>
+    <string name="sign_up_second_birthday_sex_hint">YYYY-MM-DD</string>
+    <string name="sign_up_second_birthday_sex_man">남자</string>
+    <string name="sign_up_second_birthday_sex_woman">여자</string>
+    <string name="sign_up_second_profile_title">프로필 사진 등록</string>
+    <string name="sign_up_second_profile_subtitle">필수 선택사항이 아니며 기본 프로필 사진이 등록됩니다.</string>
+
 </resources>
