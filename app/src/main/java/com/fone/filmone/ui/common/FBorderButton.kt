@@ -1,6 +1,5 @@
 package com.fone.filmone.ui.common
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -14,15 +13,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
-import com.fone.filmone.ui.theme.LocalTypography
 
 @Composable
 fun FBorderButton(
     modifier: Modifier = Modifier,
     text: String,
-    enable: Boolean
+    enable: Boolean,
+    onClick: () -> Unit = {}
 ) {
     Box(
         modifier = modifier
@@ -36,6 +36,7 @@ fun FBorderButton(
                 },
                 shape = RoundedCornerShape(5.dp)
             )
+            .clickableSingleWithNoRipple { onClick.invoke() }
             .padding(horizontal = 16.dp, vertical = 13.dp),
         contentAlignment = Alignment.Center
     ) {
