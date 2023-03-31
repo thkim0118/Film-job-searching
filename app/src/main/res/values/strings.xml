@@ -58,4 +58,7 @@
     <string name="sign_up_third_agree_marketing">마케팅 정보수신 동의(선택)</string>
     <string name="sign_up_third_button_title">회원가입</string>
 
+    <string name="sign_up_complete_title_1">님!\n</string>
+    <string name="sign_up_complete_title_2">에프원 회원가입을 환영합니다.</string>
+    <string name="sign_up_complete_button_title">로그인하기</string>
 </resources>
