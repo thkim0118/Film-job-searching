@@ -10,4 +10,27 @@
     <string name="login_inquiry_title">다른 질문이 있으신가요?</string>
     <string name="login_inquiry_text">문의하기</string>
 
+    <!--    sign_up-->
+    <string name="sign_up_title_text">회원가입</string>
+    <string name="sign_up_next_title">다음</string>
+
+    <string name="sign_up_first_title">직업과 관심사 선택으로\n맞춤 설정 끝 !</string>
+    <string name="sign_up_first_choice_job">직업 선택</string>
+    <string name="sign_up_first_choice_job_subtitle">(추후 변경 가능)</string>
+    <string name="sign_up_first_choice_favorite">관심사 선택</string>
+    <string name="sign_up_first_choice_favorite_subtitle">(중복 선택 가능)</string>
+    <string name="sign_up_first_choice_job_actor">ACTOR</string>
+    <string name="sign_up_first_choice_job_staff">STAFF</string>
+    <string name="sign_up_first_choice_job_normal">NORMAL</string>
+    <string name="sign_up_first_choice_job_hunter">HUNTER</string>
+    <string name="sign_up_first_choice_favorite_long_film">장편영화</string>
+    <string name="sign_up_first_choice_favorite_short_film">단편영화</string>
+    <string name="sign_up_first_choice_favorite_independent_film">독립영화</string>
+    <string name="sign_up_first_choice_favorite_web_drama">웹 드라마</string>
+    <string name="sign_up_first_choice_favorite_music_video_cf">뮤비 / CF</string>
+    <string name="sign_up_first_choice_favorite_ott_tv_drama">OTT/TV 드라마</string>
+    <string name="sign_up_first_choice_favorite_youtube">유튜브</string>
+    <string name="sign_up_first_choice_favorite_promotion_viral">홍보 / 바이럴</string>
+    <string name="sign_up_first_choice_favorite_etc">기타</string>
+
 </resources>

@@ -1,4 +1,4 @@
-package com.fone.filmone.ui.common.ext
+package com.fone.filmone.ui.common
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle

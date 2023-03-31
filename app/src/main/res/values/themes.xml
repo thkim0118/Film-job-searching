@@ -3,5 +3,6 @@
 
     <style name="Theme.FilmOne" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 </resources>
