@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -93,26 +92,23 @@ fun SignUpThirdScreen(
 private fun PhoneVerificationComponent() {
     val isVerificationCodeSend by rememberSaveable { mutableStateOf(true) }
 
-    Text(
-        text = stringResource(id = R.string.sign_up_third_phone_number_title),
-        style = LocalTypography.current.subtitle1
+    FTextField(
+        onValueChange = { value -> },
+        placeholder = stringResource(id = R.string.sign_up_third_phone_number_placeholder),
+        topText = TopText(
+            title = stringResource(id = R.string.sign_up_third_phone_number_title),
+            titleStar = false,
+        ),
+        borderButtons = listOf(
+            BorderButton(
+                text = stringResource(id = R.string.sign_up_third_phone_number_send_title),
+                enable = false,
+                onClick = {
+
+                }
+            )
+        )
     )
-
-    Spacer(modifier = Modifier.height(8.dp))
-
-    Row {
-        TextField(
-            value = "test",
-            onValueChange = { value ->
-
-            }
-        )
-
-        FBorderButton(
-            text = stringResource(id = R.string.sign_up_third_phone_number_send_title),
-            enable = false
-        )
-    }
 
     Column(
         modifier = Modifier
@@ -126,19 +122,28 @@ private fun PhoneVerificationComponent() {
     ) {
         Spacer(modifier = Modifier.height(40.dp))
 
-        Row {
-            TextField(
-                value = "test",
-                onValueChange = { value ->
+        FTextField(
+            onValueChange = { value -> },
+            placeholder = stringResource(id = R.string.sign_up_third_phone_number_verification_code_placeholder),
+            borderButtons = listOf(
+                BorderButton(
+                    text = stringResource(id = R.string.sign_up_third_phone_number_check_code),
+                    enable = false,
+                    onClick = {
 
-                }
+                    }
+                )
+            ),
+            textFieldTail = FTextFieldTail.Text(
+                text = "3:00",
+                style = fTextStyle(
+                    fontWeight = FontWeight.W400,
+                    fontSize = 12.sp,
+                    lineHeight = 14.sp,
+                    color = FColor.ColorFF5841
+                )
             )
-
-            FBorderButton(
-                text = stringResource(id = R.string.sign_up_third_phone_number_check_code),
-                enable = false
-            )
-        }
+        )
 
         Spacer(modifier = Modifier.height(4.dp))
 

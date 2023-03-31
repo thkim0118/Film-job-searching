@@ -16,14 +16,15 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TextFieldDefaults.indicatorLine
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -54,7 +55,9 @@ fun FTextField(
         titleStar = false,
     ),
     bottomType: BottomType = BottomType.Empty,
-    borderButton: BorderButton? = null,
+    bottomSpacer: Dp = 0.dp,
+    borderButtons: List<BorderButton>? = null,
+    textFieldTail: FTextFieldTail? = null,
     singleLine: Boolean = true,
     maxLines: Int = 1,
     readOnly: Boolean = false,
@@ -155,6 +158,14 @@ fun FTextField(
                                         )
                                     )
                                 }
+
+                                if (topText.subtitle.isNotEmpty()) {
+                                    Text(
+                                        text = topText.subtitle,
+                                        style = LocalTypography.current.label,
+                                        color = FColor.DisablePlaceholder
+                                    )
+                                }
                             }
 
                             Spacer(modifier = Modifier.height(8.dp))
@@ -164,7 +175,7 @@ fun FTextField(
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
-                                    .height(45.dp)
+                                    .height(42.dp)
                                     .clip(shape = RoundedCornerShape(cornerRounded.dp))
                                     .border(
                                         width = 1.dp,
@@ -201,26 +212,39 @@ fun FTextField(
                                     visualTransformation = visualTransformation,
                                     innerTextField = @Composable {
                                         Row(
-                                            modifier = Modifier.fillMaxWidth()
+                                            modifier = Modifier.fillMaxWidth(),
+                                            verticalAlignment = Alignment.CenterVertically
                                         ) {
-                                            Box(
-                                                modifier = Modifier.weight(1f)
-                                            ) {
-                                                if (isFocused) {
-                                                    innerTextField.invoke()
-                                                } else {
-                                                    Text(
-                                                        text = textFieldValue.text,
-                                                        style = fTextStyle(
-                                                            fontWeight = FontWeight.W400,
-                                                            fontSize = 14.sp,
-                                                            lineHeight = 19.sp,
-                                                            color = textColor,
-                                                        ),
-                                                        overflow = TextOverflow.Ellipsis
-                                                    )
+//                                            Row(
+//                                                modifier = Modifier.weight(1f)
+//                                            ) {
+//                                                if (isFocused) {
+//                                                    innerTextField.invoke()
+//                                                } else {
+                                            Text(
+                                                modifier = Modifier.weight(1f),
+                                                text = textFieldValue.text,
+                                                style = fTextStyle(
+                                                    fontWeight = FontWeight.W400,
+                                                    fontSize = 14.sp,
+                                                    lineHeight = 19.sp,
+                                                    color = textColor,
+                                                ),
+                                                overflow = TextOverflow.Ellipsis
+                                            )
+
+                                            if (textFieldTail != null) {
+                                                when (textFieldTail) {
+                                                    is FTextFieldTail.Text -> {
+                                                        Text(
+                                                            text = textFieldTail.text,
+                                                            style = textFieldTail.style
+                                                        )
+                                                    }
                                                 }
                                             }
+//                                                }
+//                                            }
                                         }
                                     },
                                     placeholder = @Composable {
@@ -258,7 +282,7 @@ fun FTextField(
                                 )
                             }
 
-                            if (borderButton != null) {
+                            borderButtons?.forEach { borderButton ->
                                 Spacer(modifier = Modifier.width(4.dp))
 
                                 FBorderButton(
@@ -272,23 +296,29 @@ fun FTextField(
                         when (bottomType) {
                             BottomType.Empty -> Unit
                             is BottomType.Error -> {
-                                if (bottomType.isError && bottomType.errorText.isNotEmpty()) {
-                                    Spacer(modifier = Modifier.height(3.dp))
+                                Spacer(modifier = Modifier.height(3.dp))
 
-                                    Text(
-                                        text = bottomType.errorText,
-                                        style = fTextStyle(
-                                            fontWeight = FontWeight.W400,
-                                            fontSize = 12.sp,
-                                            lineHeight = 14.4.sp,
-                                            color = FColor.Error
-                                        )
+                                Text(
+                                    modifier = Modifier
+                                        .alpha(
+                                            if (bottomType.isError) {
+                                                1f
+                                            } else {
+                                                0f
+                                            }
+                                        ),
+                                    text = bottomType.errorText,
+                                    style = fTextStyle(
+                                        fontWeight = FontWeight.W400,
+                                        fontSize = 12.sp,
+                                        lineHeight = 14.4.sp,
+                                        color = FColor.Error
                                     )
-
-                                    Spacer(modifier = Modifier.height(bottomType.bottomSpacer))
-                                }
+                                )
                             }
                         }
+
+                        Spacer(modifier = Modifier.height(bottomSpacer))
                     }
                 }
             )
@@ -298,6 +328,7 @@ fun FTextField(
 
 data class TopText(
     val title: String,
+    val subtitle: String = "",
     val titleStar: Boolean
 )
 
@@ -306,8 +337,7 @@ sealed interface BottomType {
 
     data class Error(
         val errorText: String,
-        val isError: Boolean,
-        val bottomSpacer: Dp = 0.dp
+        val isError: Boolean
     ) : BottomType
 }
 
@@ -316,6 +346,13 @@ data class BorderButton(
     val enable: Boolean,
     val onClick: () -> Unit
 )
+
+sealed interface FTextFieldTail {
+    data class Text(
+        val text: String,
+        val style: TextStyle
+    ) : FTextFieldTail
+}
 
 @Preview(showBackground = true)
 @Composable
@@ -375,7 +412,16 @@ private fun FTextFieldBottomWithFBorderButtonPreview() {
                     errorText = "에러 메시지 테스트 안내 문구입니다.",
                     isError = true
                 ),
-                borderButton = BorderButton(text = "중복확인", enable = true, onClick = {})
+                borderButtons = listOf(BorderButton(text = "중복확인", enable = true, onClick = {})),
+                textFieldTail = FTextFieldTail.Text(
+                    text = "3:00",
+                    style = fTextStyle(
+                        fontWeight = FontWeight.W400,
+                        fontSize = 12.sp,
+                        lineHeight = 14.sp,
+                        color = FColor.ColorFF5841
+                    )
+                )
             )
         }
     }

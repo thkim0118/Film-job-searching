@@ -79,6 +79,8 @@ object FColor {
     val Kakao = Color(0xFFFEE500)
     val Naver = Color(0xFF03C75A)
 
+    val ColorFF5841 = Color(0xFFFF5841)
+
     val ColorF5F5F5 = Color(0xFFF5F5F5)
     val Color9E9E9E = Color(0xFF9E9E9E)
     val Color757575 = Color(0xFF757575)

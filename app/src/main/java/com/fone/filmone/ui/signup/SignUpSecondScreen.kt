@@ -3,11 +3,9 @@ package com.fone.filmone.ui.signup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -22,12 +20,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
 import com.fone.filmone.ui.FOneDestinations
-import com.fone.filmone.ui.common.FBorderButton
-import com.fone.filmone.ui.common.FButton
-import com.fone.filmone.ui.common.TitleBar
-import com.fone.filmone.ui.common.TitleType
+import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
-import com.fone.filmone.ui.common.ext.fShadow
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
 import com.fone.filmone.ui.theme.FColor
@@ -73,7 +67,7 @@ fun SignUpSecondScreen(
 
             NicknameComponent()
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(23.dp))
 
             BirthdaySexComponent()
 
@@ -98,106 +92,63 @@ fun SignUpSecondScreen(
 
 @Composable
 private fun NicknameComponent() {
-    Text(
-        text = buildAnnotatedString {
-            withStyle(
-                style = SpanStyle(
-                    fontFamily = Pretendard,
-                    fontWeight = FontWeight.W500,
-                    fontSize = 15.sp,
-                    color = FColor.TextPrimary
-                )
-            ) {
-                append(stringResource(id = R.string.sign_up_second_nickname_title))
-            }
-            withStyle(
-                style = SpanStyle(
-                    fontFamily = Pretendard,
-                    fontWeight = FontWeight.W500,
-                    fontSize = 15.sp,
-                    color = FColor.Error
-                )
-            ) {
-                append("*")
-            }
-        },
-        lineHeight = 20.sp
-    )
-
-    Spacer(modifier = Modifier.height(8.dp))
-
     Row {
-        TextField(
-            value = "test",
+        FTextField(
+            text = "",
+            placeholder = stringResource(id = R.string.sign_up_second_nickname_placeholder),
             onValueChange = { value ->
+            },
+            topText = TopText(
+                title = stringResource(id = R.string.sign_up_second_nickname_title),
+                titleStar = true
+            ),
+            borderButtons = listOf(
+                BorderButton(
+                    text = stringResource(id = R.string.sign_up_second_nickname_check_duplicate),
+                    enable = false,
+                    onClick = {
 
-            }
-        )
-
-        FBorderButton(
-            text = stringResource(id = R.string.sign_up_second_nickname_check_duplicate),
-            enable = false
+                    }
+                )
+            ),
+            bottomType =
+                BottomType.Error(
+                    errorText = stringResource(id = R.string.sign_up_second_nickname_error_title),
+                    isError = true
+                )
         )
     }
 }
 
 @Composable
 private fun BirthdaySexComponent() {
-    Text(
-        text = buildAnnotatedString {
-            withStyle(
-                style = SpanStyle(
-                    fontFamily = Pretendard,
-                    fontWeight = FontWeight.W500,
-                    fontSize = 15.sp,
-                    color = FColor.TextPrimary
-                )
-            ) {
-                append(stringResource(id = R.string.sign_up_second_birthday_sex_title))
-            }
-            withStyle(
-                style = SpanStyle(
-                    fontFamily = Pretendard,
-                    fontWeight = FontWeight.W500,
-                    fontSize = 15.sp,
-                    color = FColor.Error
-                )
-            ) {
-                append("*")
-            }
-            withStyle(
-                style = SpanStyle(
-                    fontFamily = Pretendard,
-                    fontWeight = FontWeight.W400,
-                    fontSize = 12.sp,
-                    color = FColor.DisablePlaceholder
-                )
-            ) {
-                append(stringResource(id = R.string.sign_up_second_birthday_sex_subtitle))
-            }
+    FTextField(
+        text = "",
+        placeholder = stringResource(id = R.string.sign_up_second_birthday_sex_placeholder),
+        onValueChange = { value ->
         },
-        lineHeight = 20.sp
+        topText = TopText(
+            title = stringResource(id = R.string.sign_up_second_birthday_sex_title),
+            subtitle = stringResource(id = R.string.sign_up_second_birthday_sex_subtitle),
+            titleStar = true
+        ),
+        borderButtons = listOf(
+            BorderButton(
+                text = stringResource(id = R.string.sign_up_second_birthday_sex_man),
+                enable = false,
+                onClick = {
+
+                }
+            ),
+            BorderButton(
+                text = stringResource(id = R.string.sign_up_second_birthday_sex_woman),
+                enable = false,
+                onClick = {
+
+                }
+            )
+        ),
     )
-
-    Spacer(modifier = Modifier.height(8.dp))
-
-    Row {
-        TextField(
-            value = "test",
-            onValueChange = { value ->
-
-            }
-        )
-
-        FBorderButton(
-            text = stringResource(id = R.string.sign_up_second_birthday_sex_man),
-            enable = false
-        )
-        FBorderButton(
-            text = stringResource(id = R.string.sign_up_second_birthday_sex_woman),
-            enable = false
-        )
-    }
 }
 
 @Composable
