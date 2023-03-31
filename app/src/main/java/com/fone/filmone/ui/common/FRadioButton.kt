@@ -21,11 +21,12 @@ import com.fone.filmone.ui.theme.FilmOneTheme
 
 @Composable
 fun FRadioButton(
+    modifier: Modifier = Modifier,
     enable: Boolean,
     onClick: () -> Unit = {}
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(16.dp)
             .clip(shape = CircleShape)
             .border(

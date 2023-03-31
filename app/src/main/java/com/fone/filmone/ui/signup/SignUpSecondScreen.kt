@@ -7,6 +7,7 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -53,7 +54,9 @@ fun SignUpSecondScreen(
         )
 
         Column(
-            modifier = Modifier.padding(horizontal = 20.dp)
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(horizontal = 20.dp)
         ) {
             Spacer(modifier = Modifier.height(40.dp))
 
@@ -78,7 +81,7 @@ fun SignUpSecondScreen(
 
             ProfileComponent()
 
-            Spacer(modifier = Modifier.height(137.dp))
+            Spacer(modifier = Modifier.weight(1f))
 
             FButton(
                 title = stringResource(id = R.string.sign_up_next_title),
@@ -215,14 +218,14 @@ private fun ProfileComponent() {
 
     Box {
         Image(
-            imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
+            imageVector = ImageVector.vectorResource(id = R.drawable.default_profile_shadow),
             contentDescription = null
         )
 
         Image(
             modifier = Modifier
                 .align(Alignment.BottomEnd),
-            imageVector = ImageVector.vectorResource(id = R.drawable.default_profile_camera),
+            imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
             contentDescription = null
         )
     }

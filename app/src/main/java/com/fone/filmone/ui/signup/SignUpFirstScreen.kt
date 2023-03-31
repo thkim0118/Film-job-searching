@@ -48,6 +48,7 @@ fun SignUpFirstScreen(
 
         Column(
             modifier = Modifier
+                .fillMaxHeight()
                 .padding(horizontal = 20.dp)
         ) {
             Spacer(modifier = Modifier.height(40.dp))
@@ -83,7 +84,7 @@ fun SignUpFirstScreen(
 
             FavoriteTags()
 
-            Spacer(modifier = Modifier.height(203.dp))
+            Spacer(modifier = Modifier.weight(1f))
 
             FButton(
                 title = stringResource(id = R.string.sign_up_next_title),
