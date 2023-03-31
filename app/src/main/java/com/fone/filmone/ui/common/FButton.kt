@@ -11,6 +11,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.fShadow
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
@@ -20,7 +21,8 @@ import com.fone.filmone.ui.theme.LocalTypography
 fun FButton(
     modifier: Modifier = Modifier,
     title: String,
-    enable: Boolean
+    enable: Boolean,
+    onClick: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -40,7 +42,8 @@ fun FButton(
                 } else {
                     FColor.DisableBase
                 }
-            ),
+            )
+            .clickableSingle { onClick.invoke() },
     ) {
         Text(
             modifier = Modifier
@@ -63,7 +66,11 @@ private fun FButtonEnablePreview() {
                 .size(120.dp)
                 .padding(20.dp)
         ) {
-            FButton(title = "다음", enable = true)
+            FButton(
+                title = "다음",
+                enable = true,
+                onClick = {}
+            )
         }
     }
 }
@@ -77,7 +84,11 @@ private fun FButtonDisablePreview() {
                 .size(120.dp)
                 .padding(20.dp)
         ) {
-            FButton(title = "다음", enable = false)
+            FButton(
+                title = "다음",
+                enable = false,
+                onClick = {}
+            )
         }
     }
 }

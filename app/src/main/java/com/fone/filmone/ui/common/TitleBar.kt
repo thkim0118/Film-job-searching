@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.fone.filmone.R
+import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 
@@ -22,10 +23,13 @@ import com.fone.filmone.ui.theme.FilmOneTheme
 fun TitleBar(
     modifier: Modifier = Modifier,
     titleText: String = "",
-    titleType: TitleType
+    titleType: TitleType,
+    onBackClick: () -> Unit = {},
+    onCloseClick: () -> Unit = {}
 ) {
     Row(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
             .heightIn(min = 50.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -39,7 +43,8 @@ fun TitleBar(
                     } else {
                         0f
                     }
-                ),
+                )
+                .clickableSingleWithNoRipple { onBackClick.invoke() },
             imageVector = ImageVector.vectorResource(id = R.drawable.title_bar_back),
             contentDescription = null
         )
@@ -69,7 +74,8 @@ fun TitleBar(
                     } else {
                         0f
                     }
-                ),
+                )
+                .clickableSingleWithNoRipple { onCloseClick.invoke() },
             imageVector = ImageVector.vectorResource(id = R.drawable.title_bar_close),
             contentDescription = null
         )

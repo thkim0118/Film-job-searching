@@ -2,9 +2,7 @@ package com.fone.filmone.ui.signup
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,9 +16,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
+import com.fone.filmone.ui.FOneDestinations
 import com.fone.filmone.ui.common.FButton
 import com.fone.filmone.ui.common.TitleBar
 import com.fone.filmone.ui.common.TitleType
+import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
@@ -35,11 +35,15 @@ fun SignUpFirstScreen(
 ) {
     Column(
         modifier = modifier
+            .defaultSystemBarPadding()
             .fillMaxSize()
     ) {
         TitleBar(
             titleType = TitleType.Back,
-            titleText = stringResource(id = R.string.sign_up_title_text)
+            titleText = stringResource(id = R.string.sign_up_title_text),
+            onBackClick = {
+                navController.popBackStack()
+            }
         )
 
         Column(
@@ -84,7 +88,13 @@ fun SignUpFirstScreen(
                 modifier = Modifier.weight(1f)
             )
 
-            FButton(title = stringResource(id = R.string.sign_up_next_title), enable = false)
+            FButton(
+                title = stringResource(id = R.string.sign_up_next_title),
+                enable = false,
+                onClick = {
+                    navController.navigate(FOneDestinations.SignUp.SignUpSecond.route)
+                }
+            )
 
             Spacer(modifier = Modifier.height(38.dp))
         }

@@ -1,4 +1,4 @@
-package com.fone.filmone.ui.signup
+package com.fone.filmone.ui.signup.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -7,6 +7,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.ui.FOneDestinations
+import com.fone.filmone.ui.signup.SignUpCompleteScreen
+import com.fone.filmone.ui.signup.SignUpFirstScreen
+import com.fone.filmone.ui.signup.SignUpSecondScreen
+import com.fone.filmone.ui.signup.SignUpThirdScreen
 
 @Composable
 fun SignUpNavGraph(

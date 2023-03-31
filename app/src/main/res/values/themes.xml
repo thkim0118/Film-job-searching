@@ -2,7 +2,9 @@
 <resources>
 
     <style name="Theme.FilmOne" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 </resources>

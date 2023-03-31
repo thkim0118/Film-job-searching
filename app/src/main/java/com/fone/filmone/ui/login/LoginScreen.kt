@@ -24,29 +24,22 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
 import com.fone.filmone.ui.FOneDestinations
-import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
+import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.fShadow
+import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
     navController: NavController = rememberNavController()
 ) {
-    val systemUiController = rememberSystemUiController()
-
-    with(systemUiController) {
-        // FIXME 화면이 이동하면서 깜빡임.
-        setStatusBarColor(color = FColor.White)
-        setNavigationBarColor(color = FColor.White)
-    }
-
     Column(
         modifier = modifier
+            .defaultSystemBarPadding()
             .fillMaxSize()
             .padding(horizontal = 45.dp)
     ) {

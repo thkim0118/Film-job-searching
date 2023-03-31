@@ -9,7 +9,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -18,7 +17,6 @@ import com.fone.filmone.R
 import com.fone.filmone.ui.FOneDestinations
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 
 @Composable
@@ -26,13 +24,6 @@ fun SplashScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
-    val systemUiController = rememberSystemUiController()
-
-    with(systemUiController) {
-        setSystemBarsColor(color = FColor.Black)
-        setNavigationBarColor(color = FColor.Black)
-    }
-
     LaunchedEffect(key1 = true) {
         delay(2000L)
         navController.navigate(FOneDestinations.Login.route) {
