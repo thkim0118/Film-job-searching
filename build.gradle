@@ -4,6 +4,7 @@ buildscript {
         hilt_version = '2.44.2'
 
         gson_version = '2.9.0'
+        retrofit_version = '2.9.0'
     }
 
     dependencies {

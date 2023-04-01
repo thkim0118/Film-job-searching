@@ -63,6 +63,8 @@ dependencies {
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.28.0"
 
     implementation "com.google.code.gson:gson:$gson_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
