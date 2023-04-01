@@ -1,4 +1,4 @@
-package com.fone.filmone.ui.signup
+package com.fone.filmone.ui.signup.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -9,13 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
@@ -24,10 +19,8 @@ import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
-import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
-import com.fone.filmone.ui.theme.Pretendard
 
 @Composable
 fun SignUpSecondScreen(

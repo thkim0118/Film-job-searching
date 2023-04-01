@@ -1,4 +1,4 @@
-package com.fone.filmone.ui.signup
+package com.fone.filmone.ui.signup.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

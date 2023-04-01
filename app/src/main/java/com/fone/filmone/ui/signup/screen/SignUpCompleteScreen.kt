@@ -1,4 +1,4 @@
-package com.fone.filmone.ui.signup
+package com.fone.filmone.ui.signup.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -22,7 +21,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.FButton
-import com.fone.filmone.ui.common.FRadioButton
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme

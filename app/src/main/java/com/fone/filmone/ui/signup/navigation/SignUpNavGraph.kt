@@ -7,10 +7,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.ui.FOneDestinations
-import com.fone.filmone.ui.signup.SignUpCompleteScreen
-import com.fone.filmone.ui.signup.SignUpFirstScreen
-import com.fone.filmone.ui.signup.SignUpSecondScreen
-import com.fone.filmone.ui.signup.SignUpThirdScreen
+import com.fone.filmone.ui.signup.screen.SignUpCompleteScreen
+import com.fone.filmone.ui.signup.screen.SignUpFirstScreen
+import com.fone.filmone.ui.signup.screen.SignUpSecondScreen
+import com.fone.filmone.ui.signup.screen.SignUpThirdScreen
 
 @Composable
 fun SignUpNavGraph(
