@@ -49,7 +49,7 @@ fun SignUpFirstScreen(
         Column(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = 16.dp)
         ) {
             Spacer(modifier = Modifier.height(40.dp))
 
