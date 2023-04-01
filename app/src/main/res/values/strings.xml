@@ -63,4 +63,19 @@
     <string name="sign_up_complete_title_1">님!\n</string>
     <string name="sign_up_complete_title_2">에프원 회원가입을 환영합니다.</string>
     <string name="sign_up_complete_button_title">로그인하기</string>
+    
+    <string name="inquiry_title_text">문의등록</string>
+    <string name="inquiry_guide">[안내] 작업문의는 에프원 사이트 내 해당 담당자에게 직접 남겨주세요.</string>
+    <string name="inquiry_email_title">이메일 주소</string>
+    <string name="inquiry_type_title">상담유형</string>
+    <string name="inquiry_type_using_service">이용문의</string>
+    <string name="inquiry_type_partnership">제휴</string>
+    <string name="inquiry_type_user_report">고객의 소리/제보</string>
+    <string name="inquiry_content_title">제목</string>
+    <string name="inquiry_content_description">설명</string>
+    <string name="inquiry_content_description_placeholder">요청에 관한 세부 정보를 입력하세요. 저희 에프원이 가능한 빨리 답변을 드리도록 하겠습니다.</string>
+    <string name="inquiry_privacy_term_title">개인정보 수집 및 이용동의(필수)</string>
+    <string name="inquiry_privacy_term_subtitle">문의 처리를 위해 이메일, 회원 정보, 기기 정보, 문의 내용에 포함된 개인정보를 수집하여, 개인정보 처리 방침에 따라 3년 후 파기됩니다.</string>
+    <string name="inquiry_button_title">제출하기</string>
+    
 </resources>

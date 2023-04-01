@@ -53,6 +53,7 @@ fun FTextField(
     topText: TopText = TopText(
         title = "",
         titleStar = false,
+        titleSpace = 0.dp
     ),
     bottomType: BottomType = BottomType.Empty,
     bottomSpacer: Dp = 0.dp,
@@ -67,6 +68,7 @@ fun FTextField(
     cornerRounded: Int = 5,
     textStyle: TextStyle = LocalTypography.current.b1,
     textColor: Color = FColor.TextPrimary,
+    fixedHeight: Dp = 42.dp,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     placeholderTextColor: Color = FColor.DisablePlaceholder,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
@@ -168,14 +170,14 @@ fun FTextField(
                                 }
                             }
 
-                            Spacer(modifier = Modifier.height(8.dp))
+                            Spacer(modifier = Modifier.height(topText.titleSpace))
                         }
 
                         Row {
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
-                                    .height(42.dp)
+                                    .height(fixedHeight)
                                     .clip(shape = RoundedCornerShape(cornerRounded.dp))
                                     .border(
                                         width = 1.dp,
@@ -329,7 +331,8 @@ fun FTextField(
 data class TopText(
     val title: String,
     val subtitle: String = "",
-    val titleStar: Boolean
+    val titleStar: Boolean,
+    val titleSpace: Dp
 )
 
 sealed interface BottomType {
@@ -386,7 +389,8 @@ private fun FTextFieldBottomErrorTypePreview() {
             onValueChange = {},
             topText = TopText(
                 title = "Title",
-                titleStar = true
+                titleStar = true,
+                titleSpace = 8.dp
             ),
             bottomType = BottomType.Error(
                 errorText = "에러 메시지 테스트 안내 문구입니다.",
@@ -406,7 +410,8 @@ private fun FTextFieldBottomWithFBorderButtonPreview() {
                 onValueChange = {},
                 topText = TopText(
                     title = "Title",
-                    titleStar = true
+                    titleStar = true,
+                    titleSpace = 8.dp
                 ),
                 bottomType = BottomType.Error(
                     errorText = "에러 메시지 테스트 안내 문구입니다.",

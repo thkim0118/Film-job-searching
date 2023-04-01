@@ -52,7 +52,6 @@ fun FRadioButton(
         if (enable) {
             Image(
                 modifier = Modifier
-                    .fillMaxSize()
                     .align(Alignment.Center),
                 imageVector = ImageVector.vectorResource(id = R.drawable.radio_button_check),
                 contentDescription = null

@@ -24,6 +24,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
 import com.fone.filmone.ui.FOneDestinations
+import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.fShadow
@@ -96,6 +97,10 @@ fun LoginScreen(
             Spacer(modifier = Modifier.width(7.dp))
 
             Text(
+                modifier = Modifier
+                    .clickableSingle {
+                        navController.navigate(FOneDestinations.Inquiry.route)
+                    },
                 text = stringResource(id = R.string.login_inquiry_text),
                 style = fTextStyle(
                     fontWeight = FontWeight.W500,

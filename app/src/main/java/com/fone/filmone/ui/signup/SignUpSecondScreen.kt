@@ -100,7 +100,8 @@ private fun NicknameComponent() {
             },
             topText = TopText(
                 title = stringResource(id = R.string.sign_up_second_nickname_title),
-                titleStar = true
+                titleStar = true,
+                titleSpace = 8.dp
             ),
             borderButtons = listOf(
                 BorderButton(
@@ -130,7 +131,8 @@ private fun BirthdaySexComponent() {
         topText = TopText(
             title = stringResource(id = R.string.sign_up_second_birthday_sex_title),
             subtitle = stringResource(id = R.string.sign_up_second_birthday_sex_subtitle),
-            titleStar = true
+            titleStar = true,
+            titleSpace = 8.dp
         ),
         borderButtons = listOf(
             BorderButton(

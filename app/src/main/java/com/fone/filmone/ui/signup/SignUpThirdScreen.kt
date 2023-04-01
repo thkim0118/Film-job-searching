@@ -98,6 +98,7 @@ private fun PhoneVerificationComponent() {
         topText = TopText(
             title = stringResource(id = R.string.sign_up_third_phone_number_title),
             titleStar = false,
+            titleSpace = 8.dp
         ),
         borderButtons = listOf(
             BorderButton(
