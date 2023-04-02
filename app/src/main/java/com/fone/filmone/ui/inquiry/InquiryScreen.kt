@@ -23,7 +23,7 @@ fun InquiryScreen(
     navController: NavHostController = rememberNavController()
 ) {
     Column(modifier = modifier.defaultSystemBarPadding()) {
-        TitleBar(
+        FTitleBar(
             titleType = TitleType.Close,
             titleText = stringResource(id = R.string.inquiry_title_text),
             onCloseClick = {

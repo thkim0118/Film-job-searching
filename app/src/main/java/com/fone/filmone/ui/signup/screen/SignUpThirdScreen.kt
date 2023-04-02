@@ -42,7 +42,7 @@ fun SignUpThirdScreen(
             .defaultSystemBarPadding()
             .fillMaxSize()
     ) {
-        TitleBar(
+        FTitleBar(
             titleType = TitleType.Back,
             titleText = stringResource(id = R.string.sign_up_title_text),
             onBackClick = {

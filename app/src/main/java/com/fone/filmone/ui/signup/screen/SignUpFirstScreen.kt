@@ -18,7 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
 import com.fone.filmone.ui.FOneDestinations
 import com.fone.filmone.ui.common.FButton
-import com.fone.filmone.ui.common.TitleBar
+import com.fone.filmone.ui.common.FTitleBar
 import com.fone.filmone.ui.common.TitleType
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.fTextStyle
@@ -38,7 +38,7 @@ fun SignUpFirstScreen(
             .defaultSystemBarPadding()
             .fillMaxSize()
     ) {
-        TitleBar(
+        FTitleBar(
             titleType = TitleType.Back,
             titleText = stringResource(id = R.string.sign_up_title_text),
             onBackClick = {

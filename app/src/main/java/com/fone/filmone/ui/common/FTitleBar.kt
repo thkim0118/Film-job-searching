@@ -20,7 +20,7 @@ import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 
 @Composable
-fun TitleBar(
+fun FTitleBar(
     modifier: Modifier = Modifier,
     titleText: String = "",
     titleType: TitleType,
@@ -94,7 +94,7 @@ sealed interface TitleType {
 @Composable
 private fun TitleBarBackTypePreview() {
     FilmOneTheme {
-        TitleBar(
+        FTitleBar(
             titleText = "뒤로가기",
             titleType = TitleType.Back
         )
@@ -105,7 +105,7 @@ private fun TitleBarBackTypePreview() {
 @Composable
 private fun TitleBarCloseTypePreview() {
     FilmOneTheme {
-        TitleBar(
+        FTitleBar(
             titleText = "닫기",
             titleType = TitleType.Close
         )
