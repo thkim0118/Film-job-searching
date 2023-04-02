@@ -1,21 +1,43 @@
 package com.fone.filmone.ui.signup.screen
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.fone.filmone.ui.FOneDestinations
-import com.fone.filmone.ui.signup.navigation.SignUpNavGraph
 
-@Composable
-fun SignUpScreen(
+fun NavGraphBuilder.nestedSignUpScreenGraph(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
-    startDestination: String = FOneDestinations.SignUp.SignUpFirst.route
+    navController: NavHostController
 ) {
-    SignUpNavGraph(
-        modifier = modifier,
-        navController = navController,
-        startDestination = startDestination
-    )
+    navigation(
+        startDestination = FOneDestinations.SignUp.SignUpFirst.route,
+        route = FOneDestinations.SignUp.route
+    ) {
+        composable(FOneDestinations.SignUp.SignUpFirst.route) {
+            SignUpFirstScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+        composable(FOneDestinations.SignUp.SignUpSecond.route) {
+            SignUpSecondScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+        composable(FOneDestinations.SignUp.SignUpThird.route) {
+            SignUpThirdScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+        composable(FOneDestinations.SignUp.SignUpComplete.route) {
+            SignUpCompleteScreen(
+                modifier = modifier,
+                navController = navController
+            )
+        }
+    }
 }
