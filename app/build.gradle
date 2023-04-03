@@ -24,8 +24,20 @@ android {
 
     buildTypes {
         release {
+            //TODO Release 용으로 변경해야함.
+            def kakaoAppKey = "ee40509f29760cb723e4aa58c379f1da"
+            manifestPlaceholders = [kakaoAuthScheme: "kakao" + kakaoAppKey]
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            def kakaoAppKey = "ee40509f29760cb723e4aa58c379f1da"
+            manifestPlaceholders = [kakaoAuthScheme: "kakao" + kakaoAppKey]
+
+            minifyEnabled false
+            debuggable true
         }
     }
     compileOptions {

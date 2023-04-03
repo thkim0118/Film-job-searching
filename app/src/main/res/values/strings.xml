@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">FilmOne</string>
+    <string name="kakao_sdk_key">ee40509f29760cb723e4aa58c379f1da</string>
 
     <!--    login-->
     <string name="login_title">간편 로그인으로 F-ONE을\n즐겨보세요!</string>

@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +24,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
+import com.fone.filmone.core.LogUtil
+import com.fone.filmone.core.login.KakaoLoginUtil
+import com.fone.filmone.core.login.SNSLoginUtil
+import com.fone.filmone.core.login.model.SnsLoginType
 import com.fone.filmone.ui.FOneDestinations
 import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
@@ -122,9 +127,24 @@ private fun KakaoLoginButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
+    val context = LocalContext.current
+
     LoginButtonContainer(
         modifier = modifier
-            .clickableSingleWithNoRipple(onClick = onClick),
+            .clickableSingleWithNoRipple(onClick = {
+                SNSLoginUtil(
+                    context = context,
+                    onSuccess = { token, snsLoginType ->
+                        LogUtil.w("$snsLoginType token :: $token")
+                    },
+                    onFail = {
+
+                    },
+                    onCancel = {
+
+                    }
+                ).login(SnsLoginType.Kakao)
+            }),
         backgroundColor = FColor.Kakao,
         imageRes = R.drawable.login_social_kakao,
         titleRes = R.string.login_kakao_title,
@@ -136,8 +156,24 @@ private fun KakaoLoginButton(
 private fun NaverLoginButton(
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
     LoginButtonContainer(
-        modifier = modifier,
+        modifier = modifier
+            .clickableSingleWithNoRipple {
+                SNSLoginUtil(
+                    context = context,
+                    onSuccess = { token, snsLoginType ->
+
+                    },
+                    onFail = {
+
+                    },
+                    onCancel = {
+
+                    }
+                ).login(SnsLoginType.Naver)
+            },
         backgroundColor = FColor.Naver,
         imageRes = R.drawable.login_social_naver,
         titleRes = R.string.login_naver_title,
@@ -149,8 +185,24 @@ private fun NaverLoginButton(
 private fun GoogleLoginButton(
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
     LoginButtonContainer(
-        modifier = modifier,
+        modifier = modifier
+            .clickableSingleWithNoRipple {
+                SNSLoginUtil(
+                    context = context,
+                    onSuccess = { token, snsLoginType ->
+
+                    },
+                    onFail = {
+
+                    },
+                    onCancel = {
+
+                    }
+                ).login(SnsLoginType.Google)
+            },
         backgroundColor = FColor.White,
         borderColor = FColor.ColorF5F5F5,
         imageRes = R.drawable.login_social_google,
@@ -163,8 +215,24 @@ private fun GoogleLoginButton(
 private fun AppleLoginButton(
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
     LoginButtonContainer(
-        modifier = modifier,
+        modifier = modifier
+            .clickableSingleWithNoRipple {
+                SNSLoginUtil(
+                    context = context,
+                    onSuccess = { token, snsLoginType ->
+
+                    },
+                    onFail = {
+
+                    },
+                    onCancel = {
+
+                    }
+                ).login(SnsLoginType.Apple)
+            },
         backgroundColor = FColor.Black,
         imageRes = R.drawable.login_social_apple,
         titleRes = R.string.login_apple_title,
