@@ -28,7 +28,9 @@ class SNSLoginUtil private constructor(
                     GoogleLoginImpl(loginCallback, launcher).login(context)
                 } ?: return
             }
-            SnsLoginType.Apple -> TODO()
+            SnsLoginType.Apple -> {
+                AppleLoginImpl(loginCallback).login(context)
+            }
         }
     }
 
