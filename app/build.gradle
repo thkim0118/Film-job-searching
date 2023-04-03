@@ -80,7 +80,10 @@ dependencies {
 
     implementation "com.kakao.sdk:v2-user:$kakao_login_version"
     implementation "com.navercorp.nid:oauth:$naver_login_version"
-    implementation "com.google.android.gms:play-services-auth:$google_login_version"
+
+    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation "com.firebaseui:firebase-ui-auth:$firebase_auth_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
