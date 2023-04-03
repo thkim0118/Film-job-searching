@@ -5,8 +5,9 @@ buildscript {
 
         gson_version = '2.9.0'
         retrofit_version = '2.9.0'
-        kakao_version = '2.13.0'
-        naver_version = '5.5.0'
+        kakao_login_version = '2.13.0'
+        naver_login_version = '5.5.0'
+        google_login_version = '20.4.1'
     }
 
     dependencies {
