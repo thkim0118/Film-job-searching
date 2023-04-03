@@ -1,5 +1,7 @@
 package com.fone.filmone.ui
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -15,7 +17,8 @@ import com.fone.filmone.ui.splash.SplashScreen
 fun FOneNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = FOneDestinations.Splash.route
+    startDestination: String = FOneDestinations.Splash.route,
+    googleSignInLauncher: ActivityResultLauncher<Intent>? = null
 ) {
     NavHost(
         navController = navController,
@@ -26,7 +29,7 @@ fun FOneNavGraph(
             SplashScreen(navController = navController)
         }
         composable(FOneDestinations.Login.route) {
-            LoginScreen(navController = navController)
+            LoginScreen(navController = navController, googleSignInLauncher = googleSignInLauncher)
         }
         composable(FOneDestinations.Inquiry.route) {
             InquiryScreen(navController = navController)

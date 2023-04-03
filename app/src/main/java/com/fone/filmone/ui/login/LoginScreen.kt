@@ -1,5 +1,7 @@
 package com.fone.filmone.ui.login
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -21,10 +23,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
-import com.fone.filmone.core.LogUtil
 import com.fone.filmone.core.login.SNSLoginUtil
 import com.fone.filmone.core.login.model.SnsLoginType
 import com.fone.filmone.ui.FOneDestinations
@@ -40,7 +42,9 @@ import com.fone.filmone.ui.theme.LocalTypography
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    navController: NavController = rememberNavController()
+    navController: NavController = rememberNavController(),
+    googleSignInLauncher: ActivityResultLauncher<Intent>? = null,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     Column(
         modifier = modifier
@@ -65,11 +69,7 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(100.dp))
 
-        KakaoLoginButton(
-            onClick = {
-                navController.navigate(FOneDestinations.SignUp.route)
-            }
-        )
+        KakaoLoginButton()
 
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -77,7 +77,7 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        GoogleLoginButton()
+        GoogleLoginButton(launcher = googleSignInLauncher)
 
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -124,25 +124,14 @@ fun LoginScreen(
 @Composable
 private fun KakaoLoginButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
 
     LoginButtonContainer(
         modifier = modifier
             .clickableSingleWithNoRipple(onClick = {
-                SNSLoginUtil(
-                    context = context,
-                    onSuccess = { token, snsLoginType ->
-                        LogUtil.w("$snsLoginType token :: $token")
-                    },
-                    onFail = {
-
-                    },
-                    onCancel = {
-
-                    }
-                ).login(SnsLoginType.Kakao)
+                viewModel.requestSnsAccessToken(context, SnsLoginType.Kakao)
             }),
         backgroundColor = FColor.Kakao,
         imageRes = R.drawable.login_social_kakao,
@@ -153,25 +142,15 @@ private fun KakaoLoginButton(
 
 @Composable
 private fun NaverLoginButton(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
 
     LoginButtonContainer(
         modifier = modifier
             .clickableSingleWithNoRipple {
-                SNSLoginUtil(
-                    context = context,
-                    onSuccess = { token, snsLoginType ->
-
-                    },
-                    onFail = {
-
-                    },
-                    onCancel = {
-
-                    }
-                ).login(SnsLoginType.Naver)
+                viewModel.requestSnsAccessToken(context, SnsLoginType.Naver)
             },
         backgroundColor = FColor.Naver,
         imageRes = R.drawable.login_social_naver,
@@ -182,25 +161,16 @@ private fun NaverLoginButton(
 
 @Composable
 private fun GoogleLoginButton(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: LoginViewModel = hiltViewModel(),
+    launcher: ActivityResultLauncher<Intent>?
 ) {
     val context = LocalContext.current
 
     LoginButtonContainer(
         modifier = modifier
             .clickableSingleWithNoRipple {
-                SNSLoginUtil(
-                    context = context,
-                    onSuccess = { token, snsLoginType ->
-
-                    },
-                    onFail = {
-
-                    },
-                    onCancel = {
-
-                    }
-                ).login(SnsLoginType.Google)
+                viewModel.requestSnsAccessToken(context, SnsLoginType.Google, launcher)
             },
         backgroundColor = FColor.White,
         borderColor = FColor.ColorF5F5F5,
@@ -212,25 +182,15 @@ private fun GoogleLoginButton(
 
 @Composable
 private fun AppleLoginButton(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+            viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
 
     LoginButtonContainer(
         modifier = modifier
             .clickableSingleWithNoRipple {
-                SNSLoginUtil(
-                    context = context,
-                    onSuccess = { token, snsLoginType ->
-
-                    },
-                    onFail = {
-
-                    },
-                    onCancel = {
-
-                    }
-                ).login(SnsLoginType.Apple)
+                viewModel.requestSnsAccessToken(context, SnsLoginType.Apple)
             },
         backgroundColor = FColor.Black,
         imageRes = R.drawable.login_social_apple,

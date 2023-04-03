@@ -4,6 +4,7 @@
     <string name="naver_client_id">aU9oh1xxoC6uAMW48qCP</string>
     <string name="naver_client_secret">JQUAka_HJ3</string>
     <string name="naver_client_name">에프원</string>
+    <string name="google_sign_in_client_id">499416246374-gt4tvjpp05s3c5dogo8ies3hrmth6u1u.apps.googleusercontent.com</string>
 
     <!--    login-->
     <string name="login_title">간편 로그인으로 F-ONE을\n즐겨보세요!</string>

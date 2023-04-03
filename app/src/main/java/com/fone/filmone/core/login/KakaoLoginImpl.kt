@@ -11,9 +11,7 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 
 class KakaoLoginImpl (
-    override val onSuccess: (token: String, snsLoginType: SnsLoginType) -> Unit,
-    override val onFail: (message: String) -> Unit,
-    override val onCancel: () -> Unit
+    override val loginCallback: SNSLoginUtil.LoginCallback
 ) : SnsLogin {
     override fun login(context: Context) {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
@@ -55,13 +53,13 @@ class KakaoLoginImpl (
                     else -> ""
                 }
                 if (throwable is ClientError && throwable.reason == ClientErrorCause.Cancelled) {
-                    onCancel.invoke()
+                    loginCallback.onCancel()
                 } else {
-                    onFail(reason)
+                    loginCallback.onFail(reason)
                 }
             }
         } else if (oAuthToken != null) {
-            onSuccess.invoke(oAuthToken.accessToken, SnsLoginType.Kakao)
+            loginCallback.onSuccess(oAuthToken.accessToken, SnsLoginType.Kakao)
         }
     }
 }

@@ -8,9 +8,7 @@ import com.navercorp.nid.oauth.NidOAuthErrorCode
 import com.navercorp.nid.oauth.OAuthLoginCallback
 
 class NaverLoginImpl (
-    override val onSuccess: (token: String, snsLoginType: SnsLoginType) -> Unit,
-    override val onFail: (message: String) -> Unit,
-    override val onCancel: () -> Unit
+    override val loginCallback: SNSLoginUtil.LoginCallback
 ) : SnsLogin {
     override fun login(context: Context) {
         NaverIdLoginSDK.authenticate(context, NaverOAuthLoginCallback())
@@ -22,29 +20,29 @@ class NaverLoginImpl (
         }
 
         override fun onFailure(httpStatus: Int, message: String) {
-            onCancel.invoke()
+            loginCallback.onCancel()
         }
 
         override fun onSuccess() {
             val accessToken = NaverIdLoginSDK.getAccessToken() ?: run {
-                onFail.invoke("No Data")
+                loginCallback.onFail("No Data")
                 return
             }
 
             LogUtil.d("${SnsLoginType.Naver} $accessToken")
-            onSuccess.invoke(accessToken, SnsLoginType.Naver)
+            loginCallback.onSuccess(accessToken, SnsLoginType.Naver)
         }
 
         private fun handleError(errorCode: Int, message: String) {
             val code = NaverIdLoginSDK.getLastErrorCode().code
 
             if (code == NidOAuthErrorCode.CLIENT_USER_CANCEL.code) {
-                onCancel.invoke()
+                loginCallback.onCancel()
             } else {
                 if (errorCode == -1) {
-                    onCancel.invoke()
+                    loginCallback.onCancel()
                 } else {
-                    onFail.invoke("errorCode: $errorCode, message: $message")
+                    loginCallback.onFail("errorCode: $errorCode, message: $message")
                 }
             }
         }
