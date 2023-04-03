@@ -10,12 +10,12 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 
-class KakaoLoginUtil private constructor(
-    private val onSuccess: (token: String, snsLoginType: SnsLoginType) -> Unit,
-    private val onFail: (message: String) -> Unit,
-    private val onCancel: () -> Unit
-) {
-    fun login(context: Context) {
+class KakaoLoginImpl (
+    override val onSuccess: (token: String, snsLoginType: SnsLoginType) -> Unit,
+    override val onFail: (message: String) -> Unit,
+    override val onCancel: () -> Unit
+) : SnsLogin {
+    override fun login(context: Context) {
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
             UserApiClient.instance.loginWithKakaoTalk(
                 context = context,
@@ -62,20 +62,6 @@ class KakaoLoginUtil private constructor(
             }
         } else if (oAuthToken != null) {
             onSuccess.invoke(oAuthToken.accessToken, SnsLoginType.Kakao)
-        }
-    }
-
-    companion object {
-        private var instance: KakaoLoginUtil? = null
-
-        fun getInstance(
-            onSuccess: (token: String, snsLoginType: SnsLoginType) -> Unit,
-            onFail: (message: String) -> Unit,
-            onCancel: () -> Unit
-        ) = instance ?: synchronized(this) {
-            instance ?: KakaoLoginUtil(onSuccess, onFail, onCancel).also {
-                instance = it
-            }
         }
     }
 }

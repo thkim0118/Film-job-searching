@@ -25,7 +25,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
 import com.fone.filmone.core.LogUtil
-import com.fone.filmone.core.login.KakaoLoginUtil
 import com.fone.filmone.core.login.SNSLoginUtil
 import com.fone.filmone.core.login.model.SnsLoginType
 import com.fone.filmone.ui.FOneDestinations

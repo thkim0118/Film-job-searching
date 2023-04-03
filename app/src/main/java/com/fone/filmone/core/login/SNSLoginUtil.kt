@@ -13,9 +13,11 @@ class SNSLoginUtil(
     fun login(snsLoginType: SnsLoginType) {
         when (snsLoginType) {
             SnsLoginType.Kakao -> {
-                KakaoLoginUtil.getInstance(onSuccess, onFail, onCancel).login(context)
+                KakaoLoginImpl(onSuccess, onFail, onCancel).login(context)
             }
-            SnsLoginType.Naver -> TODO()
+            SnsLoginType.Naver -> {
+                NaverLoginImpl(onSuccess, onFail, onCancel).login(context)
+            }
             SnsLoginType.Google -> TODO()
             SnsLoginType.Apple -> TODO()
         }
