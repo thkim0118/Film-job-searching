@@ -1,6 +1,7 @@
 package com.fone.filmone.ui.common
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,7 +37,7 @@ fun FBorderButton(
                 },
                 shape = RoundedCornerShape(5.dp)
             )
-            .clickableSingleWithNoRipple { onClick.invoke() }
+            .clickable { onClick.invoke() }
             .padding(horizontal = 16.dp, vertical = 13.dp),
         contentAlignment = Alignment.Center
     ) {

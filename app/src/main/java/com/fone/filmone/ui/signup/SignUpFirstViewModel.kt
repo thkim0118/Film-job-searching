@@ -1,7 +1,6 @@
 package com.fone.filmone.ui.signup
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.fone.filmone.domain.model.signup.Interests
 import com.fone.filmone.domain.model.signup.Job
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,7 +8,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,7 +16,7 @@ class SignUpFirstViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SignUpFirstUiState(null, emptyList()))
     val uiState: StateFlow<SignUpFirstUiState> = _uiState.asStateFlow()
 
-    fun updateJobTag(job: Job) = viewModelScope.launch {
+    fun updateJobTag(job: Job) {
         _uiState.update { uiState ->
             uiState.copy(job = job)
         }

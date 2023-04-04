@@ -2,25 +2,34 @@ package com.fone.filmone.ui.signup.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
-import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.core.LogUtil
+import com.fone.filmone.domain.model.signup.Gender
 import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
+import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.ui.signup.SignUpSecondViewModel
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
+import java.util.regex.Pattern
 
 @Composable
 fun SignUpSecondScreen(
@@ -84,13 +93,19 @@ fun SignUpSecondScreen(
 }
 
 @Composable
-private fun NicknameComponent() {
+private fun NicknameComponent(
+    viewModel: SignUpSecondViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
     Row {
         FTextField(
-            text = "",
+            text = uiState.nickname,
             placeholder = stringResource(id = R.string.sign_up_second_nickname_placeholder),
             onValueChange = { value ->
+                viewModel.updateNickname(value)
             },
+            pattern = Pattern.compile("^[ㄱ-ㅣ가-힣a-zA-Z0-9\\s]+$"),
             topText = TopText(
                 title = stringResource(id = R.string.sign_up_second_nickname_title),
                 titleStar = true,
@@ -99,28 +114,37 @@ private fun NicknameComponent() {
             borderButtons = listOf(
                 BorderButton(
                     text = stringResource(id = R.string.sign_up_second_nickname_check_duplicate),
-                    enable = false,
+                    enable = uiState.isNicknameChecked,
                     onClick = {
 
                     }
                 )
             ),
             bottomType =
-                BottomType.Error(
-                    errorText = stringResource(id = R.string.sign_up_second_nickname_error_title),
-                    isError = true
-                )
+            BottomType.Error(
+                errorText = stringResource(id = R.string.sign_up_second_nickname_error_title),
+                isError = uiState.isNicknameDuplicated
+            )
         )
     }
 }
 
 @Composable
-private fun BirthdaySexComponent() {
+private fun BirthdaySexComponent(
+    viewModel: SignUpSecondViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
     FTextField(
-        text = "",
+        text = uiState.birthDay,
         placeholder = stringResource(id = R.string.sign_up_second_birthday_sex_placeholder),
         onValueChange = { value ->
+            viewModel.updateBirthDay(value)
         },
+        pattern = Pattern.compile("^[0-9\\s]+$"),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number
+        ),
         topText = TopText(
             title = stringResource(id = R.string.sign_up_second_birthday_sex_title),
             subtitle = stringResource(id = R.string.sign_up_second_birthday_sex_subtitle),
@@ -130,16 +154,16 @@ private fun BirthdaySexComponent() {
         borderButtons = listOf(
             BorderButton(
                 text = stringResource(id = R.string.sign_up_second_birthday_sex_man),
-                enable = false,
+                enable = uiState.gender == Gender.MAN,
                 onClick = {
-
+                    viewModel.updateGender(Gender.MAN)
                 }
             ),
             BorderButton(
                 text = stringResource(id = R.string.sign_up_second_birthday_sex_woman),
-                enable = false,
+                enable = uiState.gender == Gender.WOMAN,
                 onClick = {
-
+                    viewModel.updateGender(Gender.WOMAN)
                 }
             )
         ),
