@@ -217,23 +217,23 @@ fun FTextField(
                                             modifier = Modifier.fillMaxWidth(),
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
-//                                            Row(
-//                                                modifier = Modifier.weight(1f)
-//                                            ) {
-//                                                if (isFocused) {
-//                                                    innerTextField.invoke()
-//                                                } else {
-                                            Text(
-                                                modifier = Modifier.weight(1f),
-                                                text = textFieldValue.text,
-                                                style = fTextStyle(
-                                                    fontWeight = FontWeight.W400,
-                                                    fontSize = 14.sp,
-                                                    lineHeight = 19.sp,
-                                                    color = textColor,
-                                                ),
-                                                overflow = TextOverflow.Ellipsis
-                                            )
+                                            Box(
+                                                modifier = Modifier.weight(1f)
+                                            ) {
+                                                // FIXME https://holykisa.tistory.com/74
+                                                innerTextField.invoke()
+                                                Text(
+                                                    modifier = Modifier.fillMaxWidth(1f),
+                                                    text = textFieldValue.text,
+                                                    style = fTextStyle(
+                                                        fontWeight = FontWeight.W400,
+                                                        fontSize = 14.sp,
+                                                        lineHeight = 19.sp,
+                                                        color = textColor,
+                                                    ),
+                                                    overflow = TextOverflow.Ellipsis
+                                                )
+                                            }
 
                                             if (textFieldTail != null) {
                                                 when (textFieldTail) {
@@ -272,7 +272,8 @@ fun FTextField(
                                     label = null,
                                     singleLine = true,
                                     enabled = enabled,
-                                    isError = bottomType is BottomType.Error && bottomType.isError,
+                                    isError = bottomType is BottomType.Error &&
+                                            bottomType.isError,
                                     interactionSource = interactionSource,
                                     colors = TextFieldDefaults.textFieldColors(
                                         backgroundColor = backgroundColor,
@@ -417,7 +418,12 @@ private fun FTextFieldBottomWithFBorderButtonPreview() {
                     errorText = "에러 메시지 테스트 안내 문구입니다.",
                     isError = true
                 ),
-                borderButtons = listOf(BorderButton(text = "중복확인", enable = true, onClick = {})),
+                borderButtons = listOf(
+                    BorderButton(
+                        text = "중복확인",
+                        enable = true,
+                        onClick = {})
+                ),
                 textFieldTail = FTextFieldTail.Text(
                     text = "3:00",
                     style = fTextStyle(
