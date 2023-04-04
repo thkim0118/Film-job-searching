@@ -1,4 +1,4 @@
-package com.fone.filmone.ui
+package com.fone.filmone.ui.navigation
 
 sealed class FOneDestinations(val route: String) {
     object Splash : FOneDestinations("splash")

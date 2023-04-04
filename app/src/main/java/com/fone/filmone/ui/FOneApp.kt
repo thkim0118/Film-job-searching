@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.fone.filmone.ui.navigation.FOneNavGraph
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -14,7 +15,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 fun FOneApp(
     googleSignInLauncher: ActivityResultLauncher<Intent>? = null
 ) {
-    initSystemBarColor()
+    InitSystemBarColor()
 
     FilmOneTheme {
         Scaffold(
@@ -29,7 +30,7 @@ fun FOneApp(
 }
 
 @Composable
-private fun initSystemBarColor() {
+private fun InitSystemBarColor() {
     val systemUiController = rememberSystemUiController()
 
     with(systemUiController) {

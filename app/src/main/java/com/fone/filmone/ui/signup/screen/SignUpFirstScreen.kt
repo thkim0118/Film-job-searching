@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
-import com.fone.filmone.ui.FOneDestinations
+import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.common.FButton
 import com.fone.filmone.ui.common.FTitleBar
 import com.fone.filmone.ui.common.TitleType
@@ -59,7 +59,8 @@ fun SignUpFirstScreen(
 
             Text(
                 text = stringResource(id = R.string.sign_up_first_title),
-                style = LocalTypography.current.h1
+                style = LocalTypography.current.h1,
+                color = FColor.TextPrimary
             )
 
             Spacer(modifier = Modifier.height(32.dp))

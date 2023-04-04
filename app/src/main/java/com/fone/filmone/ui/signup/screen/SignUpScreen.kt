@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.fone.filmone.ui.FOneDestinations
+import com.fone.filmone.ui.navigation.FOneDestinations
 
 fun NavGraphBuilder.nestedSignUpScreenGraph(
     modifier: Modifier = Modifier,

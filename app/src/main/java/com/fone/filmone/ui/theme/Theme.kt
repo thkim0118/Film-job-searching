@@ -25,7 +25,7 @@ fun FilmOneTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composabl
     }
 
     MaterialTheme(
-        colors = colors,
+        colors = LightColorPalette,
         shapes = Shapes,
         content = content
     )
