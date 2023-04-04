@@ -2,7 +2,7 @@ package com.fone.filmone.core.login
 
 import android.app.Activity
 import android.content.Context
-import com.fone.filmone.core.login.model.SnsLoginType
+import com.fone.filmone.domain.model.signup.SocialLoginType
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.OAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -26,7 +26,7 @@ class AppleLoginImpl(
                 val accessToken = (it.credential as? zze)?.idToken
                 loginCallback.onSuccess(
                     accessToken ?: return@addOnSuccessListener,
-                    SnsLoginType.Apple
+                    SocialLoginType.APPLE
                 )
             }.addOnFailureListener {
                 loginCallback.onFail(it.message ?: it.localizedMessage)
@@ -40,7 +40,7 @@ class AppleLoginImpl(
                     val accessToken = (it.credential as? zze)?.idToken
                     loginCallback.onSuccess(
                         accessToken ?: return@addOnSuccessListener,
-                        SnsLoginType.Apple
+                        SocialLoginType.APPLE
                     )
                 }
                 .addOnCanceledListener {

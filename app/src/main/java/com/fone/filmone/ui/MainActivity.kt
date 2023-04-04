@@ -9,19 +9,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.LaunchedEffect
 import androidx.core.view.WindowCompat
-import com.fone.filmone.R
-import com.fone.filmone.core.LogUtil
 import com.fone.filmone.core.login.SNSLoginUtil
-import com.fone.filmone.core.login.model.SnsLoginType
+import com.fone.filmone.domain.model.signup.SocialLoginType
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.tasks.Task
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -32,7 +24,7 @@ class MainActivity : ComponentActivity() {
         if (result.resultCode == RESULT_OK) {
             SNSLoginUtil.getInstance()?.handleResult(
                 GoogleSignIn.getSignedInAccountFromIntent(result.data),
-                SnsLoginType.Google
+                SocialLoginType.GOOGLE
             )
         }
     }

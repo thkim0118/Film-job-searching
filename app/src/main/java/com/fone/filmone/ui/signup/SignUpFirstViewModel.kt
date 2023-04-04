@@ -6,6 +6,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-
 ) : ViewModel() {
+
 }

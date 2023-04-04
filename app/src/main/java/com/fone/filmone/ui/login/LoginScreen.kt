@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,13 +27,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
-import com.fone.filmone.core.login.model.SnsLoginType
-import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.domain.model.signup.SocialLoginType
 import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.fShadow
 import com.fone.filmone.ui.common.fTextStyle
+import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
@@ -131,7 +130,7 @@ private fun KakaoLoginButton(
     LoginButtonContainer(
         modifier = modifier
             .clickableSingleWithNoRipple(onClick = {
-                viewModel.requestSnsAccessToken(context, SnsLoginType.Kakao)
+                viewModel.requestSnsAccessToken(context, SocialLoginType.KAKAO)
             }),
         backgroundColor = FColor.Kakao,
         imageRes = R.drawable.login_social_kakao,
@@ -150,7 +149,7 @@ private fun NaverLoginButton(
     LoginButtonContainer(
         modifier = modifier
             .clickableSingleWithNoRipple {
-                viewModel.requestSnsAccessToken(context, SnsLoginType.Naver)
+                viewModel.requestSnsAccessToken(context, SocialLoginType.NAVER)
             },
         backgroundColor = FColor.Naver,
         imageRes = R.drawable.login_social_naver,
@@ -170,7 +169,7 @@ private fun GoogleLoginButton(
     LoginButtonContainer(
         modifier = modifier
             .clickableSingleWithNoRipple {
-                viewModel.requestSnsAccessToken(context, SnsLoginType.Google, launcher)
+                viewModel.requestSnsAccessToken(context, SocialLoginType.GOOGLE, launcher)
             },
         backgroundColor = FColor.White,
         borderColor = FColor.ColorF5F5F5,
@@ -190,7 +189,7 @@ private fun AppleLoginButton(
     LoginButtonContainer(
         modifier = modifier
             .clickableSingleWithNoRipple {
-                viewModel.requestSnsAccessToken(context, SnsLoginType.Apple)
+                viewModel.requestSnsAccessToken(context, SocialLoginType.APPLE)
             },
         backgroundColor = FColor.Black,
         imageRes = R.drawable.login_social_apple,

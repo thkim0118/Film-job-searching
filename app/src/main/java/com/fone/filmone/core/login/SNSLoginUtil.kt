@@ -3,7 +3,7 @@ package com.fone.filmone.core.login
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import com.fone.filmone.core.login.model.SnsLoginType
+import com.fone.filmone.domain.model.signup.SocialLoginType
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 
@@ -13,37 +13,37 @@ class SNSLoginUtil private constructor(
 
     fun login(
         context: Context,
-        snsLoginType: SnsLoginType,
+        socialLoginType: SocialLoginType,
         launcher: ActivityResultLauncher<Intent>? = null,
     ) {
-        when (snsLoginType) {
-            SnsLoginType.Kakao -> {
-                KakaoLoginImpl(loginCallback).login(context)
+        when (socialLoginType) {
+            SocialLoginType.APPLE -> {
+                // TODO Firebase Project 에 연결 필요.
+                AppleLoginImpl(loginCallback).login(context)
             }
-            SnsLoginType.Naver -> {
-                NaverLoginImpl(loginCallback).login(context)
-            }
-            SnsLoginType.Google -> {
+            SocialLoginType.GOOGLE -> {
                 launcher?.let {
                     GoogleLoginImpl(loginCallback, launcher).login(context)
                 } ?: return
             }
-            SnsLoginType.Apple -> {
-                // TODO Firebase Project 에 연결 필요.
-                AppleLoginImpl(loginCallback).login(context)
+            SocialLoginType.KAKAO -> {
+                KakaoLoginImpl(loginCallback).login(context)
+            }
+            SocialLoginType.NAVER -> {
+                NaverLoginImpl(loginCallback).login(context)
             }
         }
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> handleResult(data: T, snsLoginType: SnsLoginType) {
-        when (snsLoginType) {
-            SnsLoginType.Google -> {
+    fun <T> handleResult(data: T, socialLoginType: SocialLoginType) {
+        when (socialLoginType) {
+            SocialLoginType.GOOGLE -> {
                 val accessToken =
                     GoogleLoginImpl.getAccessToken(data as? Task<GoogleSignInAccount> ?: return)
 
                 if (accessToken != null) {
-                    loginCallback.onSuccess(accessToken, snsLoginType)
+                    loginCallback.onSuccess(accessToken, socialLoginType)
                 } else {
                     loginCallback.onFail("No AccessToken")
                 }
@@ -53,7 +53,7 @@ class SNSLoginUtil private constructor(
     }
 
     interface LoginCallback {
-        fun onSuccess(token: String, snsLoginType: SnsLoginType)
+        fun onSuccess(token: String, socialLoginType: SocialLoginType)
         fun onFail(message: String)
         fun onCancel()
     }

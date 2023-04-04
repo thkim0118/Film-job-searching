@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import com.fone.filmone.R
 import com.fone.filmone.core.LogUtil
-import com.fone.filmone.core.login.model.SnsLoginType
+import com.fone.filmone.domain.model.signup.SocialLoginType
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -20,7 +20,7 @@ class GoogleLoginImpl(
     override fun login(context: Context) {
         val account = GoogleSignIn.getLastSignedInAccount(context)
         if (account != null && account.idToken != null) {
-            loginCallback.onSuccess(account.idToken ?: return, SnsLoginType.Google)
+            loginCallback.onSuccess(account.idToken ?: return, SocialLoginType.GOOGLE)
             return
         }
 

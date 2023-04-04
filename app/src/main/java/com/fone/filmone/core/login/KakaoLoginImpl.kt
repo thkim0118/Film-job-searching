@@ -2,7 +2,7 @@ package com.fone.filmone.core.login
 
 import android.content.Context
 import com.fone.filmone.BuildConfig
-import com.fone.filmone.core.login.model.SnsLoginType
+import com.fone.filmone.domain.model.signup.SocialLoginType
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.AuthErrorCause
@@ -59,7 +59,7 @@ class KakaoLoginImpl (
                 }
             }
         } else if (oAuthToken != null) {
-            loginCallback.onSuccess(oAuthToken.accessToken, SnsLoginType.Kakao)
+            loginCallback.onSuccess(oAuthToken.accessToken, SocialLoginType.KAKAO)
         }
     }
 }

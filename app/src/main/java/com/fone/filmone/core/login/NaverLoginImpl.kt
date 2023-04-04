@@ -1,8 +1,7 @@
 package com.fone.filmone.core.login
 
 import android.content.Context
-import com.fone.filmone.core.LogUtil
-import com.fone.filmone.core.login.model.SnsLoginType
+import com.fone.filmone.domain.model.signup.SocialLoginType
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.NidOAuthErrorCode
 import com.navercorp.nid.oauth.OAuthLoginCallback
@@ -29,8 +28,7 @@ class NaverLoginImpl (
                 return
             }
 
-            LogUtil.d("${SnsLoginType.Naver} $accessToken")
-            loginCallback.onSuccess(accessToken, SnsLoginType.Naver)
+            loginCallback.onSuccess(accessToken, SocialLoginType.NAVER)
         }
 
         private fun handleError(errorCode: Int, message: String) {

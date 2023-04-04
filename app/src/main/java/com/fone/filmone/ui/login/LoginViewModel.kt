@@ -6,7 +6,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.ViewModel
 import com.fone.filmone.core.LogUtil
 import com.fone.filmone.core.login.SNSLoginUtil
-import com.fone.filmone.core.login.model.SnsLoginType
+import com.fone.filmone.domain.model.signup.SocialLoginType
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,8 +18,8 @@ class LoginViewModel @Inject constructor(
 
     private val snsLoginUtil: SNSLoginUtil = SNSLoginUtil.getInstance(
         object : SNSLoginUtil.LoginCallback {
-            override fun onSuccess(token: String, snsLoginType: SnsLoginType) {
-                LogUtil.d("$snsLoginType, $token")
+            override fun onSuccess(token: String, socialLoginType: SocialLoginType) {
+                LogUtil.d("$socialLoginType, $token")
                 FOneNavigator.navigateTo(FOneDestinations.SignUp)
             }
 
@@ -36,9 +36,9 @@ class LoginViewModel @Inject constructor(
 
     fun requestSnsAccessToken(
         context: Context,
-        snsLoginType: SnsLoginType,
+        socialLoginType: SocialLoginType,
         launcher: ActivityResultLauncher<Intent>? = null
     ) {
-        snsLoginUtil.login(context, snsLoginType, launcher)
+        snsLoginUtil.login(context, socialLoginType, launcher)
     }
 }
