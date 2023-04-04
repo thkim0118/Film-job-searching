@@ -37,10 +37,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fone.filmone.core.LogUtil
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
 import kotlinx.coroutines.launch
+import java.util.regex.Pattern
 
 @Composable
 fun FTextField(
@@ -48,6 +50,7 @@ fun FTextField(
     text: String = "",
     placeholder: String = "",
     onValueChange: (String) -> Unit,
+    pattern: Pattern? = null,
     textLimit: Int = Int.MAX_VALUE,
     onFocusChange: (Boolean) -> Unit = {},
     topText: TopText = TopText(
@@ -121,9 +124,32 @@ fun FTextField(
                 modifier = Modifier,
                 value = textFieldValue,
                 onValueChange = {
-                    if (it.text.length <= textLimit) {
+                    if (it.text.isEmpty()) {
                         textFieldValue = it
                         onValueChange.invoke(it.text)
+                        return@BasicTextField
+                    }
+
+                    if (it.text.length > textLimit) {
+                        return@BasicTextField
+                    }
+
+                    if (pattern == null) {
+                        textFieldValue = it
+                        onValueChange.invoke(it.text)
+                        return@BasicTextField
+                    }
+
+                    if (it.text.isEmpty()) {
+                        textFieldValue = it
+                        onValueChange.invoke(it.text)
+                        return@BasicTextField
+                    }
+
+                    if (pattern.matcher(it.text).matches()) {
+                        textFieldValue = it
+                        onValueChange.invoke(it.text)
+                        return@BasicTextField
                     }
                 },
                 cursorBrush = SolidColor(cursorColor),
