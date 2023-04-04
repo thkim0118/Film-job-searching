@@ -14,7 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
+import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 
@@ -23,7 +23,7 @@ fun FBorderButton(
     modifier: Modifier = Modifier,
     text: String,
     enable: Boolean,
-    onClick: () -> Unit = {}
+    clickType: ClickType,
 ) {
     Box(
         modifier = modifier
@@ -37,7 +37,16 @@ fun FBorderButton(
                 },
                 shape = RoundedCornerShape(5.dp)
             )
-            .clickable { onClick.invoke() }
+            .clickable {
+                if (clickType is ClickType.Click) {
+                    clickType.onClick.invoke()
+                }
+            }
+            .clickableSingle {
+                if (clickType is ClickType.ClickSingle) {
+                    clickType.onClick.invoke()
+                }
+            }
             .padding(horizontal = 16.dp, vertical = 13.dp),
         contentAlignment = Alignment.Center
     ) {
@@ -57,11 +66,17 @@ fun FBorderButton(
     }
 }
 
+sealed interface ClickType {
+    data class Click(val onClick: () -> Unit) : ClickType
+    data class ClickSingle(val onClick: () -> Unit) : ClickType
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun FBorderButtonEnablePreview() {
     FilmOneTheme {
-        FBorderButton(text = "중복확인", enable = true)
+        FBorderButton(text = "중복확인", enable = true, clickType = ClickType.Click {})
     }
 }
 
@@ -69,6 +84,6 @@ fun FBorderButtonEnablePreview() {
 @Composable
 fun FBorderButtonDisablePreview() {
     FilmOneTheme {
-        FBorderButton(text = "중복확인", enable = false)
+        FBorderButton(text = "중복확인", enable = false, clickType = ClickType.Click {})
     }
 }

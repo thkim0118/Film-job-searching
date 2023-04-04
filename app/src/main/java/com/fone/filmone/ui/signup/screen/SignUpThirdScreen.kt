@@ -104,7 +104,7 @@ private fun PhoneVerificationComponent() {
             BorderButton(
                 text = stringResource(id = R.string.sign_up_third_phone_number_send_title),
                 enable = false,
-                onClick = {
+                clickType = ClickType.ClickSingle {
 
                 }
             )
@@ -130,7 +130,7 @@ private fun PhoneVerificationComponent() {
                 BorderButton(
                     text = stringResource(id = R.string.sign_up_third_phone_number_check_code),
                     enable = false,
-                    onClick = {
+                    clickType = ClickType.ClickSingle {
 
                     }
                 )

@@ -6,10 +6,10 @@ sealed class NetworkResult<out T> {
     ) : NetworkResult<T>()
 
     data class EmptyData(
-        val networkFail: NetworkFail
+        val networkFail: NetworkFail?
     ) : NetworkResult<Nothing>()
 
-    data class Error(
+    data class Fail(
         val networkFail: NetworkFail
     ) : NetworkResult<Nothing>()
 }

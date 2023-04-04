@@ -37,7 +37,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.fone.filmone.core.LogUtil
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
@@ -317,7 +316,7 @@ fun FTextField(
                                 FBorderButton(
                                     text = borderButton.text,
                                     enable = borderButton.enable,
-                                    onClick = borderButton.onClick
+                                    clickType = borderButton.clickType,
                                 )
                             }
                         }
@@ -374,7 +373,7 @@ sealed interface BottomType {
 data class BorderButton(
     val text: String,
     val enable: Boolean,
-    val onClick: () -> Unit
+    val clickType: ClickType,
 )
 
 sealed interface FTextFieldTail {
@@ -448,7 +447,8 @@ private fun FTextFieldBottomWithFBorderButtonPreview() {
                     BorderButton(
                         text = "중복확인",
                         enable = true,
-                        onClick = {})
+                        clickType = ClickType.Click {}
+                    )
                 ),
                 textFieldTail = FTextFieldTail.Text(
                     text = "3:00",

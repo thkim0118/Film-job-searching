@@ -42,6 +42,7 @@
     <string name="sign_up_second_nickname_title">닉네임</string>
     <string name="sign_up_second_nickname_placeholder">3~8자리의 숫자, 영어, 한글만 가능합니다.</string>
     <string name="sign_up_second_nickname_check_duplicate">중복확인</string>
+    <string name="sign_up_second_nickname_check_duplicate_complete">인증완료</string>
     <string name="sign_up_second_nickname_error_title">중복되는 닉네임입니다.</string>
     <string name="sign_up_second_birthday_sex_title">생년월일 및 성별</string>
     <string name="sign_up_second_birthday_sex_subtitle">성별과 생년월일의 정보는 변경이 불가능합니다.</string>

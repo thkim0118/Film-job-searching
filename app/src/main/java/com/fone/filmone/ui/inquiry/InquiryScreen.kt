@@ -99,21 +99,24 @@ private fun InquiryTypeComponent() {
     Row {
         FBorderButton(
             text = stringResource(id = R.string.inquiry_type_using_service),
-            enable = false
+            enable = false,
+            clickType = ClickType.Click {}
         )
 
         Spacer(modifier = Modifier.width(8.dp))
 
         FBorderButton(
             text = stringResource(id = R.string.inquiry_type_partnership),
-            enable = false
+            enable = false,
+            clickType = ClickType.Click {}
         )
 
         Spacer(modifier = Modifier.width(8.dp))
 
         FBorderButton(
             text = stringResource(id = R.string.inquiry_type_user_report),
-            enable = false
+            enable = false,
+            clickType = ClickType.Click {}
         )
     }
 }
