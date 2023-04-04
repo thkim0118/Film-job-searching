@@ -29,6 +29,7 @@ class SNSLoginUtil private constructor(
                 } ?: return
             }
             SnsLoginType.Apple -> {
+                // TODO Firebase Project 에 연결 필요.
                 AppleLoginImpl(loginCallback).login(context)
             }
         }
