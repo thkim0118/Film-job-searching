@@ -1,10 +1,13 @@
 package com.fone.filmone.ui.signup.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -13,17 +16,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
-import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.domain.model.signup.Interests
+import com.fone.filmone.domain.model.signup.Job
 import com.fone.filmone.ui.common.FButton
 import com.fone.filmone.ui.common.FTitleBar
 import com.fone.filmone.ui.common.TitleType
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.fTextStyle
+import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.signup.SignUpFirstViewModel
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
+import com.fone.filmone.ui.signup.model.SignUpFirstVo
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
@@ -83,21 +92,40 @@ fun SignUpFirstScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            FavoriteTags()
+            InterestsTags()
 
             Spacer(modifier = Modifier.weight(1f))
 
-            FButton(
-                title = stringResource(id = R.string.sign_up_next_title),
-                enable = false,
-                onClick = {
-                    navController.navigate(FOneDestinations.SignUp.SignUpSecond.route)
-                }
-            )
+            NextButton()
 
             Spacer(modifier = Modifier.height(38.dp))
         }
     }
+}
+
+@Composable
+private fun NextButton(
+    viewModel: SignUpFirstViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    val enable = uiState.job != null && uiState.interests.isNotEmpty()
+
+    FButton(
+        title = stringResource(id = R.string.sign_up_next_title),
+        enable = enable,
+        onClick = {
+            if (enable) {
+                FOneNavigator.navigateTo(
+                    FOneDestinations.SignUp.SignUpSecond.getRouteWithArg(
+                        SignUpFirstVo(
+                            job = uiState.job?.name ?: return@FButton,
+                            interests = uiState.interests.map { it.name }
+                        )
+                    )
+                )
+            }
+        }
+    )
 }
 
 @Composable
@@ -135,22 +163,14 @@ private fun ChoiceTitle(
 private fun JobTags(
     modifier: Modifier = Modifier
 ) {
-    val jobItems = listOf(
-        stringResource(id = R.string.sign_up_first_choice_job_actor),
-        stringResource(id = R.string.sign_up_first_choice_job_staff),
-        stringResource(id = R.string.sign_up_first_choice_job_normal),
-        stringResource(id = R.string.sign_up_first_choice_job_hunter),
-    )
-
     FlowRow(
         modifier = modifier,
         maxItemsInEachRow = 3
     ) {
-        jobItems.forEach { title ->
+        Job.values().forEach { job ->
             JobTag(
                 modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
-                title = title,
-                isSelected = false
+                job = job,
             )
         }
     }
@@ -159,25 +179,29 @@ private fun JobTags(
 @Composable
 private fun JobTag(
     modifier: Modifier = Modifier,
-    title: String,
-    isSelected: Boolean
+    job: Job,
+    viewModel: SignUpFirstViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+    val isSelected = uiState.job == job
+
     Box(
         modifier = modifier
             .clip(shape = RoundedCornerShape(90.dp))
             .background(
                 color = if (isSelected) {
-                    FColor.Primary
+                    FColor.Red50
                 } else {
                     FColor.BgGroupedBase
                 },
                 shape = RoundedCornerShape(90.dp)
-            ),
+            )
+            .clickable { viewModel.updateJobTag(job) },
     ) {
         Text(
             modifier = Modifier
                 .padding(horizontal = 20.dp, vertical = 8.dp),
-            text = title,
+            text = job.name,
             style = if (isSelected) {
                 fTextStyle(
                     fontWeight = FontWeight.W500,
@@ -199,57 +223,48 @@ private fun JobTag(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun FavoriteTags(
+private fun InterestsTags(
     modifier: Modifier = Modifier
 ) {
-    val jobItems = listOf(
-        stringResource(id = R.string.sign_up_first_choice_favorite_long_film),
-        stringResource(id = R.string.sign_up_first_choice_favorite_short_film),
-        stringResource(id = R.string.sign_up_first_choice_favorite_independent_film),
-        stringResource(id = R.string.sign_up_first_choice_favorite_web_drama),
-        stringResource(id = R.string.sign_up_first_choice_favorite_music_video_cf),
-        stringResource(id = R.string.sign_up_first_choice_favorite_ott_tv_drama),
-        stringResource(id = R.string.sign_up_first_choice_favorite_youtube),
-        stringResource(id = R.string.sign_up_first_choice_favorite_promotion_viral),
-        stringResource(id = R.string.sign_up_first_choice_favorite_etc),
-    )
-
     FlowRow(
         modifier = modifier,
         maxItemsInEachRow = 3
     ) {
-        jobItems.forEach { title ->
-            FavoriteTag(
+        Interests.values().forEach { interests ->
+            InterestsTag(
                 modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
-                title = title,
-                isSelected = false,
+                interests = interests,
             )
         }
     }
 }
 
 @Composable
-private fun FavoriteTag(
+private fun InterestsTag(
     modifier: Modifier = Modifier,
-    title: String,
-    isSelected: Boolean
+    interests: Interests,
+    viewModel: SignUpFirstViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+    val isSelected = uiState.interests.find { it == interests } != null
+
     Box(
         modifier = modifier
             .clip(shape = RoundedCornerShape(90.dp))
             .background(
                 color = if (isSelected) {
-                    FColor.Primary
+                    FColor.Red50
                 } else {
                     FColor.BgGroupedBase
                 },
                 shape = RoundedCornerShape(90.dp)
-            ),
+            )
+            .clickable { viewModel.updateInterest(interests, isSelected.not()) },
     ) {
         Text(
             modifier = Modifier
                 .padding(horizontal = 20.dp, vertical = 8.dp),
-            text = title,
+            text = interests.title,
             style = if (isSelected) {
                 fTextStyle(
                     fontWeight = FontWeight.W500,
@@ -279,7 +294,7 @@ private fun JobTagsPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun FavoriteTagsPreview() {
-    FavoriteTags()
+    InterestsTags()
 }
 
 @Preview(showBackground = true)

@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.ui.inquiry.InquiryScreen
 import com.fone.filmone.ui.login.LoginScreen
-import com.fone.filmone.ui.signup.screen.nestedSignUpScreenGraph
+import com.fone.filmone.ui.signup.nestedSignUpScreenGraph
 import com.fone.filmone.ui.splash.SplashScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -24,8 +24,12 @@ fun FOneNavGraph(
     googleSignInLauncher: ActivityResultLauncher<Intent>? = null
 ) {
     LaunchedEffect(key1 = "navigation") {
-        FOneNavigator.sharedFlow.onEach {
+        FOneNavigator.destinationFlow.onEach {
             navController.navigate(it.route)
+        }.launchIn(this)
+
+        FOneNavigator.routeFlow.onEach { route ->
+            navController.navigate(route)
         }.launchIn(this)
     }
 
