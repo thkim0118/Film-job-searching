@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.fone.filmone.core.LogUtil
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
@@ -50,6 +51,7 @@ fun FTextField(
     placeholder: String = "",
     onValueChange: (String) -> Unit,
     pattern: Pattern? = null,
+    autoCompletion: ((value: TextFieldValue) -> TextFieldValue)? = null,
     textLimit: Int = Int.MAX_VALUE,
     onFocusChange: (Boolean) -> Unit = {},
     topText: TopText = TopText(
@@ -107,13 +109,9 @@ fun FTextField(
                     coroutineScope.launch {
                         textFieldValue = if (isFocused) {
                             textFieldValue
-                                .copy(
-                                    selection = TextRange(textFieldValue.text.length)
-                                )
+                                .copy(selection = TextRange(textFieldValue.text.length))
                         } else {
-                            textFieldValue.copy(
-                                selection = TextRange(0)
-                            )
+                            textFieldValue.copy(selection = TextRange(0))
                         }
                     }
                 }
@@ -133,21 +131,34 @@ fun FTextField(
                         return@BasicTextField
                     }
 
+                    if (autoCompletion != null) {
+                        textFieldValue = autoCompletion.invoke(it)
+                    }
+
                     if (pattern == null) {
-                        textFieldValue = it
+                        textFieldValue = if (autoCompletion != null) {
+                            textFieldValue
+                        } else {
+                            it
+                        }
                         onValueChange.invoke(it.text)
                         return@BasicTextField
                     }
-
-                    if (it.text.isEmpty()) {
-                        textFieldValue = it
-                        onValueChange.invoke(it.text)
-                        return@BasicTextField
-                    }
-
+                    LogUtil.w("textFieldValue :: ${textFieldValue}")
                     if (pattern.matcher(it.text).matches()) {
-                        textFieldValue = it
-                        onValueChange.invoke(it.text)
+                        textFieldValue = if (autoCompletion != null) {
+                            textFieldValue
+                        } else {
+                            it
+                        }
+
+                        onValueChange.invoke(
+                            if (autoCompletion != null) {
+                                textFieldValue
+                            } else {
+                                it
+                            }.text
+                        )
                         return@BasicTextField
                     }
                 },
@@ -316,7 +327,9 @@ fun FTextField(
                                 FBorderButton(
                                     text = borderButton.text,
                                     enable = borderButton.enable,
-                                    clickType = borderButton.clickType,
+                                    onClick = {
+                                        borderButton.onClick.invoke()
+                                    }
                                 )
                             }
                         }
@@ -373,8 +386,13 @@ sealed interface BottomType {
 data class BorderButton(
     val text: String,
     val enable: Boolean,
-    val clickType: ClickType,
+    val onClick: () -> Unit
 )
+
+sealed interface ClickType {
+    data class Click(val onClick: () -> Unit) : ClickType
+    data class ClickSingle(val onClick: () -> Unit) : ClickType
+}
 
 sealed interface FTextFieldTail {
     data class Text(
@@ -447,7 +465,7 @@ private fun FTextFieldBottomWithFBorderButtonPreview() {
                     BorderButton(
                         text = "중복확인",
                         enable = true,
-                        clickType = ClickType.Click {}
+                        onClick = {}
                     )
                 ),
                 textFieldTail = FTextFieldTail.Text(
