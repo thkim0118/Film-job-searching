@@ -5,9 +5,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.fone.filmone.core.LogUtil
 import com.fone.filmone.ui.navigation.FOneDestinations
-import com.fone.filmone.ui.signup.model.SignUpFirstVo
+import com.fone.filmone.ui.signup.model.SignUpVo
 import com.fone.filmone.ui.signup.screen.SignUpCompleteScreen
 import com.fone.filmone.ui.signup.screen.SignUpFirstScreen
 import com.fone.filmone.ui.signup.screen.SignUpSecondScreen
@@ -31,20 +30,28 @@ fun NavGraphBuilder.nestedSignUpScreenGraph(
             route = FOneDestinations.SignUp.SignUpSecond.routeWithArgs,
             arguments = FOneDestinations.SignUp.SignUpSecond.arguments
         ) { navBackStackEntry ->
-            val signUpFirstVo =
-                navBackStackEntry.arguments?.getString(FOneDestinations.SignUp.SignUpSecond.argSignUpFirstModel)
+            val signUpVo =
+                navBackStackEntry.arguments?.getString(FOneDestinations.SignUp.argSignUpVo)
                     ?: return@composable
-            LogUtil.d("${SignUpFirstVo.fromJson(signUpFirstVo)}")
 
             SignUpSecondScreen(
                 modifier = modifier,
-                navController = navController
+                navController = navController,
+                signUpVo = SignUpVo.fromJson(signUpVo)
             )
         }
-        composable(FOneDestinations.SignUp.SignUpThird.route) {
+        composable(
+            route = FOneDestinations.SignUp.SignUpThird.routeWithArgs,
+            arguments = FOneDestinations.SignUp.SignUpThird.arguments
+        ) { navBackStackEntry ->
+            val signUpVo =
+                navBackStackEntry.arguments?.getString(FOneDestinations.SignUp.argSignUpVo)
+                    ?: return@composable
+
             SignUpThirdScreen(
                 modifier = modifier,
-                navController = navController
+                navController = navController,
+                signUpVo = SignUpVo.fromJson(signUpVo)
             )
         }
         composable(FOneDestinations.SignUp.SignUpComplete.route) {

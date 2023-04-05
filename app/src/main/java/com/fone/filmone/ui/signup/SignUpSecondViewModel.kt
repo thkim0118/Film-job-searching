@@ -2,7 +2,6 @@ package com.fone.filmone.ui.signup
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fone.filmone.core.LogUtil
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.model.signup.Gender
 import com.fone.filmone.domain.usecase.CheckNicknameDuplicationUseCase
@@ -35,18 +34,18 @@ class SignUpSecondViewModel @Inject constructor(
         }
     }
 
-    fun updateBirthDay(birthDay: String) {
+    fun updateBirthDay(birthday: String) {
         _uiState.update {
-            it.copy(birthDay = birthDay)
+            it.copy(birthday = birthday)
         }
 
-        updateBirthDayChecked(birthDay)
+        updateBirthDayChecked(birthday)
     }
 
-    private fun updateBirthDayChecked(birthDay: String) {
+    private fun updateBirthDayChecked(birthday: String) {
         val birthDayPattern = Pattern.compile("^(\\d{4})-(0[1-9]|1[0-2])-(0\\d|[1-2]\\d|3[0-1])+$")
         _uiState.update {
-            it.copy(isBirthDayChecked = birthDayPattern.matcher(birthDay).matches())
+            it.copy(isBirthDayChecked = birthDayPattern.matcher(birthday).matches())
         }
     }
 
@@ -77,7 +76,7 @@ data class SignUpSecondUiState(
     val nickname: String = "",
     val isNicknameChecked: Boolean = false,
     val isNicknameDuplicated: Boolean = false,
-    val birthDay: String = "",
+    val birthday: String = "",
     val isBirthDayChecked: Boolean = false,
     val gender: Gender? = null,
 )

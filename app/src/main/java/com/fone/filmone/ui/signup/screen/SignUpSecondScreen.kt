@@ -26,9 +26,11 @@ import com.fone.filmone.domain.model.signup.Gender
 import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.signup.SignUpSecondViewModel
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
+import com.fone.filmone.ui.signup.model.SignUpVo
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
 import java.util.regex.Pattern
@@ -37,6 +39,7 @@ import java.util.regex.Pattern
 fun SignUpSecondScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    signUpVo: SignUpVo,
 ) {
     Column(
         modifier = modifier
@@ -81,7 +84,7 @@ fun SignUpSecondScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            NextButton(navController)
+            NextButton(signUpVo = signUpVo)
 
             Spacer(modifier = Modifier.height(38.dp))
         }
@@ -108,7 +111,7 @@ private fun NicknameComponent(
             onValueChange = { value ->
                 viewModel.updateNickname(value)
             },
-            pattern = Pattern.compile("^[ㄱ-ㅣ가-힣a-zA-Z0-9\\s]+$"),
+            pattern = Pattern.compile("^[ㄱ-ㅣ가-힣a-zA-Z\\d\\s]+$"),
             topText = TopText(
                 title = stringResource(id = R.string.sign_up_second_nickname_title),
                 titleStar = true,
@@ -151,7 +154,7 @@ private fun BirthdaySexComponent(
 
     // TODO Delete 할때 버그있음.
     FTextField(
-        text = uiState.birthDay,
+        text = uiState.birthday,
         placeholder = stringResource(id = R.string.sign_up_second_birthday_sex_placeholder),
         onValueChange = { value ->
             viewModel.updateBirthDay(value)
@@ -228,8 +231,8 @@ private fun ProfileComponent() {
 
 @Composable
 private fun NextButton(
-    navController: NavHostController,
-    viewModel: SignUpSecondViewModel = hiltViewModel()
+    viewModel: SignUpSecondViewModel = hiltViewModel(),
+    signUpVo: SignUpVo
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val enable = uiState.isNicknameChecked && uiState.gender != null && uiState.isBirthDayChecked
@@ -239,7 +242,14 @@ private fun NextButton(
         enable = enable,
         onClick = {
             if (enable) {
-                navController.navigate(FOneDestinations.SignUp.SignUpThird.route)
+                FOneNavigator.navigateTo(
+                    FOneDestinations.SignUp.SignUpThird.getRouteWithArg(
+                        signUpVo.copy(
+                            nickname = uiState.nickname,
+                            birthda = uiState.birthday
+                        )
+                    )
+                )
             }
         }
     )
@@ -249,6 +259,6 @@ private fun NextButton(
 @Composable
 fun SignUpSecondScreenPreview() {
     FilmOneTheme {
-        SignUpSecondScreen()
+        SignUpSecondScreen(signUpVo = SignUpVo())
     }
 }

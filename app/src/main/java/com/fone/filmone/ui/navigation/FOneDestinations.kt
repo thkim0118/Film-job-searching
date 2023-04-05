@@ -2,27 +2,35 @@ package com.fone.filmone.ui.navigation
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import com.fone.filmone.ui.signup.model.SignUpFirstVo
+import com.fone.filmone.ui.signup.model.SignUpVo
 
 sealed class FOneDestinations(val route: String) {
     object Splash : FOneDestinations("splash")
     object Login : FOneDestinations("login")
     object SignUp : FOneDestinations("sign-up") {
+        const val argSignUpVo = "arg_sign_up_vo"
         object SignUpFirst : FOneDestinations("sign-up/first")
         object SignUpSecond : FOneDestinations("sign-up/second") {
-            const val argSignUpFirstModel = "arg_first_model"
-
-            val routeWithArgs = "$route/{$argSignUpFirstModel}"
+            val routeWithArgs = "$route/{$argSignUpVo}"
             val arguments = listOf(
-                navArgument(argSignUpFirstModel) { type = NavType.StringType }
+                navArgument(argSignUpVo) { type = NavType.StringType }
             )
 
-            fun getRouteWithArg(signUpFirstVo: SignUpFirstVo): String {
-                return "$route/${SignUpFirstVo.toJson(signUpFirstVo)}"
+            fun getRouteWithArg(signUpFirstVo: SignUpVo): String {
+                return "$route/${SignUpVo.toJson(signUpFirstVo)}"
             }
         }
 
-        object SignUpThird : FOneDestinations("sign-up/third")
+        object SignUpThird : FOneDestinations("sign-up/third") {
+            val routeWithArgs = "$route/{$argSignUpVo}"
+            val arguments = listOf(
+                navArgument(argSignUpVo) { type = NavType.StringType }
+            )
+
+            fun getRouteWithArg(signUpVo: SignUpVo): String {
+                return "$route/${SignUpVo.toJson(signUpVo)}"
+            }
+        }
         object SignUpComplete : FOneDestinations("sign-up/complete")
     }
 

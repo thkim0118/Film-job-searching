@@ -28,6 +28,7 @@ import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
+import com.fone.filmone.ui.signup.model.SignUpVo
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
@@ -36,6 +37,7 @@ import com.fone.filmone.ui.theme.LocalTypography
 fun SignUpThirdScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    signUpVo: SignUpVo
 ) {
     Column(
         modifier = modifier
@@ -318,6 +320,6 @@ fun TermContent(
 @Composable
 fun SignUpThirdScreenPreview() {
     FilmOneTheme {
-        SignUpThirdScreen()
+        SignUpThirdScreen(signUpVo = SignUpVo())
     }
 }

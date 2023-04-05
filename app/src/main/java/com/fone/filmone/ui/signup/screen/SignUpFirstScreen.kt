@@ -32,7 +32,7 @@ import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.signup.SignUpFirstViewModel
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
-import com.fone.filmone.ui.signup.model.SignUpFirstVo
+import com.fone.filmone.ui.signup.model.SignUpVo
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
@@ -117,7 +117,7 @@ private fun NextButton(
             if (enable) {
                 FOneNavigator.navigateTo(
                     FOneDestinations.SignUp.SignUpSecond.getRouteWithArg(
-                        SignUpFirstVo(
+                        SignUpVo(
                             job = uiState.job?.name ?: return@FButton,
                             interests = uiState.interests.map { it.name }
                         )
