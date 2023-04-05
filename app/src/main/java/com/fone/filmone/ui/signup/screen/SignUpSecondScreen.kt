@@ -5,13 +5,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -19,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
-import com.fone.filmone.core.LogUtil
 import com.fone.filmone.domain.model.signup.Gender
 import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
@@ -79,13 +81,7 @@ fun SignUpSecondScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            FButton(
-                title = stringResource(id = R.string.sign_up_next_title),
-                enable = false,
-                onClick = {
-                    navController.navigate(FOneDestinations.SignUp.SignUpThird.route)
-                }
-            )
+            NextButton(navController)
 
             Spacer(modifier = Modifier.height(38.dp))
         }
@@ -97,6 +93,13 @@ private fun NicknameComponent(
     viewModel: SignUpSecondViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(key1 = uiState.isNicknameChecked) {
+        if (uiState.isNicknameChecked) {
+            focusManager.clearFocus()
+        }
+    }
 
     Row {
         FTextField(
@@ -113,13 +116,24 @@ private fun NicknameComponent(
             ),
             borderButtons = listOf(
                 BorderButton(
-                    text = stringResource(id = R.string.sign_up_second_nickname_check_duplicate),
-                    enable = uiState.isNicknameChecked,
+                    text = stringResource(
+                        id = if (uiState.isNicknameChecked) {
+                            R.string.sign_up_second_nickname_check_duplicate_complete
+                        } else {
+                            R.string.sign_up_second_nickname_check_duplicate
+                        }
+                    ),
+                    enable = if (uiState.isNicknameChecked) {
+                        false
+                    } else {
+                        uiState.nickname.isNotEmpty()
+                    },
                     onClick = {
-
+                        viewModel.checkNicknameDuplication()
                     }
                 )
             ),
+            enabled = uiState.isNicknameChecked.not(),
             bottomType =
             BottomType.Error(
                 errorText = stringResource(id = R.string.sign_up_second_nickname_error_title),
@@ -135,13 +149,24 @@ private fun BirthdaySexComponent(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
+    // TODO Delete 할때 버그있음.
     FTextField(
         text = uiState.birthDay,
         placeholder = stringResource(id = R.string.sign_up_second_birthday_sex_placeholder),
         onValueChange = { value ->
             viewModel.updateBirthDay(value)
         },
-        pattern = Pattern.compile("^[0-9\\s]+$"),
+        pattern = Pattern.compile("^[\\d\\s-]+$"),
+        autoCompletion = { value ->
+            when (value.text.length) {
+                4, 7 -> value.copy(
+                    text = "${value.text}-",
+                    selection = TextRange(value.text.length + 1)
+                )
+                else -> value
+            }
+        },
+        textLimit = 10,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number
         ),
@@ -199,6 +224,25 @@ private fun ProfileComponent() {
             contentDescription = null
         )
     }
+}
+
+@Composable
+private fun NextButton(
+    navController: NavHostController,
+    viewModel: SignUpSecondViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    val enable = uiState.isNicknameChecked && uiState.gender != null && uiState.isBirthDayChecked
+
+    FButton(
+        title = stringResource(id = R.string.sign_up_next_title),
+        enable = enable,
+        onClick = {
+            if (enable) {
+                navController.navigate(FOneDestinations.SignUp.SignUpThird.route)
+            }
+        }
+    )
 }
 
 @Preview(showBackground = true)

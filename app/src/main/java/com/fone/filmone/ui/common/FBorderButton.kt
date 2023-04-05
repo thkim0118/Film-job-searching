@@ -23,7 +23,7 @@ fun FBorderButton(
     modifier: Modifier = Modifier,
     text: String,
     enable: Boolean,
-    clickType: ClickType,
+    onClick: () -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -38,14 +38,7 @@ fun FBorderButton(
                 shape = RoundedCornerShape(5.dp)
             )
             .clickable {
-                if (clickType is ClickType.Click) {
-                    clickType.onClick.invoke()
-                }
-            }
-            .clickableSingle {
-                if (clickType is ClickType.ClickSingle) {
-                    clickType.onClick.invoke()
-                }
+                onClick.invoke()
             }
             .padding(horizontal = 16.dp, vertical = 13.dp),
         contentAlignment = Alignment.Center
@@ -66,17 +59,11 @@ fun FBorderButton(
     }
 }
 
-sealed interface ClickType {
-    data class Click(val onClick: () -> Unit) : ClickType
-    data class ClickSingle(val onClick: () -> Unit) : ClickType
-}
-
-
 @Preview(showBackground = true)
 @Composable
 fun FBorderButtonEnablePreview() {
     FilmOneTheme {
-        FBorderButton(text = "중복확인", enable = true, clickType = ClickType.Click {})
+        FBorderButton(text = "중복확인", enable = true, onClick = {})
     }
 }
 
@@ -84,6 +71,6 @@ fun FBorderButtonEnablePreview() {
 @Composable
 fun FBorderButtonDisablePreview() {
     FilmOneTheme {
-        FBorderButton(text = "중복확인", enable = false, clickType = ClickType.Click {})
+        FBorderButton(text = "중복확인", enable = false, onClick = {})
     }
 }

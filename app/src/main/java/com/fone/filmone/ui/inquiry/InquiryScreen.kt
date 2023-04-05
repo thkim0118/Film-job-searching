@@ -100,7 +100,7 @@ private fun InquiryTypeComponent() {
         FBorderButton(
             text = stringResource(id = R.string.inquiry_type_using_service),
             enable = false,
-            clickType = ClickType.Click {}
+            onClick = {}
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -108,7 +108,7 @@ private fun InquiryTypeComponent() {
         FBorderButton(
             text = stringResource(id = R.string.inquiry_type_partnership),
             enable = false,
-            clickType = ClickType.Click {}
+            onClick = {}
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -116,7 +116,7 @@ private fun InquiryTypeComponent() {
         FBorderButton(
             text = stringResource(id = R.string.inquiry_type_user_report),
             enable = false,
-            clickType = ClickType.Click {}
+            onClick = {}
         )
     }
 }

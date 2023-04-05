@@ -1,23 +1,30 @@
 package com.fone.filmone.ui.signup
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.fone.filmone.core.LogUtil
+import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.model.signup.Gender
+import com.fone.filmone.domain.usecase.CheckNicknameDuplicationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpSecondViewModel @Inject constructor(
+    private val checkNicknameDuplicationUseCase: CheckNicknameDuplicationUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SignUpSecondUiState())
     val uiState: StateFlow<SignUpSecondUiState> = _uiState.asStateFlow()
 
     fun updateNickname(nickname: String) {
         _uiState.update {
-            it.copy(nickname = nickname)
+            it.copy(nickname = nickname, isNicknameDuplicated = false)
         }
 
     }
@@ -32,12 +39,37 @@ class SignUpSecondViewModel @Inject constructor(
         _uiState.update {
             it.copy(birthDay = birthDay)
         }
+
+        updateBirthDayChecked(birthDay)
+    }
+
+    private fun updateBirthDayChecked(birthDay: String) {
+        val birthDayPattern = Pattern.compile("^(\\d{4})-(0[1-9]|1[0-2])-(0\\d|[1-2]\\d|3[0-1])+$")
+        _uiState.update {
+            it.copy(isBirthDayChecked = birthDayPattern.matcher(birthDay).matches())
+        }
     }
 
     fun updateGender(gender: Gender) {
         _uiState.update {
             it.copy(gender = gender)
         }
+    }
+
+    fun checkNicknameDuplication() = viewModelScope.launch {
+        // TODO Throttling.
+        checkNicknameDuplicationUseCase(uiState.value.nickname)
+            .onSuccess { isDuplicated ->
+                if (isDuplicated) {
+                    _uiState.update { uiState ->
+                        uiState.copy(isNicknameChecked = false, isNicknameDuplicated = true)
+                    }
+                } else {
+                    _uiState.update { uiState ->
+                        uiState.copy(isNicknameChecked = true, isNicknameDuplicated = false)
+                    }
+                }
+            }
     }
 }
 
@@ -46,5 +78,6 @@ data class SignUpSecondUiState(
     val isNicknameChecked: Boolean = false,
     val isNicknameDuplicated: Boolean = false,
     val birthDay: String = "",
+    val isBirthDayChecked: Boolean = false,
     val gender: Gender? = null,
 )
