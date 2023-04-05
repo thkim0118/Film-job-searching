@@ -54,10 +54,17 @@ fun NavGraphBuilder.nestedSignUpScreenGraph(
                 signUpVo = SignUpVo.fromJson(signUpVo)
             )
         }
-        composable(FOneDestinations.SignUp.SignUpComplete.route) {
+        composable(
+            route = FOneDestinations.SignUp.SignUpComplete.routeWithArgs,
+            arguments = FOneDestinations.SignUp.SignUpComplete.arguments
+        ) { navBackStackEntry ->
+            val signUpVo =
+                navBackStackEntry.arguments?.getString(FOneDestinations.SignUp.argSignUpVo)
+                    ?: return@composable
+
             SignUpCompleteScreen(
                 modifier = modifier,
-                navController = navController
+                signUpVo = SignUpVo.fromJson(signUpVo)
             )
         }
     }

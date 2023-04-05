@@ -2,12 +2,12 @@ package com.fone.filmone.ui.signup.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,15 +17,22 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.common.*
+import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
+import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.signup.AgreeState
+import com.fone.filmone.ui.signup.PhoneVerificationState
+import com.fone.filmone.ui.signup.SignUpThirdViewModel
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
 import com.fone.filmone.ui.signup.model.SignUpVo
@@ -72,18 +79,13 @@ fun SignUpThirdScreen(
 
             PhoneVerificationComponent()
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(49.dp))
 
             TermComponent()
 
             Spacer(modifier = Modifier.weight(1f))
 
-            FButton(
-                title = stringResource(id = R.string.sign_up_third_button_title),
-                enable = false
-            ) {
-                navController.navigate(FOneDestinations.SignUp.SignUpComplete.route)
-            }
+            NextButton(signUpVo = signUpVo)
 
             Spacer(modifier = Modifier.height(38.dp))
         }
@@ -91,32 +93,58 @@ fun SignUpThirdScreen(
 }
 
 @Composable
-private fun PhoneVerificationComponent() {
-    val isVerificationCodeSend by rememberSaveable { mutableStateOf(true) }
+private fun PhoneVerificationComponent(
+    viewModel: SignUpThirdViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
 
     FTextField(
-        onValueChange = { value -> },
+        text = uiState.phoneNumber,
+        onValueChange = { value ->
+            viewModel.updatePhoneNumber(value)
+        },
+        textLimit = 11,
         placeholder = stringResource(id = R.string.sign_up_third_phone_number_placeholder),
         topText = TopText(
             title = stringResource(id = R.string.sign_up_third_phone_number_title),
             titleStar = false,
             titleSpace = 8.dp
         ),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Phone
+        ),
         borderButtons = listOf(
             BorderButton(
-                text = stringResource(id = R.string.sign_up_third_phone_number_send_title),
-                enable = false,
+                text = stringResource(
+                    id = when (uiState.phoneVerificationState) {
+                        PhoneVerificationState.Complete -> R.string.sign_up_third_phone_number_verification
+                        PhoneVerificationState.Retransmit -> R.string.sign_up_third_phone_number_retransmit
+                        PhoneVerificationState.ShouldVerify -> R.string.sign_up_third_phone_number_transmit
+                    }
+                ),
+                enable = uiState.phoneNumber.length >= 10 && uiState.phoneVerificationState != PhoneVerificationState.Complete,
                 onClick = {
-
+                    viewModel.transmitVerificationCode()
                 }
             )
         )
     )
 
+    RetransmitComponent()
+}
+
+@Composable
+fun RetransmitComponent(
+    modifier: Modifier = Modifier,
+    viewModel: SignUpThirdViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    var verificationCode by remember { mutableStateOf("") }
+
     Column(
-        modifier = Modifier
+        modifier = modifier
             .alpha(
-                if (isVerificationCodeSend) {
+                if (uiState.phoneVerificationState == PhoneVerificationState.Retransmit) {
                     1f
                 } else {
                     0f
@@ -126,19 +154,23 @@ private fun PhoneVerificationComponent() {
         Spacer(modifier = Modifier.height(40.dp))
 
         FTextField(
-            onValueChange = { value -> },
+            text = verificationCode,
+            onValueChange = { value ->
+                verificationCode = value
+            },
+            textLimit = 6,
             placeholder = stringResource(id = R.string.sign_up_third_phone_number_verification_code_placeholder),
             borderButtons = listOf(
                 BorderButton(
                     text = stringResource(id = R.string.sign_up_third_phone_number_check_code),
-                    enable = false,
+                    enable = verificationCode.length in 1..6,
                     onClick = {
-
+                        viewModel.checkVerificationCode()
                     }
                 )
             ),
             textFieldTail = FTextFieldTail.Text(
-                text = "3:00",
+                text = uiState.verificationTime,
                 style = fTextStyle(
                     fontWeight = FontWeight.W400,
                     fontSize = 12.sp,
@@ -158,15 +190,28 @@ private fun PhoneVerificationComponent() {
 }
 
 @Composable
-private fun TermComponent() {
-    val isTermArrowExpanded by rememberSaveable { mutableStateOf(true) }
-    val isPrivacyArrowExpanded by rememberSaveable { mutableStateOf(false) }
-    val isMarketingArrowExpanded by rememberSaveable { mutableStateOf(false) }
+private fun TermComponent(
+    viewModel: SignUpThirdViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    var isTermArrowExpanded by rememberSaveable { mutableStateOf(true) }
+    var isPrivacyArrowExpanded by rememberSaveable { mutableStateOf(false) }
+    var isMarketingArrowExpanded by rememberSaveable { mutableStateOf(false) }
+
+    fun clickArrow(arrowType: ArrowType, isEnable: Boolean) {
+        isTermArrowExpanded = arrowType == ArrowType.Term && isEnable
+        isPrivacyArrowExpanded = arrowType == ArrowType.Privacy && isEnable
+        isMarketingArrowExpanded = arrowType == ArrowType.Marketing && isEnable
+    }
 
     Row {
         FRadioButton(
             modifier = Modifier.align(Alignment.CenterVertically),
-            enable = false
+            enable = uiState.isTermAllAgree,
+            onClick = {
+                viewModel.updateAllAgreeState(uiState.isTermAllAgree.not())
+            }
         )
 
         Spacer(modifier = Modifier.width(6.dp))
@@ -183,7 +228,10 @@ private fun TermComponent() {
     Row {
         FRadioButton(
             modifier = Modifier.align(Alignment.CenterVertically),
-            enable = false
+            enable = uiState.agreeState.contains(AgreeState.Term),
+            onClick = {
+                viewModel.updateAgreeState(AgreeState.Term)
+            }
         )
 
         Spacer(modifier = Modifier.width(6.dp))
@@ -195,18 +243,22 @@ private fun TermComponent() {
             color = FColor.DisablePlaceholder
         )
 
-        if (isTermArrowExpanded) {
-            Image(
-                modifier = Modifier.align(Alignment.CenterVertically),
-                imageVector = ImageVector.vectorResource(id = R.drawable.term_arrow_up),
-                contentDescription = null
-            )
-        } else {
-            Image(
-                modifier = Modifier.align(Alignment.CenterVertically),
-                imageVector = ImageVector.vectorResource(id = R.drawable.term_arrow_down),
-                contentDescription = null
-            )
+        Box(
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .clickableWithNoRipple { clickArrow(ArrowType.Term, isTermArrowExpanded.not()) }
+        ) {
+            if (isTermArrowExpanded) {
+                Image(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.term_arrow_up),
+                    contentDescription = null
+                )
+            } else {
+                Image(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.term_arrow_down),
+                    contentDescription = null
+                )
+            }
         }
     }
 
@@ -221,7 +273,10 @@ private fun TermComponent() {
     Row {
         FRadioButton(
             modifier = Modifier.align(Alignment.CenterVertically),
-            enable = false
+            enable = uiState.agreeState.contains(AgreeState.Privacy),
+            onClick = {
+                viewModel.updateAgreeState(AgreeState.Privacy)
+            }
         )
 
         Spacer(modifier = Modifier.width(6.dp))
@@ -233,18 +288,27 @@ private fun TermComponent() {
             color = FColor.DisablePlaceholder
         )
 
-        if (isPrivacyArrowExpanded) {
-            Image(
-                modifier = Modifier.align(Alignment.CenterVertically),
-                imageVector = ImageVector.vectorResource(id = R.drawable.term_arrow_up),
-                contentDescription = null
-            )
-        } else {
-            Image(
-                modifier = Modifier.align(Alignment.CenterVertically),
-                imageVector = ImageVector.vectorResource(id = R.drawable.term_arrow_down),
-                contentDescription = null
-            )
+        Box(
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .clickableWithNoRipple {
+                    clickArrow(
+                        ArrowType.Privacy,
+                        isPrivacyArrowExpanded.not()
+                    )
+                }
+        ) {
+            if (isPrivacyArrowExpanded) {
+                Image(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.term_arrow_up),
+                    contentDescription = null
+                )
+            } else {
+                Image(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.term_arrow_down),
+                    contentDescription = null
+                )
+            }
         }
     }
 
@@ -259,7 +323,10 @@ private fun TermComponent() {
     Row {
         FRadioButton(
             modifier = Modifier.align(Alignment.CenterVertically),
-            enable = false
+            enable = uiState.agreeState.contains(AgreeState.Marketing),
+            onClick = {
+                viewModel.updateAgreeState(AgreeState.Marketing)
+            }
         )
 
         Spacer(modifier = Modifier.width(6.dp))
@@ -271,18 +338,27 @@ private fun TermComponent() {
             color = FColor.DisablePlaceholder
         )
 
-        if (isMarketingArrowExpanded) {
-            Image(
-                modifier = Modifier.align(Alignment.CenterVertically),
-                imageVector = ImageVector.vectorResource(id = R.drawable.term_arrow_up),
-                contentDescription = null
-            )
-        } else {
-            Image(
-                modifier = Modifier.align(Alignment.CenterVertically),
-                imageVector = ImageVector.vectorResource(id = R.drawable.term_arrow_down),
-                contentDescription = null
-            )
+        Box(
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .clickableWithNoRipple {
+                    clickArrow(
+                        ArrowType.Marketing,
+                        isMarketingArrowExpanded.not()
+                    )
+                }
+        ) {
+            if (isMarketingArrowExpanded) {
+                Image(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.term_arrow_up),
+                    contentDescription = null
+                )
+            } else {
+                Image(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.term_arrow_down),
+                    contentDescription = null
+                )
+            }
         }
     }
 
@@ -314,6 +390,36 @@ fun TermContent(
             )
         )
     }
+}
+
+@Composable
+private fun NextButton(
+    viewModel: SignUpThirdViewModel = hiltViewModel(),
+    signUpVo: SignUpVo
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    val enable = uiState.isRequiredTemAllAgree
+
+    FButton(
+        title = stringResource(id = R.string.sign_up_third_button_title),
+        enable = enable
+    ) {
+        if (enable) {
+            FOneNavigator.navigateTo(
+                FOneDestinations.SignUp.SignUpComplete.getRouteWithArg(
+                    signUpVo.copy(
+                        phoneNumber = uiState.phoneNumber
+                    )
+                )
+            )
+        }
+    }
+}
+
+private sealed interface ArrowType {
+    object Term : ArrowType
+    object Privacy : ArrowType
+    object Marketing : ArrowType
 }
 
 @Preview(showBackground = true)

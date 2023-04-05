@@ -31,7 +31,16 @@ sealed class FOneDestinations(val route: String) {
                 return "$route/${SignUpVo.toJson(signUpVo)}"
             }
         }
-        object SignUpComplete : FOneDestinations("sign-up/complete")
+        object SignUpComplete : FOneDestinations("sign-up/complete") {
+            val routeWithArgs = "$route/{$argSignUpVo}"
+            val arguments = listOf(
+                navArgument(argSignUpVo) { type = NavType.StringType }
+            )
+
+            fun getRouteWithArg(signUpVo: SignUpVo): String {
+                return "$route/${SignUpVo.toJson(signUpVo)}"
+            }
+        }
     }
 
     object Inquiry : FOneDestinations("inquiry")

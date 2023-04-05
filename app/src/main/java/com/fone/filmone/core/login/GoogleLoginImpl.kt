@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import com.fone.filmone.R
-import com.fone.filmone.core.LogUtil
+import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.domain.model.signup.SocialLoginType
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount

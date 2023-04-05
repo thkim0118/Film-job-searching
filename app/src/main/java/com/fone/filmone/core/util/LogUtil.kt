@@ -1,4 +1,4 @@
-package com.fone.filmone.core
+package com.fone.filmone.core.util
 
 import android.util.Log
 import com.fone.filmone.BuildConfig

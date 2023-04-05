@@ -22,13 +22,14 @@ import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.FButton
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
+import com.fone.filmone.ui.signup.model.SignUpVo
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 
 @Composable
 fun SignUpCompleteScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
+    signUpVo: SignUpVo
 ) {
     Box(
         modifier = modifier
@@ -101,6 +102,6 @@ fun SignUpCompleteScreen(
 @Composable
 fun SignUpCompleteScreenPreview() {
     FilmOneTheme {
-        SignUpCompleteScreen()
+        SignUpCompleteScreen(signUpVo = SignUpVo())
     }
 }
