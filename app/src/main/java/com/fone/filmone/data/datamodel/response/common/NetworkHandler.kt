@@ -1,17 +1,21 @@
 package com.fone.filmone.data.datamodel.response.common
 
 import com.fone.filmone.data.datamodel.response.exception.EmptyNetworkBodyException
+import com.fone.filmone.domain.model.common.DataFail
+import com.fone.filmone.domain.model.common.DataResult
 import com.google.gson.Gson
 import retrofit2.Response
 
-suspend fun <T> handleNetwork(block: suspend () -> Response<NetworkResponse<T>>): NetworkResult<T> {
+suspend fun <T> handleNetwork(block: suspend () -> Response<NetworkResponse<T>>): DataResult<T> {
     return try {
         block.invoke().parseNetworkResponse()
     } catch (e: EmptyNetworkBodyException) {
-        NetworkResult.Fail(networkFail = e.networkFail)
+        DataResult.Fail(
+            dataFail = DataFail(e.dataFail.errorCode, e.dataFail.message)
+        )
     } catch (e: Throwable) {
-        NetworkResult.Fail(
-            networkFail = NetworkFail(
+        DataResult.Fail(
+            dataFail = DataFail(
                 errorCode = ErrorCode.ERROR_UNKNOWN,
                 message = e.message ?: e.stackTraceToString()
             )
@@ -19,13 +23,13 @@ suspend fun <T> handleNetwork(block: suspend () -> Response<NetworkResponse<T>>)
     }
 }
 
-private fun <T> Response<NetworkResponse<T>>.parseNetworkResponse(): NetworkResult<T> {
+private fun <T> Response<NetworkResponse<T>>.parseNetworkResponse(): DataResult<T> {
     val response = this
 
     if (response.isSuccessful) {
         val networkResponse: NetworkResponse<T> =
             response.body() ?: throw EmptyNetworkBodyException(
-                networkFail = NetworkFail(
+                dataFail = DataFail(
                     errorCode = ErrorCode.ERROR_UNKNOWN,
                     message = "요청 데이터가 없습니다."
                 )
@@ -34,13 +38,13 @@ private fun <T> Response<NetworkResponse<T>>.parseNetworkResponse(): NetworkResu
         return when (networkResponse.result) {
             Result.SUCCESS,
             Result.ce -> if (networkResponse.data != null) {
-                NetworkResult.Success(data = networkResponse.data)
+                DataResult.Success(data = networkResponse.data)
             } else {
-                NetworkResult.EmptyData(
-                    networkFail = if (networkResponse.errorCode == null) {
+                DataResult.EmptyData(
+                    dataFail = if (networkResponse.errorCode == null) {
                         null
                     } else {
-                        NetworkFail(
+                        DataFail(
                             errorCode = networkResponse.errorCode ?: ErrorCode.ERROR_UNKNOWN,
                             message = networkResponse.message
                         )
@@ -48,8 +52,8 @@ private fun <T> Response<NetworkResponse<T>>.parseNetworkResponse(): NetworkResu
                 )
             }
             Result.FAIL -> {
-                NetworkResult.Fail(
-                    networkFail = NetworkFail(
+                DataResult.Fail(
+                    dataFail = DataFail(
                         errorCode = networkResponse.errorCode ?: ErrorCode.ERROR_UNKNOWN,
                         message = networkResponse.message
                     )
@@ -60,8 +64,8 @@ private fun <T> Response<NetworkResponse<T>>.parseNetworkResponse(): NetworkResu
         val errorBody = response.errorBody()?.string()
         val networkFailResponse = Gson().fromJson(errorBody, NetworkResponse::class.java)
 
-        return NetworkResult.Fail(
-            networkFail = NetworkFail(
+        return DataResult.Fail(
+            dataFail = DataFail(
                 errorCode = networkFailResponse.errorCode ?: ErrorCode.ERROR_UNKNOWN,
                 message = networkFailResponse.message
             )

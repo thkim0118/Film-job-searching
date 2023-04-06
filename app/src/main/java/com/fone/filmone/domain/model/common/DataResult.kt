@@ -1,7 +1,5 @@
 package com.fone.filmone.domain.model.common
 
-import com.fone.filmone.data.datamodel.response.common.NetworkResult
-
 sealed class DataResult<out T> {
     data class Success<T>(
         val data: T
@@ -30,27 +28,15 @@ fun <T> DataResult<T>.onFail(action: (dataFail: DataFail) -> Unit): DataResult<T
     return this
 }
 
-fun <T> NetworkResult<T>.toDataResult() = when (this) {
-    is NetworkResult.EmptyData -> DataResult.EmptyData(
-        if (networkFail == null) {
+fun <T, R> DataResult<T>.toMappedDataResult(transform: (T) -> R) = when (this) {
+    is DataResult.EmptyData -> DataResult.EmptyData(
+        if (dataFail == null) {
             null
         } else {
-            DataFail(errorCode = networkFail.errorCode, message = networkFail.message)
+            DataFail(errorCode = dataFail.errorCode, message = dataFail.message)
         }
     )
-    is NetworkResult.Fail -> DataResult.Fail(DataFail(networkFail.errorCode, networkFail.message))
-    is NetworkResult.Success -> DataResult.Success(data)
-}
-
-fun <T, R> NetworkResult<T>.toMappedDataResult(transform: (T) -> R) = when (this) {
-    is NetworkResult.EmptyData -> DataResult.EmptyData(
-        if (networkFail == null) {
-            null
-        } else {
-            DataFail(errorCode = networkFail.errorCode, message = networkFail.message)
-        }
-    )
-    is NetworkResult.Fail -> DataResult.Fail(DataFail(networkFail.errorCode, networkFail.message))
-    is NetworkResult.Success -> DataResult.Success(transform(data))
+    is DataResult.Fail -> DataResult.Fail(DataFail(dataFail.errorCode, dataFail.message))
+    is DataResult.Success -> DataResult.Success(transform(data))
 
 }

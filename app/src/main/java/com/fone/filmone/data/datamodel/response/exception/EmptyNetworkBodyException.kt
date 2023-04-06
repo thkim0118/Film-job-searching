@@ -1,5 +1,5 @@
 package com.fone.filmone.data.datamodel.response.exception
 
-import com.fone.filmone.data.datamodel.response.common.NetworkFail
+import com.fone.filmone.domain.model.common.DataFail
 
-class EmptyNetworkBodyException(val networkFail: NetworkFail) : Throwable()
+class EmptyNetworkBodyException(val dataFail: DataFail) : Throwable()

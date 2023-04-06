@@ -11,6 +11,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -18,6 +19,7 @@ import javax.inject.Singleton
 object NetworkModule {
     private const val connectionTime = 30_000L
     private const val baseUrl = "http://3.38.94.181/api/"
+    private const val smsBaseUrl = "https://54d38vfw3c.execute-api.ap-northeast-1.amazonaws.com"
 
     @Provides
     fun provideHttpClient(): OkHttpClient = OkHttpClient.Builder().apply {
@@ -31,6 +33,14 @@ object NetworkModule {
         }
     }.build()
 
+    @SmsRetrofit
+    @Provides
+    fun provideSmsRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .baseUrl(smsBaseUrl)
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
@@ -43,3 +53,7 @@ object NetworkModule {
     fun provideUserApi(retrofit: Retrofit): UserApi =
         retrofit.create(UserApi::class.java)
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class SmsRetrofit
