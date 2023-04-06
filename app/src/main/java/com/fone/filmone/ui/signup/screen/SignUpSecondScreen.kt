@@ -246,7 +246,7 @@ private fun NextButton(
                     FOneDestinations.SignUp.SignUpThird.getRouteWithArg(
                         signUpVo.copy(
                             nickname = uiState.nickname,
-                            birthda = uiState.birthday
+                            birthday = uiState.birthday
                         )
                     )
                 )
