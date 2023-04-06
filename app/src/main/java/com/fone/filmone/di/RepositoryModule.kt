@@ -1,7 +1,9 @@
 package com.fone.filmone.di
 
+import com.fone.filmone.data.repository.ImageUploadRepositoryImpl
 import com.fone.filmone.data.repository.SmsRepositoryImpl
 import com.fone.filmone.data.repository.UserRepositoryImpl
+import com.fone.filmone.domain.repository.imageupload.ImageUploadRepository
 import com.fone.filmone.domain.repository.sms.SmsRepository
 import com.fone.filmone.domain.repository.user.UserRepository
 import dagger.Binds
@@ -21,4 +23,9 @@ abstract class RepositoryModule {
     abstract fun bindsSmsRepository(
         repository: SmsRepositoryImpl
     ): SmsRepository
+
+    @Binds
+    abstract fun bindsImageUploadRepository(
+        repository: ImageUploadRepositoryImpl
+    ): ImageUploadRepository
 }

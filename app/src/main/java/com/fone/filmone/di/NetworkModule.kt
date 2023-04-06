@@ -1,6 +1,7 @@
 package com.fone.filmone.di
 
 import com.fone.filmone.BuildConfig
+import com.fone.filmone.data.datasource.remote.ImageUploadApi
 import com.fone.filmone.data.datasource.remote.SmsApi
 import com.fone.filmone.data.datasource.remote.UserApi
 import dagger.Module
@@ -21,6 +22,8 @@ object NetworkModule {
     private const val connectionTime = 30_000L
     private const val baseUrl = "http://3.38.94.181/api/"
     private const val smsBaseUrl = "https://54d38vfw3c.execute-api.ap-northeast-1.amazonaws.com"
+    private const val imageUploadBaseUrl =
+        "https://rho64ux05h.execute-api.ap-northeast-2.amazonaws.com/prod/image-upload/user-profile"
 
     @Provides
     fun provideHttpClient(): OkHttpClient = OkHttpClient.Builder().apply {
@@ -42,6 +45,14 @@ object NetworkModule {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
+    @ImageUploadRetrofit
+    @Provides
+    fun provideImageUploadRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .baseUrl(imageUploadBaseUrl)
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
@@ -51,16 +62,25 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideUserApi(retrofit: Retrofit): UserApi =
-        retrofit.create(UserApi::class.java)
+    fun provideSmsApi(@SmsRetrofit retrofit: Retrofit): SmsApi =
+        retrofit.create(SmsApi::class.java)
 
     @Singleton
     @Provides
-    fun provideSmsApi(@SmsRetrofit retrofit: Retrofit): SmsApi =
-        retrofit.create(SmsApi::class.java)
+    fun provideImageUploadApi(@ImageUploadRetrofit retrofit: Retrofit): ImageUploadApi =
+        retrofit.create(ImageUploadApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideUserApi(retrofit: Retrofit): UserApi =
+        retrofit.create(UserApi::class.java)
 
 }
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class SmsRetrofit
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class ImageUploadRetrofit
