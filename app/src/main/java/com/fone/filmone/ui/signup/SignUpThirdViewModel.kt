@@ -17,6 +17,10 @@ class SignUpThirdViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SignUpThirdUiState())
     val uiState: StateFlow<SignUpThirdUiState> = _uiState.asStateFlow()
 
+    private val _dialogState =
+        MutableStateFlow<SignUpThirdDialogState>(SignUpThirdDialogState.Clear)
+    val dialogState: StateFlow<SignUpThirdDialogState> = _dialogState.asStateFlow()
+
     private val verificationTimer = VerificationTimer(
         onChangedListener = { time ->
             updateVerificationTime(time)
@@ -70,7 +74,7 @@ class SignUpThirdViewModel @Inject constructor(
             val requiredAgreeSize = AgreeState.values().filter { it.isRequired }.size
             val selectedRequiredAgreeSize = uiState.agreeState.filter { it.isRequired }.size
 
-                uiState.copy(
+            uiState.copy(
                 isTermAllAgree = isAgreeAll,
                 isRequiredTemAllAgree = selectedRequiredAgreeSize == requiredAgreeSize
             )
@@ -81,16 +85,31 @@ class SignUpThirdViewModel @Inject constructor(
         // TODO Phone 인증 api 호출
         // if success
         _uiState.update {
-            it.copy(phoneVerificationState = PhoneVerificationState.Retransmit)
+            it.copy(phoneVerificationState = PhoneVerificationState.Retransmit,)
         }
 
         verificationTimer.startVerificationTimer()
     }
 
     fun checkVerificationCode() = viewModelScope.launch {
+        if (uiState.value.verificationTime == "0:00") {
+            // TODO 인증 시간 만료에 대한 예외처리.
+            return@launch
+        }
+
         // TODO 인증번호 검증 api 호출
         // if success
+        updateDialogState(SignUpThirdDialogState.VerificationComplete)
         updatePhoneNumberVerification()
+        verificationTimer.finishVerificationTimer()
+    }
+
+    fun clearDialogState() {
+        _dialogState.value = SignUpThirdDialogState.Clear
+    }
+
+    private fun updateDialogState(dialogState: SignUpThirdDialogState) {
+        _dialogState.value = dialogState
     }
 
     private fun updatePhoneNumberVerification() {
@@ -126,4 +145,10 @@ enum class AgreeState(val isRequired: Boolean) {
     Term(true),
     Privacy(true),
     Marketing(false)
+}
+
+sealed interface SignUpThirdDialogState {
+    object VerificationComplete : SignUpThirdDialogState
+    object SignUpFail : SignUpThirdDialogState
+    object Clear : SignUpThirdDialogState
 }

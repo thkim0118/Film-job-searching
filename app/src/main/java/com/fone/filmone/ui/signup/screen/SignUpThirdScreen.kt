@@ -2,7 +2,6 @@ package com.fone.filmone.ui.signup.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -25,13 +24,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
-import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.common.*
+import com.fone.filmone.ui.common.dialog.SingleButtonDialog
 import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
+import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.signup.AgreeState
 import com.fone.filmone.ui.signup.PhoneVerificationState
+import com.fone.filmone.ui.signup.SignUpThirdDialogState
 import com.fone.filmone.ui.signup.SignUpThirdViewModel
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
@@ -46,9 +47,25 @@ fun SignUpThirdScreen(
     navController: NavHostController = rememberNavController(),
     signUpVo: SignUpVo
 ) {
-    Column(
+    Box(
         modifier = modifier
             .defaultSystemBarPadding()
+            .fillMaxSize()
+    ) {
+        SignUpMainScreen(navController = navController, signUpVo = signUpVo)
+
+        DialogScreen()
+    }
+}
+
+@Composable
+private fun SignUpMainScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+    signUpVo: SignUpVo
+) {
+    Column(
+        modifier = modifier
             .fillMaxSize()
     ) {
         FTitleBar(
@@ -140,6 +157,7 @@ fun RetransmitComponent(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     var verificationCode by remember { mutableStateOf("") }
+    val enable = verificationCode.length == 6
 
     Column(
         modifier = modifier
@@ -163,9 +181,11 @@ fun RetransmitComponent(
             borderButtons = listOf(
                 BorderButton(
                     text = stringResource(id = R.string.sign_up_third_phone_number_check_code),
-                    enable = verificationCode.length in 1..6,
+                    enable = enable,
                     onClick = {
-                        viewModel.checkVerificationCode()
+                        if (enable) {
+                            viewModel.checkVerificationCode()
+                        }
                     }
                 )
             ),
@@ -195,7 +215,7 @@ private fun TermComponent(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    var isTermArrowExpanded by rememberSaveable { mutableStateOf(true) }
+    var isTermArrowExpanded by rememberSaveable { mutableStateOf(false) }
     var isPrivacyArrowExpanded by rememberSaveable { mutableStateOf(false) }
     var isMarketingArrowExpanded by rememberSaveable { mutableStateOf(false) }
 
@@ -413,6 +433,47 @@ private fun NextButton(
                 )
             )
         }
+    }
+}
+
+@Composable
+private fun DialogScreen(
+    viewModel: SignUpThirdViewModel = hiltViewModel()
+) {
+    val dialogState by viewModel.dialogState.collectAsState()
+
+    when (dialogState) {
+        SignUpThirdDialogState.Clear -> Unit
+        SignUpThirdDialogState.SignUpFail -> {
+            SignUpFailDialog()
+        }
+        SignUpThirdDialogState.VerificationComplete -> {
+            VerificationCompleteDialog()
+        }
+    }
+}
+
+@Composable
+private fun SignUpFailDialog(
+    viewModel: SignUpThirdViewModel = hiltViewModel()
+) {
+    SingleButtonDialog(
+        titleText = stringResource(id = R.string.sign_up_third_dialog_sign_up_fail_title),
+        buttonText = stringResource(id = R.string.confirm)
+    ) {
+        viewModel.clearDialogState()
+    }
+}
+
+@Composable
+private fun VerificationCompleteDialog(
+    viewModel: SignUpThirdViewModel = hiltViewModel()
+) {
+    SingleButtonDialog(
+        titleText = stringResource(id = R.string.sign_up_third_dialog_verification_complete_title),
+        buttonText = stringResource(id = R.string.confirm)
+    ) {
+        viewModel.clearDialogState()
     }
 }
 

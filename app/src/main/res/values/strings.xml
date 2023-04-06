@@ -6,6 +6,9 @@
     <string name="naver_client_name">에프원</string>
     <string name="google_sign_in_client_id">499416246374-gt4tvjpp05s3c5dogo8ies3hrmth6u1u.apps.googleusercontent.com</string>
 
+    <!--    common-->
+    <string name="confirm">확인</string>
+
     <!--    login-->
     <string name="login_title">간편 로그인으로 F-ONE을\n즐겨보세요!</string>
     <string name="login_kakao_title">카카오톡으로 로그인</string>
@@ -66,11 +69,13 @@
     <string name="sign_up_third_agree_privacy">개인정보 취급방침 동의(필수)</string>
     <string name="sign_up_third_agree_marketing">마케팅 정보수신 동의(선택)</string>
     <string name="sign_up_third_button_title">회원가입</string>
+    <string name="sign_up_third_dialog_verification_complete_title">인증에 성공하였습니다</string>
+    <string name="sign_up_third_dialog_sign_up_fail_title">회원가입에 실패하였습니다.\n다시 시도해주세요</string>
 
     <string name="sign_up_complete_title_1">님!\n</string>
     <string name="sign_up_complete_title_2">에프원 회원가입을 환영합니다.</string>
     <string name="sign_up_complete_button_title">로그인하기</string>
-    
+
     <string name="inquiry_title_text">문의등록</string>
     <string name="inquiry_guide">[안내] 작업문의는 에프원 사이트 내 해당 담당자에게 직접 남겨주세요.</string>
     <string name="inquiry_email_title">이메일 주소</string>
@@ -84,5 +89,5 @@
     <string name="inquiry_privacy_term_title">개인정보 수집 및 이용동의(필수)</string>
     <string name="inquiry_privacy_term_subtitle">문의 처리를 위해 이메일, 회원 정보, 기기 정보, 문의 내용에 포함된 개인정보를 수집하여, 개인정보 처리 방침에 따라 3년 후 파기됩니다.</string>
     <string name="inquiry_button_title">제출하기</string>
-    
+
 </resources>
