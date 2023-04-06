@@ -1,6 +1,7 @@
 package com.fone.filmone.di
 
 import com.fone.filmone.BuildConfig
+import com.fone.filmone.data.datasource.remote.SmsApi
 import com.fone.filmone.data.datasource.remote.UserApi
 import dagger.Module
 import dagger.Provides
@@ -52,6 +53,12 @@ object NetworkModule {
     @Provides
     fun provideUserApi(retrofit: Retrofit): UserApi =
         retrofit.create(UserApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideSmsApi(@SmsRetrofit retrofit: Retrofit): SmsApi =
+        retrofit.create(SmsApi::class.java)
+
 }
 
 @Qualifier
