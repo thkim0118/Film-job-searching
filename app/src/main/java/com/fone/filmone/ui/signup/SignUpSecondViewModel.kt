@@ -28,12 +28,6 @@ class SignUpSecondViewModel @Inject constructor(
 
     }
 
-    fun updateNicknameIsChecked() {
-        _uiState.update {
-            it.copy(isNicknameChecked = true)
-        }
-    }
-
     fun updateBirthDay(birthday: String) {
         _uiState.update {
             it.copy(birthday = birthday)
@@ -56,6 +50,12 @@ class SignUpSecondViewModel @Inject constructor(
     }
 
     fun checkNicknameDuplication() = viewModelScope.launch {
+        // TODO Delete
+        _uiState.update { uiState ->
+            uiState.copy(isNicknameChecked = true, isNicknameDuplicated = false)
+        }
+        return@launch
+
         // TODO Throttling.
         checkNicknameDuplicationUseCase(uiState.value.nickname)
             .onSuccess { isDuplicated ->

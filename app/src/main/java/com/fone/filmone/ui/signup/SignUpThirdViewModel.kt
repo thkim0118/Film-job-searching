@@ -1,8 +1,13 @@
 package com.fone.filmone.ui.signup
 
+import android.os.CountDownTimer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.core.util.VerificationTimer
+import com.fone.filmone.domain.model.common.onSuccess
+import com.fone.filmone.domain.usecase.RequestPhoneVerificationUseCase
+import com.fone.filmone.domain.usecase.VerifySmsCodeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,6 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpThirdViewModel @Inject constructor(
+    private val requestPhoneVerificationUseCase: RequestPhoneVerificationUseCase,
+    private val verifySmsCodeUseCase: VerifySmsCodeUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SignUpThirdUiState())
     val uiState: StateFlow<SignUpThirdUiState> = _uiState.asStateFlow()
@@ -26,6 +33,16 @@ class SignUpThirdViewModel @Inject constructor(
             updateVerificationTime(time)
         }
     )
+    private val retransmitTimer = object : CountDownTimer(1 * 60 * 1000, 1000) {
+        override fun onTick(p0: Long) {
+        }
+
+        override fun onFinish() {
+            updateRetransmitPossible(true)
+        }
+    }
+
+    private var requestCount: Int = 0
 
     fun updatePhoneNumber(phoneNumber: String) {
         _uiState.update {
@@ -36,6 +53,12 @@ class SignUpThirdViewModel @Inject constructor(
     private fun updateVerificationTime(time: String) {
         _uiState.update {
             it.copy(verificationTime = time)
+        }
+    }
+
+    private fun updateRetransmitPossible(isPossible: Boolean) {
+        _uiState.update {
+            it.copy(isTransmitPossible = isPossible)
         }
     }
 
@@ -82,26 +105,58 @@ class SignUpThirdViewModel @Inject constructor(
     }
 
     fun transmitVerificationCode() = viewModelScope.launch {
-        // TODO Phone 인증 api 호출
-        // if success
-        _uiState.update {
-            it.copy(phoneVerificationState = PhoneVerificationState.Retransmit,)
+        if (isTransmitImpossible()) {
+            return@launch
         }
 
-        verificationTimer.startVerificationTimer()
+        requestPhoneVerificationUseCase.invoke(
+            "+82${uiState.value.phoneNumber.drop(1)}"
+        ).onSuccess {
+            _uiState.update {
+                it.copy(phoneVerificationState = PhoneVerificationState.Retransmit)
+            }
+
+            verificationTimer.startVerificationTimer()
+            // TODO "인증번호를 전송하였습니다" 문구 토스트
+        }
     }
 
-    fun checkVerificationCode() = viewModelScope.launch {
-        if (uiState.value.verificationTime == "0:00") {
+    private fun isTransmitImpossible(): Boolean {
+        val isRetransmitPossible = uiState.value.isTransmitPossible
+
+        if (isRetransmitPossible) {
+            requestCount += 1
+        }
+
+        if (requestCount == 3) {
+            retransmitTimer.start()
+            updateRetransmitPossible(false)
+        }
+
+        if (requestCount > 4 && isRetransmitPossible.not()) {
+            // TODO "너무 많은 요청을 하셨습니다. 5분 후 다시 시도해 주세요." 토스트.
+            return true
+        }
+
+        requestCount %= 3
+        return false
+    }
+
+    fun checkVerificationCode(code: String) = viewModelScope.launch {
+        if (uiState.value.verificationTime == "00:00") {
             // TODO 인증 시간 만료에 대한 예외처리.
             return@launch
         }
 
-        // TODO 인증번호 검증 api 호출
-        // if success
-        updateDialogState(SignUpThirdDialogState.VerificationComplete)
-        updatePhoneNumberVerification()
-        verificationTimer.finishVerificationTimer()
+        verifySmsCodeUseCase.invoke(code).onSuccess { isVerify ->
+            if (isVerify) {
+                updateDialogState(SignUpThirdDialogState.VerificationComplete)
+                updatePhoneNumberVerification()
+                verificationTimer.finishVerificationTimer()
+            } else {
+                // TODO "올바른 인증번호를 입력해주세요" 문구 토스트
+            }
+        }
     }
 
     fun clearDialogState() {
@@ -122,6 +177,7 @@ class SignUpThirdViewModel @Inject constructor(
         super.onCleared()
 
         verificationTimer.finishVerificationTimer()
+        retransmitTimer.cancel()
     }
 }
 
@@ -130,6 +186,7 @@ data class SignUpThirdUiState(
     val phoneVerificationState: PhoneVerificationState = PhoneVerificationState.ShouldVerify,
     val verificationCode: String = "",
     val verificationTime: String = "3:00",
+    val isTransmitPossible: Boolean = true,
     val agreeState: Set<AgreeState> = setOf(),
     val isTermAllAgree: Boolean = false,
     val isRequiredTemAllAgree: Boolean = false,

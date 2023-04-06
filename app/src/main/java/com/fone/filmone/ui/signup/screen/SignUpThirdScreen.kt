@@ -12,7 +12,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -156,13 +158,19 @@ fun RetransmitComponent(
     viewModel: SignUpThirdViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val isVisible = uiState.phoneVerificationState == PhoneVerificationState.Retransmit
     var verificationCode by remember { mutableStateOf("") }
     val enable = verificationCode.length == 6
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(key1 = isVisible) {
+        focusManager.moveFocus(FocusDirection.Down)
+    }
 
     Column(
         modifier = modifier
             .alpha(
-                if (uiState.phoneVerificationState == PhoneVerificationState.Retransmit) {
+                if (isVisible) {
                     1f
                 } else {
                     0f
@@ -177,6 +185,9 @@ fun RetransmitComponent(
                 verificationCode = value
             },
             textLimit = 6,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.NumberPassword
+            ),
             placeholder = stringResource(id = R.string.sign_up_third_phone_number_verification_code_placeholder),
             borderButtons = listOf(
                 BorderButton(
@@ -184,7 +195,7 @@ fun RetransmitComponent(
                     enable = enable,
                     onClick = {
                         if (enable) {
-                            viewModel.checkVerificationCode()
+                            viewModel.checkVerificationCode(verificationCode)
                         }
                     }
                 )
@@ -197,7 +208,8 @@ fun RetransmitComponent(
                     lineHeight = 14.sp,
                     color = FColor.ColorFF5841
                 )
-            )
+            ),
+            enabled = isVisible
         )
 
         Spacer(modifier = Modifier.height(4.dp))
