@@ -23,7 +23,7 @@ object NetworkModule {
     private const val baseUrl = "http://3.38.94.181/api/"
     private const val smsBaseUrl = "https://54d38vfw3c.execute-api.ap-northeast-1.amazonaws.com/"
     private const val imageUploadBaseUrl =
-        "https://rho64ux05h.execute-api.ap-northeast-2.amazonaws.com/prod/image-upload/user-profile"
+        "https://rho64ux05h.execute-api.ap-northeast-2.amazonaws.com/"
 
     @Provides
     fun provideHttpClient(): OkHttpClient = OkHttpClient.Builder().apply {

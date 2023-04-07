@@ -6,6 +6,6 @@ import retrofit2.Response
 import retrofit2.http.POST
 
 interface ImageUploadApi {
-    @POST
+    @POST("prod/image-upload/user-profile")
     suspend fun uploadImage(): Response<NetworkResponse<ImageUploadResponse>>
 }
