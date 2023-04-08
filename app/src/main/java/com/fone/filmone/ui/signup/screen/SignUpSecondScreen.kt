@@ -1,7 +1,6 @@
 package com.fone.filmone.ui.signup.screen
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -163,13 +162,22 @@ private fun BirthdaySexComponent(
             viewModel.updateBirthDay(value)
         },
         pattern = Pattern.compile("^[\\d\\s-]+$"),
-        autoCompletion = { value ->
-            when (value.text.length) {
-                4, 7 -> value.copy(
-                    text = "${value.text}-",
-                    selection = TextRange(value.text.length + 1)
-                )
-                else -> value
+        autoCompletion = { before, after ->
+            if (before.text.length < after.text.length) {
+                when (after.text.length) {
+                    5, 8 -> after.copy(
+                        text = "${before.text}-${after.text.last()}",
+                        selection = TextRange(after.text.length + 1)
+                    )
+                    else -> after
+                }
+            } else {
+                when (after.text.length) {
+                    5, 8 -> after.copy(
+                        text = after.text.dropLast(1),
+                    )
+                    else -> after
+                }
             }
         },
         textLimit = 10,

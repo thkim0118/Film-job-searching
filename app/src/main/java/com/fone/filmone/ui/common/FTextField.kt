@@ -51,7 +51,7 @@ fun FTextField(
     placeholder: String = "",
     onValueChange: (String) -> Unit,
     pattern: Pattern? = null,
-    autoCompletion: ((value: TextFieldValue) -> TextFieldValue)? = null,
+    autoCompletion: ((beforeValue: TextFieldValue, afterValue: TextFieldValue) -> TextFieldValue)? = null,
     textLimit: Int = Int.MAX_VALUE,
     onFocusChange: (Boolean) -> Unit = {},
     topText: TopText = TopText(
@@ -132,7 +132,7 @@ fun FTextField(
                     }
 
                     if (autoCompletion != null) {
-                        textFieldValue = autoCompletion.invoke(it)
+                        textFieldValue = autoCompletion.invoke(textFieldValue, it)
                     }
 
                     if (pattern == null) {
