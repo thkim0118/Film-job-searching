@@ -268,10 +268,11 @@ private fun NextButton(
         onClick = {
             if (enable) {
                 FOneNavigator.navigateTo(
-                    FOneDestinations.SignUp.SignUpThird.getRouteWithArg(
+                    FOneDestinations.SignUpThird.getRouteWithArg(
                         signUpVo.copy(
                             nickname = uiState.nickname,
-                            birthday = uiState.birthday
+                            birthday = uiState.birthday,
+                            gender = uiState.gender.name
                         )
                     )
                 )

@@ -39,11 +39,18 @@ class SNSLoginUtil private constructor(
     fun <T> handleResult(data: T, socialLoginType: SocialLoginType) {
         when (socialLoginType) {
             SocialLoginType.GOOGLE -> {
-                val accessToken =
-                    GoogleLoginImpl.getAccessToken(data as? Task<GoogleSignInAccount> ?: return)
+                val loginInfo =
+                    GoogleLoginImpl.getLoginInfo(data as? Task<GoogleSignInAccount> ?: return)
 
-                if (accessToken != null) {
-                    loginCallback.onSuccess(accessToken, socialLoginType)
+                if (loginInfo != null) {
+                    val token = loginInfo.first
+                    val email = loginInfo.second
+
+                    loginCallback.onSuccess(
+                        token,
+                        email,
+                        socialLoginType
+                    )
                 } else {
                     loginCallback.onFail("No AccessToken")
                 }
@@ -53,7 +60,12 @@ class SNSLoginUtil private constructor(
     }
 
     interface LoginCallback {
-        fun onSuccess(token: String, socialLoginType: SocialLoginType)
+        fun onSuccess(
+            token: String,
+            email: String,
+            socialLoginType: SocialLoginType
+        )
+
         fun onFail(message: String)
         fun onCancel()
     }

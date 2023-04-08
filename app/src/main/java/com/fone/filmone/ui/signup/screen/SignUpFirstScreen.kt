@@ -41,6 +41,7 @@ import com.fone.filmone.ui.theme.LocalTypography
 fun SignUpFirstScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    signUpVo: SignUpVo
 ) {
     Column(
         modifier = modifier
@@ -96,7 +97,7 @@ fun SignUpFirstScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            NextButton()
+            NextButton(signUpVo = signUpVo)
 
             Spacer(modifier = Modifier.height(38.dp))
         }
@@ -105,7 +106,8 @@ fun SignUpFirstScreen(
 
 @Composable
 private fun NextButton(
-    viewModel: SignUpFirstViewModel = hiltViewModel()
+    viewModel: SignUpFirstViewModel = hiltViewModel(),
+    signUpVo: SignUpVo
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val enable = uiState.job != null && uiState.interests.isNotEmpty()
@@ -116,8 +118,8 @@ private fun NextButton(
         onClick = {
             if (enable) {
                 FOneNavigator.navigateTo(
-                    FOneDestinations.SignUp.SignUpSecond.getRouteWithArg(
-                        SignUpVo(
+                    FOneDestinations.SignUpSecond.getRouteWithArg(
+                        signUpVo.copy(
                             job = uiState.job?.name ?: return@FButton,
                             interests = uiState.interests.map { it.name }
                         )
@@ -301,6 +303,6 @@ private fun FavoriteTagsPreview() {
 @Composable
 private fun SignUpFirstScreenPreview() {
     FilmOneTheme {
-        SignUpFirstScreen()
+        SignUpFirstScreen(signUpVo = SignUpVo())
     }
 }

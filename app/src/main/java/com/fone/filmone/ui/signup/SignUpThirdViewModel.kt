@@ -3,7 +3,6 @@ package com.fone.filmone.ui.signup
 import android.os.CountDownTimer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.core.util.VerificationTimer
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.RequestPhoneVerificationUseCase

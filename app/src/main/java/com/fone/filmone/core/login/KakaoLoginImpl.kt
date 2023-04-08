@@ -2,6 +2,7 @@ package com.fone.filmone.core.login
 
 import android.content.Context
 import com.fone.filmone.BuildConfig
+import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.domain.model.signup.SocialLoginType
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthError
@@ -10,7 +11,7 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 
-class KakaoLoginImpl (
+class KakaoLoginImpl(
     override val loginCallback: SNSLoginUtil.LoginCallback
 ) : SnsLogin {
     override fun login(context: Context) {
@@ -59,7 +60,22 @@ class KakaoLoginImpl (
                 }
             }
         } else if (oAuthToken != null) {
-            loginCallback.onSuccess(oAuthToken.accessToken, SocialLoginType.KAKAO)
+            UserApiClient.instance.me { user, error ->
+                if (error != null) {
+                    loginCallback.onFail("Kakao login fail: ${error.message}")
+                } else {
+                    val email = user?.kakaoAccount?.email ?: run {
+                        loginCallback.onFail("email is empty")
+                        return@me
+                    }
+
+                    loginCallback.onSuccess(
+                        oAuthToken.accessToken,
+                        email,
+                        SocialLoginType.KAKAO
+                    )
+                }
+            }
         }
     }
 }

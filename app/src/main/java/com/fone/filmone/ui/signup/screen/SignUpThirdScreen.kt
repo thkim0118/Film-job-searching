@@ -2,6 +2,7 @@ package com.fone.filmone.ui.signup.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -237,13 +238,15 @@ private fun TermComponent(
         isMarketingArrowExpanded = arrowType == ArrowType.Marketing && isEnable
     }
 
-    Row {
+    Row(
+        modifier = Modifier
+            .clickable {
+                viewModel.updateAllAgreeState(uiState.isTermAllAgree.not())
+            }
+    ) {
         FRadioButton(
             modifier = Modifier.align(Alignment.CenterVertically),
             enable = uiState.isTermAllAgree,
-            onClick = {
-                viewModel.updateAllAgreeState(uiState.isTermAllAgree.not())
-            }
         )
 
         Spacer(modifier = Modifier.width(6.dp))
@@ -258,22 +261,27 @@ private fun TermComponent(
     Spacer(modifier = Modifier.height(16.dp))
 
     Row {
-        FRadioButton(
-            modifier = Modifier.align(Alignment.CenterVertically),
-            enable = uiState.agreeState.contains(AgreeState.Term),
-            onClick = {
-                viewModel.updateAgreeState(AgreeState.Term)
-            }
-        )
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .clickable {
+                    viewModel.updateAgreeState(AgreeState.Term)
+                }
+        ) {
+            FRadioButton(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                enable = uiState.agreeState.contains(AgreeState.Term),
+            )
 
-        Spacer(modifier = Modifier.width(6.dp))
+            Spacer(modifier = Modifier.width(6.dp))
 
-        Text(
-            modifier = Modifier.weight(1f),
-            text = stringResource(id = R.string.sign_up_third_agree_term),
-            style = LocalTypography.current.h5,
-            color = FColor.DisablePlaceholder
-        )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = stringResource(id = R.string.sign_up_third_agree_term),
+                style = LocalTypography.current.h5,
+                color = FColor.DisablePlaceholder
+            )
+        }
 
         Box(
             modifier = Modifier
@@ -303,22 +311,27 @@ private fun TermComponent(
     Spacer(modifier = Modifier.height(16.dp))
 
     Row {
-        FRadioButton(
-            modifier = Modifier.align(Alignment.CenterVertically),
-            enable = uiState.agreeState.contains(AgreeState.Privacy),
-            onClick = {
-                viewModel.updateAgreeState(AgreeState.Privacy)
-            }
-        )
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .clickable {
+                    viewModel.updateAgreeState(AgreeState.Privacy)
+                }
+        ) {
+            FRadioButton(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                enable = uiState.agreeState.contains(AgreeState.Privacy),
+            )
 
-        Spacer(modifier = Modifier.width(6.dp))
+            Spacer(modifier = Modifier.width(6.dp))
 
-        Text(
-            modifier = Modifier.weight(1f),
-            text = stringResource(id = R.string.sign_up_third_agree_privacy),
-            style = LocalTypography.current.h5,
-            color = FColor.DisablePlaceholder
-        )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = stringResource(id = R.string.sign_up_third_agree_privacy),
+                style = LocalTypography.current.h5,
+                color = FColor.DisablePlaceholder
+            )
+        }
 
         Box(
             modifier = Modifier
@@ -353,22 +366,27 @@ private fun TermComponent(
     Spacer(modifier = Modifier.height(16.dp))
 
     Row {
-        FRadioButton(
-            modifier = Modifier.align(Alignment.CenterVertically),
-            enable = uiState.agreeState.contains(AgreeState.Marketing),
-            onClick = {
-                viewModel.updateAgreeState(AgreeState.Marketing)
-            }
-        )
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .clickable {
+                    viewModel.updateAgreeState(AgreeState.Marketing)
+                }
+        ) {
+            FRadioButton(
+                modifier = Modifier.align(Alignment.CenterVertically),
+                enable = uiState.agreeState.contains(AgreeState.Marketing),
+            )
 
-        Spacer(modifier = Modifier.width(6.dp))
+            Spacer(modifier = Modifier.width(6.dp))
 
-        Text(
-            modifier = Modifier.weight(1f),
-            text = stringResource(id = R.string.sign_up_third_agree_marketing),
-            style = LocalTypography.current.h5,
-            color = FColor.DisablePlaceholder
-        )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = stringResource(id = R.string.sign_up_third_agree_marketing),
+                style = LocalTypography.current.h5,
+                color = FColor.DisablePlaceholder
+            )
+        }
 
         Box(
             modifier = Modifier
@@ -438,9 +456,11 @@ private fun NextButton(
     ) {
         if (enable) {
             FOneNavigator.navigateTo(
-                FOneDestinations.SignUp.SignUpComplete.getRouteWithArg(
+                FOneDestinations.SignUpComplete.getRouteWithArg(
                     signUpVo.copy(
-                        phoneNumber = uiState.phoneNumber
+                        phoneNumber = uiState.phoneNumber,
+                        agreeToPersonalInformation = true,
+                        isReceiveMarketing = uiState.isTermAllAgree
                     )
                 )
             )

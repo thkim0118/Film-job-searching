@@ -4,9 +4,12 @@ import android.content.Context
 import com.fone.filmone.domain.model.signup.SocialLoginType
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.NidOAuthErrorCode
+import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
+import com.navercorp.nid.profile.NidProfileCallback
+import com.navercorp.nid.profile.data.NidProfileResponse
 
-class NaverLoginImpl (
+class NaverLoginImpl(
     override val loginCallback: SNSLoginUtil.LoginCallback
 ) : SnsLogin {
     override fun login(context: Context) {
@@ -28,7 +31,30 @@ class NaverLoginImpl (
                 return
             }
 
-            loginCallback.onSuccess(accessToken, SocialLoginType.NAVER)
+            NidOAuthLogin().callProfileApi(
+                object : NidProfileCallback<NidProfileResponse> {
+                    override fun onError(errorCode: Int, message: String) {
+                        handleError(errorCode, message)
+                    }
+
+                    override fun onFailure(httpStatus: Int, message: String) {
+                        loginCallback.onCancel()
+                    }
+
+                    override fun onSuccess(result: NidProfileResponse) {
+                        val email = result.profile?.email ?: run {
+                            loginCallback.onFail("email is empty")
+                            return
+                        }
+
+                        loginCallback.onSuccess(
+                            accessToken,
+                            email,
+                            SocialLoginType.NAVER
+                        )
+                    }
+                }
+            )
         }
 
         private fun handleError(errorCode: Int, message: String) {

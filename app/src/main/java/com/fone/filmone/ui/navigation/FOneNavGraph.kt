@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.ui.inquiry.InquiryScreen
 import com.fone.filmone.ui.login.LoginScreen
-import com.fone.filmone.ui.signup.nestedSignUpScreenGraph
+import com.fone.filmone.ui.signup.signUpScreenComposable
 import com.fone.filmone.ui.splash.SplashScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -47,7 +47,7 @@ fun FOneNavGraph(
         composable(FOneDestinations.Inquiry.route) {
             InquiryScreen(navController = navController)
         }
-        nestedSignUpScreenGraph(navController = navController)
+        signUpScreenComposable(navController = navController)
         composable(FOneDestinations.Home.route) {
 
         }

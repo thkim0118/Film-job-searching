@@ -20,7 +20,11 @@ class GoogleLoginImpl(
     override fun login(context: Context) {
         val account = GoogleSignIn.getLastSignedInAccount(context)
         if (account != null && account.idToken != null) {
-            loginCallback.onSuccess(account.idToken ?: return, SocialLoginType.GOOGLE)
+            loginCallback.onSuccess(
+                account.idToken ?: return,
+                "",
+                SocialLoginType.GOOGLE
+            )
             return
         }
 
@@ -40,9 +44,11 @@ class GoogleLoginImpl(
     }
 
     companion object {
-        fun getAccessToken(task: Task<GoogleSignInAccount>): String? {
+        fun getLoginInfo(task: Task<GoogleSignInAccount>): Pair<String, String>? {
             return try {
-                task.result.idToken
+                val token = task.result?.idToken ?: throw NullPointerException("AccessToken is null")
+                val email = task.result?.email ?: throw NullPointerException("AccessToken is null")
+                token to email
             } catch (e: Throwable) {
                 LogUtil.e("error : ${e.localizedMessage}")
                 null

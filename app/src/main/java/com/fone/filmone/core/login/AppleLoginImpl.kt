@@ -23,9 +23,17 @@ class AppleLoginImpl(
     override fun login(context: Context) {
         if (pending != null) {
             pending.addOnSuccessListener {
-                val accessToken = (it.credential as? zze)?.idToken
+                val accessToken = (it.credential as? zze)?.idToken ?: run {
+                    loginCallback.onFail("token is empty")
+                    return@addOnSuccessListener
+                }
+                val email = it.user?.email ?: run {
+                    loginCallback.onFail("email is empty")
+                    return@addOnSuccessListener
+                }
                 loginCallback.onSuccess(
-                    accessToken ?: return@addOnSuccessListener,
+                    accessToken,
+                    email ?: return@addOnSuccessListener,
                     SocialLoginType.APPLE
                 )
             }.addOnFailureListener {
@@ -37,9 +45,17 @@ class AppleLoginImpl(
                 provider.build()
             )
                 .addOnSuccessListener {
-                    val accessToken = (it.credential as? zze)?.idToken
+                    val accessToken = (it.credential as? zze)?.idToken ?: run {
+                        loginCallback.onFail("token is empty")
+                        return@addOnSuccessListener
+                    }
+                    val email = it.user?.email ?: run {
+                        loginCallback.onFail("email is empty")
+                        return@addOnSuccessListener
+                    }
                     loginCallback.onSuccess(
-                        accessToken ?: return@addOnSuccessListener,
+                        accessToken,
+                        email,
                         SocialLoginType.APPLE
                     )
                 }

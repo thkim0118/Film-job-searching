@@ -50,12 +50,6 @@ class SignUpSecondViewModel @Inject constructor(
     }
 
     fun checkNicknameDuplication() = viewModelScope.launch {
-        // TODO Delete
-        _uiState.update { uiState ->
-            uiState.copy(isNicknameChecked = true, isNicknameDuplicated = false)
-        }
-        return@launch
-
         // TODO Throttling.
         checkNicknameDuplicationUseCase(uiState.value.nickname)
             .onSuccess { isDuplicated ->
@@ -78,5 +72,5 @@ data class SignUpSecondUiState(
     val isNicknameDuplicated: Boolean = false,
     val birthday: String = "",
     val isBirthDayChecked: Boolean = false,
-    val gender: Gender? = null,
+    val gender: Gender = Gender.IRRELEVANT,
 )
