@@ -1,7 +1,9 @@
 package com.fone.filmone.ui.signup.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -25,12 +27,14 @@ import com.fone.filmone.R
 import com.fone.filmone.domain.model.signup.Gender
 import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
+import com.fone.filmone.ui.common.ext.fShadow
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.signup.SignUpSecondViewModel
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
 import com.fone.filmone.ui.signup.model.SignUpVo
+import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
 import java.util.regex.Pattern
@@ -152,7 +156,6 @@ private fun BirthdaySexComponent(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    // TODO Delete 할때 버그있음.
     FTextField(
         text = uiState.birthday,
         placeholder = stringResource(id = R.string.sign_up_second_birthday_sex_placeholder),
@@ -214,16 +217,30 @@ private fun ProfileComponent() {
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    Box {
-        Image(
-            imageVector = ImageVector.vectorResource(id = R.drawable.default_profile_shadow),
-            contentDescription = null
+    Box(
+        modifier = Modifier
+    ) {
+        Box(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .size(108.dp)
+                .fShadow(shape = CircleShape)
         )
-
         Image(
             modifier = Modifier
-                .align(Alignment.BottomEnd),
+                .align(Alignment.Center),
             imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
+            contentDescription = null
+        )
+        Image(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .fShadow(
+                    shape = CircleShape,
+                    spotColor = FColor.Primary,
+                    ambientColor = FColor.Primary
+                ),
+            imageVector = ImageVector.vectorResource(id = R.drawable.default_profile_camera),
             contentDescription = null
         )
     }
@@ -260,5 +277,15 @@ private fun NextButton(
 fun SignUpSecondScreenPreview() {
     FilmOneTheme {
         SignUpSecondScreen(signUpVo = SignUpVo())
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ProfileComponentPreview() {
+    FilmOneTheme {
+        Column {
+            ProfileComponent()
+        }
     }
 }
