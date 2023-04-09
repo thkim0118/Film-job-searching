@@ -264,13 +264,16 @@ private fun TermComponent(
         Row(
             modifier = Modifier
                 .weight(1f)
-                .clickable {
+                .clickableWithNoRipple {
                     viewModel.updateAgreeState(AgreeState.Term)
                 }
         ) {
             FRadioButton(
                 modifier = Modifier.align(Alignment.CenterVertically),
                 enable = uiState.agreeState.contains(AgreeState.Term),
+                onClick = {
+                    viewModel.updateAgreeState(AgreeState.Term)
+                }
             )
 
             Spacer(modifier = Modifier.width(6.dp))
@@ -314,13 +317,16 @@ private fun TermComponent(
         Row(
             modifier = Modifier
                 .weight(1f)
-                .clickable {
+                .clickableWithNoRipple {
                     viewModel.updateAgreeState(AgreeState.Privacy)
                 }
         ) {
             FRadioButton(
                 modifier = Modifier.align(Alignment.CenterVertically),
                 enable = uiState.agreeState.contains(AgreeState.Privacy),
+                onClick = {
+                    viewModel.updateAgreeState(AgreeState.Privacy)
+                }
             )
 
             Spacer(modifier = Modifier.width(6.dp))
@@ -369,13 +375,16 @@ private fun TermComponent(
         Row(
             modifier = Modifier
                 .weight(1f)
-                .clickable {
+                .clickableWithNoRipple {
                     viewModel.updateAgreeState(AgreeState.Marketing)
                 }
         ) {
             FRadioButton(
                 modifier = Modifier.align(Alignment.CenterVertically),
                 enable = uiState.agreeState.contains(AgreeState.Marketing),
+                onClick = {
+                    viewModel.updateAgreeState(AgreeState.Marketing)
+                }
             )
 
             Spacer(modifier = Modifier.width(6.dp))
