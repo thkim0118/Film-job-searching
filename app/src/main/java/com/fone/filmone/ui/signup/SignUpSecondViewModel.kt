@@ -1,10 +1,10 @@
 package com.fone.filmone.ui.signup
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.model.signup.Gender
 import com.fone.filmone.domain.usecase.CheckNicknameDuplicationUseCase
+import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpSecondViewModel @Inject constructor(
     private val checkNicknameDuplicationUseCase: CheckNicknameDuplicationUseCase
-) : ViewModel() {
+) : BaseViewModel() {
     private val _uiState = MutableStateFlow(SignUpSecondUiState())
     val uiState: StateFlow<SignUpSecondUiState> = _uiState.asStateFlow()
 

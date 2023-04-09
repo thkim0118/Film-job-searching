@@ -1,12 +1,13 @@
 package com.fone.filmone.ui.signup
 
 import android.os.CountDownTimer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.R
 import com.fone.filmone.core.util.VerificationTimer
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.RequestPhoneVerificationUseCase
 import com.fone.filmone.domain.usecase.VerifySmsCodeUseCase
+import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +20,7 @@ import javax.inject.Inject
 class SignUpThirdViewModel @Inject constructor(
     private val requestPhoneVerificationUseCase: RequestPhoneVerificationUseCase,
     private val verifySmsCodeUseCase: VerifySmsCodeUseCase
-) : ViewModel() {
+) : BaseViewModel() {
     private val _uiState = MutableStateFlow(SignUpThirdUiState())
     val uiState: StateFlow<SignUpThirdUiState> = _uiState.asStateFlow()
 
@@ -117,7 +118,7 @@ class SignUpThirdViewModel @Inject constructor(
 
             verificationTimer.finishVerificationTimer()
             verificationTimer.startVerificationTimer()
-            // TODO "인증번호를 전송하였습니다" 문구 토스트
+            showToast(R.string.toast_request_verification_code)
         }
     }
 
@@ -134,7 +135,7 @@ class SignUpThirdViewModel @Inject constructor(
         }
 
         if (requestCount > 4 && isRetransmitPossible.not()) {
-            // TODO "너무 많은 요청을 하셨습니다. 5분 후 다시 시도해 주세요." 토스트.
+            showToast(R.string.toast_request_verification_code_too_much)
             return true
         }
 
@@ -144,7 +145,7 @@ class SignUpThirdViewModel @Inject constructor(
 
     fun checkVerificationCode(code: String) = viewModelScope.launch {
         if (uiState.value.verificationTime == "00:00") {
-            // TODO 인증 시간 만료에 대한 예외처리.
+            showToast(R.string.toast_verification_time_is_expired)
             return@launch
         }
 
@@ -154,7 +155,7 @@ class SignUpThirdViewModel @Inject constructor(
                 updatePhoneNumberVerification()
                 verificationTimer.finishVerificationTimer()
             } else {
-                // TODO "올바른 인증번호를 입력해주세요" 문구 토스트
+                showToast(R.string.toast_verification_code_is_error)
             }
         }
     }

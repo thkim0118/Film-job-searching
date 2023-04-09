@@ -31,6 +31,7 @@ import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.dialog.SingleButtonDialog
 import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
+import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.signup.AgreeState
@@ -53,11 +54,14 @@ fun SignUpThirdScreen(
     Box(
         modifier = modifier
             .defaultSystemBarPadding()
+            .toastPadding()
             .fillMaxSize()
     ) {
         SignUpMainScreen(navController = navController, signUpVo = signUpVo)
 
         DialogScreen()
+
+        SignUpThirdToast()
     }
 }
 
@@ -240,13 +244,16 @@ private fun TermComponent(
 
     Row(
         modifier = Modifier
-            .clickable {
+            .clickableWithNoRipple {
                 viewModel.updateAllAgreeState(uiState.isTermAllAgree.not())
             }
     ) {
         FRadioButton(
             modifier = Modifier.align(Alignment.CenterVertically),
             enable = uiState.isTermAllAgree,
+            onClick = {
+                viewModel.updateAllAgreeState(uiState.isTermAllAgree.not())
+            }
         )
 
         Spacer(modifier = Modifier.width(6.dp))
@@ -516,6 +523,17 @@ private fun VerificationCompleteDialog(
     ) {
         viewModel.clearDialogState()
     }
+}
+
+@Composable
+private fun BoxScope.SignUpThirdToast(
+    modifier: Modifier = Modifier,
+    viewModel: SignUpThirdViewModel = hiltViewModel()
+) {
+    FToast(
+        modifier = modifier,
+        baseViewModel = viewModel
+    )
 }
 
 private sealed interface ArrowType {

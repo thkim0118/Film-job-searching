@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.theme.FColor
@@ -27,12 +28,18 @@ import kotlinx.coroutines.delay
 fun BoxScope.FToast(
     modifier: Modifier = Modifier,
     baseViewModel: BaseViewModel,
-    hostState: SnackbarHostState
+    hostState: SnackbarHostState = SnackbarHostState()
 ) {
     val toastEvent by baseViewModel.toastEvent.collectAsState()
 
-    LaunchedEffect(key1 = toastEvent.message) {
-        hostState.showSnackbar(toastEvent.message)
+    if (toastEvent.messageRes == Int.MIN_VALUE) {
+        return
+    }
+
+    val message = stringResource(id = toastEvent.messageRes)
+
+    LaunchedEffect(key1 = message) {
+        hostState.showSnackbar(message)
     }
 
     SnackbarHost(

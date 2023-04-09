@@ -1,5 +1,6 @@
 package com.fone.filmone.ui.common.base
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,10 +13,10 @@ abstract class BaseViewModel : ViewModel() {
     val toastEvent: StateFlow<ToastEvent> = _toastEvent.asStateFlow()
 
 
-    fun showToast(message: String) {
+    fun showToast(@StringRes message: Int) {
         _toastEvent.update {
             it.copy(
-                message = message
+                messageRes = message
             )
         }
     }
@@ -28,6 +29,6 @@ abstract class BaseViewModel : ViewModel() {
 }
 
 data class ToastEvent(
-    val message: String = "",
+    @StringRes val messageRes: Int = Int.MIN_VALUE,
     val bottomPadding: Int = 0
 )
