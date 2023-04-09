@@ -3,7 +3,9 @@ package com.fone.filmone.ui.signup.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -43,6 +45,8 @@ fun SignUpFirstScreen(
     navController: NavHostController = rememberNavController(),
     signUpVo: SignUpVo
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = modifier
             .defaultSystemBarPadding()
@@ -58,46 +62,55 @@ fun SignUpFirstScreen(
 
         Column(
             modifier = Modifier
-                .fillMaxHeight()
-                .padding(horizontal = 16.dp)
+                .fillMaxSize()
+                .verticalScroll(scrollState)
         ) {
-            Spacer(modifier = Modifier.height(40.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Spacer(modifier = Modifier.height(40.dp))
 
-            SignUpIndicator(indicatorType = IndicatorType.First)
+                SignUpIndicator(indicatorType = IndicatorType.First)
 
-            Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(14.dp))
 
-            Text(
-                text = stringResource(id = R.string.sign_up_first_title),
-                style = LocalTypography.current.h1,
-                color = FColor.TextPrimary
+                Text(
+                    text = stringResource(id = R.string.sign_up_first_title),
+                    style = LocalTypography.current.h1,
+                    color = FColor.TextPrimary
+                )
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                ChoiceTitle(
+                    title = stringResource(id = R.string.sign_up_first_choice_job),
+                    subtitle = stringResource(id = R.string.sign_up_first_choice_job_subtitle)
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                JobTags()
+
+                Spacer(modifier = Modifier.height(40.dp))
+
+                ChoiceTitle(
+                    title = stringResource(id = R.string.sign_up_first_choice_favorite),
+                    subtitle = stringResource(id = R.string.sign_up_first_choice_favorite_subtitle)
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                InterestsTags()
+
+                Spacer(modifier = Modifier.height(203.dp))
+            }
+
+            NextButton(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                signUpVo = signUpVo
             )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            ChoiceTitle(
-                title = stringResource(id = R.string.sign_up_first_choice_job),
-                subtitle = stringResource(id = R.string.sign_up_first_choice_job_subtitle)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            JobTags()
-
-            Spacer(modifier = Modifier.height(40.dp))
-
-            ChoiceTitle(
-                title = stringResource(id = R.string.sign_up_first_choice_favorite),
-                subtitle = stringResource(id = R.string.sign_up_first_choice_favorite_subtitle)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            InterestsTags()
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            NextButton(signUpVo = signUpVo)
 
             Spacer(modifier = Modifier.height(38.dp))
         }
@@ -105,14 +118,18 @@ fun SignUpFirstScreen(
 }
 
 @Composable
-private fun NextButton(
+private fun ColumnScope.NextButton(
+    modifier: Modifier = Modifier,
     viewModel: SignUpFirstViewModel = hiltViewModel(),
     signUpVo: SignUpVo
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val enable = uiState.job != null && uiState.interests.isNotEmpty()
 
+    Spacer(modifier = Modifier.weight(1f))
+
     FButton(
+        modifier = modifier,
         title = stringResource(id = R.string.sign_up_next_title),
         enable = enable,
         onClick = {

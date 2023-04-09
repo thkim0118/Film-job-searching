@@ -1,8 +1,6 @@
 package com.fone.filmone.ui.signup.screen
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -71,6 +69,8 @@ private fun SignUpMainScreen(
     navController: NavHostController = rememberNavController(),
     signUpVo: SignUpVo
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -84,32 +84,41 @@ private fun SignUpMainScreen(
         )
 
         Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(horizontal = 16.dp)
+            modifier = modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
         ) {
-            Spacer(modifier = Modifier.height(40.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Spacer(modifier = Modifier.height(40.dp))
 
-            SignUpIndicator(indicatorType = IndicatorType.Third)
+                SignUpIndicator(indicatorType = IndicatorType.Third)
 
-            Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(14.dp))
 
-            Text(
-                text = stringResource(id = R.string.sign_up_third_title),
-                style = LocalTypography.current.h1
+                Text(
+                    text = stringResource(id = R.string.sign_up_third_title),
+                    style = LocalTypography.current.h1
+                )
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                PhoneVerificationComponent()
+
+                Spacer(modifier = Modifier.height(49.dp))
+
+                TermComponent()
+
+                Spacer(modifier = Modifier.height(110.dp))
+            }
+
+            NextButton(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                signUpVo = signUpVo
             )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            PhoneVerificationComponent()
-
-            Spacer(modifier = Modifier.height(49.dp))
-
-            TermComponent()
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            NextButton(signUpVo = signUpVo)
 
             Spacer(modifier = Modifier.height(38.dp))
         }
@@ -459,14 +468,18 @@ fun TermContent(
 }
 
 @Composable
-private fun NextButton(
+private fun ColumnScope.NextButton(
+    modifier: Modifier = Modifier,
     viewModel: SignUpThirdViewModel = hiltViewModel(),
     signUpVo: SignUpVo
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val enable = uiState.isRequiredTemAllAgree
 
+    Spacer(modifier = Modifier.weight(1f))
+
     FButton(
+        modifier = modifier,
         title = stringResource(id = R.string.sign_up_third_button_title),
         enable = enable
     ) {
