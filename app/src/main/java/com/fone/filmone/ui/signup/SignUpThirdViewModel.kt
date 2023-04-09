@@ -115,6 +115,7 @@ class SignUpThirdViewModel @Inject constructor(
                 it.copy(phoneVerificationState = PhoneVerificationState.Retransmit)
             }
 
+            verificationTimer.finishVerificationTimer()
             verificationTimer.startVerificationTimer()
             // TODO "인증번호를 전송하였습니다" 문구 토스트
         }
