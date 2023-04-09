@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
 import com.fone.filmone.domain.model.signup.Gender
 import com.fone.filmone.ui.common.*
+import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.fShadow
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
@@ -49,6 +50,7 @@ fun SignUpSecondScreen(
 
     Column(
         modifier = modifier
+            .defaultSystemBarPadding()
             .fillMaxSize()
     ) {
         FTitleBar(
