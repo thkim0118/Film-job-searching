@@ -2,8 +2,10 @@ package com.fone.filmone.ui.signup.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,7 +27,6 @@ import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
 import com.fone.filmone.domain.model.signup.Gender
 import com.fone.filmone.ui.common.*
-import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.fShadow
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
@@ -44,9 +45,10 @@ fun SignUpSecondScreen(
     navController: NavHostController = rememberNavController(),
     signUpVo: SignUpVo,
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = modifier
-            .defaultSystemBarPadding()
             .fillMaxSize()
     ) {
         FTitleBar(
@@ -59,35 +61,44 @@ fun SignUpSecondScreen(
 
         Column(
             modifier = Modifier
-                .fillMaxHeight()
-                .padding(horizontal = 16.dp)
+                .fillMaxSize()
+                .verticalScroll(scrollState)
         ) {
-            Spacer(modifier = Modifier.height(40.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Spacer(modifier = Modifier.height(40.dp))
 
-            SignUpIndicator(indicatorType = IndicatorType.Second)
+                SignUpIndicator(indicatorType = IndicatorType.Second)
 
-            Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(14.dp))
 
-            Text(
-                text = stringResource(id = R.string.sign_up_second_title),
-                style = LocalTypography.current.h1
+                Text(
+                    text = stringResource(id = R.string.sign_up_second_title),
+                    style = LocalTypography.current.h1
+                )
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                NicknameComponent()
+
+                Spacer(modifier = Modifier.height(23.dp))
+
+                BirthdaySexComponent()
+
+                Spacer(modifier = Modifier.height(40.dp))
+
+                ProfileComponent()
+
+                Spacer(modifier = Modifier.height(137.dp))
+            }
+
+            NextButton(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                signUpVo = signUpVo
             )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            NicknameComponent()
-
-            Spacer(modifier = Modifier.height(23.dp))
-
-            BirthdaySexComponent()
-
-            Spacer(modifier = Modifier.height(40.dp))
-
-            ProfileComponent()
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            NextButton(signUpVo = signUpVo)
 
             Spacer(modifier = Modifier.height(38.dp))
         }
@@ -255,14 +266,18 @@ private fun ProfileComponent() {
 }
 
 @Composable
-private fun NextButton(
+private fun ColumnScope.NextButton(
+    modifier: Modifier = Modifier,
     viewModel: SignUpSecondViewModel = hiltViewModel(),
     signUpVo: SignUpVo
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val enable = uiState.isNicknameChecked && uiState.gender != null && uiState.isBirthDayChecked
+    val enable = uiState.isNicknameChecked && uiState.isBirthDayChecked
+
+    Spacer(modifier = Modifier.weight(1f))
 
     FButton(
+        modifier = modifier,
         title = stringResource(id = R.string.sign_up_next_title),
         enable = enable,
         onClick = {
