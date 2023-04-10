@@ -39,7 +39,6 @@ class LoginViewModel @Inject constructor(
             override fun onCancel() {
                 LogUtil.w("cancel sns login")
             }
-
         }
     )
 

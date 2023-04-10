@@ -1,7 +1,5 @@
 package com.fone.filmone.ui
 
-import android.content.Intent
-import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -12,9 +10,7 @@ import com.fone.filmone.ui.theme.FilmOneTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun FOneApp(
-    googleSignInLauncher: ActivityResultLauncher<Intent>? = null
-) {
+fun FOneApp() {
     InitSystemBarColor()
 
     FilmOneTheme {
@@ -23,7 +19,6 @@ fun FOneApp(
         ) {
             FOneNavGraph(
                 modifier = Modifier.padding(it),
-                googleSignInLauncher = googleSignInLauncher
             )
         }
     }

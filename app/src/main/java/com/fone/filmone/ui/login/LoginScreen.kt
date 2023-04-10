@@ -1,7 +1,8 @@
 package com.fone.filmone.ui.login
 
-import android.content.Intent
-import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -27,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
+import com.fone.filmone.core.login.SNSLoginUtil
 import com.fone.filmone.domain.model.signup.SocialLoginType
 import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
@@ -37,12 +39,12 @@ import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
     navController: NavController = rememberNavController(),
-    googleSignInLauncher: ActivityResultLauncher<Intent>? = null,
 ) {
     Column(
         modifier = modifier
@@ -75,7 +77,7 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        GoogleLoginButton(launcher = googleSignInLauncher)
+        GoogleLoginButton()
 
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -161,8 +163,18 @@ private fun NaverLoginButton(
 private fun GoogleLoginButton(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
-    launcher: ActivityResultLauncher<Intent>?
 ) {
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = { result ->
+            if (result.resultCode == ComponentActivity.RESULT_OK) {
+                SNSLoginUtil.getInstance()?.handleResult(
+                    GoogleSignIn.getSignedInAccountFromIntent(result.data),
+                    SocialLoginType.GOOGLE
+                )
+            }
+        }
+    )
     val context = LocalContext.current
 
     LoginButtonContainer(
@@ -181,7 +193,7 @@ private fun GoogleLoginButton(
 @Composable
 private fun AppleLoginButton(
     modifier: Modifier = Modifier,
-            viewModel: LoginViewModel = hiltViewModel(),
+    viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
 
