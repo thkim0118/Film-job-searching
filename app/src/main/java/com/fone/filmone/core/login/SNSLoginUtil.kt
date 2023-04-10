@@ -74,8 +74,6 @@ class SNSLoginUtil private constructor(
         @Volatile
         private var instance: SNSLoginUtil? = null
 
-        fun getInstance(): SNSLoginUtil? = instance
-
         fun getInstance(loginCallback: LoginCallback): SNSLoginUtil {
             return instance ?: synchronized(this) {
                 instance ?: SNSLoginUtil(loginCallback).also {
