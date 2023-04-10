@@ -43,7 +43,6 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     navController: NavController = rememberNavController(),
     googleSignInLauncher: ActivityResultLauncher<Intent>? = null,
-    viewModel: LoginViewModel = hiltViewModel()
 ) {
     Column(
         modifier = modifier

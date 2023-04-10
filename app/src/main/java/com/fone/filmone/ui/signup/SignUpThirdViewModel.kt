@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpThirdViewModel @Inject constructor(
     private val requestPhoneVerificationUseCase: RequestPhoneVerificationUseCase,
-    private val verifySmsCodeUseCase: VerifySmsCodeUseCase
+    private val verifySmsCodeUseCase: VerifySmsCodeUseCase,
 ) : BaseViewModel() {
     private val _uiState = MutableStateFlow(SignUpThirdUiState())
     val uiState: StateFlow<SignUpThirdUiState> = _uiState.asStateFlow()

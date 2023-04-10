@@ -4,7 +4,6 @@ import com.fone.filmone.data.datamodel.request.sms.SmsRequest
 import com.fone.filmone.data.datamodel.response.common.handleNetwork
 import com.fone.filmone.data.datamodel.response.sms.SmsTransmitResponse
 import com.fone.filmone.data.datasource.remote.SmsApi
-import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.repository.sms.SmsRepository
@@ -25,8 +24,10 @@ class SmsRepositoryImpl @Inject constructor(
             return DataResult.EmptyData(null)
         }
 
-        return DataResult.Success(verificationCode == code).onSuccess {
-            verificationCode = ""
+        return DataResult.Success(verificationCode == code).onSuccess { isVerify ->
+            if (isVerify) {
+                verificationCode = ""
+            }
         }
     }
 }
