@@ -1,19 +1,23 @@
 package com.fone.filmone.ui.signup.screen
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -25,8 +29,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
+import com.fone.filmone.core.image.ImageBase64Util
 import com.fone.filmone.domain.model.signup.Gender
 import com.fone.filmone.ui.common.*
+import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.fShadow
 import com.fone.filmone.ui.navigation.FOneDestinations
@@ -39,6 +45,11 @@ import com.fone.filmone.ui.signup.model.SignUpVo
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
+import com.skydoves.landscapist.ShimmerParams
+import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
 @Composable
@@ -103,7 +114,9 @@ fun SignUpSecondScreen(
 
                 Spacer(modifier = Modifier.height(40.dp))
 
-                ProfileComponent()
+                ProfileComponent(
+                    onUpdateProfileImage = viewModel::updateProfileImage
+                )
 
                 Spacer(modifier = Modifier.height(137.dp))
             }
@@ -158,7 +171,11 @@ private fun NicknameComponent(
                     } else {
                         uiState.nickname.isNotEmpty()
                     },
-                    onClick = onCheckDuplicateNickname
+                    onClick = {
+                        if (uiState.isNicknameChecked.not()) {
+                            onCheckDuplicateNickname.invoke()
+                        }
+                    }
                 )
             ),
             enabled = uiState.isNicknameChecked.not(),
@@ -230,7 +247,29 @@ private fun BirthdaySexComponent(
 }
 
 @Composable
-private fun ProfileComponent() {
+private fun ProfileComponent(
+    onUpdateProfileImage: (String) -> Unit
+) {
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri: Uri? ->
+            imageUri = uri
+            coroutineScope.launch(Dispatchers.IO) {
+                uri?.let {
+                    ImageBase64Util.encodeToString(context, it)
+                        .collectLatest { encodeString: String? ->
+                            if (encodeString != null) {
+                                onUpdateProfileImage.invoke(encodeString)
+                            }
+                        }
+                }
+            }
+        }
+    )
+
     Text(
         text = stringResource(id = R.string.sign_up_second_profile_title),
         style = LocalTypography.current.subtitle1
@@ -247,6 +286,9 @@ private fun ProfileComponent() {
 
     Box(
         modifier = Modifier
+            .clickableWithNoRipple {
+                launcher.launch("image/*")
+            }
     ) {
         Box(
             modifier = Modifier
@@ -254,12 +296,38 @@ private fun ProfileComponent() {
                 .size(108.dp)
                 .fShadow(shape = CircleShape)
         )
-        Image(
-            modifier = Modifier
-                .align(Alignment.Center),
-            imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
-            contentDescription = null
-        )
+        if (imageUri == null) {
+            Image(
+                modifier = Modifier
+                    .align(Alignment.Center),
+                imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
+                contentDescription = null
+            )
+        } else {
+            GlideImage(
+                modifier = Modifier
+                    .size(106.dp)
+                    .clip(CircleShape),
+                shimmerParams = ShimmerParams(
+                    baseColor = MaterialTheme.colors.background,
+                    highlightColor = FColor.Gray700,
+                    durationMillis = 350,
+                    dropOff = 0.65f,
+                    tilt = 20f
+                ),
+
+                imageModel = imageUri,
+                contentScale = ContentScale.Crop,
+                failure = {
+                    Image(
+                        modifier = Modifier
+                            .align(Alignment.Center),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
+                        contentDescription = null
+                    )
+                }
+            )
+        }
         Image(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
@@ -280,7 +348,8 @@ private fun ColumnScope.NextButton(
     signUpVo: SignUpVo,
     uiState: SignUpSecondUiState
 ) {
-    val enable = uiState.isNicknameChecked && uiState.isBirthDayChecked
+    val enable =
+        uiState.isNicknameChecked && uiState.isBirthDayChecked && uiState.profileImage.isNotEmpty()
 
     Spacer(modifier = Modifier.weight(1f))
 
@@ -317,7 +386,7 @@ fun SignUpSecondScreenPreview() {
 fun ProfileComponentPreview() {
     FilmOneTheme {
         Column {
-            ProfileComponent()
+            ProfileComponent(onUpdateProfileImage = {})
         }
     }
 }

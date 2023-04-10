@@ -36,6 +36,14 @@ class SignUpSecondViewModel @Inject constructor(
         updateBirthDayChecked(birthday)
     }
 
+    fun updateProfileImage(profileEncodedString: String) {
+        _uiState.update {
+            it.copy(
+                profileImage = profileEncodedString
+            )
+        }
+    }
+
     private fun updateBirthDayChecked(birthday: String) {
         val birthDayPattern = Pattern.compile("^(\\d{4})-(0[1-9]|1[0-2])-(0\\d|[1-2]\\d|3[0-1])+$")
         _uiState.update {
@@ -72,5 +80,6 @@ data class SignUpSecondUiState(
     val isNicknameDuplicated: Boolean = false,
     val birthday: String = "",
     val isBirthDayChecked: Boolean = false,
+    val profileImage: String = "",
     val gender: Gender = Gender.IRRELEVANT,
 )
