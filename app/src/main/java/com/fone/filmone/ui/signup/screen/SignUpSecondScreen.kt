@@ -31,6 +31,7 @@ import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.fShadow
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.signup.SignUpSecondUiState
 import com.fone.filmone.ui.signup.SignUpSecondViewModel
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
@@ -45,7 +46,9 @@ fun SignUpSecondScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     signUpVo: SignUpVo,
+    viewModel: SignUpSecondViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
 
     Column(
@@ -84,11 +87,19 @@ fun SignUpSecondScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                NicknameComponent()
+                NicknameComponent(
+                    uiState = uiState,
+                    onUpdateNickname = viewModel::updateNickname,
+                    onCheckDuplicateNickname = viewModel::checkNicknameDuplication
+                )
 
                 Spacer(modifier = Modifier.height(23.dp))
 
-                BirthdaySexComponent()
+                BirthdaySexComponent(
+                    uiState = uiState,
+                    onUpdateBirthday = viewModel::updateBirthDay,
+                    onUpdateGender = viewModel::updateGender
+                )
 
                 Spacer(modifier = Modifier.height(40.dp))
 
@@ -99,7 +110,8 @@ fun SignUpSecondScreen(
 
             NextButton(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                signUpVo = signUpVo
+                signUpVo = signUpVo,
+                uiState = uiState
             )
 
             Spacer(modifier = Modifier.height(38.dp))
@@ -109,9 +121,10 @@ fun SignUpSecondScreen(
 
 @Composable
 private fun NicknameComponent(
-    viewModel: SignUpSecondViewModel = hiltViewModel()
+    uiState: SignUpSecondUiState,
+    onUpdateNickname: (String) -> Unit,
+    onCheckDuplicateNickname: () -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsState()
     val focusManager = LocalFocusManager.current
 
     LaunchedEffect(key1 = uiState.isNicknameChecked) {
@@ -124,9 +137,7 @@ private fun NicknameComponent(
         FTextField(
             text = uiState.nickname,
             placeholder = stringResource(id = R.string.sign_up_second_nickname_placeholder),
-            onValueChange = { value ->
-                viewModel.updateNickname(value)
-            },
+            onValueChange = onUpdateNickname,
             pattern = Pattern.compile("^[ㄱ-ㅣ가-힣a-zA-Z\\d\\s]+$"),
             topText = TopText(
                 title = stringResource(id = R.string.sign_up_second_nickname_title),
@@ -147,9 +158,7 @@ private fun NicknameComponent(
                     } else {
                         uiState.nickname.isNotEmpty()
                     },
-                    onClick = {
-                        viewModel.checkNicknameDuplication()
-                    }
+                    onClick = onCheckDuplicateNickname
                 )
             ),
             enabled = uiState.isNicknameChecked.not(),
@@ -164,16 +173,14 @@ private fun NicknameComponent(
 
 @Composable
 private fun BirthdaySexComponent(
-    viewModel: SignUpSecondViewModel = hiltViewModel()
+    uiState: SignUpSecondUiState,
+    onUpdateBirthday: (String) -> Unit,
+    onUpdateGender: (Gender) -> Unit,
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-
     FTextField(
         text = uiState.birthday,
         placeholder = stringResource(id = R.string.sign_up_second_birthday_sex_placeholder),
-        onValueChange = { value ->
-            viewModel.updateBirthDay(value)
-        },
+        onValueChange = onUpdateBirthday,
         pattern = Pattern.compile("^[\\d\\s-]+$"),
         autoCompletion = { before, after ->
             if (before.text.length < after.text.length) {
@@ -208,14 +215,14 @@ private fun BirthdaySexComponent(
                 text = stringResource(id = R.string.sign_up_second_birthday_sex_man),
                 enable = uiState.gender == Gender.MAN,
                 onClick = {
-                    viewModel.updateGender(Gender.MAN)
+                    onUpdateGender(Gender.MAN)
                 }
             ),
             BorderButton(
                 text = stringResource(id = R.string.sign_up_second_birthday_sex_woman),
                 enable = uiState.gender == Gender.WOMAN,
                 onClick = {
-                    viewModel.updateGender(Gender.WOMAN)
+                    onUpdateGender(Gender.WOMAN)
                 }
             )
         ),
@@ -270,10 +277,9 @@ private fun ProfileComponent() {
 @Composable
 private fun ColumnScope.NextButton(
     modifier: Modifier = Modifier,
-    viewModel: SignUpSecondViewModel = hiltViewModel(),
-    signUpVo: SignUpVo
+    signUpVo: SignUpVo,
+    uiState: SignUpSecondUiState
 ) {
-    val uiState by viewModel.uiState.collectAsState()
     val enable = uiState.isNicknameChecked && uiState.isBirthDayChecked
 
     Spacer(modifier = Modifier.weight(1f))
