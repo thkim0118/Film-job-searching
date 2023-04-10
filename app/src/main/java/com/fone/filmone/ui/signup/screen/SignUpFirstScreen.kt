@@ -31,6 +31,7 @@ import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.signup.SignUpFirstUiState
 import com.fone.filmone.ui.signup.SignUpFirstViewModel
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
@@ -43,8 +44,10 @@ import com.fone.filmone.ui.theme.LocalTypography
 fun SignUpFirstScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    signUpVo: SignUpVo
+    signUpVo: SignUpVo,
+    viewModel: SignUpFirstViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
 
     Column(
@@ -91,7 +94,10 @@ fun SignUpFirstScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                JobTags()
+                JobTags(
+                    currentJob = uiState.job,
+                    onUpdateJob = viewModel::updateJobTag
+                )
 
                 Spacer(modifier = Modifier.height(40.dp))
 
@@ -102,14 +108,18 @@ fun SignUpFirstScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                InterestsTags()
+                InterestsTags(
+                    currentInterests = uiState.interests,
+                    onUpdateInterests = viewModel::updateInterest
+                )
 
                 Spacer(modifier = Modifier.height(203.dp))
             }
 
             NextButton(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                signUpVo = signUpVo
+                signUpVo = signUpVo,
+                uiState = uiState
             )
 
             Spacer(modifier = Modifier.height(38.dp))
@@ -120,10 +130,9 @@ fun SignUpFirstScreen(
 @Composable
 private fun ColumnScope.NextButton(
     modifier: Modifier = Modifier,
-    viewModel: SignUpFirstViewModel = hiltViewModel(),
+    uiState: SignUpFirstUiState,
     signUpVo: SignUpVo
 ) {
-    val uiState by viewModel.uiState.collectAsState()
     val enable = uiState.job != null && uiState.interests.isNotEmpty()
 
     Spacer(modifier = Modifier.weight(1f))
@@ -180,7 +189,9 @@ private fun ChoiceTitle(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun JobTags(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    currentJob: Job?,
+    onUpdateJob: (Job) -> Unit
 ) {
     FlowRow(
         modifier = modifier,
@@ -190,6 +201,8 @@ private fun JobTags(
             JobTag(
                 modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
                 job = job,
+                isSelected = currentJob == job,
+                onClick = onUpdateJob
             )
         }
     }
@@ -199,11 +212,9 @@ private fun JobTags(
 private fun JobTag(
     modifier: Modifier = Modifier,
     job: Job,
-    viewModel: SignUpFirstViewModel = hiltViewModel()
+    isSelected: Boolean,
+    onClick: (Job) -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val isSelected = uiState.job == job
-
     Box(
         modifier = modifier
             .clip(shape = RoundedCornerShape(90.dp))
@@ -215,7 +226,7 @@ private fun JobTag(
                 },
                 shape = RoundedCornerShape(90.dp)
             )
-            .clickable { viewModel.updateJobTag(job) },
+            .clickable { onClick(job) },
     ) {
         Text(
             modifier = Modifier
@@ -243,7 +254,9 @@ private fun JobTag(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun InterestsTags(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    currentInterests: List<Interests>,
+    onUpdateInterests: (Interests, Boolean) -> Unit
 ) {
     FlowRow(
         modifier = modifier,
@@ -253,6 +266,8 @@ private fun InterestsTags(
             InterestsTag(
                 modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
                 interests = interests,
+                isSelected = currentInterests.find { it == interests } != null,
+                onClick = onUpdateInterests
             )
         }
     }
@@ -262,11 +277,9 @@ private fun InterestsTags(
 private fun InterestsTag(
     modifier: Modifier = Modifier,
     interests: Interests,
-    viewModel: SignUpFirstViewModel = hiltViewModel()
+    isSelected: Boolean,
+    onClick: (Interests, Boolean) -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val isSelected = uiState.interests.find { it == interests } != null
-
     Box(
         modifier = modifier
             .clip(shape = RoundedCornerShape(90.dp))
@@ -278,7 +291,7 @@ private fun InterestsTag(
                 },
                 shape = RoundedCornerShape(90.dp)
             )
-            .clickable { viewModel.updateInterest(interests, isSelected.not()) },
+            .clickable { onClick(interests, isSelected.not()) },
     ) {
         Text(
             modifier = Modifier
@@ -306,14 +319,20 @@ private fun InterestsTag(
 @Preview(showBackground = true)
 @Composable
 private fun JobTagsPreview() {
-    JobTags()
+    JobTags(
+        currentJob = Job.HUNTER,
+        onUpdateJob = {}
+    )
 }
 
 
 @Preview(showBackground = true)
 @Composable
 private fun FavoriteTagsPreview() {
-    InterestsTags()
+    InterestsTags(
+        currentInterests = Interests.values().toList(),
+        onUpdateInterests = { _, _ -> }
+    )
 }
 
 @Preview(showBackground = true)
