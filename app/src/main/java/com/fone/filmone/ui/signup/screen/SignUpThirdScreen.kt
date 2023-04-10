@@ -35,10 +35,7 @@ import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
-import com.fone.filmone.ui.signup.AgreeState
-import com.fone.filmone.ui.signup.PhoneVerificationState
-import com.fone.filmone.ui.signup.SignUpThirdDialogState
-import com.fone.filmone.ui.signup.SignUpThirdViewModel
+import com.fone.filmone.ui.signup.*
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
 import com.fone.filmone.ui.signup.model.SignUpVo
@@ -50,19 +47,38 @@ import com.fone.filmone.ui.theme.LocalTypography
 fun SignUpThirdScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    viewModel: SignUpThirdViewModel = hiltViewModel(),
     signUpVo: SignUpVo
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+    val dialogState by viewModel.dialogState.collectAsState()
+
     Box(
         modifier = modifier
             .defaultSystemBarPadding()
             .toastPadding()
             .fillMaxSize()
     ) {
-        SignUpMainScreen(navController = navController, signUpVo = signUpVo)
+        SignUpMainScreen(
+            navController = navController,
+            signUpVo = signUpVo,
+            uiState = uiState,
+            onPhoneNumberChanged = viewModel::updatePhoneNumber,
+            onVerifyClick = viewModel::transmitVerificationCode,
+            onVerificationCheckClick = viewModel::checkVerificationCode,
+            onUpdateAllAgreeState = viewModel::updateAllAgreeState,
+            onUpdateAgreeState = viewModel::updateAgreeState
+        )
 
-        DialogScreen()
+        DialogScreen(
+            dialogState = dialogState,
+            onDismiss = viewModel::clearDialogState
+        )
 
-        SignUpThirdToast()
+        FToast(
+            modifier = modifier,
+            baseViewModel = viewModel
+        )
     }
 }
 
@@ -70,7 +86,13 @@ fun SignUpThirdScreen(
 private fun SignUpMainScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    signUpVo: SignUpVo
+    signUpVo: SignUpVo,
+    uiState: SignUpThirdUiState,
+    onPhoneNumberChanged: (String) -> Unit,
+    onVerifyClick: () -> Unit,
+    onVerificationCheckClick: (String) -> Unit,
+    onUpdateAllAgreeState: () -> Unit,
+    onUpdateAgreeState: (AgreeState) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -109,18 +131,28 @@ private fun SignUpMainScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                PhoneVerificationComponent()
+                PhoneVerificationComponent(
+                    uiState = uiState,
+                    onValueChanged = onPhoneNumberChanged,
+                    onVerifyClick = onVerifyClick,
+                    onVerificationCheckClick = onVerificationCheckClick
+                )
 
                 Spacer(modifier = Modifier.height(49.dp))
 
-                TermComponent()
+                TermComponent(
+                    uiState = uiState,
+                    onUpdateAllAgreeState = onUpdateAllAgreeState,
+                    onUpdateAgreeState = onUpdateAgreeState
+                )
 
                 Spacer(modifier = Modifier.height(110.dp))
             }
 
             NextButton(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                signUpVo = signUpVo
+                signUpVo = signUpVo,
+                uiState = uiState
             )
 
             Spacer(modifier = Modifier.height(38.dp))
@@ -130,15 +162,14 @@ private fun SignUpMainScreen(
 
 @Composable
 private fun PhoneVerificationComponent(
-    viewModel: SignUpThirdViewModel = hiltViewModel()
+    uiState: SignUpThirdUiState,
+    onValueChanged: (String) -> Unit,
+    onVerifyClick: () -> Unit,
+    onVerificationCheckClick: (String) -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-
     FTextField(
         text = uiState.phoneNumber,
-        onValueChange = { value ->
-            viewModel.updatePhoneNumber(value)
-        },
+        onValueChange = onValueChanged,
         textLimit = 11,
         placeholder = stringResource(id = R.string.sign_up_third_phone_number_placeholder),
         topText = TopText(
@@ -159,22 +190,23 @@ private fun PhoneVerificationComponent(
                     }
                 ),
                 enable = uiState.phoneNumber.length >= 10 && uiState.phoneVerificationState != PhoneVerificationState.Complete,
-                onClick = {
-                    viewModel.transmitVerificationCode()
-                }
+                onClick = onVerifyClick
             )
         )
     )
 
-    RetransmitComponent()
+    RetransmitComponent(
+        uiState = uiState,
+        onVerificationCheckClick = onVerificationCheckClick
+    )
 }
 
 @Composable
 fun RetransmitComponent(
     modifier: Modifier = Modifier,
-    viewModel: SignUpThirdViewModel = hiltViewModel()
+    uiState: SignUpThirdUiState,
+    onVerificationCheckClick: (String) -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsState()
     val isVisible = uiState.phoneVerificationState == PhoneVerificationState.Retransmit
     var verificationCode by remember { mutableStateOf("") }
     val enable = verificationCode.length == 6
@@ -212,7 +244,7 @@ fun RetransmitComponent(
                     enable = enable,
                     onClick = {
                         if (enable) {
-                            viewModel.checkVerificationCode(verificationCode)
+                            onVerificationCheckClick.invoke(verificationCode)
                         }
                     }
                 )
@@ -240,10 +272,10 @@ fun RetransmitComponent(
 
 @Composable
 private fun TermComponent(
-    viewModel: SignUpThirdViewModel = hiltViewModel()
+    uiState: SignUpThirdUiState,
+    onUpdateAllAgreeState: () -> Unit,
+    onUpdateAgreeState: (AgreeState) -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-
     var isTermArrowExpanded by rememberSaveable { mutableStateOf(false) }
     var isPrivacyArrowExpanded by rememberSaveable { mutableStateOf(false) }
     var isMarketingArrowExpanded by rememberSaveable { mutableStateOf(false) }
@@ -257,14 +289,14 @@ private fun TermComponent(
     Row(
         modifier = Modifier
             .clickableWithNoRipple {
-                viewModel.updateAllAgreeState(uiState.isTermAllAgree.not())
+                onUpdateAllAgreeState.invoke()
             }
     ) {
         FRadioButton(
             modifier = Modifier.align(Alignment.CenterVertically),
             enable = uiState.isTermAllAgree,
             onClick = {
-                viewModel.updateAllAgreeState(uiState.isTermAllAgree.not())
+                onUpdateAllAgreeState.invoke()
             }
         )
 
@@ -284,14 +316,14 @@ private fun TermComponent(
             modifier = Modifier
                 .weight(1f)
                 .clickableWithNoRipple {
-                    viewModel.updateAgreeState(AgreeState.Term)
+                    onUpdateAgreeState(AgreeState.Term)
                 }
         ) {
             FRadioButton(
                 modifier = Modifier.align(Alignment.CenterVertically),
                 enable = uiState.agreeState.contains(AgreeState.Term),
                 onClick = {
-                    viewModel.updateAgreeState(AgreeState.Term)
+                    onUpdateAgreeState(AgreeState.Term)
                 }
             )
 
@@ -337,14 +369,14 @@ private fun TermComponent(
             modifier = Modifier
                 .weight(1f)
                 .clickableWithNoRipple {
-                    viewModel.updateAgreeState(AgreeState.Privacy)
+                    onUpdateAgreeState(AgreeState.Privacy)
                 }
         ) {
             FRadioButton(
                 modifier = Modifier.align(Alignment.CenterVertically),
                 enable = uiState.agreeState.contains(AgreeState.Privacy),
                 onClick = {
-                    viewModel.updateAgreeState(AgreeState.Privacy)
+                    onUpdateAgreeState(AgreeState.Privacy)
                 }
             )
 
@@ -395,14 +427,14 @@ private fun TermComponent(
             modifier = Modifier
                 .weight(1f)
                 .clickableWithNoRipple {
-                    viewModel.updateAgreeState(AgreeState.Marketing)
+                    onUpdateAgreeState(AgreeState.Marketing)
                 }
         ) {
             FRadioButton(
                 modifier = Modifier.align(Alignment.CenterVertically),
                 enable = uiState.agreeState.contains(AgreeState.Marketing),
                 onClick = {
-                    viewModel.updateAgreeState(AgreeState.Marketing)
+                    onUpdateAgreeState(AgreeState.Marketing)
                 }
             )
 
@@ -473,20 +505,17 @@ fun TermContent(
 @Composable
 private fun ColumnScope.NextButton(
     modifier: Modifier = Modifier,
-    viewModel: SignUpThirdViewModel = hiltViewModel(),
-    signUpVo: SignUpVo
+    signUpVo: SignUpVo,
+    uiState: SignUpThirdUiState
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val enable = uiState.isRequiredTemAllAgree
-
     Spacer(modifier = Modifier.weight(1f))
 
     FButton(
         modifier = modifier,
         title = stringResource(id = R.string.sign_up_third_button_title),
-        enable = enable
+        enable = uiState.isRequiredTemAllAgree
     ) {
-        if (enable) {
+        if (uiState.isRequiredTemAllAgree) {
             FOneNavigator.navigateTo(
                 FOneDestinations.SignUpComplete.getRouteWithArg(
                     signUpVo.copy(
@@ -502,36 +531,35 @@ private fun ColumnScope.NextButton(
 
 @Composable
 private fun DialogScreen(
-    viewModel: SignUpThirdViewModel = hiltViewModel()
+    dialogState: SignUpThirdDialogState,
+    onDismiss: () -> Unit
 ) {
-    val dialogState by viewModel.dialogState.collectAsState()
-
     when (dialogState) {
         SignUpThirdDialogState.Clear -> Unit
         SignUpThirdDialogState.SignUpFail -> {
-            SignUpFailDialog()
+            SignUpFailDialog(onClick = onDismiss)
         }
         SignUpThirdDialogState.VerificationComplete -> {
-            VerificationCompleteDialog()
+            VerificationCompleteDialog(onClick = onDismiss)
         }
     }
 }
 
 @Composable
 private fun SignUpFailDialog(
-    viewModel: SignUpThirdViewModel = hiltViewModel()
+    onClick: () -> Unit
 ) {
     SingleButtonDialog(
         titleText = stringResource(id = R.string.sign_up_third_dialog_sign_up_fail_title),
         buttonText = stringResource(id = R.string.confirm)
     ) {
-        viewModel.clearDialogState()
+        onClick.invoke()
     }
 }
 
 @Composable
 private fun VerificationCompleteDialog(
-    viewModel: SignUpThirdViewModel = hiltViewModel()
+    onClick: () -> Unit
 ) {
     LocalFocusManager.current.clearFocus()
 
@@ -539,19 +567,8 @@ private fun VerificationCompleteDialog(
         titleText = stringResource(id = R.string.sign_up_third_dialog_verification_complete_title),
         buttonText = stringResource(id = R.string.confirm)
     ) {
-        viewModel.clearDialogState()
+        onClick.invoke()
     }
-}
-
-@Composable
-private fun BoxScope.SignUpThirdToast(
-    modifier: Modifier = Modifier,
-    viewModel: SignUpThirdViewModel = hiltViewModel()
-) {
-    FToast(
-        modifier = modifier,
-        baseViewModel = viewModel
-    )
 }
 
 private sealed interface ArrowType {

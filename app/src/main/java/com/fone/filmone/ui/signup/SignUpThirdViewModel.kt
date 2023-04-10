@@ -78,7 +78,9 @@ class SignUpThirdViewModel @Inject constructor(
         updateTermAllAgree(_uiState.value.agreeState.size == AgreeState.values().size)
     }
 
-    fun updateAllAgreeState(isAgreeAll: Boolean) {
+    fun updateAllAgreeState() {
+        val isAgreeAll = uiState.value.isTermAllAgree.not()
+
         _uiState.update { uiState ->
             uiState.copy(
                 agreeState = if (isAgreeAll) {
