@@ -11,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TextFieldDefaults.indicatorLine
@@ -165,7 +166,10 @@ fun FTextField(
                 enabled = enabled,
                 readOnly = readOnly,
                 textStyle = textStyle.copy(
-                    color = textColor
+                    color = textColor,
+                    fontWeight = FontWeight.W400,
+                    fontSize = 14.sp,
+                    lineHeight = 19.sp,
                 ),
                 keyboardOptions = keyboardOptions,
                 keyboardActions = keyboardActions,
@@ -253,21 +257,12 @@ fun FTextField(
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
                                             Box(
-                                                modifier = Modifier.weight(1f)
+                                                modifier = Modifier
+                                                    .weight(1f)
+                                                    .height(fixedHeight)
                                             ) {
                                                 // FIXME https://holykisa.tistory.com/74
                                                 innerTextField.invoke()
-                                                Text(
-                                                    modifier = Modifier.fillMaxWidth(1f),
-                                                    text = textFieldValue.text,
-                                                    style = fTextStyle(
-                                                        fontWeight = FontWeight.W400,
-                                                        fontSize = 14.sp,
-                                                        lineHeight = 19.sp,
-                                                        color = textColor,
-                                                    ),
-                                                    overflow = TextOverflow.Ellipsis
-                                                )
                                             }
 
                                             if (textFieldTail != null) {
@@ -280,13 +275,13 @@ fun FTextField(
                                                     }
                                                 }
                                             }
-//                                                }
-//                                            }
                                         }
                                     },
                                     placeholder = @Composable {
                                         Row(
-                                            modifier = Modifier.fillMaxWidth()
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(fixedHeight)
                                         ) {
                                             Text(
                                                 text = placeholder,
@@ -407,6 +402,18 @@ private fun FTextFieldPreview() {
         FTextField(
             text = "Input Text",
             onValueChange = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun FTextFieldFixedSizePreview() {
+    FilmOneTheme {
+        FTextField(
+            text = "Input Text",
+            onValueChange = {},
+            fixedHeight = 150.dp
         )
     }
 }
