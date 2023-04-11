@@ -1,8 +1,10 @@
 package com.fone.filmone.data.repository
 
+import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.response.common.handleNetwork
 import com.fone.filmone.data.datamodel.response.user.CheckNicknameDuplicationResponse
+import com.fone.filmone.data.datamodel.response.user.SigninResponse
 import com.fone.filmone.data.datamodel.response.user.SignUpResponse
 import com.fone.filmone.data.datasource.remote.UserApi
 import com.fone.filmone.domain.model.common.DataResult
@@ -18,5 +20,9 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun signUp(signUpRequest: SignUpRequest): DataResult<SignUpResponse> {
         return handleNetwork { userApi.signUp(signUpRequest) }
+    }
+
+    override suspend fun signIn(signinRequest: SigninRequest): DataResult<SigninResponse> {
+        return handleNetwork { userApi.signIn(signinRequest) }
     }
 }

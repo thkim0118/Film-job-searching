@@ -44,17 +44,25 @@ sealed class FOneDestinations(val route: String) {
     }
 
     object SignUpComplete : FOneDestinations("sign-up/complete") {
-        const val argSignUpVo = "arg_sign_up_vo"
-        val routeWithArgs = "$route/{$argSignUpVo}"
+        const val argAccessToken = "arg_access_token"
+        const val argEmail = "arg_email"
+        const val argSocialLoginType = "arg_social_login_type"
+        val routeWithArgs = "$route/{$argAccessToken}/{$argEmail}/{$argSocialLoginType}"
         val arguments = listOf(
-            navArgument(argSignUpVo) { type = NavType.StringType }
+            navArgument(argAccessToken) { type = NavType.StringType },
+            navArgument(argEmail) { type = NavType.StringType },
+            navArgument(argSocialLoginType) { type = NavType.StringType },
         )
 
-        fun getRouteWithArg(signUpVo: SignUpVo): String {
-            return "$route/${SignUpVo.toJson(signUpVo)}"
+        fun getRouteWithArg(
+            accessToken: String,
+            email: String,
+            socialLoginType: String
+        ): String {
+            return "$route/${accessToken}/${email}/${socialLoginType}"
         }
     }
 
     object Inquiry : FOneDestinations("inquiry")
-    object Home : FOneDestinations("home")
+    object Main : FOneDestinations("main")
 }

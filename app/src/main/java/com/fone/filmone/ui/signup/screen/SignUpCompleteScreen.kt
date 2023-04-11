@@ -14,22 +14,22 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.FButton
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
-import com.fone.filmone.ui.signup.model.SignUpVo
+import com.fone.filmone.ui.signup.SignUpCompleteViewModel
 import com.fone.filmone.ui.theme.FColor
-import com.fone.filmone.ui.theme.FilmOneTheme
 
 @Composable
 fun SignUpCompleteScreen(
     modifier: Modifier = Modifier,
-    signUpVo: SignUpVo
+    accessToken: String,
+    email: String,
+    socialLoginType: String,
+    viewModel: SignUpCompleteViewModel = hiltViewModel()
 ) {
     Box(
         modifier = modifier
@@ -93,15 +93,11 @@ fun SignUpCompleteScreen(
             title = stringResource(id = R.string.sign_up_complete_button_title),
             enable = true
         ) {
-
+            viewModel.signIn(
+                accessToken = accessToken,
+                email = email,
+                socialLoginType = socialLoginType
+            )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SignUpCompleteScreenPreview() {
-    FilmOneTheme {
-        SignUpCompleteScreen(signUpVo = SignUpVo())
     }
 }

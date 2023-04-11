@@ -4,10 +4,15 @@ import android.os.CountDownTimer
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
 import com.fone.filmone.core.util.VerificationTimer
+import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.RequestPhoneVerificationUseCase
+import com.fone.filmone.domain.usecase.SignUpUseCase
 import com.fone.filmone.domain.usecase.VerifySmsCodeUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
+import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.signup.model.SignUpVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +25,7 @@ import javax.inject.Inject
 class SignUpThirdViewModel @Inject constructor(
     private val requestPhoneVerificationUseCase: RequestPhoneVerificationUseCase,
     private val verifySmsCodeUseCase: VerifySmsCodeUseCase,
+    private val signUpUseCase: SignUpUseCase
 ) : BaseViewModel() {
     private val _uiState = MutableStateFlow(SignUpThirdUiState())
     val uiState: StateFlow<SignUpThirdUiState> = _uiState.asStateFlow()
@@ -43,6 +49,28 @@ class SignUpThirdViewModel @Inject constructor(
     }
 
     private var requestCount: Int = 0
+
+    fun signUp(signUpVo: SignUpVo) = viewModelScope.launch {
+        val agreeStates = uiState.value.agreeState
+        signUpUseCase.invoke(
+            signUpVo = signUpVo.copy(
+                phoneNumber = uiState.value.phoneNumber,
+                agreeToTermsOfServiceTermsOfUse = agreeStates.contains(AgreeState.Term),
+                agreeToPersonalInformation = agreeStates.contains(AgreeState.Privacy),
+                isReceiveMarketing = agreeStates.contains(AgreeState.Marketing),
+            )
+        ).onSuccess {
+            FOneNavigator.navigateTo(
+                FOneDestinations.SignUpComplete.getRouteWithArg(
+                    accessToken = signUpVo.accessToken,
+                    email = signUpVo.email,
+                    socialLoginType = signUpVo.socialLoginType
+                )
+            )
+        }.onFail {
+            updateDialogState(SignUpThirdDialogState.SignUpFail)
+        }
+    }
 
     fun updatePhoneNumber(phoneNumber: String) {
         _uiState.update {

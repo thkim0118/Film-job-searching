@@ -61,13 +61,21 @@ fun NavGraphBuilder.signUpScreenComposable(
         route = FOneDestinations.SignUpComplete.routeWithArgs,
         arguments = FOneDestinations.SignUpComplete.arguments
     ) { navBackStackEntry ->
-        val signUpVo =
-            navBackStackEntry.arguments?.getString(FOneDestinations.SignUpComplete.argSignUpVo)
+        val accessToken =
+            navBackStackEntry.arguments?.getString(FOneDestinations.SignUpComplete.argAccessToken)
+                ?: return@composable
+        val email =
+            navBackStackEntry.arguments?.getString(FOneDestinations.SignUpComplete.argEmail)
+                ?: return@composable
+        val socialLoginType =
+            navBackStackEntry.arguments?.getString(FOneDestinations.SignUpComplete.argSocialLoginType)
                 ?: return@composable
 
         SignUpCompleteScreen(
             modifier = modifier,
-            signUpVo = SignUpVo.fromJson(signUpVo)
+            accessToken = accessToken,
+            email = email,
+            socialLoginType = socialLoginType
         )
     }
 }

@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.ui.inquiry.InquiryScreen
 import com.fone.filmone.ui.login.LoginScreen
+import com.fone.filmone.ui.main.MainScreen
 import com.fone.filmone.ui.signup.signUpScreenComposable
 import com.fone.filmone.ui.splash.SplashScreen
 import kotlinx.coroutines.flow.launchIn
@@ -28,6 +29,12 @@ fun FOneNavGraph(
         FOneNavigator.routeFlow.onEach { route ->
             navController.navigate(route)
         }.launchIn(this)
+
+        FOneNavigator.main.onEach {
+            navController.navigate(FOneDestinations.Main.route) {
+                popUpTo(0)
+            }
+        }.launchIn(this)
     }
 
     NavHost(
@@ -45,8 +52,8 @@ fun FOneNavGraph(
             InquiryScreen(navController = navController)
         }
         signUpScreenComposable(navController = navController)
-        composable(FOneDestinations.Home.route) {
-
+        composable(FOneDestinations.Main.route) {
+            MainScreen()
         }
     }
 }

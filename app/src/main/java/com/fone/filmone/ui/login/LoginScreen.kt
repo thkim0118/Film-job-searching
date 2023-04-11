@@ -176,7 +176,7 @@ fun LoginScreen(
 
             Text(
                 modifier = Modifier
-                    .clickableSingle {
+                    .clickableSingleWithNoRipple {
                         navController.navigate(FOneDestinations.Inquiry.route)
                     },
                 text = stringResource(id = R.string.login_inquiry_text),

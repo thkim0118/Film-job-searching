@@ -1,11 +1,10 @@
 package com.fone.filmone.ui.signup.model
 
+import com.fone.filmone.core.ext.toDecoding
+import com.fone.filmone.core.ext.toEncoding
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.google.gson.Gson
 import java.io.Serializable
-import java.net.URLDecoder
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 data class SignUpVo(
     val accessToken: String = "",
@@ -19,19 +18,14 @@ data class SignUpVo(
     val phoneNumber: String = "",
     val profileUrl: String = "",
     val agreeToPersonalInformation: Boolean = false,
+    val agreeToTermsOfServiceTermsOfUse: Boolean = false,
     val isReceiveMarketing: Boolean = false,
 ) : Serializable {
     companion object {
-        fun toJson(signUpVo: SignUpVo): String = URLEncoder.encode(
-            Gson().toJson(signUpVo),
-            StandardCharsets.UTF_8.toString()
-        )
+        fun toJson(signUpVo: SignUpVo): String = Gson().toJson(signUpVo).toEncoding()
 
         fun fromJson(json: String): SignUpVo = Gson().fromJson(
-            URLDecoder.decode(
-                json,
-                StandardCharsets.UTF_8.toString()
-            ),
+            json.toDecoding(),
             SignUpVo::class.java
         )
 

@@ -1,5 +1,6 @@
 package com.fone.filmone.ui.signup.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -53,6 +54,10 @@ fun SignUpThirdScreen(
     val uiState by viewModel.uiState.collectAsState()
     val dialogState by viewModel.dialogState.collectAsState()
 
+    BackHandler(enabled = true) {
+        navigateLoginScreen(navController)
+    }
+
     Box(
         modifier = modifier
             .defaultSystemBarPadding()
@@ -67,7 +72,8 @@ fun SignUpThirdScreen(
             onVerifyClick = viewModel::transmitVerificationCode,
             onVerificationCheckClick = viewModel::checkVerificationCode,
             onUpdateAllAgreeState = viewModel::updateAllAgreeState,
-            onUpdateAgreeState = viewModel::updateAgreeState
+            onUpdateAgreeState = viewModel::updateAgreeState,
+            onSignUpClick = { viewModel.signUp(signUpVo) }
         )
 
         DialogScreen(
@@ -92,7 +98,8 @@ private fun SignUpMainScreen(
     onVerifyClick: () -> Unit,
     onVerificationCheckClick: (String) -> Unit,
     onUpdateAllAgreeState: () -> Unit,
-    onUpdateAgreeState: (AgreeState) -> Unit
+    onUpdateAgreeState: (AgreeState) -> Unit,
+    onSignUpClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -104,7 +111,7 @@ private fun SignUpMainScreen(
             titleType = TitleType.Back,
             titleText = stringResource(id = R.string.sign_up_title_text),
             onBackClick = {
-                navController.popBackStack()
+                navigateLoginScreen(navController)
             }
         )
 
@@ -152,11 +159,18 @@ private fun SignUpMainScreen(
             NextButton(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 signUpVo = signUpVo,
-                uiState = uiState
+                uiState = uiState,
+                onClick = onSignUpClick
             )
 
             Spacer(modifier = Modifier.height(38.dp))
         }
+    }
+}
+
+private fun navigateLoginScreen(navController: NavHostController) {
+    navController.navigate(FOneDestinations.Login.route) {
+        popUpTo(0)
     }
 }
 
@@ -506,7 +520,8 @@ fun TermContent(
 private fun ColumnScope.NextButton(
     modifier: Modifier = Modifier,
     signUpVo: SignUpVo,
-    uiState: SignUpThirdUiState
+    uiState: SignUpThirdUiState,
+    onClick: () -> Unit
 ) {
     Spacer(modifier = Modifier.weight(1f))
 
@@ -516,15 +531,7 @@ private fun ColumnScope.NextButton(
         enable = uiState.isRequiredTemAllAgree
     ) {
         if (uiState.isRequiredTemAllAgree) {
-            FOneNavigator.navigateTo(
-                FOneDestinations.SignUpComplete.getRouteWithArg(
-                    signUpVo.copy(
-                        phoneNumber = uiState.phoneNumber,
-                        agreeToPersonalInformation = true,
-                        isReceiveMarketing = uiState.isTermAllAgree
-                    )
-                )
-            )
+            onClick.invoke()
         }
     }
 }

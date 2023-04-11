@@ -10,12 +10,19 @@ object FOneNavigator {
     private val _routeFlow = MutableSharedFlow<String>(extraBufferCapacity = 1)
     val routeFlow = _routeFlow.asSharedFlow()
 
+    private val _main = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    val main = _routeFlow.asSharedFlow()
+
     fun navigateTo(destinations: FOneDestinations) {
         _destinationFlow.tryEmit(destinations)
     }
 
     fun navigateTo(route: String) {
         _routeFlow.tryEmit(route)
+    }
+
+    fun navigateToMain() {
+        _main.tryEmit(Unit)
     }
 }
 

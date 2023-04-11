@@ -1,6 +1,7 @@
 package com.fone.filmone.ui.signup.screen
 
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -62,6 +63,10 @@ fun SignUpSecondScreen(
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
 
+    BackHandler(enabled = true) {
+        navigateLoginScreen(navController)
+    }
+
     Column(
         modifier = modifier
             .defaultSystemBarPadding()
@@ -71,7 +76,7 @@ fun SignUpSecondScreen(
             titleType = TitleType.Back,
             titleText = stringResource(id = R.string.sign_up_title_text),
             onBackClick = {
-                navController.popBackStack()
+                navigateLoginScreen(navController)
             }
         )
 
@@ -129,6 +134,12 @@ fun SignUpSecondScreen(
 
             Spacer(modifier = Modifier.height(38.dp))
         }
+    }
+}
+
+private fun navigateLoginScreen(navController: NavHostController) {
+    navController.navigate(FOneDestinations.Login.route) {
+        popUpTo(0)
     }
 }
 
@@ -364,7 +375,8 @@ private fun ColumnScope.NextButton(
                         signUpVo.copy(
                             nickname = uiState.nickname,
                             birthday = uiState.birthday,
-                            gender = uiState.gender.name
+                            gender = uiState.gender.name,
+                            profileUrl = uiState.profileImage
                         )
                     )
                 )
