@@ -18,7 +18,6 @@ import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
 import com.fone.filmone.domain.model.inquiry.InquiryType
 import com.fone.filmone.ui.common.*
-import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
 import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.toastPadding
@@ -112,7 +111,9 @@ fun InquiryScreen(
                 Spacer(modifier = Modifier.height(68.dp))
             }
 
-            SubmissionButton()
+            SubmissionButton(
+                onClick = { viewModel.submitInquiry() }
+            )
 
             Spacer(modifier = Modifier.height(38.dp))
         }
@@ -237,14 +238,16 @@ private fun PrivacyTermComponent(
 }
 
 @Composable
-private fun ColumnScope.SubmissionButton() {
+private fun ColumnScope.SubmissionButton(
+    onClick: () -> Unit
+) {
     Spacer(modifier = Modifier.weight(1f))
 
     FButton(
         title = stringResource(id = R.string.inquiry_button_title),
         enable = true
     ) {
-
+        onClick.invoke()
     }
 }
 

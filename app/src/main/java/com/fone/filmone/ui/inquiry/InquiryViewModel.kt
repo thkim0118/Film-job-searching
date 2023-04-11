@@ -2,7 +2,11 @@ package com.fone.filmone.ui.inquiry
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.domain.model.common.onFail
+import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.model.inquiry.InquiryType
+import com.fone.filmone.domain.model.inquiry.InquiryVo
+import com.fone.filmone.domain.usecase.SubmitInquiryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,6 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InquiryViewModel @Inject constructor(
+    private val submitInquiryUseCase: SubmitInquiryUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(InquiryUiState())
     val uiState: StateFlow<InquiryUiState> = _uiState.asStateFlow()
@@ -47,8 +52,23 @@ class InquiryViewModel @Inject constructor(
         }
     }
 
-    fun submit() = viewModelScope.launch {
+    fun submitInquiry() = viewModelScope.launch {
+        // TODO Throttling
+        submitInquiryUseCase.invoke(
+            with(uiState.value) {
+                InquiryVo(
+                    email = email,
+                    title = title,
+                    description = description,
+                    agreeToPersonalInformation = isAgreePersonalInformation,
+                    type = inquiryType ?: return@launch
+                )
+            }
+        ).onSuccess {
 
+        }.onFail {
+
+        }
     }
 }
 
