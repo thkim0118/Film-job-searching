@@ -1,18 +1,27 @@
 package com.fone.filmone.ui.inquiry
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
+import com.fone.filmone.domain.model.inquiry.InquiryType
 import com.fone.filmone.ui.common.*
+import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
+import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
+import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
@@ -20,9 +29,17 @@ import com.fone.filmone.ui.theme.LocalTypography
 @Composable
 fun InquiryScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    viewModel: InquiryViewModel = hiltViewModel()
 ) {
-    Column(modifier = modifier.defaultSystemBarPadding()) {
+    val uiState by viewModel.uiState.collectAsState()
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = modifier
+            .defaultSystemBarPadding()
+            .toastPadding()
+    ) {
         FTitleBar(
             titleType = TitleType.Close,
             titleText = stringResource(id = R.string.inquiry_title_text),
@@ -33,45 +50,67 @@ fun InquiryScreen(
 
         Column(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(horizontal = 16.dp)
+                .verticalScroll(scrollState)
         ) {
-            Spacer(modifier = Modifier.height(10.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+            ) {
+                Spacer(modifier = Modifier.height(10.dp))
 
-            Text(
-                text = stringResource(id = R.string.inquiry_guide),
-                style = LocalTypography.current.b3,
-                color = FColor.TextSecondary
-            )
+                Text(
+                    text = stringResource(id = R.string.inquiry_guide),
+                    style = LocalTypography.current.b3,
+                    color = FColor.TextSecondary
+                )
 
-            Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
-            EmailInputComponent()
+                EmailInputComponent(
+                    uiState = uiState,
+                    onValueChanged = viewModel::updateEmail
+                )
 
-            Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
-            Text(
-                text = stringResource(id = R.string.inquiry_type_title),
-                style = LocalTypography.current.subtitle1,
-                color = FColor.TextPrimary
-            )
+                Text(
+                    text = stringResource(id = R.string.inquiry_type_title),
+                    style = LocalTypography.current.subtitle1,
+                    color = FColor.TextPrimary
+                )
 
-            Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(6.dp))
 
-            InquiryTypeComponent()
+                InquiryTypeComponent(
+                    uiState = uiState,
+                    onUpdateInquiryType = viewModel::updateInquiryType
+                )
 
-            Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
-            InquiryTitleComponent()
+                InquiryTitleComponent(
+                    uiState = uiState,
+                    onValueChanged = viewModel::updateTitle
+                )
 
-            Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
-            InquiryDescriptionComponent()
+                InquiryDescriptionComponent(
+                    uiState = uiState,
+                    onValueChanged = viewModel::updateDescription
+                )
 
-            Spacer(modifier = Modifier.height(38.dp))
+                Spacer(modifier = Modifier.height(38.dp))
 
-            PrivacyTermComponent()
+                PrivacyTermComponent(
+                    uiState = uiState,
+                    onClick = viewModel::updatePrivacyInformation
+                )
 
-            Spacer(modifier = Modifier.height(68.dp))
+                Spacer(modifier = Modifier.height(68.dp))
+            }
 
             SubmissionButton()
 
@@ -81,11 +120,13 @@ fun InquiryScreen(
 }
 
 @Composable
-private fun EmailInputComponent() {
+private fun EmailInputComponent(
+    uiState: InquiryUiState,
+    onValueChanged: (String) -> Unit
+) {
     FTextField(
-        onValueChange = { value ->
-
-        },
+        text = uiState.email,
+        onValueChange = onValueChanged,
         topText = TopText(
             title = stringResource(id = R.string.inquiry_email_title),
             titleStar = false,
@@ -95,36 +136,43 @@ private fun EmailInputComponent() {
 }
 
 @Composable
-private fun InquiryTypeComponent() {
+private fun InquiryTypeComponent(
+    uiState: InquiryUiState,
+    onUpdateInquiryType: (InquiryType) -> Unit
+) {
     Row {
         FBorderButton(
-            text = stringResource(id = R.string.inquiry_type_using_service),
-            enable = false,
-            onClick = {}
+            text = stringResource(id = InquiryType.USE_QUESTION.titleRes),
+            enable = uiState.inquiryType == InquiryType.USE_QUESTION,
+            onClick = { onUpdateInquiryType.invoke(InquiryType.USE_QUESTION) }
         )
 
         Spacer(modifier = Modifier.width(8.dp))
 
         FBorderButton(
-            text = stringResource(id = R.string.inquiry_type_partnership),
-            enable = false,
-            onClick = {}
+            text = stringResource(id = InquiryType.ALLIANCE.titleRes),
+            enable = uiState.inquiryType == InquiryType.ALLIANCE,
+            onClick = { onUpdateInquiryType.invoke(InquiryType.ALLIANCE) }
         )
 
         Spacer(modifier = Modifier.width(8.dp))
 
         FBorderButton(
-            text = stringResource(id = R.string.inquiry_type_user_report),
-            enable = false,
-            onClick = {}
+            text = stringResource(id = InquiryType.VOICE_OF_THE_CUSTOMER.titleRes),
+            enable = uiState.inquiryType == InquiryType.VOICE_OF_THE_CUSTOMER,
+            onClick = { onUpdateInquiryType.invoke(InquiryType.VOICE_OF_THE_CUSTOMER) }
         )
     }
 }
 
 @Composable
-private fun InquiryTitleComponent() {
+private fun InquiryTitleComponent(
+    uiState: InquiryUiState,
+    onValueChanged: (String) -> Unit
+) {
     FTextField(
-        onValueChange = { value -> },
+        text = uiState.title,
+        onValueChange = onValueChanged,
         topText = TopText(
             title = stringResource(id = R.string.inquiry_content_title),
             titleStar = false,
@@ -134,9 +182,13 @@ private fun InquiryTitleComponent() {
 }
 
 @Composable
-private fun InquiryDescriptionComponent() {
+private fun InquiryDescriptionComponent(
+    uiState: InquiryUiState,
+    onValueChanged: (String) -> Unit
+) {
     FTextField(
-        onValueChange = { value -> },
+        text = uiState.description,
+        onValueChange = onValueChanged,
         topText = TopText(
             title = stringResource(id = R.string.inquiry_content_description),
             titleStar = false,
@@ -150,11 +202,19 @@ private fun InquiryDescriptionComponent() {
 }
 
 @Composable
-private fun PrivacyTermComponent() {
+private fun PrivacyTermComponent(
+    uiState: InquiryUiState,
+    onClick: () -> Unit
+) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier
+            .clickableWithNoRipple { onClick.invoke() },
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        FRadioButton(enable = false)
+        FRadioButton(
+            enable = uiState.isAgreePersonalInformation,
+            onClick = onClick
+        )
 
         Spacer(modifier = Modifier.width(6.dp))
 
@@ -177,10 +237,12 @@ private fun PrivacyTermComponent() {
 }
 
 @Composable
-private fun SubmissionButton() {
+private fun ColumnScope.SubmissionButton() {
+    Spacer(modifier = Modifier.weight(1f))
+
     FButton(
         title = stringResource(id = R.string.inquiry_button_title),
-        enable = false
+        enable = true
     ) {
 
     }
