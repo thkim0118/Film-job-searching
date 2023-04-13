@@ -359,8 +359,7 @@ private fun ColumnScope.NextButton(
     signUpVo: SignUpVo,
     uiState: SignUpSecondUiState
 ) {
-    val enable =
-        uiState.isNicknameChecked && uiState.isBirthDayChecked && uiState.profileImage.isNotEmpty()
+    val enable = uiState.isNicknameChecked && uiState.isBirthDayChecked
 
     Spacer(modifier = Modifier.weight(1f))
 
@@ -376,7 +375,7 @@ private fun ColumnScope.NextButton(
                             nickname = uiState.nickname,
                             birthday = uiState.birthday,
                             gender = uiState.gender.name,
-                            profileUrl = uiState.profileImage
+                            encodingImage = uiState.profileImage
                         )
                     )
                 )
