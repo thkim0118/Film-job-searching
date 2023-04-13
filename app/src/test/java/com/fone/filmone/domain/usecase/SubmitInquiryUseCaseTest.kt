@@ -37,27 +37,27 @@ internal class SubmitInquiryUseCaseTest {
     fun setUp() {
         inquiryVo = InquiryVo(
             agreeToPersonalInformation = true,
-            description = "",
-            email = "",
-            title = "",
+            description = "description",
+            email = "email",
+            title = "title",
             type = InquiryType.USE_QUESTION
         )
 
         inquiryRequest = InquiryRequest(
             agreeToPersonalInformation = true,
-            description = "",
-            email = "",
-            title = "",
-            type = ""
+            description = "description",
+            email = "email",
+            title = "title",
+            type = InquiryType.USE_QUESTION.name
         )
         inquiryResponse = InquiryResponse(
             Question(
                 id = 0,
                 agreeToPersonalInformation = true,
-                description = "",
-                email = "",
-                title = "",
-                type = ""
+                description = "description",
+                email = "email",
+                title = "title",
+                type = InquiryType.USE_QUESTION.name
             )
         )
     }

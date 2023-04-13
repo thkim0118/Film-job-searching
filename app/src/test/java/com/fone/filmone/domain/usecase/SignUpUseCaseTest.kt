@@ -27,42 +27,60 @@ internal class SignUpUseCaseTest {
 
     private val signUpUseCase by lazy { SignUpUseCase(userRepository) }
 
+    private lateinit var signUpVo: SignUpVo
     private lateinit var signUpRequest: SignUpRequest
     private lateinit var signUpResponse: SignUpResponse
 
     @Before
     fun setUp() {
-        signUpRequest = SignUpRequest(
-            accessToken = "",
+        signUpVo = SignUpVo(
+            accessToken = "accessToken",
             agreeToPersonalInformation = true,
-            birthday = "",
-            email = "",
-            gender = "",
+            birthday = "birthday",
+            email = "email",
+            gender = "gender",
             interests = listOf(),
             isReceiveMarketing = true,
-            job = "",
-            nickname = "",
-            phoneNumber = "",
-            profileUrl = "",
-            socialLoginType = ""
+            job = "job",
+            nickname = "nickname",
+            phoneNumber = "phoneNumber",
+            profileUrl = "profileUrl",
+            socialLoginType = "socialLoginType",
+            agreeToTermsOfServiceTermsOfUse = true
+        )
+
+        signUpRequest = SignUpRequest(
+            accessToken = "accessToken",
+            agreeToPersonalInformation = true,
+            birthday = "birthday",
+            email = "email",
+            gender = "gender",
+            interests = listOf(),
+            isReceiveMarketing = true,
+            job = "job",
+            nickname = "nickname",
+            phoneNumber = "phoneNumber",
+            profileUrl = "profileUrl",
+            socialLoginType = "socialLoginType",
+            agreeToTermsOfServiceTermsOfUse = true
         )
 
         signUpResponse = SignUpResponse(
             User(
                 agreeToPersonalInformation = true,
                 agreeToTermsOfServiceTermsOfUse = true,
-                birthday = "",
-                email = "",
+                birthday = "birthday",
+                email = "email",
                 enabled = true,
-                gender = "",
+                gender = "gender",
                 id = 0,
                 interests = listOf(),
                 isReceiveMarketing = true,
-                job = "",
-                nickname = "",
-                phoneNumber = "",
-                profileUrl = "",
-                socialLoginType = ""
+                job = "job",
+                nickname = "nickname",
+                phoneNumber = "phoneNumber",
+                profileUrl = "profileUrl",
+                socialLoginType = "socialLoginType"
             )
         )
     }
@@ -74,7 +92,7 @@ internal class SignUpUseCaseTest {
                 DataResult.Success(signUpResponse)
             )
 
-        signUpUseCase.invoke(SignUpVo())
+        signUpUseCase.invoke(signUpVo)
             .onSuccess {
                 assert(true)
             }.onFail {
@@ -87,7 +105,7 @@ internal class SignUpUseCaseTest {
         whenever(userRepository.signUp(signUpRequest))
             .thenReturn(DataResult.Fail(DataFail("", "")))
 
-        signUpUseCase.invoke(SignUpVo())
+        signUpUseCase.invoke(signUpVo)
             .onSuccess {
                 assert(false)
             }.onFail {

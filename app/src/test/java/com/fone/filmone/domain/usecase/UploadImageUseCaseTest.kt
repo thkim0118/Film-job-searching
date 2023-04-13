@@ -2,6 +2,7 @@ package com.fone.filmone.domain.usecase
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.fone.filmone.data.datamodel.request.imageupload.ImageUploadRequest
+import com.fone.filmone.data.datamodel.request.imageupload.StageVariables
 import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
 import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult
@@ -34,6 +35,9 @@ internal class UploadImageUseCaseTest {
         imageUploadRequest = ImageUploadRequest(
             imageData = "",
             resource = "/image-upload/user-profile",
+            stageVariables = StageVariables(
+                stage = "prod"
+            )
         )
         imageUploadResponse = ImageUploadResponse("")
     }
@@ -45,7 +49,7 @@ internal class UploadImageUseCaseTest {
                 DataResult.Success(imageUploadResponse)
             )
 
-        uploadImageUseCase.invoke("", "")
+        uploadImageUseCase.invoke("")
             .onSuccess {
                 assert(true)
             }.onFail {
@@ -60,7 +64,7 @@ internal class UploadImageUseCaseTest {
                 DataResult.Fail(DataFail("", ""))
             )
 
-        uploadImageUseCase.invoke("", "")
+        uploadImageUseCase.invoke("")
             .onSuccess {
                 assert(false)
             }.onFail {
