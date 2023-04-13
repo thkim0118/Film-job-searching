@@ -32,7 +32,7 @@ fun BoxScope.FToast(
 ) {
     val toastEvent by baseViewModel.toastEvent.collectAsState()
 
-    if (toastEvent.messageRes == Int.MIN_VALUE) {
+    if (toastEvent.isEmptyMessage()) {
         return
     }
 

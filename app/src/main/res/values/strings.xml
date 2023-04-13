@@ -13,6 +13,7 @@
     <string name="toast_request_verification_code_too_much">너무 많은 요청을 하셨습니다. 1분 뒤 다시 시도해 주세요.</string>
     <string name="toast_verification_time_is_expired">인증 시간이 만료되었습니다.</string>
     <string name="toast_verification_code_is_error">올바른 인증번호를 입력해주세요.</string>
+    <string name="toast_profile_register_fail">[실패] 사진이 업로드 되지 않았습니다.</string>
 
     <!--    login-->
     <string name="login_title">간편 로그인으로 F-ONE을\n즐겨보세요!</string>

@@ -158,7 +158,6 @@ private fun SignUpMainScreen(
 
             NextButton(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                signUpVo = signUpVo,
                 uiState = uiState,
                 onClick = onSignUpClick
             )
@@ -519,7 +518,6 @@ fun TermContent(
 @Composable
 private fun ColumnScope.NextButton(
     modifier: Modifier = Modifier,
-    signUpVo: SignUpVo,
     uiState: SignUpThirdUiState,
     onClick: () -> Unit
 ) {

@@ -33,7 +33,7 @@ class AppleLoginImpl(
                 }
                 loginCallback.onSuccess(
                     accessToken,
-                    email ?: return@addOnSuccessListener,
+                    email,
                     SocialLoginType.APPLE
                 )
             }.addOnFailureListener {

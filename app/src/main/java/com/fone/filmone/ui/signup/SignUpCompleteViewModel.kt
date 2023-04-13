@@ -1,10 +1,10 @@
 package com.fone.filmone.ui.signup
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.SignInUseCase
+import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpCompleteViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase
-) : ViewModel() {
+) : BaseViewModel() {
 
     fun signIn(
         accessToken: String,
@@ -28,7 +28,7 @@ class SignUpCompleteViewModel @Inject constructor(
         ).onSuccess {
             FOneNavigator.navigateTo(FOneDestinations.Main)
         }.onFail {
-
+            showToast(it.message)
         }
     }
 }

@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.FButton
+import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.signup.SignUpCompleteViewModel
 import com.fone.filmone.ui.theme.FColor
@@ -99,5 +100,7 @@ fun SignUpCompleteScreen(
                 socialLoginType = socialLoginType
             )
         }
+
+        FToast(baseViewModel = viewModel)
     }
 }

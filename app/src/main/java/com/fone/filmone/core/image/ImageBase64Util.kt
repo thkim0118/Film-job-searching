@@ -13,6 +13,7 @@ import java.io.ByteArrayOutputStream
 
 object ImageBase64Util {
     suspend fun encodeToString(context: Context, imageUri: Uri) = flow {
+        @Suppress("DEPRECATION")
         val bitmap = if (Build.VERSION.SDK_INT < 28) {
             MediaStore.Images
                 .Media.getBitmap(context.contentResolver, imageUri)

@@ -12,6 +12,6 @@ class ImageUploadRepositoryImpl @Inject constructor(
     private val imageUploadApi: ImageUploadApi
 ) : ImageUploadRepository {
     override suspend fun uploadImage(imageUploadRequest: ImageUploadRequest): DataResult<ImageUploadResponse> {
-        return handleNetwork { imageUploadApi.uploadImage() }
+        return handleNetwork { imageUploadApi.uploadImage(imageUploadRequest) }
     }
 }

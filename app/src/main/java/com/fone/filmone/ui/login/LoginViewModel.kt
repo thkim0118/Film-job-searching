@@ -39,7 +39,6 @@ class LoginViewModel @Inject constructor(
         }
     })
 
-
     fun signIn(
         accessToken: String,
         email: String,

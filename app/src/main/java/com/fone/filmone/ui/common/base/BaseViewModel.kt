@@ -15,20 +15,33 @@ abstract class BaseViewModel : ViewModel() {
 
     fun showToast(@StringRes message: Int) {
         _toastEvent.update {
-            it.copy(
-                messageRes = message
-            )
+            it.copy(messageRes = message)
+        }
+    }
+
+    fun showToast(message: String) {
+        _toastEvent.update {
+            it.copy(message = message)
         }
     }
 
     fun clearToast() {
         _toastEvent.update {
-            ToastEvent(bottomPadding = it.bottomPadding)
+            ToastEvent(
+                bottomPadding = it.bottomPadding,
+                message = "",
+                messageRes = Int.MIN_VALUE
+            )
         }
     }
 }
 
 data class ToastEvent(
     @StringRes val messageRes: Int = Int.MIN_VALUE,
+    val message: String = "",
     val bottomPadding: Int = 0
-)
+) {
+    fun isEmptyMessage(): Boolean {
+        return message.isEmpty() && messageRes == Int.MIN_VALUE
+    }
+}

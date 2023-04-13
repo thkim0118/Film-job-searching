@@ -45,7 +45,7 @@ private fun <T> Response<NetworkResponse<T>>.parseNetworkResponse(): DataResult<
                         null
                     } else {
                         DataFail(
-                            errorCode = networkResponse.errorCode ?: ErrorCode.ERROR_UNKNOWN,
+                            errorCode = networkResponse.errorCode,
                             message = networkResponse.message
                         )
                     }

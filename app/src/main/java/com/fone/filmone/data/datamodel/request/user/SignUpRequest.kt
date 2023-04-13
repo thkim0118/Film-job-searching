@@ -3,6 +3,7 @@ package com.fone.filmone.data.datamodel.request.user
 data class SignUpRequest(
     val accessToken: String,
     val agreeToPersonalInformation: Boolean,
+    val agreeToTermsOfServiceTermsOfUse: Boolean,
     val birthday: String,
     val email: String,
     val gender: String,

@@ -120,6 +120,7 @@ fun SignUpSecondScreen(
                 Spacer(modifier = Modifier.height(40.dp))
 
                 ProfileComponent(
+                    onUpdateProfileEncoding = viewModel::updateProfileEncoding,
                     onUpdateProfileImage = viewModel::updateProfileImage
                 )
 
@@ -259,6 +260,7 @@ private fun BirthdaySexComponent(
 
 @Composable
 private fun ProfileComponent(
+    onUpdateProfileEncoding: () -> Unit,
     onUpdateProfileImage: (String) -> Unit
 ) {
     var imageUri by remember { mutableStateOf<Uri?>(null) }
@@ -268,6 +270,7 @@ private fun ProfileComponent(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri: Uri? ->
             imageUri = uri
+            onUpdateProfileEncoding.invoke()
             coroutineScope.launch(Dispatchers.IO) {
                 uri?.let {
                     ImageBase64Util.encodeToString(context, it)
@@ -359,7 +362,8 @@ private fun ColumnScope.NextButton(
     signUpVo: SignUpVo,
     uiState: SignUpSecondUiState
 ) {
-    val enable = uiState.isNicknameChecked && uiState.isBirthDayChecked
+    val enable =
+        uiState.isNicknameChecked && uiState.isBirthDayChecked && uiState.isProfileEncoding.not() && uiState.gender != null
 
     Spacer(modifier = Modifier.weight(1f))
 
@@ -374,8 +378,8 @@ private fun ColumnScope.NextButton(
                         signUpVo.copy(
                             nickname = uiState.nickname,
                             birthday = uiState.birthday,
-                            gender = uiState.gender.name,
-                            encodingImage = uiState.profileImage
+                            gender = uiState.gender?.name ?: Gender.IRRELEVANT.name,
+                            encodingImage = uiState.encodingProfileImage
                         )
                     )
                 )
@@ -386,18 +390,10 @@ private fun ColumnScope.NextButton(
 
 @Preview(showBackground = true)
 @Composable
-fun SignUpSecondScreenPreview() {
-    FilmOneTheme {
-        SignUpSecondScreen(signUpVo = SignUpVo())
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
 fun ProfileComponentPreview() {
     FilmOneTheme {
         Column {
-            ProfileComponent(onUpdateProfileImage = {})
+            ProfileComponent(onUpdateProfileImage = {}, onUpdateProfileEncoding = {})
         }
     }
 }

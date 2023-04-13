@@ -30,11 +30,11 @@ fun FOneNavGraph(
             navController.navigate(route)
         }.launchIn(this)
 
-        FOneNavigator.main.onEach {
-            navController.navigate(FOneDestinations.Main.route) {
-                popUpTo(0)
-            }
-        }.launchIn(this)
+//        FOneNavigator.main.onEach { route ->
+//            navController.navigate(route) {
+//                popUpTo(0)
+//            }
+//        }.launchIn(this)
     }
 
     NavHost(

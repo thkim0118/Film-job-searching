@@ -1,6 +1,7 @@
 package com.fone.filmone.domain.usecase
 
 import com.fone.filmone.data.datamodel.request.imageupload.ImageUploadRequest
+import com.fone.filmone.data.datamodel.request.imageupload.StageVariables
 import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.repository.imageupload.ImageUploadRepository
@@ -11,12 +12,15 @@ class UploadImageUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         imageData: String,
-        resource: String,
+        resource: String = "/image-upload/user-profile",
     ): DataResult<ImageUploadResponse> {
         return imageUploadRepository.uploadImage(
             ImageUploadRequest(
                 imageData,
                 resource,
+                stageVariables = StageVariables(
+                    stage = "prod"
+                )
             )
         )
     }

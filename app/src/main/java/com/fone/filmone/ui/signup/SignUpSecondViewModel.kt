@@ -36,10 +36,17 @@ class SignUpSecondViewModel @Inject constructor(
         updateBirthDayChecked(birthday)
     }
 
+    fun updateProfileEncoding() {
+        _uiState.update {
+            it.copy(isProfileEncoding = true)
+        }
+    }
+
     fun updateProfileImage(profileEncodedString: String) {
         _uiState.update {
             it.copy(
-                profileImage = profileEncodedString
+                encodingProfileImage = profileEncodedString,
+                isProfileEncoding = false
             )
         }
     }
@@ -80,6 +87,7 @@ data class SignUpSecondUiState(
     val isNicknameDuplicated: Boolean = false,
     val birthday: String = "",
     val isBirthDayChecked: Boolean = false,
-    val profileImage: String = "",
-    val gender: Gender = Gender.IRRELEVANT,
+    val encodingProfileImage: String = "",
+    val isProfileEncoding: Boolean = false,
+    val gender: Gender? = null,
 )
