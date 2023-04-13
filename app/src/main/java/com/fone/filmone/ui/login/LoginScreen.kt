@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
@@ -44,40 +45,14 @@ import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 
-val LocalSnsLoginUtil = compositionLocalOf {
-    SNSLoginUtil.getInstance(
-        object : SNSLoginUtil.LoginCallback {
-            override fun onSuccess(token: String, email: String, socialLoginType: SocialLoginType) {
-                LogUtil.d("$socialLoginType, $token")
-                FOneNavigator.navigateTo(
-                    FOneDestinations.SignUpFirst.getRouteWithArg(
-                        SignUpVo(
-                            accessToken = token,
-                            email = email,
-                            socialLoginType = socialLoginType.name
-                        )
-                    )
-                )
-            }
-
-            override fun onFail(message: String) {
-                LogUtil.e("Fail :: $message")
-            }
-
-            override fun onCancel() {
-                LogUtil.w("cancel sns login")
-            }
-        }
-    )
-}
-
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
     navController: NavController = rememberNavController(),
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val snsLoginUtil = LocalSnsLoginUtil.current
+    val snsLoginUtil = viewModel.localSnsLoginUtil
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = { result ->
