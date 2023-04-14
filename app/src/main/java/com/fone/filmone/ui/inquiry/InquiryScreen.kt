@@ -34,88 +34,112 @@ fun InquiryScreen(
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
 
-    Column(
+    Box(
         modifier = modifier
+            .fillMaxSize()
             .defaultSystemBarPadding()
             .toastPadding()
     ) {
-        FTitleBar(
-            titleType = TitleType.Close,
-            titleText = stringResource(id = R.string.inquiry_title_text),
-            onCloseClick = {
-                navController.popBackStack()
-            }
-        )
-
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-                .verticalScroll(scrollState)
         ) {
+            FTitleBar(
+                titleType = TitleType.Close,
+                titleText = stringResource(id = R.string.inquiry_title_text),
+                onCloseClick = {
+                    navController.popBackStack()
+                }
+            )
+
             Column(
                 modifier = Modifier
-                    .fillMaxHeight()
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+                    .verticalScroll(scrollState)
             ) {
-                Spacer(modifier = Modifier.height(10.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                ) {
+                    Spacer(modifier = Modifier.height(10.dp))
 
-                Text(
-                    text = stringResource(id = R.string.inquiry_guide),
-                    style = LocalTypography.current.b3,
-                    color = FColor.TextSecondary
-                )
+                    Text(
+                        text = stringResource(id = R.string.inquiry_guide),
+                        style = LocalTypography.current.b3,
+                        color = FColor.TextSecondary
+                    )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                EmailInputComponent(
-                    uiState = uiState,
-                    onValueChanged = viewModel::updateEmail
-                )
+                    EmailInputComponent(
+                        uiState = uiState,
+                        onValueChanged = viewModel::updateEmail
+                    )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                Text(
-                    text = stringResource(id = R.string.inquiry_type_title),
-                    style = LocalTypography.current.subtitle1,
-                    color = FColor.TextPrimary
-                )
+                    Text(
+                        text = stringResource(id = R.string.inquiry_type_title),
+                        style = LocalTypography.current.subtitle1,
+                        color = FColor.TextPrimary
+                    )
 
-                Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(6.dp))
 
-                InquiryTypeComponent(
-                    uiState = uiState,
-                    onUpdateInquiryType = viewModel::updateInquiryType
-                )
+                    InquiryTypeComponent(
+                        uiState = uiState,
+                        onUpdateInquiryType = viewModel::updateInquiryType
+                    )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                InquiryTitleComponent(
-                    uiState = uiState,
-                    onValueChanged = viewModel::updateTitle
-                )
+                    InquiryTitleComponent(
+                        uiState = uiState,
+                        onValueChanged = viewModel::updateTitle
+                    )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
-                InquiryDescriptionComponent(
-                    uiState = uiState,
-                    onValueChanged = viewModel::updateDescription
+                    InquiryDescriptionComponent(
+                        uiState = uiState,
+                        onValueChanged = viewModel::updateDescription
+                    )
+
+                    Spacer(modifier = Modifier.height(38.dp))
+
+                    PrivacyTermComponent(
+                        uiState = uiState,
+                        onClick = viewModel::updatePrivacyInformation
+                    )
+
+                    Spacer(modifier = Modifier.height(68.dp))
+                }
+
+                SubmissionButton(
+                    onClick = { viewModel.submitInquiry() }
                 )
 
                 Spacer(modifier = Modifier.height(38.dp))
-
-                PrivacyTermComponent(
-                    uiState = uiState,
-                    onClick = viewModel::updatePrivacyInformation
-                )
-
-                Spacer(modifier = Modifier.height(68.dp))
             }
+        }
 
-            SubmissionButton(
-                onClick = { viewModel.submitInquiry() }
-            )
+        InquiryToast(
+            viewModel = viewModel,
+            uiState = uiState,
+            navController = navController
+        )
+    }
+}
 
-            Spacer(modifier = Modifier.height(38.dp))
+@Composable
+private fun BoxScope.InquiryToast(
+    viewModel: InquiryViewModel,
+    uiState: InquiryUiState,
+    navController: NavHostController
+) {
+    FToast(baseViewModel = viewModel) {
+        if (uiState.isInquirySuccess) {
+            navController.popBackStack()
         }
     }
 }

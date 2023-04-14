@@ -1,12 +1,13 @@
 package com.fone.filmone.ui.inquiry
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.R
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.model.inquiry.InquiryType
 import com.fone.filmone.domain.model.inquiry.InquiryVo
 import com.fone.filmone.domain.usecase.SubmitInquiryUseCase
+import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class InquiryViewModel @Inject constructor(
     private val submitInquiryUseCase: SubmitInquiryUseCase
-) : ViewModel() {
+) : BaseViewModel() {
     private val _uiState = MutableStateFlow(InquiryUiState())
     val uiState: StateFlow<InquiryUiState> = _uiState.asStateFlow()
 
@@ -65,9 +66,15 @@ class InquiryViewModel @Inject constructor(
                 )
             }
         ).onSuccess {
-
+            _uiState.update {
+                it.copy(isInquirySuccess = true)
+            }
+            showToast(R.string.toast_inquiry_complete)
         }.onFail {
-
+            _uiState.update {
+                it.copy(isInquirySuccess = false)
+            }
+            showToast(R.string.toast_inquiry_fail)
         }
     }
 }
@@ -77,5 +84,6 @@ data class InquiryUiState(
     val inquiryType: InquiryType? = null,
     val title: String = "",
     val description: String = "",
-    val isAgreePersonalInformation: Boolean = false
+    val isAgreePersonalInformation: Boolean = false,
+    val isInquirySuccess: Boolean = false
 )

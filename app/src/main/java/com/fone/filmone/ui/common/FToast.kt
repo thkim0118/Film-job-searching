@@ -28,7 +28,8 @@ import kotlinx.coroutines.delay
 fun BoxScope.FToast(
     modifier: Modifier = Modifier,
     baseViewModel: BaseViewModel,
-    hostState: SnackbarHostState = SnackbarHostState()
+    hostState: SnackbarHostState = SnackbarHostState(),
+    onDismiss: () -> Unit = {}
 ) {
     val toastEvent by baseViewModel.toastEvent.collectAsState()
 
@@ -70,6 +71,7 @@ fun BoxScope.FToast(
                 SnackbarDuration.Indefinite -> Unit
             }
             baseViewModel.clearToast()
+            onDismiss.invoke()
         }
     }
 }
