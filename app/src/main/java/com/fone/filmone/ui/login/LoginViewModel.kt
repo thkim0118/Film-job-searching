@@ -20,7 +20,7 @@ class LoginViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase
 ) : ViewModel() {
 
-    val localSnsLoginUtil = SNSLoginUtil.getInstance(object : SNSLoginUtil.LoginCallback {
+    val localSnsLoginUtil: SNSLoginUtil = SNSLoginUtil(object : SNSLoginUtil.LoginCallback {
         override fun onSuccess(
             token: String,
             email: String,

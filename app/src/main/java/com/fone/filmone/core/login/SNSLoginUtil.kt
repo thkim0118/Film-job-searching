@@ -7,7 +7,7 @@ import com.fone.filmone.domain.model.signup.SocialLoginType
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 
-class SNSLoginUtil private constructor(
+class SNSLoginUtil(
     private val loginCallback: LoginCallback,
 ) {
 
@@ -68,18 +68,5 @@ class SNSLoginUtil private constructor(
 
         fun onFail(message: String)
         fun onCancel()
-    }
-
-    companion object {
-        @Volatile
-        private var instance: SNSLoginUtil? = null
-
-        fun getInstance(loginCallback: LoginCallback): SNSLoginUtil {
-            return instance ?: synchronized(this) {
-                instance ?: SNSLoginUtil(loginCallback).also {
-                    instance = it
-                }
-            }
-        }
     }
 }
