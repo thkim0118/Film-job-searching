@@ -1,10 +1,8 @@
 package com.fone.filmone.ui.common.dialog
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
@@ -20,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.Pretendard
@@ -36,52 +33,66 @@ fun SingleButtonDialog(
     buttonText: String,
     onButtonClick: () -> Unit,
 ) {
-    Dialog(
-        onDismissRequest = onDismissRequest,
-        properties = properties,
+    val dialogModifier = modifier
+        .fillMaxWidth()
+        .padding(horizontal = 40.dp)
+        .clip(shape = RoundedCornerShape(10.dp))
+        .background(color = Color.White, shape = RoundedCornerShape(10.dp))
+
+    val titleTextStyle = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.W400,
+        fontSize = 16.sp,
+        lineHeight = 22.sp,
+        color = FColor.TextPrimary,
+        textAlign = TextAlign.Center
+    )
+
+    val buttonTextStyle = TextStyle(
+        fontFamily = Pretendard,
+        fontWeight = FontWeight.W700,
+        fontSize = 16.sp,
+        lineHeight = 22.sp,
+        color = FColor.TextSecondary,
+        textAlign = TextAlign.Center
+    )
+
+    // Dialog 배경에 dim 영역 그리기
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.5f))
+            .clickable(onClick = onDismissRequest)
     ) {
-        Column(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 40.dp)
-                .clip(shape = RoundedCornerShape(10.dp))
-                .background(color = Color.White, shape = RoundedCornerShape(10.dp))
+        Dialog(
+            onDismissRequest = onDismissRequest,
+            properties = properties,
         ) {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 32.dp),
-                text = titleText,
-                style = TextStyle(
-                    fontFamily = Pretendard,
-                    fontWeight = FontWeight.W400,
-                    fontSize = 16.sp,
-                    lineHeight = 22.sp,
-                    color = FColor.TextPrimary,
-                    textAlign = TextAlign.Center
-                )
-            )
-
-            Divider(color = FColor.Divider1)
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickableSingle { onButtonClick.invoke() }
-                    .padding(vertical = 11.dp),
+            Column(
+                modifier = dialogModifier
             ) {
                 Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = buttonText,
-                    style = TextStyle(
-                        fontFamily = Pretendard,
-                        fontWeight = FontWeight.W700,
-                        fontSize = 16.sp,
-                        lineHeight = 22.sp,
-                        color = FColor.TextSecondary,
-                        textAlign = TextAlign.Center
-                    )
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 32.dp),
+                    text = titleText,
+                    style = titleTextStyle
                 )
+
+                Divider(color = FColor.Divider1)
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = onButtonClick)
+                        .padding(vertical = 11.dp),
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = buttonText,
+                        style = buttonTextStyle
+                    )
+                }
             }
         }
     }
