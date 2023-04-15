@@ -35,7 +35,6 @@ import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.navigation.FOneDestinations
-import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.signup.*
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator

@@ -273,12 +273,8 @@ private fun ProfileComponent(
             onUpdateProfileEncoding.invoke()
             coroutineScope.launch(Dispatchers.IO) {
                 uri?.let {
-                    ImageBase64Util.encodeToString(context, it)
-                        .collectLatest { encodeString: String? ->
-                            if (encodeString != null) {
-                                onUpdateProfileImage.invoke(encodeString)
-                            }
-                        }
+                    val encodeString = ImageBase64Util.encodeToString(context, it)
+                    onUpdateProfileImage.invoke(encodeString)
                 }
             }
         }
