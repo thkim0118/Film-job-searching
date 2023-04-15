@@ -1,3 +1,102 @@
 <resources>
     <string name="app_name">FilmOne</string>
+    <string name="kakao_sdk_key">ee40509f29760cb723e4aa58c379f1da</string>
+    <string name="naver_client_id">aU9oh1xxoC6uAMW48qCP</string>
+    <string name="naver_client_secret">JQUAka_HJ3</string>
+    <string name="naver_client_name">에프원</string>
+    <string name="google_sign_in_client_id">499416246374-gt4tvjpp05s3c5dogo8ies3hrmth6u1u.apps.googleusercontent.com</string>
+
+    <!--    common-->
+    <string name="confirm">확인</string>
+    <!--toast-->
+    <string name="toast_request_verification_code">인증번호를 전송하였습니다.</string>
+    <string name="toast_request_verification_code_too_much">너무 많은 요청을 하셨습니다. 1분 뒤 다시 시도해 주세요.</string>
+    <string name="toast_verification_time_is_expired">인증 시간이 만료되었습니다.</string>
+    <string name="toast_verification_code_is_error">올바른 인증번호를 입력해주세요.</string>
+    <string name="toast_profile_register_fail">[실패] 사진이 업로드 되지 않았습니다.</string>
+
+    <!--    login-->
+    <string name="login_title">간편 로그인으로 F-ONE을\n즐겨보세요!</string>
+    <string name="login_kakao_title">카카오톡으로 로그인</string>
+    <string name="login_naver_title">네이버로 로그인</string>
+    <string name="login_google_title">구글로 로그인</string>
+    <string name="login_apple_title">Apple로 로그인</string>
+    <string name="login_inquiry_title">다른 질문이 있으신가요?</string>
+    <string name="login_inquiry_text">문의하기</string>
+
+    <!--    sign_up-->
+    <string name="sign_up_title_text">회원가입</string>
+    <string name="sign_up_next_title">다음</string>
+
+    <string name="sign_up_first_title">직업과 관심사 선택으로\n맞춤 설정 끝 !</string>
+    <string name="sign_up_first_choice_job">직업 선택</string>
+    <string name="sign_up_first_choice_job_subtitle">(추후 변경 가능)</string>
+    <string name="sign_up_first_choice_favorite">관심사 선택</string>
+    <string name="sign_up_first_choice_favorite_subtitle">(중복 선택 가능)</string>
+    <string name="sign_up_first_choice_job_actor">ACTOR</string>
+    <string name="sign_up_first_choice_job_staff">STAFF</string>
+    <string name="sign_up_first_choice_job_normal">NORMAL</string>
+    <string name="sign_up_first_choice_job_hunter">HUNTER</string>
+    <string name="sign_up_first_choice_favorite_long_film">장편영화</string>
+    <string name="sign_up_first_choice_favorite_short_film">단편영화</string>
+    <string name="sign_up_first_choice_favorite_independent_film">독립영화</string>
+    <string name="sign_up_first_choice_favorite_web_drama">웹 드라마</string>
+    <string name="sign_up_first_choice_favorite_music_video_cf">뮤비 / CF</string>
+    <string name="sign_up_first_choice_favorite_ott_tv_drama">OTT/TV 드라마</string>
+    <string name="sign_up_first_choice_favorite_youtube">유튜브</string>
+    <string name="sign_up_first_choice_favorite_promotion_viral">홍보 / 바이럴</string>
+    <string name="sign_up_first_choice_favorite_etc">기타</string>
+
+    <string name="sign_up_second_title">기본 정보를 입력해 주세요</string>
+    <string name="sign_up_second_nickname_title">닉네임</string>
+    <string name="sign_up_second_nickname_placeholder">3~8자리의 숫자, 영어, 한글만 가능합니다.</string>
+    <string name="sign_up_second_nickname_check_duplicate">중복확인</string>
+    <string name="sign_up_second_nickname_check_duplicate_complete">인증완료</string>
+    <string name="sign_up_second_nickname_error_title">중복되는 닉네임입니다.</string>
+    <string name="sign_up_second_birthday_sex_title">생년월일 및 성별</string>
+    <string name="sign_up_second_birthday_sex_subtitle">성별과 생년월일의 정보는 변경이 불가능합니다.</string>
+    <string name="sign_up_second_birthday_sex_placeholder">YYYY-MM-DD</string>
+    <string name="sign_up_second_birthday_sex_man">남자</string>
+    <string name="sign_up_second_birthday_sex_woman">여자</string>
+    <string name="sign_up_second_profile_title">프로필 사진 등록</string>
+    <string name="sign_up_second_profile_subtitle">필수 선택사항이 아니며 기본 프로필 사진이 등록됩니다.</string>
+
+    <string name="sign_up_third_title">마지막으로\n휴대전화 번호를 인증해주세요.</string>
+    <string name="sign_up_third_phone_number_title">휴대전화 번호</string>
+    <string name="sign_up_third_phone_number_placeholder">\'-\'빼고 숫자만 입력</string>
+    <string name="sign_up_third_phone_number_transmit">인증번호 발송</string>
+    <string name="sign_up_third_phone_number_retransmit">재전송</string>
+    <string name="sign_up_third_phone_number_verification">인증완료</string>
+    <string name="sign_up_third_phone_number_check_code">인증번호 확인</string>
+    <string name="sign_up_third_phone_number_verification_code_placeholder">인증번호 6자리</string>
+    <string name="sign_up_third_phone_number_check_code_guide">인증번호를 발송했습니다. (유효시간 00분)\n인증번호가 오지 않는다면, 통신사 스팸 차단 서비스 혹은 휴대폰 번호 차단 여부를 확인해주세요.</string>
+    <string name="sign_up_third_agree_all">모두 동의합니다.</string>
+    <string name="sign_up_third_agree_term">이용약관 동의(필수)</string>
+    <string name="sign_up_third_agree_privacy">개인정보 취급방침 동의(필수)</string>
+    <string name="sign_up_third_agree_marketing">마케팅 정보수신 동의(선택)</string>
+    <string name="sign_up_third_button_title">회원가입</string>
+    <string name="sign_up_third_dialog_verification_complete_title">인증에 성공하였습니다</string>
+    <string name="sign_up_third_dialog_sign_up_fail_title">회원가입에 실패하였습니다.\n다시 시도해주세요</string>
+
+    <string name="sign_up_complete_title_1">님!\n</string>
+    <string name="sign_up_complete_title_2">에프원 회원가입을 환영합니다.</string>
+    <string name="sign_up_complete_button_title">로그인하기</string>
+
+    <!--    inquiry-->
+    <string name="inquiry_title_text">문의등록</string>
+    <string name="inquiry_guide">[안내] 작업문의는 에프원 사이트 내 해당 담당자에게 직접 남겨주세요.</string>
+    <string name="inquiry_email_title">이메일 주소</string>
+    <string name="inquiry_type_title">상담유형</string>
+    <string name="inquiry_type_using_service">이용문의</string>
+    <string name="inquiry_type_partnership">제휴</string>
+    <string name="inquiry_type_user_report">고객의 소리/제보</string>
+    <string name="inquiry_content_title">제목</string>
+    <string name="inquiry_content_description">설명</string>
+    <string name="inquiry_content_description_placeholder">요청에 관한 세부 정보를 입력하세요. 저희 에프원이 가능한 빨리 답변을 드리도록 하겠습니다.</string>
+    <string name="inquiry_privacy_term_title">개인정보 수집 및 이용동의(필수)</string>
+    <string name="inquiry_privacy_term_subtitle">문의 처리를 위해 이메일, 회원 정보, 기기 정보, 문의 내용에 포함된 개인정보를 수집하여, 개인정보 처리 방침에 따라 3년 후 파기됩니다.</string>
+    <string name="inquiry_button_title">제출하기</string>
+    <string name="toast_inquiry_complete">제출이 완료되었습니다.</string>
+    <string name="toast_inquiry_fail">제출에 실패하였습니다. 다시 시도해주세요.</string>
+
 </resources>
