@@ -1,6 +1,6 @@
 package com.fone.filmone.domain.usecase
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.fone.filmone.data.datamodel.response.sms.SmsTransmitResponse
 import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult

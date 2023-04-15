@@ -1,6 +1,6 @@
 package com.fone.filmone.domain.usecase
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.fone.filmone.data.datamodel.request.inquiry.InquiryRequest
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse
 import com.fone.filmone.data.datamodel.response.inquiry.Question

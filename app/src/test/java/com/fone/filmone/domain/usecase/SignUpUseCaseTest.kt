@@ -1,6 +1,6 @@
 package com.fone.filmone.domain.usecase
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.response.user.SignUpResponse
 import com.fone.filmone.data.datamodel.response.user.User
@@ -10,7 +10,6 @@ import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.repository.user.UserRepository
 import com.fone.filmone.ui.signup.model.SignUpVo
-import com.fone.filmone.ui.signup.model.SignUpVo.Companion.mapToSignUpRequest
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule

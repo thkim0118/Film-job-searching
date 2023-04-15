@@ -1,6 +1,6 @@
 package com.fone.filmone.domain.usecase
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.response.user.SigninResponse
 import com.fone.filmone.data.datamodel.response.user.Token

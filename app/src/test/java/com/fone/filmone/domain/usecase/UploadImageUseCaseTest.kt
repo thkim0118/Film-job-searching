@@ -1,6 +1,6 @@
 package com.fone.filmone.domain.usecase
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.fone.filmone.data.datamodel.request.imageupload.ImageUploadRequest
 import com.fone.filmone.data.datamodel.request.imageupload.StageVariables
 import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
