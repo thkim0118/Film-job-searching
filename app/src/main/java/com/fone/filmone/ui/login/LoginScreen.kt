@@ -288,11 +288,3 @@ private fun LoginButtonContainer(
         Spacer(modifier = Modifier.weight(68f))
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-private fun LoginScreenPreview() {
-    FilmOneTheme {
-        LoginScreen()
-    }
-}
