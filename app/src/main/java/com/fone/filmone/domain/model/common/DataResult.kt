@@ -1,5 +1,8 @@
 package com.fone.filmone.domain.model.common
 
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
+
 sealed class DataResult<out T> {
     data class Success<T>(
         val data: T
@@ -12,6 +15,18 @@ sealed class DataResult<out T> {
     data class Fail(
         val dataFail: DataFail
     ) : DataResult<Nothing>()
+}
+
+suspend fun <T> DataResult<T>.onSuccess(
+    dispatcher: CoroutineDispatcher,
+    action: suspend (value: T) -> Unit
+): DataResult<T> {
+    if (this is DataResult.Success) {
+        withContext(dispatcher) {
+            action(data)
+        }
+    }
+    return this
 }
 
 fun <T> DataResult<T>.onSuccess(action: (value: T) -> Unit): DataResult<T> {
