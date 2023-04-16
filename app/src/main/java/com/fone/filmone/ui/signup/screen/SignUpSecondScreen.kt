@@ -276,6 +276,7 @@ private fun ProfileComponent(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri: Uri? ->
             imageUri = uri
+            onUpdateProfileEncoding.invoke()
             coroutineScope.launch(Dispatchers.IO) {
                 uri?.let {
                     val encodeString = ImageBase64Util.encodeToString(context, it)
