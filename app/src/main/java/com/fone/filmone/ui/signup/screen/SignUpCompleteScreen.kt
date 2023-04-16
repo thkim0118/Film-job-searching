@@ -30,6 +30,7 @@ fun SignUpCompleteScreen(
     accessToken: String,
     email: String,
     socialLoginType: String,
+    nickname: String,
     viewModel: SignUpCompleteViewModel = hiltViewModel()
 ) {
     Box(
@@ -61,7 +62,7 @@ fun SignUpCompleteScreen(
                             color = FColor.TextPrimary,
                         )
                     ) {
-                        append("이름")
+                        append(nickname)
                     }
                     withStyle(
                         style = SpanStyle(

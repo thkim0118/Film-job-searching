@@ -87,7 +87,8 @@ class SignUpThirdViewModel @Inject constructor(
                 FOneDestinations.SignUpComplete.getRouteWithArg(
                     accessToken = signUpVo.accessToken,
                     email = signUpVo.email,
-                    socialLoginType = signUpVo.socialLoginType
+                    socialLoginType = signUpVo.socialLoginType,
+                    nickname = signUpVo.nickname
                 )
             )
         }.onFail {

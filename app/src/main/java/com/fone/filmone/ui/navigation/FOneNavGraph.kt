@@ -29,12 +29,6 @@ fun FOneNavGraph(
         FOneNavigator.routeFlow.onEach { route ->
             navController.navigate(route)
         }.launchIn(this)
-
-//        FOneNavigator.main.onEach { route ->
-//            navController.navigate(route) {
-//                popUpTo(0)
-//            }
-//        }.launchIn(this)
     }
 
     NavHost(
