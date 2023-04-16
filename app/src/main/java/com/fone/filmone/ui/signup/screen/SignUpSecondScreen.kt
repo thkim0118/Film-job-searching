@@ -49,7 +49,6 @@ import com.fone.filmone.ui.theme.LocalTypography
 import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
@@ -67,74 +66,81 @@ fun SignUpSecondScreen(
         navigateLoginScreen(navController)
     }
 
-    Column(
+    Box(
         modifier = modifier
             .defaultSystemBarPadding()
             .fillMaxSize()
     ) {
-        FTitleBar(
-            titleType = TitleType.Back,
-            titleText = stringResource(id = R.string.sign_up_title_text),
-            onBackClick = {
-                navigateLoginScreen(navController)
-            }
-        )
-
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(horizontal = 16.dp)
-            ) {
-                Spacer(modifier = Modifier.height(40.dp))
-
-                SignUpIndicator(indicatorType = IndicatorType.Second)
-
-                Spacer(modifier = Modifier.height(14.dp))
-
-                Text(
-                    text = stringResource(id = R.string.sign_up_second_title),
-                    style = LocalTypography.current.h1
-                )
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                NicknameComponent(
-                    uiState = uiState,
-                    onUpdateNickname = viewModel::updateNickname,
-                    onCheckDuplicateNickname = viewModel::checkNicknameDuplication
-                )
-
-                Spacer(modifier = Modifier.height(23.dp))
-
-                BirthdaySexComponent(
-                    uiState = uiState,
-                    onUpdateBirthday = viewModel::updateBirthDay,
-                    onUpdateGender = viewModel::updateGender
-                )
-
-                Spacer(modifier = Modifier.height(40.dp))
-
-                ProfileComponent(
-                    onUpdateProfileEncoding = viewModel::updateProfileEncoding,
-                    onUpdateProfileImage = viewModel::updateProfileImage
-                )
-
-                Spacer(modifier = Modifier.height(137.dp))
-            }
-
-            NextButton(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                signUpVo = signUpVo,
-                uiState = uiState
+            FTitleBar(
+                titleType = TitleType.Back,
+                titleText = stringResource(id = R.string.sign_up_title_text),
+                onBackClick = {
+                    navigateLoginScreen(navController)
+                }
             )
 
-            Spacer(modifier = Modifier.height(38.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(horizontal = 16.dp)
+                ) {
+                    Spacer(modifier = Modifier.height(40.dp))
+
+                    SignUpIndicator(indicatorType = IndicatorType.Second)
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    Text(
+                        text = stringResource(id = R.string.sign_up_second_title),
+                        style = LocalTypography.current.h1
+                    )
+
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    NicknameComponent(
+                        uiState = uiState,
+                        onUpdateNickname = viewModel::updateNickname,
+                        onCheckDuplicateNickname = viewModel::checkNicknameDuplication
+                    )
+
+                    Spacer(modifier = Modifier.height(23.dp))
+
+                    BirthdaySexComponent(
+                        uiState = uiState,
+                        onUpdateBirthday = viewModel::updateBirthDay,
+                        onUpdateGender = viewModel::updateGender
+                    )
+
+                    Spacer(modifier = Modifier.height(40.dp))
+
+                    ProfileComponent(
+                        onUpdateProfileEncoding = viewModel::updateProfileUploadState,
+                        onUpdateProfileImage = viewModel::updateProfileImage
+                    )
+
+                    Spacer(modifier = Modifier.height(137.dp))
+                }
+
+                NextButton(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    signUpVo = signUpVo,
+                    uiState = uiState
+                )
+
+                Spacer(modifier = Modifier.height(38.dp))
+            }
         }
+
+        FToast(baseViewModel = viewModel)
     }
 }
 
@@ -270,7 +276,6 @@ private fun ProfileComponent(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri: Uri? ->
             imageUri = uri
-            onUpdateProfileEncoding.invoke()
             coroutineScope.launch(Dispatchers.IO) {
                 uri?.let {
                     val encodeString = ImageBase64Util.encodeToString(context, it)
@@ -359,7 +364,7 @@ private fun ColumnScope.NextButton(
     uiState: SignUpSecondUiState
 ) {
     val enable =
-        uiState.isNicknameChecked && uiState.isBirthDayChecked && uiState.isProfileEncoding.not() && uiState.gender != null
+        uiState.isNicknameChecked && uiState.isBirthDayChecked && uiState.isProfileUploading.not() && uiState.gender != null
 
     Spacer(modifier = Modifier.weight(1f))
 
@@ -375,7 +380,7 @@ private fun ColumnScope.NextButton(
                             nickname = uiState.nickname,
                             birthday = uiState.birthday,
                             gender = uiState.gender?.name ?: Gender.IRRELEVANT.name,
-                            encodingImage = uiState.encodingProfileImage
+                            profileUrl = uiState.profileUrl
                         )
                     )
                 )

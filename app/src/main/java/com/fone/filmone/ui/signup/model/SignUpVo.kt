@@ -16,7 +16,6 @@ data class SignUpVo(
     val birthday: String = "",
     val gender: String = "",
     val phoneNumber: String = "",
-    val encodingImage: String = "",
     val profileUrl: String = "",
     val agreeToPersonalInformation: Boolean = false,
     val agreeToTermsOfServiceTermsOfUse: Boolean = false,

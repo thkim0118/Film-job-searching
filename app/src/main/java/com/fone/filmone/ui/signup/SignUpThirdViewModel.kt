@@ -4,12 +4,11 @@ import android.os.CountDownTimer
 import android.telephony.PhoneNumberUtils
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
-import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.core.util.VerificationTimer
-import com.fone.filmone.domain.model.common.*
+import com.fone.filmone.domain.model.common.onFail
+import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.RequestPhoneVerificationUseCase
 import com.fone.filmone.domain.usecase.SignUpUseCase
-import com.fone.filmone.domain.usecase.UploadImageUseCase
 import com.fone.filmone.domain.usecase.VerifySmsCodeUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.navigation.FOneDestinations
@@ -21,14 +20,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class SignUpThirdViewModel @Inject constructor(
     private val requestPhoneVerificationUseCase: RequestPhoneVerificationUseCase,
     private val verifySmsCodeUseCase: VerifySmsCodeUseCase,
-    private val uploadImageUseCase: UploadImageUseCase,
     private val signUpUseCase: SignUpUseCase
 ) : BaseViewModel() {
     private val _uiState = MutableStateFlow(SignUpThirdUiState())
@@ -57,19 +54,6 @@ class SignUpThirdViewModel @Inject constructor(
 
     fun signUp(signUpVo: SignUpVo) = viewModelScope.launch {
         val agreeStates = uiState.value.agreeState
-
-        if (profileUrl.isEmpty() && signUpVo.encodingImage.isNotEmpty()) {
-            val result = uploadImageUseCase.invoke(signUpVo.encodingImage)
-            if (result.isFail()) {
-                showToast(R.string.toast_profile_register_fail)
-                return@launch
-            }
-
-            val response = result.getOrNull() ?: run {
-                return@launch
-            }
-            profileUrl = response.imageUrl
-        }
 
         signUpUseCase.invoke(
             signUpVo = signUpVo.copy(

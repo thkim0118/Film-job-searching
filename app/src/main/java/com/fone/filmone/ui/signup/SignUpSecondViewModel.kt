@@ -1,9 +1,13 @@
 package com.fone.filmone.ui.signup
 
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.R
+import com.fone.filmone.domain.model.common.getOrNull
+import com.fone.filmone.domain.model.common.isFail
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.model.signup.Gender
 import com.fone.filmone.domain.usecase.CheckNicknameDuplicationUseCase
+import com.fone.filmone.domain.usecase.UploadImageUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpSecondViewModel @Inject constructor(
-    private val checkNicknameDuplicationUseCase: CheckNicknameDuplicationUseCase
+    private val checkNicknameDuplicationUseCase: CheckNicknameDuplicationUseCase,
+    private val uploadImageUseCase: UploadImageUseCase,
 ) : BaseViewModel() {
     private val _uiState = MutableStateFlow(SignUpSecondUiState())
     val uiState: StateFlow<SignUpSecondUiState> = _uiState.asStateFlow()
@@ -36,18 +41,33 @@ class SignUpSecondViewModel @Inject constructor(
         updateBirthDayChecked(birthday)
     }
 
-    fun updateProfileEncoding() {
+    fun updateProfileUploadState() {
         _uiState.update {
-            it.copy(isProfileEncoding = true)
+            it.copy(isProfileUploading = true)
         }
     }
 
-    fun updateProfileImage(profileEncodedString: String) {
-        _uiState.update {
-            it.copy(
-                encodingProfileImage = profileEncodedString,
-                isProfileEncoding = false
-            )
+    fun updateProfileImage(profileEncodedString: String) = viewModelScope.launch {
+        if (profileEncodedString.isNotEmpty()) {
+            val result = uploadImageUseCase.invoke(profileEncodedString)
+            if (result.isFail()) {
+                showToast(R.string.toast_profile_register_fail)
+                return@launch
+            }
+
+            val response = result.getOrNull() ?: run {
+                return@launch
+            }
+
+            _uiState.update {
+                it.copy(
+                    profileUrl = response.imageUrl,
+                    isProfileUploading = false
+                )
+            }
+        } else {
+            showToast(R.string.toast_profile_register_fail)
+            return@launch
         }
     }
 
@@ -87,7 +107,7 @@ data class SignUpSecondUiState(
     val isNicknameDuplicated: Boolean = false,
     val birthday: String = "",
     val isBirthDayChecked: Boolean = false,
-    val encodingProfileImage: String = "",
-    val isProfileEncoding: Boolean = false,
+    val profileUrl: String = "",
+    val isProfileUploading: Boolean = false,
     val gender: Gender? = null,
 )
