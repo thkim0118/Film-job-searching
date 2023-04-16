@@ -21,12 +21,6 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments += ["dagger.hilt.android.compileTimeRunTimeAnnotationProcessing": "true"]
-            }
-        }
     }
 
     buildTypes {
