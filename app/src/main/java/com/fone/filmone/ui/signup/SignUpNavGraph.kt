@@ -11,7 +11,7 @@ import com.fone.filmone.ui.signup.screen.SignUpFirstScreen
 import com.fone.filmone.ui.signup.screen.SignUpSecondScreen
 import com.fone.filmone.ui.signup.screen.SignUpThirdScreen
 
-fun NavGraphBuilder.signUpScreenComposable(
+fun NavGraphBuilder.signUpNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
