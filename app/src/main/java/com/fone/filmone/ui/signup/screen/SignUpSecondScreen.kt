@@ -197,8 +197,7 @@ private fun NicknameComponent(
                 )
             ),
             enabled = uiState.isNicknameChecked.not(),
-            bottomType =
-            BottomType.Error(
+            bottomType = BottomType.Error(
                 errorText = stringResource(id = R.string.sign_up_second_nickname_error_title),
                 isError = uiState.isNicknameDuplicated
             )

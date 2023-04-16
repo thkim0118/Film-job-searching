@@ -233,7 +233,7 @@ fun FTextField(
                                     )
                                     .indicatorLine(
                                         enabled,
-                                        bottomType is BottomType.Error && bottomType.isError,
+                                        false,
                                         interactionSource,
                                         TextFieldDefaults.textFieldColors(
                                             backgroundColor = backgroundColor,
