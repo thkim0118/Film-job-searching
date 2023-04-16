@@ -5,6 +5,8 @@ import com.fone.filmone.data.datasource.remote.ImageUploadApi
 import com.fone.filmone.data.datasource.remote.InquiryApi
 import com.fone.filmone.data.datasource.remote.SmsApi
 import com.fone.filmone.data.datasource.remote.UserApi
+import com.fone.filmone.domain.repository.auth.AuthRepository
+import com.fone.filmone.framework.drivers.AuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,16 +29,23 @@ object NetworkModule {
         "https://rho64ux05h.execute-api.ap-northeast-2.amazonaws.com/"
 
     @Provides
-    fun provideHttpClient(): OkHttpClient = OkHttpClient.Builder().apply {
-        connectTimeout(connectionTime, TimeUnit.MILLISECONDS)
-        if (BuildConfig.DEBUG) {
-            addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                }
-            )
-        }
-    }.build()
+    fun provideAuthInterceptor(authRepository: AuthRepository): AuthInterceptor =
+        AuthInterceptor(authRepository = authRepository)
+
+    @Provides
+    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient =
+        OkHttpClient.Builder().apply {
+            connectTimeout(connectionTime, TimeUnit.MILLISECONDS)
+            if (BuildConfig.DEBUG) {
+                addInterceptor(
+                    HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }
+                )
+            }
+
+            addInterceptor(authInterceptor)
+        }.build()
 
     @SmsRetrofit
     @Provides
