@@ -24,17 +24,12 @@ fun FOneNavGraph(
     startDestination: String = FOneDestinations.Main.route,
 ) {
     LaunchedEffect(key1 = "navigation") {
-        FOneNavigator.destinationFlow.onEach {
-            navController.navigate(it.first.route) {
-                val isPopAll = it.second
-                if (isPopAll) {
+        FOneNavigator.routeFlow.onEach { navigationState ->
+            navController.navigate(navigationState.route) {
+                if (navigationState.isPopAll) {
                     popUpTo(0)
                 }
             }
-        }.launchIn(this)
-
-        FOneNavigator.routeFlow.onEach { route ->
-            navController.navigate(route)
         }.launchIn(this)
     }
 

@@ -7,6 +7,7 @@ import com.fone.filmone.domain.usecase.SignInUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,7 +27,7 @@ class SignUpCompleteViewModel @Inject constructor(
             email,
             socialLoginType
         ).onSuccess {
-            FOneNavigator.navigateTo(FOneDestinations.Main)
+            FOneNavigator.navigateTo(NavDestinationState(route = FOneDestinations.Main.route))
         }.onFail {
             showToast(it.message)
         }

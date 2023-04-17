@@ -13,6 +13,7 @@ import com.fone.filmone.domain.usecase.VerifySmsCodeUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.signup.model.SignUpVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -68,11 +69,13 @@ class SignUpThirdViewModel @Inject constructor(
             )
         ).onSuccess {
             FOneNavigator.navigateTo(
-                FOneDestinations.SignUpComplete.getRouteWithArg(
-                    accessToken = signUpVo.accessToken,
-                    email = signUpVo.email,
-                    socialLoginType = signUpVo.socialLoginType,
-                    nickname = signUpVo.nickname
+                NavDestinationState(
+                    route = FOneDestinations.SignUpComplete.getRouteWithArg(
+                        accessToken = signUpVo.accessToken,
+                        email = signUpVo.email,
+                        socialLoginType = signUpVo.socialLoginType,
+                        nickname = signUpVo.nickname
+                    )
                 )
             )
         }.onFail {

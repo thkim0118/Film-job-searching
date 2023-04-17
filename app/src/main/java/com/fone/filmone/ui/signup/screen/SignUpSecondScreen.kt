@@ -40,6 +40,7 @@ import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.fShadow
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.signup.SignUpSecondUiState
 import com.fone.filmone.ui.signup.SignUpSecondViewModel
 import com.fone.filmone.ui.signup.components.IndicatorType
@@ -419,12 +420,14 @@ private fun ColumnScope.NextButton(
         onClick = {
             if (enable) {
                 FOneNavigator.navigateTo(
-                    FOneDestinations.SignUpThird.getRouteWithArg(
-                        signUpVo.copy(
-                            nickname = uiState.nickname,
-                            birthday = uiState.birthday,
-                            gender = uiState.gender?.name ?: Gender.IRRELEVANT.name,
-                            profileUrl = uiState.profileUrl
+                    NavDestinationState(
+                        route = FOneDestinations.SignUpThird.getRouteWithArg(
+                            signUpVo.copy(
+                                nickname = uiState.nickname,
+                                birthday = uiState.birthday,
+                                gender = uiState.gender?.name ?: Gender.IRRELEVANT.name,
+                                profileUrl = uiState.profileUrl
+                            )
                         )
                     )
                 )

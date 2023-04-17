@@ -1,15 +1,20 @@
 package com.fone.filmone.ui.main
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
@@ -24,7 +29,7 @@ import com.fone.filmone.ui.theme.FColor
 fun MainScreen(
     modifier: Modifier = Modifier,
 ) {
-    var selectedScreen by remember { mutableStateOf(BottomNavItem.Home) }
+    var selectedScreen by rememberSaveable { mutableStateOf(BottomNavItem.Home) }
 
     Scaffold(
         modifier = modifier

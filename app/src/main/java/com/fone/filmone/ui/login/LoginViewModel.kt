@@ -10,6 +10,7 @@ import com.fone.filmone.domain.model.signup.SocialLoginType
 import com.fone.filmone.domain.usecase.SignInUseCase
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.signup.model.SignUpVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -46,14 +47,21 @@ class LoginViewModel @Inject constructor(
     ) = viewModelScope.launch {
         signInUseCase(accessToken, email, socialLoginType)
             .onSuccess {
-                FOneNavigator.navigateTo(destinations = FOneDestinations.Main, isPopAll = true)
+                FOneNavigator.navigateTo(
+                    NavDestinationState(
+                        route = FOneDestinations.Main.route,
+                        isPopAll = true
+                    )
+                )
             }.onFail {
                 FOneNavigator.navigateTo(
-                    FOneDestinations.SignUpFirst.getRouteWithArg(
-                        SignUpVo(
-                            accessToken = accessToken,
-                            email = email,
-                            socialLoginType = socialLoginType
+                    NavDestinationState(
+                        route = FOneDestinations.SignUpFirst.getRouteWithArg(
+                            SignUpVo(
+                                accessToken = accessToken,
+                                email = email,
+                                socialLoginType = socialLoginType
+                            )
                         )
                     )
                 )

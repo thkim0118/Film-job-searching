@@ -29,12 +29,15 @@ import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
+import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 
 @Composable
 fun MyScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Scaffold(
         topBar = {
@@ -69,7 +72,11 @@ fun MyScreen(
         ) {
             ProfileComponent(
                 modifier = Modifier,
-                onClick = {}
+                onClick = {
+                    FOneNavigator.navigateTo(
+                        NavDestinationState(route = FOneDestinations.MyInfo.route)
+                    )
+                }
             )
 
             ScrapFavoriteComponent(
