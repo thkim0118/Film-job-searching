@@ -70,7 +70,7 @@ internal class SignInUseCaseTest {
                 DataResult.Success(signinResponse)
             )
 
-        signInUseCase.invoke(
+        signInUseCase(
             signinRequest.accessToken,
             signinRequest.email,
             signinRequest.socialLoginType
@@ -89,7 +89,7 @@ internal class SignInUseCaseTest {
                 DataResult.Fail(dataFail = DataFail("", ""))
             )
 
-        signInUseCase.invoke(
+        signInUseCase(
             signinRequest.accessToken,
             signinRequest.email,
             signinRequest.socialLoginType

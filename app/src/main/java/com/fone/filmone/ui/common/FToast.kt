@@ -71,7 +71,7 @@ fun BoxScope.FToast(
                 SnackbarDuration.Indefinite -> Unit
             }
             baseViewModel.clearToast()
-            onDismiss.invoke()
+            onDismiss()
         }
     }
 }

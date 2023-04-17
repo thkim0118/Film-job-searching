@@ -8,7 +8,7 @@ import retrofit2.Response
 
 suspend fun <T> handleNetwork(block: suspend () -> Response<NetworkResponse<T>>): DataResult<T> {
     return try {
-        block.invoke().parseNetworkResponse()
+        block().parseNetworkResponse()
     } catch (e: EmptyNetworkBodyException) {
         DataResult.Fail(
             dataFail = DataFail(e.dataFail.errorCode, e.dataFail.message)

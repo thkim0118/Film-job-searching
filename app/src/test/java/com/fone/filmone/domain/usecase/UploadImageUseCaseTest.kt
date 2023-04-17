@@ -49,7 +49,7 @@ internal class UploadImageUseCaseTest {
                 DataResult.Success(imageUploadResponse)
             )
 
-        uploadImageUseCase.invoke("")
+        uploadImageUseCase("")
             .onSuccess {
                 assert(true)
             }.onFail {
@@ -64,7 +64,7 @@ internal class UploadImageUseCaseTest {
                 DataResult.Fail(DataFail("", ""))
             )
 
-        uploadImageUseCase.invoke("")
+        uploadImageUseCase("")
             .onSuccess {
                 assert(false)
             }.onFail {

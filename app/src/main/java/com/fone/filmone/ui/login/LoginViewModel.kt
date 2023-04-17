@@ -44,7 +44,7 @@ class LoginViewModel @Inject constructor(
         email: String,
         socialLoginType: String
     ) = viewModelScope.launch {
-        signInUseCase.invoke(accessToken, email, socialLoginType)
+        signInUseCase(accessToken, email, socialLoginType)
             .onSuccess {
                 FOneNavigator.navigateTo(destinations = FOneDestinations.Main, isPopAll = true)
             }.onFail {

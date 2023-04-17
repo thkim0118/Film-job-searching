@@ -69,7 +69,7 @@ internal class SubmitInquiryUseCaseTest {
                 DataResult.Success(inquiryResponse)
             )
 
-        submitInquiryUseCase.invoke(inquiryVo)
+        submitInquiryUseCase(inquiryVo)
             .onSuccess {
                 assert(true)
             }.onFail {
@@ -84,7 +84,7 @@ internal class SubmitInquiryUseCaseTest {
                 DataResult.Fail(DataFail("", ""))
             )
 
-        submitInquiryUseCase.invoke(inquiryVo)
+        submitInquiryUseCase(inquiryVo)
             .onSuccess {
                 assert(false)
             }.onFail {

@@ -178,7 +178,7 @@ private fun KakaoLoginButton(
     LoginButtonContainer(
         modifier = modifier
             .clickableSingleWithNoRipple(onClick = {
-                onClick.invoke()
+                onClick()
             }),
         backgroundColor = FColor.Kakao,
         imageRes = R.drawable.login_social_kakao,
@@ -195,7 +195,7 @@ private fun NaverLoginButton(
     LoginButtonContainer(
         modifier = modifier
             .clickableSingleWithNoRipple {
-                onClick.invoke()
+                onClick()
             },
         backgroundColor = FColor.Naver,
         imageRes = R.drawable.login_social_naver,
@@ -212,7 +212,7 @@ private fun GoogleLoginButton(
     LoginButtonContainer(
         modifier = modifier
             .clickableSingleWithNoRipple {
-                onClick.invoke()
+                onClick()
             },
         backgroundColor = FColor.White,
         borderColor = FColor.ColorF5F5F5,
@@ -230,7 +230,7 @@ private fun AppleLoginButton(
     LoginButtonContainer(
         modifier = modifier
             .clickableSingleWithNoRipple {
-                onClick.invoke()
+                onClick()
             },
         backgroundColor = FColor.Black,
         imageRes = R.drawable.login_social_apple,

@@ -49,7 +49,7 @@ class SignUpSecondViewModel @Inject constructor(
 
     fun updateProfileImage(profileEncodedString: String) = viewModelScope.launch {
         if (profileEncodedString.isNotEmpty()) {
-            val result = uploadImageUseCase.invoke(profileEncodedString)
+            val result = uploadImageUseCase(profileEncodedString)
             if (result.isFail()) {
                 showToast(R.string.toast_profile_register_fail)
                 return@launch

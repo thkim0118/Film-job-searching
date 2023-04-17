@@ -38,7 +38,7 @@ internal class CheckNicknameDuplicationUseCaseUnitTest {
                 )
             )
 
-        checkNicknameDuplicationUseCase.invoke(testNickname)
+        checkNicknameDuplicationUseCase(testNickname)
             .onSuccess {
                 assert(it.not())
             }.onFail {
@@ -60,7 +60,7 @@ internal class CheckNicknameDuplicationUseCaseUnitTest {
                 )
             )
 
-        checkNicknameDuplicationUseCase.invoke(testNickname)
+        checkNicknameDuplicationUseCase(testNickname)
             .onSuccess {
                 assert(it)
             }.onFail {
@@ -79,7 +79,7 @@ internal class CheckNicknameDuplicationUseCaseUnitTest {
                 )
             )
 
-        checkNicknameDuplicationUseCase.invoke(testNickname)
+        checkNicknameDuplicationUseCase(testNickname)
             .onSuccess {
                 assert(false)
             }.onFail {

@@ -43,7 +43,7 @@ fun FButton(
                     FColor.DisableBase
                 }
             )
-            .clickableSingle { onClick.invoke() },
+            .clickableSingle { onClick() },
     ) {
         Text(
             modifier = Modifier

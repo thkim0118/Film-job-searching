@@ -30,7 +30,7 @@ internal class VerifySmsCodeUseCaseTest {
                 DataResult.Success(true)
             )
 
-        verifySmsCodeUpUseCase.invoke(code)
+        verifySmsCodeUpUseCase(code)
             .onSuccess {
                 assert(it)
             }.onFail {
@@ -46,7 +46,7 @@ internal class VerifySmsCodeUseCaseTest {
                 DataResult.Success(false)
             )
 
-        verifySmsCodeUpUseCase.invoke(code)
+        verifySmsCodeUpUseCase(code)
             .onSuccess {
                 assert(it.not())
             }.onFail {

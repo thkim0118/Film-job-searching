@@ -169,7 +169,7 @@ private fun InquiryTypeComponent(
         FBorderButton(
             text = stringResource(id = InquiryType.USE_QUESTION.titleRes),
             enable = uiState.inquiryType == InquiryType.USE_QUESTION,
-            onClick = { onUpdateInquiryType.invoke(InquiryType.USE_QUESTION) }
+            onClick = { onUpdateInquiryType(InquiryType.USE_QUESTION) }
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -177,7 +177,7 @@ private fun InquiryTypeComponent(
         FBorderButton(
             text = stringResource(id = InquiryType.ALLIANCE.titleRes),
             enable = uiState.inquiryType == InquiryType.ALLIANCE,
-            onClick = { onUpdateInquiryType.invoke(InquiryType.ALLIANCE) }
+            onClick = { onUpdateInquiryType(InquiryType.ALLIANCE) }
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -185,7 +185,7 @@ private fun InquiryTypeComponent(
         FBorderButton(
             text = stringResource(id = InquiryType.VOICE_OF_THE_CUSTOMER.titleRes),
             enable = uiState.inquiryType == InquiryType.VOICE_OF_THE_CUSTOMER,
-            onClick = { onUpdateInquiryType.invoke(InquiryType.VOICE_OF_THE_CUSTOMER) }
+            onClick = { onUpdateInquiryType(InquiryType.VOICE_OF_THE_CUSTOMER) }
         )
     }
 }
@@ -233,7 +233,7 @@ private fun PrivacyTermComponent(
 ) {
     Row(
         modifier = Modifier
-            .clickableWithNoRipple { onClick.invoke() },
+            .clickableWithNoRipple { onClick() },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         FRadioButton(
@@ -271,7 +271,7 @@ private fun ColumnScope.SubmissionButton(
         title = stringResource(id = R.string.inquiry_button_title),
         enable = true
     ) {
-        onClick.invoke()
+        onClick()
     }
 }
 

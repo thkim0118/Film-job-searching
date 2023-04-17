@@ -48,7 +48,7 @@ fun FRadioButton(
                 },
                 shape = CircleShape
             )
-            .clickable { onClick.invoke() }
+            .clickable { onClick() }
     ) {
         if (enable) {
             Image(

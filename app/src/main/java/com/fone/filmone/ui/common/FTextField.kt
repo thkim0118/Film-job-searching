@@ -104,7 +104,7 @@ fun FTextField(
                 .focusRequester(focusRequester)
                 .onFocusChanged {
                     isFocused = it.isFocused
-                    onFocusChange.invoke(it.isFocused)
+                    onFocusChange(it.isFocused)
 
                     coroutineScope.launch {
                         textFieldValue = if (isFocused) {
@@ -123,7 +123,7 @@ fun FTextField(
                 onValueChange = {
                     if (it.text.isEmpty()) {
                         textFieldValue = it
-                        onValueChange.invoke(it.text)
+                        onValueChange(it.text)
                         return@BasicTextField
                     }
 
@@ -132,7 +132,7 @@ fun FTextField(
                     }
 
                     if (autoCompletion != null) {
-                        textFieldValue = autoCompletion.invoke(textFieldValue, it)
+                        textFieldValue = autoCompletion(textFieldValue, it)
                     }
 
                     if (pattern == null) {
@@ -141,7 +141,7 @@ fun FTextField(
                         } else {
                             it
                         }
-                        onValueChange.invoke(it.text)
+                        onValueChange(it.text)
                         return@BasicTextField
                     }
 
@@ -152,7 +152,7 @@ fun FTextField(
                             it
                         }
 
-                        onValueChange.invoke(
+                        onValueChange(
                             if (autoCompletion != null) {
                                 textFieldValue
                             } else {
@@ -262,7 +262,7 @@ fun FTextField(
                                                     .height(fixedHeight)
                                             ) {
                                                 // FIXME https://holykisa.tistory.com/74
-                                                innerTextField.invoke()
+                                                innerTextField()
                                             }
 
                                             if (textFieldTail != null) {
@@ -322,7 +322,7 @@ fun FTextField(
                                     text = borderButton.text,
                                     enable = borderButton.enable,
                                     onClick = {
-                                        borderButton.onClick.invoke()
+                                        borderButton.onClick()
                                     }
                                 )
                             }

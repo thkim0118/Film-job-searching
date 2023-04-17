@@ -105,6 +105,6 @@ fun RowScope.MainBottomNavigationItem(
         selectedContentColor = FColor.Primary,
         unselectedContentColor = FColor.DisablePlaceholder,
         selected = selectedScreen == bottomNavItems,
-        onClick = { onItemClick.invoke(bottomNavItems) }
+        onClick = { onItemClick(bottomNavItems) }
     )
 }

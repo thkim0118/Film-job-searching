@@ -44,7 +44,7 @@ fun FTitleBar(
                         0f
                     }
                 )
-                .clickableSingleWithNoRipple { onBackClick.invoke() },
+                .clickableSingleWithNoRipple { onBackClick() },
             imageVector = ImageVector.vectorResource(id = R.drawable.title_bar_back),
             contentDescription = null
         )
@@ -75,7 +75,7 @@ fun FTitleBar(
                         0f
                     }
                 )
-                .clickableSingleWithNoRipple { onCloseClick.invoke() },
+                .clickableSingleWithNoRipple { onCloseClick() },
             imageVector = ImageVector.vectorResource(id = R.drawable.title_bar_close),
             contentDescription = null
         )

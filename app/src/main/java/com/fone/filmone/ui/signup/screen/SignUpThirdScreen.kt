@@ -256,7 +256,7 @@ fun RetransmitComponent(
                     enable = enable,
                     onClick = {
                         if (enable) {
-                            onVerificationCheckClick.invoke(verificationCode)
+                            onVerificationCheckClick(verificationCode)
                         }
                     }
                 )
@@ -301,14 +301,14 @@ private fun TermComponent(
     Row(
         modifier = Modifier
             .clickableWithNoRipple {
-                onUpdateAllAgreeState.invoke()
+                onUpdateAllAgreeState()
             }
     ) {
         FRadioButton(
             modifier = Modifier.align(Alignment.CenterVertically),
             enable = uiState.isTermAllAgree,
             onClick = {
-                onUpdateAllAgreeState.invoke()
+                onUpdateAllAgreeState()
             }
         )
 
@@ -528,7 +528,7 @@ private fun ColumnScope.NextButton(
         enable = uiState.isRequiredTemAllAgree
     ) {
         if (uiState.isRequiredTemAllAgree) {
-            onClick.invoke()
+            onClick()
         }
     }
 }
@@ -557,7 +557,7 @@ private fun SignUpFailDialog(
         titleText = stringResource(id = R.string.sign_up_third_dialog_sign_up_fail_title),
         buttonText = stringResource(id = R.string.confirm)
     ) {
-        onClick.invoke()
+        onClick()
     }
 }
 
@@ -571,7 +571,7 @@ private fun VerificationCompleteDialog(
         titleText = stringResource(id = R.string.sign_up_third_dialog_verification_complete_title),
         buttonText = stringResource(id = R.string.confirm)
     ) {
-        onClick.invoke()
+        onClick()
     }
 }
 

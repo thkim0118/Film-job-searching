@@ -38,7 +38,7 @@ fun FBorderButton(
                 shape = RoundedCornerShape(5.dp)
             )
             .clickable {
-                onClick.invoke()
+                onClick()
             }
             .padding(horizontal = 16.dp, vertical = 13.dp),
         contentAlignment = Alignment.Center

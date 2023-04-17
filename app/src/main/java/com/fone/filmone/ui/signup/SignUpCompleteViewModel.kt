@@ -21,7 +21,7 @@ class SignUpCompleteViewModel @Inject constructor(
         email: String,
         socialLoginType: String
     ) = viewModelScope.launch {
-        signInUseCase.invoke(
+        signInUseCase(
             accessToken,
             email,
             socialLoginType

@@ -55,7 +55,7 @@ class InquiryViewModel @Inject constructor(
 
     fun submitInquiry() = viewModelScope.launch {
         // TODO Throttling
-        submitInquiryUseCase.invoke(
+        submitInquiryUseCase(
             with(uiState.value) {
                 InquiryVo(
                     email = email,

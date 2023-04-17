@@ -91,7 +91,7 @@ internal class SignUpUseCaseTest {
                 DataResult.Success(signUpResponse)
             )
 
-        signUpUseCase.invoke(signUpVo)
+        signUpUseCase(signUpVo)
             .onSuccess {
                 assert(true)
             }.onFail {
@@ -104,7 +104,7 @@ internal class SignUpUseCaseTest {
         whenever(userRepository.signUp(signUpRequest))
             .thenReturn(DataResult.Fail(DataFail("", "")))
 
-        signUpUseCase.invoke(signUpVo)
+        signUpUseCase(signUpVo)
             .onSuccess {
                 assert(false)
             }.onFail {

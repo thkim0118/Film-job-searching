@@ -30,7 +30,7 @@ internal class RequestPhoneVerificationUseCaseTest {
         val verificationCode = "123123"
 
         whenever(
-            requestPhoneVerificationUseCase.invoke(
+            requestPhoneVerificationUseCase(
                 phoneNumber = phoneNumber,
                 verificationCode = verificationCode
             )
@@ -40,7 +40,7 @@ internal class RequestPhoneVerificationUseCaseTest {
             )
         )
 
-        requestPhoneVerificationUseCase.invoke(
+        requestPhoneVerificationUseCase(
             phoneNumber = phoneNumber,
             verificationCode = verificationCode
         ).onSuccess {
@@ -56,7 +56,7 @@ internal class RequestPhoneVerificationUseCaseTest {
         val verificationCode = "123123"
 
         whenever(
-            requestPhoneVerificationUseCase.invoke(
+            requestPhoneVerificationUseCase(
                 phoneNumber = phoneNumber,
                 verificationCode = verificationCode
             )
@@ -66,7 +66,7 @@ internal class RequestPhoneVerificationUseCaseTest {
             )
         )
 
-        requestPhoneVerificationUseCase.invoke(
+        requestPhoneVerificationUseCase(
             phoneNumber = phoneNumber,
             verificationCode = verificationCode
         ).onSuccess {
@@ -82,7 +82,7 @@ internal class RequestPhoneVerificationUseCaseTest {
         val verificationCode = "123123"
 
         whenever(
-            requestPhoneVerificationUseCase.invoke(
+            requestPhoneVerificationUseCase(
                 phoneNumber = phoneNumber,
                 verificationCode = verificationCode
             )
@@ -92,7 +92,7 @@ internal class RequestPhoneVerificationUseCaseTest {
             )
         )
 
-        requestPhoneVerificationUseCase.invoke(
+        requestPhoneVerificationUseCase(
             phoneNumber = phoneNumber,
             verificationCode = verificationCode
         ).onSuccess {

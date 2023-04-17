@@ -100,9 +100,18 @@
     <string name="toast_inquiry_fail">제출에 실패하였습니다. 다시 시도해주세요.</string>
 
     <!--    main-->
-    <string name="main_home_title">홈</string>
-    <string name="main_job_title">구인구직</string>
-    <string name="main_chat_title">채팅</string>
-    <string name="main_my_title">마이페이지</string>
+    <string name="main_bottom_nav_home_title">홈</string>
+    <string name="main_bottom_nav_job_title">구인구직</string>
+    <string name="main_bottom_nav_chat_title">채팅</string>
+    <string name="main_bottom_nav_my_title">마이페이지</string>
 
+    <!--    my-->
+    <string name="my_title">나의 F-ONE</string>
+    <string name="my_scrap_title">스크랩</string>
+    <string name="my_favorite_title">찜</string>
+    <string name="my_register_title">나의 등록내역</string>
+    <string name="my_inquiry_title">문의하기</string>
+    <string name="my_app_version_title">앱 버전</string>
+    <string name="my_logout_title">로그아웃</string>
+    <string name="my_withdrawal_title">회원 탈퇴</string>
 </resources>

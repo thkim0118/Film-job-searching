@@ -55,7 +55,7 @@ class SignUpThirdViewModel @Inject constructor(
     fun signUp(signUpVo: SignUpVo) = viewModelScope.launch {
         val agreeStates = uiState.value.agreeState
 
-        signUpUseCase.invoke(
+        signUpUseCase(
             signUpVo = signUpVo.copy(
                 phoneNumber = PhoneNumberUtils.formatNumber(
                     uiState.value.phoneNumber,
@@ -147,7 +147,7 @@ class SignUpThirdViewModel @Inject constructor(
             return@launch
         }
 
-        requestPhoneVerificationUseCase.invoke(
+        requestPhoneVerificationUseCase(
             "+82${uiState.value.phoneNumber.drop(1)}"
         ).onSuccess {
             _uiState.update {
@@ -187,7 +187,7 @@ class SignUpThirdViewModel @Inject constructor(
             return@launch
         }
 
-        verifySmsCodeUseCase.invoke(code).onSuccess { isVerify ->
+        verifySmsCodeUseCase(code).onSuccess { isVerify ->
             if (isVerify) {
                 updateDialogState(SignUpThirdDialogState.VerificationComplete)
                 updatePhoneNumberVerification()
