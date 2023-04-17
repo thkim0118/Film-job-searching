@@ -193,8 +193,10 @@ private fun PhoneVerificationComponent(
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Phone
         ),
-        borderButtons = listOf(
-            BorderButton(
+        rightComponents = {
+            Spacer(modifier = Modifier.width(4.dp))
+
+            FBorderButton(
                 text = stringResource(
                     id = when (uiState.phoneVerificationState) {
                         PhoneVerificationState.Complete -> R.string.sign_up_third_phone_number_verification
@@ -205,7 +207,7 @@ private fun PhoneVerificationComponent(
                 enable = uiState.phoneNumber.length >= 10 && uiState.phoneVerificationState != PhoneVerificationState.Complete,
                 onClick = onVerifyClick
             )
-        )
+        }
     )
 
     RetransmitComponent(
@@ -251,8 +253,10 @@ fun RetransmitComponent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             placeholder = stringResource(id = R.string.sign_up_third_phone_number_verification_code_placeholder),
-            borderButtons = listOf(
-                BorderButton(
+            rightComponents = {
+                Spacer(modifier = Modifier.width(4.dp))
+
+                FBorderButton(
                     text = stringResource(id = R.string.sign_up_third_phone_number_check_code),
                     enable = enable,
                     onClick = {
@@ -261,7 +265,7 @@ fun RetransmitComponent(
                         }
                     }
                 )
-            ),
+            },
             textFieldTail = FTextFieldTail.Text(
                 text = uiState.verificationTime,
                 style = fTextStyle(

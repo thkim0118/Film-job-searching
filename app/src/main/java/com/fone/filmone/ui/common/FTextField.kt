@@ -59,10 +59,10 @@ fun FTextField(
 //        titleStar = false,
 //        titleSpace = 0.dp
 //    ),
-    topText: @Composable () -> Unit = {},
+    topText: @Composable ColumnScope.() -> Unit = {},
     bottomType: BottomType = BottomType.Empty,
     bottomSpacer: Dp = 0.dp,
-    borderButtons: List<BorderButton>? = null,
+    rightComponents: @Composable RowScope.() -> Unit = {},
     textFieldTail: FTextFieldTail? = null,
     singleLine: Boolean = true,
     maxLines: Int = 1,
@@ -287,17 +287,7 @@ fun FTextField(
                                 )
                             }
 
-                            borderButtons?.forEach { borderButton ->
-                                Spacer(modifier = Modifier.width(4.dp))
-
-                                FBorderButton(
-                                    text = borderButton.text,
-                                    enable = borderButton.enable,
-                                    onClick = {
-                                        borderButton.onClick()
-                                    }
-                                )
-                            }
+                            rightComponents()
                         }
 
                         when (bottomType) {
@@ -483,13 +473,15 @@ private fun FTextFieldBottomWithFBorderButtonPreview() {
                     errorText = "에러 메시지 테스트 안내 문구입니다.",
                     isError = true
                 ),
-                borderButtons = listOf(
-                    BorderButton(
+                rightComponents = {
+                    Spacer(modifier = Modifier.width(4.dp))
+
+                    FBorderButton(
                         text = "중복확인",
                         enable = true,
                         onClick = {}
                     )
-                ),
+                },
                 textFieldTail = FTextFieldTail.Text(
                     text = "3:00",
                     style = fTextStyle(

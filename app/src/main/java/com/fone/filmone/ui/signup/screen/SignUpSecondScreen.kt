@@ -192,8 +192,10 @@ private fun NicknameComponent(
 
                 Spacer(modifier = Modifier.height(6.dp))
             },
-            borderButtons = listOf(
-                BorderButton(
+            rightComponents = {
+                Spacer(modifier = Modifier.width(4.dp))
+
+                FBorderButton(
                     text = stringResource(
                         id = if (uiState.isNicknameChecked) {
                             R.string.sign_up_second_nickname_check_duplicate_complete
@@ -212,7 +214,7 @@ private fun NicknameComponent(
                         }
                     }
                 )
-            ),
+            },
             enabled = uiState.isNicknameChecked.not(),
             bottomType = BottomType.Error(
                 errorText = stringResource(id = R.string.sign_up_second_nickname_error_title),
@@ -281,22 +283,27 @@ private fun BirthdaySexComponent(
 
             Spacer(modifier = Modifier.height(8.dp))
         },
-        borderButtons = listOf(
-            BorderButton(
+        rightComponents = {
+            Spacer(modifier = Modifier.width(4.dp))
+
+            FBorderButton(
                 text = stringResource(id = R.string.sign_up_second_birthday_sex_man),
                 enable = uiState.gender == Gender.MAN,
                 onClick = {
                     onUpdateGender(Gender.MAN)
                 }
-            ),
-            BorderButton(
+            )
+
+            Spacer(modifier = Modifier.width(4.dp))
+
+            FBorderButton(
                 text = stringResource(id = R.string.sign_up_second_birthday_sex_woman),
                 enable = uiState.gender == Gender.WOMAN,
                 onClick = {
                     onUpdateGender(Gender.WOMAN)
                 }
             )
-        ),
+        },
     )
 }
 
