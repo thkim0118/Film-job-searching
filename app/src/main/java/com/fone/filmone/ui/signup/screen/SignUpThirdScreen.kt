@@ -184,11 +184,14 @@ private fun PhoneVerificationComponent(
         onValueChange = onValueChanged,
         textLimit = 11,
         placeholder = stringResource(id = R.string.sign_up_third_phone_number_placeholder),
-        topText = TopText(
-            title = stringResource(id = R.string.sign_up_third_phone_number_title),
-            titleStar = false,
-            titleSpace = 8.dp
-        ),
+        topText = {
+            Text(
+                text = stringResource(id = R.string.sign_up_third_phone_number_title),
+                style = LocalTypography.current.subtitle1
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+        },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Phone
         ),

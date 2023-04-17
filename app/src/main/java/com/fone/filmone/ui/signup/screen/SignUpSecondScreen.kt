@@ -23,9 +23,11 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -170,11 +172,26 @@ private fun NicknameComponent(
             placeholder = stringResource(id = R.string.sign_up_second_nickname_placeholder),
             onValueChange = onUpdateNickname,
             pattern = Pattern.compile("^[ㄱ-ㅣ가-힣a-zA-Z\\d\\s]+$"),
-            topText = TopText(
-                title = stringResource(id = R.string.sign_up_second_nickname_title),
-                titleStar = true,
-                titleSpace = 8.dp
-            ),
+            topText = {
+                Row {
+                    Text(
+                        text = stringResource(id = R.string.sign_up_second_nickname_title),
+                        style = LocalTypography.current.subtitle1
+                    )
+
+                    Text(
+                        text = " *",
+                        style = fTextStyle(
+                            fontWeight = FontWeight.W500,
+                            fontSize = 16.sp,
+                            lineHeight = 19.2.sp,
+                            color = FColor.Error
+                        )
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(6.dp))
+            },
             borderButtons = listOf(
                 BorderButton(
                     text = stringResource(
@@ -238,12 +255,32 @@ private fun BirthdaySexComponent(
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number
         ),
-        topText = TopText(
-            title = stringResource(id = R.string.sign_up_second_birthday_sex_title),
-            subtitle = stringResource(id = R.string.sign_up_second_birthday_sex_subtitle),
-            titleStar = true,
-            titleSpace = 8.dp
-        ),
+        topText = {
+            Row {
+                Text(
+                    text = stringResource(id = R.string.sign_up_second_birthday_sex_title),
+                    style = LocalTypography.current.subtitle1
+                )
+
+                Text(
+                    text = " *",
+                    style = fTextStyle(
+                        fontWeight = FontWeight.W500,
+                        fontSize = 16.sp,
+                        lineHeight = 19.2.sp,
+                        color = FColor.Error
+                    )
+                )
+
+                Text(
+                    text = stringResource(id = R.string.sign_up_second_birthday_sex_subtitle),
+                    style = LocalTypography.current.label,
+                    color = FColor.DisablePlaceholder
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+        },
         borderButtons = listOf(
             BorderButton(
                 text = stringResource(id = R.string.sign_up_second_birthday_sex_man),

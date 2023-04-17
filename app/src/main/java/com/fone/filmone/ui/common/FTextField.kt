@@ -54,11 +54,12 @@ fun FTextField(
     autoCompletion: ((beforeValue: TextFieldValue, afterValue: TextFieldValue) -> TextFieldValue)? = null,
     textLimit: Int = Int.MAX_VALUE,
     onFocusChange: (Boolean) -> Unit = {},
-    topText: TopText = TopText(
-        title = "",
-        titleStar = false,
-        titleSpace = 0.dp
-    ),
+//    topText: TopText = TopText(
+//        title = "",
+//        titleStar = false,
+//        titleSpace = 0.dp
+//    ),
+    topText: @Composable () -> Unit = {},
     bottomType: BottomType = BottomType.Empty,
     bottomSpacer: Dp = 0.dp,
     borderButtons: List<BorderButton>? = null,
@@ -181,36 +182,7 @@ fun FTextField(
                     Column(
                         modifier = Modifier
                     ) {
-                        if (topText.title.isNotEmpty()) {
-                            Row {
-                                Text(
-                                    text = topText.title,
-                                    style = LocalTypography.current.subtitle1
-                                )
-
-                                if (topText.titleStar) {
-                                    Text(
-                                        text = " *",
-                                        style = fTextStyle(
-                                            fontWeight = FontWeight.W500,
-                                            fontSize = 16.sp,
-                                            lineHeight = 19.2.sp,
-                                            color = FColor.Error
-                                        )
-                                    )
-                                }
-
-                                if (topText.subtitle.isNotEmpty()) {
-                                    Text(
-                                        text = topText.subtitle,
-                                        style = LocalTypography.current.label,
-                                        color = FColor.DisablePlaceholder
-                                    )
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.height(topText.titleSpace))
-                        }
+                        topText()
 
                         Row {
                             Box(
@@ -437,11 +409,33 @@ private fun FTextFieldBottomErrorTypePreview() {
         FTextField(
             text = "Input Text",
             onValueChange = {},
-            topText = TopText(
-                title = "Title",
-                titleStar = true,
-                titleSpace = 8.dp
-            ),
+            topText = {
+                Row {
+                    Text(
+                        text = "topText.title",
+                        style = LocalTypography.current.subtitle1
+                    )
+
+                    Text(
+                        text = " *",
+                        style = fTextStyle(
+                            fontWeight = FontWeight.W500,
+                            fontSize = 16.sp,
+                            lineHeight = 19.2.sp,
+                            color = FColor.Error
+                        )
+                    )
+
+                    Text(
+                        text = "topText.subtitle",
+                        style = LocalTypography.current.label,
+                        color = FColor.DisablePlaceholder
+                    )
+
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+            },
             bottomType = BottomType.Error(
                 errorText = "에러 메시지 테스트 안내 문구입니다.",
                 isError = true
@@ -458,11 +452,33 @@ private fun FTextFieldBottomWithFBorderButtonPreview() {
             FTextField(
                 text = "Input Text",
                 onValueChange = {},
-                topText = TopText(
-                    title = "Title",
-                    titleStar = true,
-                    titleSpace = 8.dp
-                ),
+                topText = {
+                    Row {
+                        Text(
+                            text = "topText.title",
+                            style = LocalTypography.current.subtitle1
+                        )
+
+                        Text(
+                            text = " *",
+                            style = fTextStyle(
+                                fontWeight = FontWeight.W500,
+                                fontSize = 16.sp,
+                                lineHeight = 19.2.sp,
+                                color = FColor.Error
+                            )
+                        )
+
+                        Text(
+                            text = "topText.subtitle",
+                            style = LocalTypography.current.label,
+                            color = FColor.DisablePlaceholder
+                        )
+
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                },
                 bottomType = BottomType.Error(
                     errorText = "에러 메시지 테스트 안내 문구입니다.",
                     isError = true

@@ -10,8 +10,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -152,11 +154,14 @@ private fun EmailInputComponent(
     FTextField(
         text = uiState.email,
         onValueChange = onValueChanged,
-        topText = TopText(
-            title = stringResource(id = R.string.inquiry_email_title),
-            titleStar = false,
-            titleSpace = 6.dp
-        )
+        topText = {
+            Text(
+                text = stringResource(id = R.string.inquiry_email_title),
+                style = LocalTypography.current.subtitle1
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+        }
     )
 }
 
@@ -198,11 +203,14 @@ private fun InquiryTitleComponent(
     FTextField(
         text = uiState.title,
         onValueChange = onValueChanged,
-        topText = TopText(
-            title = stringResource(id = R.string.inquiry_content_title),
-            titleStar = false,
-            titleSpace = 6.dp
-        )
+        topText = {
+            Text(
+                text = stringResource(id = R.string.inquiry_content_title),
+                style = LocalTypography.current.subtitle1
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+        }
     )
 }
 
@@ -214,11 +222,14 @@ private fun InquiryDescriptionComponent(
     FTextField(
         text = uiState.description,
         onValueChange = onValueChanged,
-        topText = TopText(
-            title = stringResource(id = R.string.inquiry_content_description),
-            titleStar = false,
-            titleSpace = 6.dp
-        ),
+        topText = {
+            Text(
+                text = stringResource(id = R.string.inquiry_content_description),
+                style = LocalTypography.current.subtitle1
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+        },
         placeholder = stringResource(id = R.string.inquiry_content_description_placeholder),
         singleLine = false,
         maxLines = Int.MAX_VALUE,
