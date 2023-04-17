@@ -23,7 +23,6 @@ import com.fone.filmone.ui.theme.FColor
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController,
 ) {
     var selectedScreen by remember { mutableStateOf(BottomNavItem.Home) }
 

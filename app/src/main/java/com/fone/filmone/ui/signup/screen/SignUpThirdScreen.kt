@@ -65,7 +65,6 @@ fun SignUpThirdScreen(
     ) {
         SignUpMainScreen(
             navController = navController,
-            signUpVo = signUpVo,
             uiState = uiState,
             onPhoneNumberChanged = viewModel::updatePhoneNumber,
             onVerifyClick = viewModel::transmitVerificationCode,
@@ -91,7 +90,6 @@ fun SignUpThirdScreen(
 private fun SignUpMainScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    signUpVo: SignUpVo,
     uiState: SignUpThirdUiState,
     onPhoneNumberChanged: (String) -> Unit,
     onVerifyClick: () -> Unit,

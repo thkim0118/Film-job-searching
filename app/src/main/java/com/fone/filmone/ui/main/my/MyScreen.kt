@@ -237,7 +237,6 @@ private fun ScrapFavoriteComponent(
 
 @Composable
 private fun MenuList(
-    modifier: Modifier = Modifier,
     onRegisterListClick: () -> Unit,
     onInquiryClick: () -> Unit,
     onLogoutClick: () -> Unit,
