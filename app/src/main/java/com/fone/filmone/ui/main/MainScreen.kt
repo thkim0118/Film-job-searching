@@ -64,7 +64,7 @@ private fun MainBottomNavigation(
         bottomNavItems.forEach { bottomNavItem ->
             MainBottomNavigationItem(
                 bottomNavItems = bottomNavItem,
-                selectedScreen = selectedScreen,
+                selectedBottomNavItem = selectedScreen,
                 onItemClick = onItemSelected
             )
         }
@@ -74,14 +74,14 @@ private fun MainBottomNavigation(
 @Composable
 fun RowScope.MainBottomNavigationItem(
     bottomNavItems: BottomNavItem,
-    selectedScreen: BottomNavItem,
+    selectedBottomNavItem: BottomNavItem,
     onItemClick: (BottomNavItem) -> Unit
 ) {
     BottomNavigationItem(
         icon = {
             Icon(
                 imageVector = ImageVector.vectorResource(
-                    id = if (selectedScreen == bottomNavItems) {
+                    id = if (selectedBottomNavItem == bottomNavItems) {
                         bottomNavItems.selectedIconRes
                     } else {
                         bottomNavItems.unselectedIconRes
@@ -97,14 +97,18 @@ fun RowScope.MainBottomNavigationItem(
                     fontWeight = FontWeight.W400,
                     fontSize = 12.sp,
                     lineHeight = 12.sp,
-                    color = FColor.DisablePlaceholder,
+                    color = if (selectedBottomNavItem == bottomNavItems) {
+                        FColor.Primary
+                    } else {
+                        FColor.DisablePlaceholder
+                    },
                 )
             )
         },
         alwaysShowLabel = true,
         selectedContentColor = FColor.Primary,
         unselectedContentColor = FColor.DisablePlaceholder,
-        selected = selectedScreen == bottomNavItems,
+        selected = selectedBottomNavItem == bottomNavItems,
         onClick = { onItemClick(bottomNavItems) }
     )
 }
