@@ -271,13 +271,13 @@ private fun BirthdaySexComponent(
                         color = FColor.Error
                     )
                 )
-
-                Text(
-                    text = stringResource(id = R.string.sign_up_second_birthday_sex_subtitle),
-                    style = LocalTypography.current.label,
-                    color = FColor.DisablePlaceholder
-                )
             }
+
+            Text(
+                text = stringResource(id = R.string.sign_up_second_birthday_sex_subtitle),
+                style = LocalTypography.current.label,
+                color = FColor.DisablePlaceholder
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
         },
