@@ -114,4 +114,13 @@
     <string name="my_app_version_title">앱 버전</string>
     <string name="my_logout_title">로그아웃</string>
     <string name="my_withdrawal_title">회원 탈퇴</string>
+
+    <!--    my info-->
+    <string name="my_info_nickname_title">닉네임</string>
+    <string name="my_info_nickname_subtitle">※3~8자리의 숫자, 영어 한글만 가능합니다.</string>
+    <string name="my_info_nickname_duplicate_title">중복확인</string>
+    <string name="my_info_job_choice_title">직업 선택</string>
+    <string name="my_info_favorite_choice_title">관심사 선택</string>
+    <string name="my_info_favorite_choice_subtitle">(중복 선택 가능)</string>
+    <string name="my_info_button_title">수정하기</string>
 </resources>
