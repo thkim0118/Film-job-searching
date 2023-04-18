@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.response.user.SigninResponse
 import com.fone.filmone.data.datamodel.response.user.Token
-import com.fone.filmone.data.datamodel.response.user.User
+import com.fone.filmone.data.datamodel.response.user.UserResponse
 import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
@@ -44,7 +44,7 @@ internal class SignInUseCaseTest {
                 refreshToken = "",
                 tokenType = ""
             ),
-            User(
+            UserResponse(
                 agreeToPersonalInformation = true,
                 agreeToTermsOfServiceTermsOfUse = true,
                 birthday = "",

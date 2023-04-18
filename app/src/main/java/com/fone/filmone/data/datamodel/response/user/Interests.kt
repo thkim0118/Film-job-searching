@@ -1,4 +1,4 @@
-package com.fone.filmone.domain.model.signup
+package com.fone.filmone.data.datamodel.response.user
 
 enum class Interests(val title: String) {
     FEATURE_FILM("장편영화"),

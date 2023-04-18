@@ -4,22 +4,27 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.fone.filmone.R
-import com.fone.filmone.domain.model.signup.Interests
-import com.fone.filmone.domain.model.signup.Job
+import com.fone.filmone.data.datamodel.response.user.Interests
+import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
@@ -28,12 +33,16 @@ import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
+import com.skydoves.landscapist.ShimmerParams
+import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun MyInfoScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: MyInfoViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
 
     Column(
@@ -63,7 +72,8 @@ fun MyInfoScreen(
 
                 ProfileImageComponent(
                     modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
+                        .align(Alignment.CenterHorizontally),
+                    uiState = uiState
                 )
 
                 Spacer(modifier = Modifier.height(23.dp))
@@ -71,21 +81,22 @@ fun MyInfoScreen(
                 NicknameComponent(
                     onDuplicateCheckClick = {
 
-                    }
+                    },
+                    uiState = uiState
                 )
 
                 Spacer(modifier = Modifier.height(42.dp))
 
                 JobComponent(
-                    currentJob = Job.HUNTER,
-                    onUpdateJob = {}
+                    onUpdateJob = {},
+                    uiState = uiState
                 )
 
                 Spacer(modifier = Modifier.height(40.dp))
 
                 InterestsComponent(
-                    currentInterests = listOf(),
-                    onUpdateInterests = { _, _ -> }
+                    onUpdateInterests = { _, _ -> },
+                    uiState = uiState
                 )
 
                 Spacer(modifier = Modifier.height(141.dp))
@@ -100,8 +111,11 @@ fun MyInfoScreen(
 
 @Composable
 private fun ProfileImageComponent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    uiState: MyInfoUiState
 ) {
+    val profileUrl = uiState.profileUrl ?: ""
+
     Box(
         modifier = modifier
             .size(65.dp)
@@ -109,12 +123,38 @@ private fun ProfileImageComponent(
             },
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            modifier = Modifier
-                .align(Alignment.TopStart),
-            imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
-            contentDescription = null
-        )
+        if (profileUrl.isEmpty()) {
+            Image(
+                modifier = Modifier
+                    .align(Alignment.TopStart),
+                imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
+                contentDescription = null
+            )
+        } else {
+            GlideImage(
+                modifier = Modifier
+                    .size(65.dp)
+                    .clip(CircleShape),
+                shimmerParams = ShimmerParams(
+                    baseColor = MaterialTheme.colors.background,
+                    highlightColor = FColor.Gray700,
+                    durationMillis = 350,
+                    dropOff = 0.65f,
+                    tilt = 20f
+                ),
+
+                imageModel = profileUrl,
+                contentScale = ContentScale.Crop,
+                failure = {
+                    Image(
+                        modifier = Modifier
+                            .align(Alignment.Center),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
+                        contentDescription = null
+                    )
+                }
+            )
+        }
         Image(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
@@ -132,9 +172,13 @@ private fun ProfileImageComponent(
 @Composable
 private fun NicknameComponent(
     modifier: Modifier = Modifier,
-    onDuplicateCheckClick: () -> Unit
+    onDuplicateCheckClick: () -> Unit,
+    uiState: MyInfoUiState
 ) {
+    val nickname = uiState.nickname
+
     FTextField(
+        text = nickname,
         modifier = modifier,
         onValueChange = {
 
@@ -182,9 +226,11 @@ private fun NicknameComponent(
 @Composable
 private fun JobComponent(
     modifier: Modifier = Modifier,
-    currentJob: Job?,
+    uiState: MyInfoUiState,
     onUpdateJob: (Job) -> Unit
 ) {
+    val currentJob = uiState.job
+
     Text(
         text = stringResource(id = R.string.my_info_job_choice_title),
         style = LocalTypography.current.subtitle2,
@@ -255,9 +301,11 @@ private fun JobTag(
 @Composable
 private fun InterestsComponent(
     modifier: Modifier = Modifier,
-    currentInterests: List<Interests>,
+    uiState: MyInfoUiState,
     onUpdateInterests: (Interests, Boolean) -> Unit
 ) {
+    val currentInterests = uiState.interests
+
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
@@ -353,7 +401,7 @@ private fun ColumnScope.EditButton() {
 @Composable
 fun ProfileImageComponentPreview() {
     FilmOneTheme {
-        ProfileImageComponent()
+        ProfileImageComponent(uiState = MyInfoUiState())
     }
 }
 
@@ -361,7 +409,10 @@ fun ProfileImageComponentPreview() {
 @Composable
 fun NicknameComponentPreview() {
     FilmOneTheme {
-        NicknameComponent(onDuplicateCheckClick = {})
+        NicknameComponent(
+            onDuplicateCheckClick = {},
+            uiState = MyInfoUiState()
+        )
     }
 }
 
@@ -370,7 +421,10 @@ fun NicknameComponentPreview() {
 fun JobComponentPreview() {
     FilmOneTheme {
         Column {
-            JobComponent(currentJob = Job.HUNTER, onUpdateJob = {})
+            JobComponent(
+                onUpdateJob = {},
+                uiState = MyInfoUiState()
+            )
         }
     }
 }
@@ -380,7 +434,10 @@ fun JobComponentPreview() {
 fun InterestsComponentPreview() {
     FilmOneTheme {
         Column {
-            InterestsComponent(currentInterests = listOf(), onUpdateInterests = { _, _ -> })
+            InterestsComponent(
+                onUpdateInterests = { _, _ -> },
+                uiState = MyInfoUiState()
+            )
         }
     }
 }

@@ -4,14 +4,9 @@ import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.response.common.NetworkResponse
 import com.fone.filmone.data.datamodel.response.common.Server
-import com.fone.filmone.data.datamodel.response.user.CheckNicknameDuplicationResponse
-import com.fone.filmone.data.datamodel.response.user.SignUpResponse
-import com.fone.filmone.data.datamodel.response.user.SigninResponse
+import com.fone.filmone.data.datamodel.response.user.*
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface UserApi {
     @GET("${Server.ApiVersion}/users/check-nickname-duplication")
@@ -28,4 +23,7 @@ interface UserApi {
     suspend fun signIn(
         @Body signInRequest: SigninRequest
     ): Response<NetworkResponse<SigninResponse>>
+
+    @GET("${Server.ApiVersion}/users")
+    suspend fun getUserInfo(): Response<NetworkResponse<UserResponse>>
 }

@@ -3,9 +3,7 @@ package com.fone.filmone.data.repository
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.response.common.handleNetwork
-import com.fone.filmone.data.datamodel.response.user.CheckNicknameDuplicationResponse
-import com.fone.filmone.data.datamodel.response.user.SignUpResponse
-import com.fone.filmone.data.datamodel.response.user.SigninResponse
+import com.fone.filmone.data.datamodel.response.user.*
 import com.fone.filmone.data.datasource.local.TokenDataStore
 import com.fone.filmone.data.datasource.remote.UserApi
 import com.fone.filmone.di.IoDispatcher
@@ -34,5 +32,9 @@ class UserRepositoryImpl @Inject constructor(
                 tokenDataStore.saveAccessToken(signInResponse.token.accessToken)
                 tokenDataStore.saveRefreshToken(signInResponse.token.refreshToken)
             }
+    }
+
+    override suspend fun getUserInfo(): DataResult<UserResponse> {
+        return handleNetwork { userApi.getUserInfo() }
     }
 }
