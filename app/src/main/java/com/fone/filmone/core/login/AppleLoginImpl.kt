@@ -2,7 +2,7 @@ package com.fone.filmone.core.login
 
 import android.app.Activity
 import android.content.Context
-import com.fone.filmone.domain.model.signup.SocialLoginType
+import com.fone.filmone.data.datamodel.response.user.SocialLoginType
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.OAuthProvider
 import com.google.firebase.auth.ktx.auth

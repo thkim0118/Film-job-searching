@@ -1,7 +1,7 @@
 package com.fone.filmone.core.login
 
 import android.content.Context
-import com.fone.filmone.domain.model.signup.SocialLoginType
+import com.fone.filmone.data.datamodel.response.user.SocialLoginType
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.NidOAuthErrorCode
 import com.navercorp.nid.oauth.NidOAuthLogin

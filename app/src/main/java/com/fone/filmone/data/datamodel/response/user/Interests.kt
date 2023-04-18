@@ -1,5 +1,8 @@
 package com.fone.filmone.data.datamodel.response.user
 
+import androidx.annotation.Keep
+
+@Keep
 enum class Interests(val title: String) {
     FEATURE_FILM("장편영화"),
     SHORT_FILM("단편영화"),

@@ -9,7 +9,7 @@ data class User(
     val birthday: String,
     val email: String,
     val enabled: Boolean,
-    val gender: String,
+    val gender: Gender,
     val id: Int,
     val interests: List<Interests>,
     val isReceiveMarketing: Boolean,
@@ -17,5 +17,5 @@ data class User(
     val nickname: String,
     val phoneNumber: String,
     val profileUrl: String,
-    val socialLoginType: String
+    val socialLoginType: SocialLoginType
 )

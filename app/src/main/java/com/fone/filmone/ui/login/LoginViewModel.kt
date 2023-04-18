@@ -6,7 +6,7 @@ import com.fone.filmone.core.login.SNSLoginUtil
 import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.model.signup.SocialLoginType
+import com.fone.filmone.data.datamodel.response.user.SocialLoginType
 import com.fone.filmone.domain.usecase.SignInUseCase
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator

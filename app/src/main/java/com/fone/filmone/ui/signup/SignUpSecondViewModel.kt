@@ -5,7 +5,7 @@ import com.fone.filmone.R
 import com.fone.filmone.domain.model.common.getOrNull
 import com.fone.filmone.domain.model.common.isFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.model.signup.Gender
+import com.fone.filmone.data.datamodel.response.user.Gender
 import com.fone.filmone.domain.usecase.CheckNicknameDuplicationUseCase
 import com.fone.filmone.domain.usecase.UploadImageUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel

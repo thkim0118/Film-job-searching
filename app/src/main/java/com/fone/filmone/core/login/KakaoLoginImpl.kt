@@ -2,8 +2,7 @@ package com.fone.filmone.core.login
 
 import android.content.Context
 import com.fone.filmone.BuildConfig
-import com.fone.filmone.core.util.LogUtil
-import com.fone.filmone.domain.model.signup.SocialLoginType
+import com.fone.filmone.data.datamodel.response.user.SocialLoginType
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.AuthErrorCause

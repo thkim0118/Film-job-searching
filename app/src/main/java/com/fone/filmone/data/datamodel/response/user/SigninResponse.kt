@@ -5,5 +5,5 @@ import androidx.annotation.Keep
 @Keep
 data class SigninResponse(
     val token: Token,
-    val userResponse: UserResponse
+    val user: User
 )

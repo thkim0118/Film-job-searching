@@ -2,8 +2,7 @@ package com.fone.filmone.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
-import com.fone.filmone.data.datamodel.response.user.SignUpResponse
-import com.fone.filmone.data.datamodel.response.user.UserResponse
+import com.fone.filmone.data.datamodel.response.user.*
 import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
@@ -65,21 +64,21 @@ internal class SignUpUseCaseTest {
         )
 
         signUpResponse = SignUpResponse(
-            UserResponse(
+            User(
                 agreeToPersonalInformation = true,
                 agreeToTermsOfServiceTermsOfUse = true,
                 birthday = "birthday",
                 email = "email",
                 enabled = true,
-                gender = "gender",
+                gender = Gender.MAN,
                 id = 0,
                 interests = listOf(),
                 isReceiveMarketing = true,
-                job = "job",
+                job = Job.ACTOR,
                 nickname = "nickname",
                 phoneNumber = "phoneNumber",
                 profileUrl = "profileUrl",
-                socialLoginType = "socialLoginType"
+                socialLoginType = SocialLoginType.APPLE
             )
         )
     }
