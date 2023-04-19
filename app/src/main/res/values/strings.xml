@@ -8,6 +8,13 @@
 
     <!--    common-->
     <string name="confirm">확인</string>
+
+    <!--    dialog-->
+    <string name="dialog_profile_setting_title">프로필 사진 설정</string>
+    <string name="dialog_profile_setting_button_title">취소</string>
+    <string name="dialog_profile_setting_album">앨범에서 사진 선택</string>
+    <string name="dialog_profile_setting_default_image">기본 이미지로 변경</string>
+
     <!--toast-->
     <string name="toast_request_verification_code">인증번호를 전송하였습니다.</string>
     <string name="toast_request_verification_code_too_much">너무 많은 요청을 하셨습니다. 1분 뒤 다시 시도해 주세요.</string>

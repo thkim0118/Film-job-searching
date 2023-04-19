@@ -1,10 +1,11 @@
 package com.fone.filmone.ui.myinfo
 
 import androidx.lifecycle.viewModelScope
-import com.fone.filmone.domain.model.common.onFail
-import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.data.datamodel.response.user.Interests
 import com.fone.filmone.data.datamodel.response.user.Job
+import com.fone.filmone.domain.model.common.onFail
+import com.fone.filmone.domain.model.common.onSuccess
+import com.fone.filmone.domain.usecase.CheckNicknameDuplicationUseCase
 import com.fone.filmone.domain.usecase.GetUserInfoUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,11 +18,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyInfoViewModel @Inject constructor(
-    private val getUserInfoUseCase: GetUserInfoUseCase
+    private val getUserInfoUseCase: GetUserInfoUseCase,
+    private val checkNicknameDuplicationUseCase: CheckNicknameDuplicationUseCase
 ) : BaseViewModel() {
 
     private val _uiState = MutableStateFlow(MyInfoUiState())
     val uiState: StateFlow<MyInfoUiState> = _uiState.asStateFlow()
+
+    private val _dialogState = MutableStateFlow<MyInfoDialogState>(MyInfoDialogState.Clear)
+    val dialogState: StateFlow<MyInfoDialogState> = _dialogState.asStateFlow()
+
+    private lateinit var savedUserState: MyInfoUiState
 
     init {
         getUserInfo()
@@ -31,6 +38,13 @@ class MyInfoViewModel @Inject constructor(
         getUserInfoUseCase()
             .onSuccess { userResponse ->
                 val user = userResponse.user
+                savedUserState = MyInfoUiState(
+                    profileUrl = user.profileUrl,
+                    nickname = user.nickname,
+                    job = user.job,
+                    interests = user.interests
+                )
+
                 _uiState.update {
                     it.copy(
                         profileUrl = user.profileUrl,
@@ -40,15 +54,140 @@ class MyInfoViewModel @Inject constructor(
                     )
                 }
             }.onFail {
-                // TODO Error 처리
+                showToast(it.message)
             }
     }
 
+    fun updateDialog(dialogState: MyInfoDialogState) {
+        _dialogState.value = dialogState
+    }
+
+    fun clearDialog() {
+        _dialogState.value = MyInfoDialogState.Clear
+    }
+
+    fun updateProfileEncodingState() {
+        _uiState.update {
+            it.copy(
+                isUpdateProfileEncoding = true
+            )
+        }
+    }
+
+    fun updateEncodedProfileString(encodedProfile: String) {
+        _uiState.update {
+            it.copy(
+                encodedProfile = encodedProfile,
+                isUpdateProfileEncoding = false
+            )
+        }
+
+        updateEditButtonState()
+    }
+
+    fun updateDefaultProfile() {
+        _uiState.update {
+            it.copy(
+                encodedProfile = null,
+                profileUrl = null
+            )
+        }
+
+        updateEditButtonState()
+    }
+
+    fun updateNickname(nickname: String) {
+        _uiState.update {
+            it.copy(
+                nickname = nickname
+            )
+        }
+
+        updateDuplicateState()
+        updateEditButtonState()
+    }
+
+    fun checkNicknameDuplicate() = viewModelScope.launch {
+        checkNicknameDuplicationUseCase(_uiState.value.nickname)
+            .onSuccess {
+                _uiState.update {
+                    it.copy(
+                        isEnableDuplicate = false
+                    )
+                }
+            }.onFail {
+                showToast(it.message)
+            }
+
+        updateEditButtonState()
+    }
+
+    fun updateJob(job: Job) {
+        _uiState.update {
+            it.copy(
+                job = job
+            )
+        }
+
+        updateEditButtonState()
+    }
+
+    fun updateInterest(interest: Interests, enable: Boolean) {
+        _uiState.update { uiState ->
+            uiState.copy(
+                interests = if (enable) {
+                    uiState.interests + listOf(interest)
+                } else {
+                    uiState.interests.filterNot { it == interest }
+                }
+            )
+        }
+
+        updateEditButtonState()
+    }
+
+    private fun updateEditButtonState() {
+        val currentState = _uiState.value
+
+        val disable =
+            (currentState.profileUrl == savedUserState.profileUrl || currentState.encodedProfile == null) &&
+                    currentState.job == savedUserState.job &&
+                    currentState.interests.sorted() == savedUserState.interests.sorted() &&
+                    currentState.nickname == savedUserState.nickname &&
+                    currentState.interests.isNotEmpty()
+
+        _uiState.update {
+            it.copy(
+                isEnableEditButton = disable.not()
+            )
+        }
+    }
+
+    private fun updateDuplicateState() {
+        val currentState = _uiState.value
+        val enable = currentState.nickname != savedUserState.nickname &&
+                currentState.nickname.length >= 3
+
+        _uiState.update {
+            it.copy(
+                isEnableDuplicate = enable
+            )
+        }
+    }
 }
 
 data class MyInfoUiState(
+    val isUpdateProfileEncoding: Boolean = false,
+    val encodedProfile: String? = null,
     val profileUrl: String? = null,
     val nickname: String = "",
     val job: Job? = null,
-    val interests: List<Interests> = emptyList()
+    val interests: List<Interests> = emptyList(),
+    val isEnableEditButton: Boolean = false,
+    val isEnableDuplicate: Boolean = false
 )
+
+sealed interface MyInfoDialogState {
+    object ProfileSetting : MyInfoDialogState
+    object Clear : MyInfoDialogState
+}

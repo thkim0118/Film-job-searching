@@ -57,11 +57,10 @@ fun SingleButtonDialog(
         textAlign = TextAlign.Center
     )
 
-    // Dialog 배경에 dim 영역 그리기
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.5f))
+            .background(FColor.DimColorThin)
             .clickable(onClick = onDismissRequest)
     ) {
         Dialog(
