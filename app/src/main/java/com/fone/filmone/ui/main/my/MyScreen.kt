@@ -81,7 +81,9 @@ fun MyScreen(
 
             ScrapFavoriteComponent(
                 onScrapClick = {
-
+                    FOneNavigator.navigateTo(
+                        NavDestinationState(route = FOneDestinations.Scrap.route)
+                    )
                 },
                 onFavoriteClick = {
 

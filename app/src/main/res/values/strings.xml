@@ -131,4 +131,7 @@
     <string name="my_info_favorite_choice_title">관심사 선택</string>
     <string name="my_info_favorite_choice_subtitle">(중복 선택 가능)</string>
     <string name="my_info_button_title">수정하기</string>
+
+    <!--    scrap-->
+    <string name="scrap_title_text">스크랩</string>
 </resources>

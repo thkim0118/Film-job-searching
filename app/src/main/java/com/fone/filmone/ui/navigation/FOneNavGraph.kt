@@ -11,6 +11,7 @@ import com.fone.filmone.ui.inquiry.InquiryScreen
 import com.fone.filmone.ui.login.LoginScreen
 import com.fone.filmone.ui.main.MainScreen
 import com.fone.filmone.ui.myinfo.MyInfoScreen
+import com.fone.filmone.ui.scrap.ScrapScreen
 import com.fone.filmone.ui.signup.signUpNavGraph
 import com.fone.filmone.ui.splash.SplashScreen
 import kotlinx.coroutines.flow.launchIn
@@ -53,6 +54,9 @@ fun FOneNavGraph(
         }
         composable(FOneDestinations.MyInfo.route) {
             MyInfoScreen(navController = navController)
+        }
+        composable(FOneDestinations.Scrap.route) {
+            ScrapScreen(navController = navController)
         }
     }
 }
