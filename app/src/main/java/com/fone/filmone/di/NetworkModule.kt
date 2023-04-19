@@ -44,6 +44,29 @@ object NetworkModule {
             addInterceptor(authInterceptor)
         }.build()
 
+    @AuthOkHttpClient
+    @Provides
+    fun provideAuthOkHttpClient(): OkHttpClient =
+        OkHttpClient.Builder().apply {
+            connectTimeout(connectionTime, TimeUnit.MILLISECONDS)
+            if (BuildConfig.DEBUG) {
+                addInterceptor(
+                    HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }
+                )
+            }
+        }.build()
+
+    @AuthRetrofit
+    @Provides
+    fun provideAuthRetrofit(@AuthOkHttpClient okHttpClient: OkHttpClient): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
     @SmsRetrofit
     @Provides
     fun provideSmsRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
@@ -66,6 +89,11 @@ object NetworkModule {
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
+
+    @Singleton
+    @Provides
+    fun provideTokenApi(@AuthRetrofit retrofit: Retrofit): TokenApi =
+        retrofit.create(TokenApi::class.java)
 
     @Singleton
     @Provides
@@ -92,6 +120,14 @@ object NetworkModule {
     fun provideJobApi(retrofit: Retrofit): JobOpeningsApi =
         retrofit.create(JobOpeningsApi::class.java)
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class AuthOkHttpClient
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class AuthRetrofit
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)

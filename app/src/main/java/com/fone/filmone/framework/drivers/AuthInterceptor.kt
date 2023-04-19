@@ -9,6 +9,8 @@ import javax.inject.Inject
 class AuthInterceptor @Inject constructor(
     private val authRepository: AuthRepository
 ) : Interceptor {
+
+    @Synchronized
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val accessToken = runBlocking { authRepository.getAccessToken() }
@@ -21,6 +23,22 @@ class AuthInterceptor @Inject constructor(
             request
         }
 
-        return chain.proceed(authenticatedRequest)
+        val response = chain.proceed(authenticatedRequest)
+
+        if (response.code == 401 || response.code == 403) {
+            synchronized(this) {
+                val newAccessToken = runBlocking { authRepository.refreshToken() }
+
+                if (newAccessToken.isNotEmpty()) {
+                    val newRequest = request.newBuilder()
+                        .header("Authorization", "Bearer $newAccessToken")
+                        .build()
+
+                    return chain.proceed(newRequest)
+                }
+            }
+        }
+
+        return response
     }
 }
