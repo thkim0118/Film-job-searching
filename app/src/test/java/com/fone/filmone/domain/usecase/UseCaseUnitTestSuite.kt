@@ -6,6 +6,7 @@ import org.junit.runners.Suite
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
     CheckNicknameDuplicationUseCaseTest::class,
+    GetMyJobOpeningsInfoUseCaseTest::class,
     GetUserInfoUseCaseTest::class,
     RequestPhoneVerificationUseCaseTest::class,
     SignInUseCaseTest::class,

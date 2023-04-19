@@ -3,6 +3,7 @@ package com.fone.filmone.data.datamodel
 import com.fone.filmone.data.datamodel.request.imageupload.ImageUploadRequest
 import com.fone.filmone.data.datamodel.request.imageupload.StageVariables
 import com.fone.filmone.data.datamodel.request.inquiry.InquiryRequest
+import com.fone.filmone.data.datamodel.request.jobopenings.*
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
@@ -128,4 +129,60 @@ val fakeUserUpdateRequest = UserUpdateRequest(
     job = Job.ACTOR,
     nickname = "user_update_test",
     profileUrl = "https://test.com"
+)
+
+val fakeWork = Work(
+    details = "details",
+    director = "director",
+    email = "test@test.com",
+    genre = "genre",
+    location = "location",
+    logline = "logline",
+    manager = "manager",
+    pay = "pay",
+    period = "period",
+    produce = "produce",
+    workTitle = "workTitle"
+)
+
+val fakeJobContent = Content(
+    ageMax = 20,
+    ageMin = 0,
+    career = Career.IRRELEVANT,
+    casting = "casting",
+    categories = listOf(Category.ETC),
+    dday = "dday",
+    deadline = "deadline",
+    domains = listOf(Domain.ART),
+    gender = Gender.MAN,
+    id = 0,
+    isScrap = true,
+    numberOfRecruits = 0,
+    scrapCount = 1,
+    title = "title",
+    type = Type.ACTOR,
+    viewCount = 1,
+    work = fakeWork
+)
+
+val fakeSort = Sort(
+    empty = false,
+    sorted = false,
+    unsorted = false
+)
+
+val fakeJobOpenings = JobOpenings(
+    content = listOf(fakeJobContent),
+    empty = false,
+    first = false,
+    last = false,
+    number = 1,
+    numberOfElements = 1,
+    pageable = Pageable(),
+    size = 1,
+    sort = fakeSort
+)
+
+val fakeMyJobOpeningsResponse = MyJobOpeningsResponse(
+    jobOpenings = fakeJobOpenings
 )

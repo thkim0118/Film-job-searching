@@ -1,10 +1,7 @@
 package com.fone.filmone.di
 
 import com.fone.filmone.BuildConfig
-import com.fone.filmone.data.datasource.remote.ImageUploadApi
-import com.fone.filmone.data.datasource.remote.InquiryApi
-import com.fone.filmone.data.datasource.remote.SmsApi
-import com.fone.filmone.data.datasource.remote.UserApi
+import com.fone.filmone.data.datasource.remote.*
 import com.fone.filmone.domain.repository.auth.AuthRepository
 import com.fone.filmone.framework.drivers.AuthInterceptor
 import dagger.Module
@@ -89,6 +86,11 @@ object NetworkModule {
     @Provides
     fun provideInquiryApi(retrofit: Retrofit): InquiryApi =
         retrofit.create(InquiryApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideJobApi(retrofit: Retrofit): JobOpeningsApi =
+        retrofit.create(JobOpeningsApi::class.java)
 }
 
 @Qualifier
