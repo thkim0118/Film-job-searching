@@ -1,6 +1,9 @@
 package com.fone.filmone.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.fone.filmone.data.datamodel.fakeInquiryRequest
+import com.fone.filmone.data.datamodel.fakeInquiryResponse
+import com.fone.filmone.data.datamodel.fakeInquiryVo
 import com.fone.filmone.data.datamodel.request.inquiry.InquiryRequest
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse
 import com.fone.filmone.data.datamodel.response.inquiry.Question
@@ -35,31 +38,9 @@ internal class SubmitInquiryUseCaseTest {
 
     @Before
     fun setUp() {
-        inquiryVo = InquiryVo(
-            agreeToPersonalInformation = true,
-            description = "description",
-            email = "email",
-            title = "title",
-            type = InquiryType.USE_QUESTION
-        )
-
-        inquiryRequest = InquiryRequest(
-            agreeToPersonalInformation = true,
-            description = "description",
-            email = "email",
-            title = "title",
-            type = InquiryType.USE_QUESTION.name
-        )
-        inquiryResponse = InquiryResponse(
-            Question(
-                id = 0,
-                agreeToPersonalInformation = true,
-                description = "description",
-                email = "email",
-                title = "title",
-                type = InquiryType.USE_QUESTION.name
-            )
-        )
+        inquiryVo = fakeInquiryVo
+        inquiryRequest = fakeInquiryRequest
+        inquiryResponse = fakeInquiryResponse
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.fone.filmone.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.fone.filmone.data.datamodel.fakeUser
 import com.fone.filmone.data.datamodel.response.user.*
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
@@ -29,22 +30,7 @@ internal class GetUserInfoUseCaseTest {
 
     @Before
     fun setUp() {
-        user = User(
-            agreeToPersonalInformation = true,
-            agreeToTermsOfServiceTermsOfUse = true,
-            birthday = "1234-12-12",
-            email = "email@test.com",
-            enabled = true,
-            gender = Gender.MAN,
-            id = 0,
-            interests = listOf(Interests.INDEPENDENT_FILM),
-            isReceiveMarketing = true,
-            job = Job.ACTOR,
-            nickname = "test",
-            phoneNumber = "010-1234-5678",
-            profileUrl = "https://profile.url",
-            socialLoginType = SocialLoginType.APPLE
-        )
+        user = fakeUser
         userResponse = UserResponse(
             user = user
         )

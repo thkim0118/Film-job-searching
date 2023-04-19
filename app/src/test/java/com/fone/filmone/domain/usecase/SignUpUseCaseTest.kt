@@ -1,6 +1,9 @@
 package com.fone.filmone.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.fone.filmone.data.datamodel.fakeSignUpRequest
+import com.fone.filmone.data.datamodel.fakeSignUpResponse
+import com.fone.filmone.data.datamodel.fakeSignUpVo
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.response.user.*
 import com.fone.filmone.domain.model.common.DataFail
@@ -31,56 +34,9 @@ internal class SignUpUseCaseTest {
 
     @Before
     fun setUp() {
-        signUpVo = SignUpVo(
-            accessToken = "accessToken",
-            agreeToPersonalInformation = true,
-            birthday = "birthday",
-            email = "email",
-            gender = "gender",
-            interests = listOf(),
-            isReceiveMarketing = true,
-            job = "job",
-            nickname = "nickname",
-            phoneNumber = "phoneNumber",
-            profileUrl = "profileUrl",
-            socialLoginType = "socialLoginType",
-            agreeToTermsOfServiceTermsOfUse = true
-        )
-
-        signUpRequest = SignUpRequest(
-            accessToken = "accessToken",
-            agreeToPersonalInformation = true,
-            birthday = "birthday",
-            email = "email",
-            gender = "gender",
-            interests = listOf(),
-            isReceiveMarketing = true,
-            job = "job",
-            nickname = "nickname",
-            phoneNumber = "phoneNumber",
-            profileUrl = "profileUrl",
-            socialLoginType = "socialLoginType",
-            agreeToTermsOfServiceTermsOfUse = true
-        )
-
-        signUpResponse = SignUpResponse(
-            User(
-                agreeToPersonalInformation = true,
-                agreeToTermsOfServiceTermsOfUse = true,
-                birthday = "birthday",
-                email = "email",
-                enabled = true,
-                gender = Gender.MAN,
-                id = 0,
-                interests = listOf(),
-                isReceiveMarketing = true,
-                job = Job.ACTOR,
-                nickname = "nickname",
-                phoneNumber = "phoneNumber",
-                profileUrl = "profileUrl",
-                socialLoginType = SocialLoginType.APPLE
-            )
-        )
+        signUpVo = fakeSignUpVo
+        signUpRequest = fakeSignUpRequest
+        signUpResponse = fakeSignUpResponse
     }
 
     @Test

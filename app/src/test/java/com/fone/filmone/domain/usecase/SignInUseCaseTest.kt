@@ -1,6 +1,8 @@
 package com.fone.filmone.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.fone.filmone.data.datamodel.fakeSigninRequest
+import com.fone.filmone.data.datamodel.fakeSigninResponse
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.response.user.*
 import com.fone.filmone.domain.model.common.DataFail
@@ -29,36 +31,8 @@ internal class SignInUseCaseTest {
 
     @Before
     fun setUp() {
-        signinRequest = SigninRequest(
-            "accessToken",
-            "email@email.com",
-            "google"
-        )
-        signinResponse = SigninResponse(
-            Token(
-                accessToken = signinRequest.accessToken,
-                expiresIn = 0,
-                issuedAt = "",
-                refreshToken = "",
-                tokenType = ""
-            ),
-            User(
-                agreeToPersonalInformation = true,
-                agreeToTermsOfServiceTermsOfUse = true,
-                birthday = "",
-                email = "",
-                enabled = true,
-                gender = Gender.MAN,
-                id = 0,
-                interests = listOf(),
-                isReceiveMarketing = true,
-                job = Job.ACTOR,
-                nickname = "",
-                phoneNumber = "",
-                profileUrl = "",
-                socialLoginType = SocialLoginType.APPLE
-            )
-        )
+        signinRequest = fakeSigninRequest
+        signinResponse = fakeSigninResponse
     }
 
     @Test

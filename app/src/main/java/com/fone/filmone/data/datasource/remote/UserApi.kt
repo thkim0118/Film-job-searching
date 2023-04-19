@@ -2,6 +2,7 @@ package com.fone.filmone.data.datasource.remote
 
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
+import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
 import com.fone.filmone.data.datamodel.response.common.NetworkResponse
 import com.fone.filmone.data.datamodel.response.common.Server
 import com.fone.filmone.data.datamodel.response.user.*
@@ -26,4 +27,9 @@ interface UserApi {
 
     @GET("${Server.ApiVersion}/users")
     suspend fun getUserInfo(): Response<NetworkResponse<UserResponse>>
+
+    @PATCH("${Server.ApiVersion}/users")
+    suspend fun updateUserInfo(
+        @Body userUpdateRequest: UserUpdateRequest
+    ): Response<NetworkResponse<UserResponse>>
 }

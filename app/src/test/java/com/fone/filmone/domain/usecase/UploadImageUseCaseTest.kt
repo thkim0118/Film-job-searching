@@ -1,6 +1,8 @@
 package com.fone.filmone.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.fone.filmone.data.datamodel.fakeImageUploadRequest
+import com.fone.filmone.data.datamodel.fakeImageUploadResponse
 import com.fone.filmone.data.datamodel.request.imageupload.ImageUploadRequest
 import com.fone.filmone.data.datamodel.request.imageupload.StageVariables
 import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
@@ -32,14 +34,8 @@ internal class UploadImageUseCaseTest {
 
     @Before
     fun setUp() {
-        imageUploadRequest = ImageUploadRequest(
-            imageData = "",
-            resource = "/image-upload/user-profile",
-            stageVariables = StageVariables(
-                stage = "prod"
-            )
-        )
-        imageUploadResponse = ImageUploadResponse("")
+        imageUploadRequest = fakeImageUploadRequest
+        imageUploadResponse = fakeImageUploadResponse
     }
 
     @Test
