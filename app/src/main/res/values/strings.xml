@@ -16,6 +16,7 @@
     <string name="dialog_profile_setting_default_image">기본 이미지로 변경</string>
 
     <!--toast-->
+    <string name="toast_empty_data">알 수 없는 문제가 발생했습니다.\n다시 시도해주세요.</string>
     <string name="toast_request_verification_code">인증번호를 전송하였습니다.</string>
     <string name="toast_request_verification_code_too_much">너무 많은 요청을 하셨습니다. 1분 뒤 다시 시도해 주세요.</string>
     <string name="toast_verification_time_is_expired">인증 시간이 만료되었습니다.</string>

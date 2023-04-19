@@ -1,12 +1,15 @@
 package com.fone.filmone.ui.myinfo
 
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.response.user.Interests
 import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.CheckNicknameDuplicationUseCase
 import com.fone.filmone.domain.usecase.GetUserInfoUseCase
+import com.fone.filmone.domain.usecase.UpdateUserInfoUseCase
+import com.fone.filmone.domain.usecase.UploadImageUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +22,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MyInfoViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
-    private val checkNicknameDuplicationUseCase: CheckNicknameDuplicationUseCase
+    private val checkNicknameDuplicationUseCase: CheckNicknameDuplicationUseCase,
+    private val uploadImageUseCase: UploadImageUseCase,
+    private val updateUserInfoUseCase: UpdateUserInfoUseCase
 ) : BaseViewModel() {
 
     private val _uiState = MutableStateFlow(MyInfoUiState())
@@ -144,6 +149,41 @@ class MyInfoViewModel @Inject constructor(
         }
 
         updateEditButtonState()
+    }
+
+    fun updateUserInfo() = viewModelScope.launch {
+        val encodedProfile: String? = _uiState.value.encodedProfile
+
+        if (encodedProfile != null) {
+            uploadImageUseCase(encodedProfile)
+                .onSuccess {
+                    updateUserInfoToRemote(it.imageUrl)
+                }.onFail {
+                    showToast(R.string.toast_profile_register_fail)
+                }
+        } else {
+            updateUserInfoToRemote()
+        }
+    }
+
+    private fun updateUserInfoToRemote(profileUrl: String? = null) = viewModelScope.launch {
+        val currentUiState = _uiState.value
+        updateUserInfoUseCase(
+            interests = currentUiState.interests,
+            job = currentUiState.job ?: run {
+                showToast(R.string.toast_empty_data)
+                return@launch
+            },
+            nickname = currentUiState.nickname,
+            profileUrl = profileUrl ?: currentUiState.profileUrl ?: run {
+                showToast(R.string.toast_empty_data)
+                return@launch
+            }
+        ).onSuccess {
+            // TODO 정보 수정 후 액션 추가 필요함.
+        }.onFail {
+            showToast(it.message)
+        }
     }
 
     private fun updateEditButtonState() {

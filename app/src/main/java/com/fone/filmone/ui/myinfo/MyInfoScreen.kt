@@ -134,7 +134,10 @@ fun MyInfoScreen(
                     Spacer(modifier = Modifier.height(141.dp))
                 }
 
-                EditButton(uiState = uiState)
+                EditButton(
+                    uiState = uiState,
+                    onClick = viewModel::updateUserInfo
+                )
 
                 Spacer(modifier = Modifier.height(40.dp))
             }
@@ -450,7 +453,10 @@ private fun InterestsTag(
 }
 
 @Composable
-private fun ColumnScope.EditButton(uiState: MyInfoUiState) {
+private fun ColumnScope.EditButton(
+    uiState: MyInfoUiState,
+    onClick: () -> Unit
+) {
     val enable = uiState.isEnableEditButton &&
             uiState.isEnableDuplicate.not() &&
             uiState.isUpdateProfileEncoding.not()
@@ -461,7 +467,9 @@ private fun ColumnScope.EditButton(uiState: MyInfoUiState) {
         title = stringResource(id = R.string.my_info_button_title),
         enable = enable
     ) {
-
+        if (enable) {
+            onClick()
+        }
     }
 }
 
