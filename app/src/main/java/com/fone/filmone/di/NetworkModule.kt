@@ -119,6 +119,11 @@ object NetworkModule {
     @Provides
     fun provideJobApi(retrofit: Retrofit): JobOpeningsApi =
         retrofit.create(JobOpeningsApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideCompetitionsApi(retrofit: Retrofit): CompetitionsApi =
+        retrofit.create(CompetitionsApi::class.java)
 }
 
 @Qualifier

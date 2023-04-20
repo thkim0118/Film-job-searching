@@ -2,6 +2,7 @@ package com.fone.filmone.di
 
 import com.fone.filmone.data.repository.*
 import com.fone.filmone.domain.repository.auth.AuthRepository
+import com.fone.filmone.domain.repository.competitions.CompetitionsRepository
 import com.fone.filmone.domain.repository.imageupload.ImageUploadRepository
 import com.fone.filmone.domain.repository.inquiry.InquiryRepository
 import com.fone.filmone.domain.repository.jobopenings.JobOpeningsRepository
@@ -51,4 +52,10 @@ abstract class RepositoryModule {
     abstract fun bindsJobOpeningsRepository(
         repository: JobOpeningsRepositoryImpl
     ): JobOpeningsRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindsCompetitionsRepository(
+        repository: CompetitionsRepositoryImpl
+    ): CompetitionsRepository
 }

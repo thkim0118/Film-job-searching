@@ -1,0 +1,16 @@
+package com.fone.filmone.data.repository
+
+import com.fone.filmone.data.datamodel.response.common.network.handleNetwork
+import com.fone.filmone.data.datamodel.response.competition.CompetitionsResponse
+import com.fone.filmone.data.datasource.remote.CompetitionsApi
+import com.fone.filmone.domain.model.common.DataResult
+import com.fone.filmone.domain.repository.competitions.CompetitionsRepository
+import javax.inject.Inject
+
+class CompetitionsRepositoryImpl @Inject constructor(
+    private val competitionsApi: CompetitionsApi
+) : CompetitionsRepository {
+    override suspend fun getCompetitions(): DataResult<CompetitionsResponse> {
+        return handleNetwork { competitionsApi.getCompetitions() }
+    }
+}

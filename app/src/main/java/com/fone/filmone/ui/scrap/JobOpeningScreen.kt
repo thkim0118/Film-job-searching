@@ -17,6 +17,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.R
+import com.fone.filmone.data.datamodel.response.jobopenings.Category
 import com.fone.filmone.data.datamodel.response.jobopenings.Type
 import com.fone.filmone.data.datamodel.response.user.Gender
 import com.fone.filmone.ui.common.ext.clickableSingle

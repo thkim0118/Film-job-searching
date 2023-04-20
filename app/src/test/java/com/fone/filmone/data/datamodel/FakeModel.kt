@@ -8,6 +8,9 @@ import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
 import com.fone.filmone.data.datamodel.response.common.Pageable
 import com.fone.filmone.data.datamodel.response.common.Sort
+import com.fone.filmone.data.datamodel.response.competition.CompetitionPrize
+import com.fone.filmone.data.datamodel.response.competition.Competitions
+import com.fone.filmone.data.datamodel.response.competition.CompetitionsResponse
 import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse
 import com.fone.filmone.data.datamodel.response.inquiry.Question
@@ -187,4 +190,46 @@ val fakeJobOpenings = JobOpenings(
 
 val fakeMyJobOpeningsResponse = MyJobOpeningsResponse(
     jobOpenings = fakeJobOpenings
+)
+
+val fakeCompetitionPrizes = CompetitionPrize(
+    competitionId = 0,
+    id = 0,
+    prizeMoney = "prizeMoney",
+    ranking = "ranking"
+)
+
+val fakeCompetitionContent = com.fone.filmone.data.datamodel.response.competition.Content(
+    agency = "agency",
+    competitionPrizes = listOf(fakeCompetitionPrizes),
+    dday = "dday",
+    details = "details",
+    endDate = "endDate",
+    id = 0,
+    imageUrl = "https://image.url",
+    isScrap = false,
+    scrapCount = 0,
+    showStartDate = "showStartDate",
+    startDate = "startDate",
+    submitEndDate = "submitEndDate",
+    submitStartDate = "submitStartDate",
+    title = "title",
+    viewCount = 0
+)
+
+val fakeCompetition = Competitions(
+    content = listOf(fakeCompetitionContent),
+    empty = false,
+    first = false,
+    last = false,
+    number = 0,
+    numberOfElements = 0,
+    pageable = Pageable(),
+    size = 0,
+    sort = fakeSort
+)
+
+val fakeCompetitionsResponse = CompetitionsResponse(
+    competitions = fakeCompetition,
+    totalCount = 1
 )
