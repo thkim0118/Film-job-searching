@@ -1,7 +1,7 @@
 package com.fone.filmone.domain.usecase
 
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
-import com.fone.filmone.data.datamodel.response.user.Interests
+import com.fone.filmone.data.datamodel.response.jobopenings.Category
 import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.data.datamodel.response.user.UserResponse
 import com.fone.filmone.domain.model.common.DataResult
@@ -12,7 +12,7 @@ class UpdateUserInfoUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
     suspend operator fun invoke(
-        interests: List<Interests>,
+        interests: List<Category>,
         job: Job,
         nickname: String,
         profileUrl: String

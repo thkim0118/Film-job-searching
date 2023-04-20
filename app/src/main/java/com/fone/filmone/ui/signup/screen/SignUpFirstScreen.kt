@@ -22,7 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
-import com.fone.filmone.data.datamodel.response.user.Interests
+import com.fone.filmone.data.datamodel.response.jobopenings.Category
 import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.ui.common.FButton
 import com.fone.filmone.ui.common.FTitleBar
@@ -258,17 +258,17 @@ private fun JobTag(
 @Composable
 private fun InterestsTags(
     modifier: Modifier = Modifier,
-    currentInterests: List<Interests>,
-    onUpdateInterests: (Interests, Boolean) -> Unit
+    currentInterests: List<Category>,
+    onUpdateInterests: (Category, Boolean) -> Unit
 ) {
     FlowRow(
         modifier = modifier,
         maxItemsInEachRow = 3
     ) {
-        Interests.values().forEach { interests ->
+        Category.values().forEach { interests ->
             InterestsTag(
                 modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
-                interests = interests,
+                category = interests,
                 isSelected = currentInterests.find { it == interests } != null,
                 onClick = onUpdateInterests
             )
@@ -279,9 +279,9 @@ private fun InterestsTags(
 @Composable
 private fun InterestsTag(
     modifier: Modifier = Modifier,
-    interests: Interests,
+    category: Category,
     isSelected: Boolean,
-    onClick: (Interests, Boolean) -> Unit
+    onClick: (Category, Boolean) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -294,12 +294,12 @@ private fun InterestsTag(
                 },
                 shape = RoundedCornerShape(90.dp)
             )
-            .clickable { onClick(interests, isSelected.not()) },
+            .clickable { onClick(category, isSelected.not()) },
     ) {
         Text(
             modifier = Modifier
                 .padding(horizontal = 20.dp, vertical = 8.dp),
-            text = interests.title,
+            text = stringResource(id = category.stringRes),
             style = if (isSelected) {
                 fTextStyle(
                     fontWeight = FontWeight.W500,
@@ -333,7 +333,7 @@ private fun JobTagsPreview() {
 @Composable
 private fun FavoriteTagsPreview() {
     InterestsTags(
-        currentInterests = Interests.values().toList(),
+        currentInterests = Category.values().toList(),
         onUpdateInterests = { _, _ -> }
     )
 }

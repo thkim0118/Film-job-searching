@@ -2,7 +2,7 @@ package com.fone.filmone.ui.myinfo
 
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
-import com.fone.filmone.data.datamodel.response.user.Interests
+import com.fone.filmone.data.datamodel.response.jobopenings.Category
 import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
@@ -137,7 +137,7 @@ class MyInfoViewModel @Inject constructor(
         updateEditButtonState()
     }
 
-    fun updateInterest(interest: Interests, enable: Boolean) {
+    fun updateInterest(interest: Category, enable: Boolean) {
         _uiState.update { uiState ->
             uiState.copy(
                 interests = if (enable) {
@@ -222,7 +222,7 @@ data class MyInfoUiState(
     val profileUrl: String? = null,
     val nickname: String = "",
     val job: Job? = null,
-    val interests: List<Interests> = emptyList(),
+    val interests: List<Category> = emptyList(),
     val isEnableEditButton: Boolean = false,
     val isEnableDuplicate: Boolean = false
 )

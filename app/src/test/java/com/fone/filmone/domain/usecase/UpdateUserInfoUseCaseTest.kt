@@ -5,9 +5,6 @@ import com.fone.filmone.data.datamodel.fakeUser
 import com.fone.filmone.data.datamodel.fakeUserResponse
 import com.fone.filmone.data.datamodel.fakeUserUpdateRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
-import com.fone.filmone.data.datamodel.response.user.Interests
-import com.fone.filmone.data.datamodel.response.user.Job
-import com.fone.filmone.data.datamodel.response.user.User
 import com.fone.filmone.data.datamodel.response.user.UserResponse
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.repository.user.UserRepository

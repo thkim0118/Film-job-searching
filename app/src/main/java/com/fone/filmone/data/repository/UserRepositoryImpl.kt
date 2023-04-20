@@ -3,7 +3,7 @@ package com.fone.filmone.data.repository
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
-import com.fone.filmone.data.datamodel.response.common.handleNetwork
+import com.fone.filmone.data.datamodel.response.common.network.handleNetwork
 import com.fone.filmone.data.datamodel.response.user.CheckNicknameDuplicationResponse
 import com.fone.filmone.data.datamodel.response.user.SignUpResponse
 import com.fone.filmone.data.datamodel.response.user.SigninResponse

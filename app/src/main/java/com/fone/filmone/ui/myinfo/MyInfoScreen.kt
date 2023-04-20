@@ -27,7 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.fone.filmone.R
 import com.fone.filmone.core.image.ImageBase64Util
-import com.fone.filmone.data.datamodel.response.user.Interests
+import com.fone.filmone.data.datamodel.response.jobopenings.Category
 import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.dialog.ProfileSettingDialog
@@ -369,7 +369,7 @@ private fun JobTag(
 private fun InterestsComponent(
     modifier: Modifier = Modifier,
     uiState: MyInfoUiState,
-    onUpdateInterests: (Interests, Boolean) -> Unit
+    onUpdateInterests: (Category, Boolean) -> Unit
 ) {
     val currentInterests = uiState.interests
 
@@ -398,10 +398,10 @@ private fun InterestsComponent(
         modifier = Modifier,
         maxItemsInEachRow = 3
     ) {
-        Interests.values().forEach { interests ->
+        Category.values().forEach { interests ->
             InterestsTag(
                 modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
-                interests = interests,
+                category = interests,
                 isSelected = currentInterests.find { it == interests } != null,
                 onClick = onUpdateInterests
             )
@@ -412,9 +412,9 @@ private fun InterestsComponent(
 @Composable
 private fun InterestsTag(
     modifier: Modifier = Modifier,
-    interests: Interests,
+    category: Category,
     isSelected: Boolean,
-    onClick: (Interests, Boolean) -> Unit
+    onClick: (Category, Boolean) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -427,12 +427,12 @@ private fun InterestsTag(
                 },
                 shape = RoundedCornerShape(90.dp)
             )
-            .clickable { onClick(interests, isSelected.not()) },
+            .clickable { onClick(category, isSelected.not()) },
     ) {
         Text(
             modifier = Modifier
                 .padding(horizontal = 20.dp, vertical = 8.dp),
-            text = interests.title,
+            text = stringResource(id = category.stringRes),
             style = if (isSelected) {
                 fTextStyle(
                     fontWeight = FontWeight.W500,

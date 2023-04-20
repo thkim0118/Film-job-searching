@@ -1,8 +1,8 @@
 package com.fone.filmone.data.datasource.remote
 
 import com.fone.filmone.data.datamodel.request.inquiry.InquiryRequest
-import com.fone.filmone.data.datamodel.response.common.NetworkResponse
-import com.fone.filmone.data.datamodel.response.common.Server
+import com.fone.filmone.data.datamodel.response.common.network.NetworkResponse
+import com.fone.filmone.data.datamodel.response.common.network.Server
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse
 import retrofit2.Response
 import retrofit2.http.Body

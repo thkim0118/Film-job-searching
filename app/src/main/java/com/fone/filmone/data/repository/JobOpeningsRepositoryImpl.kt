@@ -1,7 +1,7 @@
 package com.fone.filmone.data.repository
 
-import com.fone.filmone.data.datamodel.request.jobopenings.MyJobOpeningsResponse
-import com.fone.filmone.data.datamodel.response.common.handleNetwork
+import com.fone.filmone.data.datamodel.response.jobopenings.MyJobOpeningsResponse
+import com.fone.filmone.data.datamodel.response.common.network.handleNetwork
 import com.fone.filmone.data.datasource.remote.JobOpeningsApi
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.repository.jobopenings.JobOpeningsRepository

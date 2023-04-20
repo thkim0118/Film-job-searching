@@ -1,6 +1,7 @@
 package com.fone.filmone.data.datamodel.response.user
 
 import androidx.annotation.Keep
+import com.fone.filmone.data.datamodel.response.jobopenings.Category
 
 @Keep
 data class User(
@@ -11,7 +12,7 @@ data class User(
     val enabled: Boolean,
     val gender: Gender,
     val id: Int,
-    val interests: List<Interests>,
+    val interests: List<Category>,
     val isReceiveMarketing: Boolean,
     val job: Job,
     val nickname: String,

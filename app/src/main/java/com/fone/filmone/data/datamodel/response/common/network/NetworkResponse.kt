@@ -1,4 +1,4 @@
-package com.fone.filmone.data.datamodel.response.common
+package com.fone.filmone.data.datamodel.response.common.network
 
 import com.google.gson.annotations.SerializedName
 

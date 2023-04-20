@@ -3,13 +3,15 @@ package com.fone.filmone.data.datamodel
 import com.fone.filmone.data.datamodel.request.imageupload.ImageUploadRequest
 import com.fone.filmone.data.datamodel.request.imageupload.StageVariables
 import com.fone.filmone.data.datamodel.request.inquiry.InquiryRequest
-import com.fone.filmone.data.datamodel.request.jobopenings.*
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
+import com.fone.filmone.data.datamodel.response.common.Pageable
+import com.fone.filmone.data.datamodel.response.common.Sort
 import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse
 import com.fone.filmone.data.datamodel.response.inquiry.Question
+import com.fone.filmone.data.datamodel.response.jobopenings.*
 import com.fone.filmone.data.datamodel.response.user.*
 import com.fone.filmone.domain.model.inquiry.InquiryType
 import com.fone.filmone.domain.model.inquiry.InquiryVo
@@ -125,7 +127,7 @@ val fakeImageUploadResponse = ImageUploadResponse("https://test.com")
 val fakeUserResponse = UserResponse(fakeUser)
 
 val fakeUserUpdateRequest = UserUpdateRequest(
-    interests = listOf(Interests.INDEPENDENT_FILM),
+    interests = listOf(Category.INDEPENDENT_FILM),
     job = Job.ACTOR,
     nickname = "user_update_test",
     profileUrl = "https://test.com"

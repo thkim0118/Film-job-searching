@@ -1,4 +1,4 @@
-package com.fone.filmone.data.datamodel.response.common
+package com.fone.filmone.data.datamodel.response.common.network
 
 import com.fone.filmone.data.datamodel.response.exception.EmptyNetworkBodyException
 import com.fone.filmone.domain.model.common.DataFail
