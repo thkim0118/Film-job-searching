@@ -29,8 +29,11 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun refreshToken(): String {
+        val accessToken = tokenDataStore.getAccessToken()
         refreshTokenMutex.withLock {
-            if (tokenDataStore.getAccessToken().isNullOrEmpty()) {
+            val currentAccessToken = tokenDataStore.getAccessToken()
+
+            if (accessToken == currentAccessToken) {
                 val result = handleNetwork {
                     tokenApi.refreshToken(
                         RefreshTokenRequest(
