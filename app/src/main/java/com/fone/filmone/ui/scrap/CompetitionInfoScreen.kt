@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -34,7 +35,10 @@ fun CompetitionsScreen(
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         if (competitionUiModels.isNotEmpty()) {
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 20.dp)
+            ) {
                 items(competitionUiModels) {
                     CompetitionComponent(
                         imageUrl = it.imageUrl,
@@ -44,6 +48,11 @@ fun CompetitionsScreen(
                         viewCount = it.vieweCount
                     ) {
                     }
+
+                    Divider(
+                        thickness = 1.dp,
+                        color = FColor.BgGroupedBase
+                    )
                 }
             }
         } else {
@@ -65,7 +74,7 @@ private fun CompetitionComponent(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 20.dp, top = 10.dp, bottom = 10.dp)
+            .padding(vertical = 10.dp)
     ) {
         CompetitionImage(modifier, imageUrl)
 

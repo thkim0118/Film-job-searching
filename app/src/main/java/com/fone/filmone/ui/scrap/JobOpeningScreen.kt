@@ -34,7 +34,9 @@ fun JobOpeningScreen(
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         if (jobOpeningUiModes.isNotEmpty()) {
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier.padding(top = 11.dp)
+            ) {
                 items(jobOpeningUiModes) {
                     JobOpeningComponent(
                         type = it.type,
@@ -47,6 +49,11 @@ fun JobOpeningScreen(
                         jobType = it.jobType,
                         casting = it.casting,
                         onScrapClick = {}
+                    )
+
+                    Divider(
+                        thickness = 6.dp,
+                        color = FColor.Divider2
                     )
                 }
             }
