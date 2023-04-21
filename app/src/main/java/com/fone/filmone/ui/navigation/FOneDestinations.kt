@@ -71,4 +71,5 @@ sealed class FOneDestinations(val route: String) {
     object Main : FOneDestinations("main")
     object MyInfo : FOneDestinations("my-info")
     object Scrap : FOneDestinations("scrap")
+    object Favorite : FOneDestinations("favorite")
 }

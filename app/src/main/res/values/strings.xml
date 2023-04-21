@@ -159,4 +159,9 @@
     <string name="job_opening_job_type_part_title">배역</string>
     <string name="job_opening_job_type_field_title">분야</string>
 
+    <!--    favorite-->
+    <string name="favorite_title_text">찜한 프로필</string>
+    <string name="favorite_tab_actor_title">배우</string>
+    <string name="favorite_tab_staff_title">스태프</string>
+    <string name="favorite_empty_title">자주 찾는 사람을 찜 해보세요</string>
 </resources>

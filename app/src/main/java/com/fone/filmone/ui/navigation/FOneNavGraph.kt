@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.fone.filmone.ui.favorite.FavoriteScreen
 import com.fone.filmone.ui.inquiry.InquiryScreen
 import com.fone.filmone.ui.login.LoginScreen
 import com.fone.filmone.ui.main.MainScreen
@@ -57,6 +58,9 @@ fun FOneNavGraph(
         }
         composable(FOneDestinations.Scrap.route) {
             ScrapScreen(navController = navController)
+        }
+        composable(FOneDestinations.Favorite.route) {
+            FavoriteScreen(navController = navController)
         }
     }
 }

@@ -89,7 +89,9 @@ fun MyScreen(
                     )
                 },
                 onFavoriteClick = {
-
+                    FOneNavigator.navigateTo(
+                        NavDestinationState(route = FOneDestinations.Favorite.route)
+                    )
                 }
             )
 
