@@ -9,6 +9,8 @@ import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,6 +23,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.fone.filmone.BuildConfig
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.ext.*
@@ -34,7 +37,10 @@ import com.fone.filmone.ui.theme.LocalTypography
 @Composable
 fun MyScreen(
     modifier: Modifier = Modifier,
+    viewModel: MyViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -68,6 +74,7 @@ fun MyScreen(
         ) {
             ProfileComponent(
                 modifier = Modifier,
+                nickname = uiState.nickname,
                 onClick = {
                     FOneNavigator.navigateTo(
                         NavDestinationState(route = FOneDestinations.MyInfo.route)
@@ -111,6 +118,7 @@ fun MyScreen(
 @Composable
 private fun ProfileComponent(
     modifier: Modifier = Modifier,
+    nickname: String,
     onClick: () -> Unit
 ) {
     Row(
@@ -130,7 +138,7 @@ private fun ProfileComponent(
         Spacer(modifier = Modifier.width(12.dp))
 
         Text(
-            "닉네임",
+            text = nickname,
             style = LocalTypography.current.h1(),
             color = FColor.TextPrimary
         )
