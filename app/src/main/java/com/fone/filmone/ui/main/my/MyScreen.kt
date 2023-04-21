@@ -106,7 +106,9 @@ fun MyScreen(
                     )
                 },
                 onInquiryClick = {
-
+                    FOneNavigator.navigateTo(
+                        NavDestinationState(route = FOneDestinations.Inquiry.route)
+                    )
                 },
                 onLogoutClick = {
 
