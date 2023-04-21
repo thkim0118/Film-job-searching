@@ -3,6 +3,8 @@ package com.fone.filmone.ui.scrap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
@@ -27,9 +29,31 @@ import com.fone.filmone.ui.theme.LocalTypography
 
 @Composable
 fun JobOpeningScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    jobOpeningUiModes: List<JobOpeningUiModel>
 ) {
-
+    Box(modifier = modifier.fillMaxSize()) {
+        if (jobOpeningUiModes.isNotEmpty()) {
+            LazyColumn {
+                items(jobOpeningUiModes) {
+                    JobOpeningComponent(
+                        type = it.type,
+                        categories = it.categories,
+                        title = it.title,
+                        deadline = it.deadline,
+                        director = it.director,
+                        gender = it.gender,
+                        period = it.period,
+                        jobType = it.jobType,
+                        casting = it.casting,
+                        onScrapClick = {}
+                    )
+                }
+            }
+        } else {
+            EmptyScreen(modifier = Modifier.align(Alignment.Center))
+        }
+    }
 }
 
 @Composable
@@ -247,6 +271,27 @@ private fun JobOpeningContent(
             text = content,
             style = LocalTypography.current.b3,
             color = FColor.TextSecondary
+        )
+    }
+}
+
+@Composable
+private fun EmptyScreen(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            imageVector = ImageVector.vectorResource(id = R.drawable.login_fone_logo),
+            contentDescription = null
+        )
+
+        Text(
+            text = stringResource(id = R.string.scrap_empty_title),
+            style = LocalTypography.current.subtitle2,
+            color = FColor.TextPrimary
         )
     }
 }

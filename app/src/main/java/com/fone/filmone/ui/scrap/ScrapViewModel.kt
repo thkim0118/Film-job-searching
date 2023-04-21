@@ -8,6 +8,8 @@ import com.fone.filmone.data.datamodel.response.jobopenings.Category
 import com.fone.filmone.data.datamodel.response.jobopenings.JobOpenings
 import com.fone.filmone.data.datamodel.response.jobopenings.Type
 import com.fone.filmone.data.datamodel.response.user.Gender
+import com.fone.filmone.domain.usecase.GetCompetitionsUseCase
+import com.fone.filmone.domain.usecase.GetMyJobOpeningsInfoUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ScrapViewModel @Inject constructor(
+    private val getMyJobOpeningsInfoUseCase: GetMyJobOpeningsInfoUseCase,
+    private val getCompetitionsUseCase: GetCompetitionsUseCase,
 ) : BaseViewModel() {
     private val viewModelState = MutableStateFlow(ScarpViewModelState())
 

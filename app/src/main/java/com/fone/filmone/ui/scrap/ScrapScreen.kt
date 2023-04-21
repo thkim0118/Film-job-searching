@@ -1,23 +1,48 @@
 package com.fone.filmone.ui.scrap
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.Tab
+import androidx.compose.material.TabRow
+import androidx.compose.material.TabRowDefaults
+import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.FTitleBar
 import com.fone.filmone.ui.common.TitleType
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
+import com.fone.filmone.ui.common.fTextStyle
+import com.fone.filmone.ui.theme.FColor
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ScrapScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: ScrapViewModel = hiltViewModel()
 ) {
+    val pagerState = rememberPagerState()
+    val coroutineScope = rememberCoroutineScope()
+    val uiState by viewModel.uiState.collectAsState()
+
     Column(modifier = modifier.defaultSystemBarPadding()) {
         FTitleBar(
             titleType = TitleType.Back,
@@ -26,12 +51,63 @@ fun ScrapScreen(
                 navController.popBackStack()
             }
         )
-        
-        HorizontalPager(pageCount = 2) { page ->
+
+        TabRow(
+            selectedTabIndex = pagerState.currentPage,
+            backgroundColor = FColor.White,
+            indicator = { tabPositions ->
+                TabRowDefaults.Indicator(
+                    modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
+                    color = FColor.Primary
+                )
+            }
+        ) {
+            repeat(ScrapTab.values().size) { index ->
+                val scrapTab = ScrapTab.values().find { it.index == index } ?: return@repeat
+                val selected = pagerState.currentPage == index
+                Tab(
+                    text = {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 10.dp),
+                            text = stringResource(id = scrapTab.titleRes),
+                            style = fTextStyle(
+                                fontWeight = FontWeight.W400,
+                                fontSize = 14.sp,
+                                lineHeight = 16.8.sp,
+                                color = if (selected) {
+                                    FColor.Primary
+                                } else {
+                                    FColor.DisablePlaceholder
+                                },
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+                    },
+                    selected = selected,
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.scrollToPage(index)
+                        }
+                    }
+                )
+            }
+        }
+
+        HorizontalPager(pageCount = 2, state = pagerState) { page ->
             when (page) {
-                0 -> JobOpeningScreen()
-                1 -> CompetitionsScreen()
+                0 -> JobOpeningScreen(jobOpeningUiModes = uiState.jobOpenings)
+                1 -> CompetitionsScreen(competitionUiModels = uiState.competitions)
             }
         }
     }
+}
+
+private enum class ScrapTab(
+    @StringRes val titleRes: Int,
+    val index: Int
+) {
+    JOB_OPENINGS(R.string.scrap_tab_job_openings_name, 0),
+    COMPETITIONS(R.string.scrap_tab_competitions_name, 1)
 }

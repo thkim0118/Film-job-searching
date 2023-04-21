@@ -148,6 +148,9 @@
 
     <!--    scrap-->
     <string name="scrap_title_text">스크랩</string>
+    <string name="scrap_empty_title">자주 찾는 게시물을 스크랩 해보세요.</string>
+    <string name="scrap_tab_job_openings_name">구인구직</string>
+    <string name="scrap_tab_competitions_name">공모전</string>
     <!--    job opening-->
     <string name="job_opening_deadline_title">모집마감일</string>
     <string name="job_opening_director_title">제작</string>
