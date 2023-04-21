@@ -28,6 +28,7 @@ import com.fone.filmone.R
 import com.fone.filmone.ui.common.FTitleBar
 import com.fone.filmone.ui.common.TitleType
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
+import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.theme.FColor
 import kotlinx.coroutines.launch
@@ -74,8 +75,8 @@ fun ScrapScreen(
                             text = stringResource(id = scrapTab.titleRes),
                             style = fTextStyle(
                                 fontWeight = FontWeight.W400,
-                                fontSize = 14.sp,
-                                lineHeight = 16.8.sp,
+                                fontSize = 14.textDp,
+                                lineHeight = 16.8.textDp,
                                 color = if (selected) {
                                     FColor.Primary
                                 } else {

@@ -21,13 +21,9 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.fone.filmone.BuildConfig
 import com.fone.filmone.R
-import com.fone.filmone.ui.common.ext.clickableSingle
-import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
-import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
-import com.fone.filmone.ui.common.ext.toastPadding
+import com.fone.filmone.ui.common.ext.*
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
@@ -45,7 +41,7 @@ fun MyScreen(
                 title = {
                     Text(
                         stringResource(id = R.string.my_title),
-                        style = LocalTypography.current.h2,
+                        style = LocalTypography.current.h2(),
                         color = FColor.TextPrimary
                     )
                 },
@@ -135,7 +131,7 @@ private fun ProfileComponent(
 
         Text(
             "닉네임",
-            style = LocalTypography.current.h1,
+            style = LocalTypography.current.h1(),
             color = FColor.TextPrimary
         )
 
@@ -143,7 +139,7 @@ private fun ProfileComponent(
 
         Text(
             text = "STAFF",
-            style = LocalTypography.current.subtitle2,
+            style = LocalTypography.current.subtitle2(),
             color = FColor.Primary
         )
 
@@ -175,7 +171,7 @@ private fun ScrapFavoriteComponent(
     }
     val scrapInlineContentMap = mapOf(
         scrapIcon to InlineTextContent(
-            Placeholder(width = 18.sp, height = 18.sp, PlaceholderVerticalAlign.Center)
+            Placeholder(width = 18.textDp, height = 18.textDp, PlaceholderVerticalAlign.Center)
         ) {
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.my_scrap),
@@ -185,7 +181,7 @@ private fun ScrapFavoriteComponent(
     )
     val favoriteInlineContentMap = mapOf(
         favoriteIcon to InlineTextContent(
-            Placeholder(width = 18.sp, height = 18.sp, PlaceholderVerticalAlign.Center)
+            Placeholder(width = 18.textDp, height = 18.textDp, PlaceholderVerticalAlign.Center)
         ) {
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.my_favorite),
@@ -210,8 +206,8 @@ private fun ScrapFavoriteComponent(
             text = scrapTitle,
             style = fTextStyle(
                 fontWeight = FontWeight.W500,
-                14.sp,
-                lineHeight = 18.sp,
+                fontSize = 14.textDp,
+                lineHeight = 18.textDp,
                 color = FColor.TextSecondary
             ),
             inlineContent = scrapInlineContentMap,
@@ -234,8 +230,8 @@ private fun ScrapFavoriteComponent(
             text = favoriteTitle,
             style = fTextStyle(
                 fontWeight = FontWeight.W500,
-                14.sp,
-                lineHeight = 18.sp,
+                fontSize = 14.textDp,
+                lineHeight = 18.textDp,
                 color = FColor.TextSecondary
             ),
             inlineContent = favoriteInlineContentMap,
@@ -268,7 +264,7 @@ private fun MenuList(
         Text(
             modifier = Modifier.weight(1f),
             text = stringResource(id = R.string.my_register_title),
-            style = LocalTypography.current.subtitle1,
+            style = LocalTypography.current.subtitle1(),
             color = FColor.TextPrimary
         )
 
@@ -295,7 +291,7 @@ private fun MenuList(
         Text(
             modifier = Modifier.weight(1f),
             text = stringResource(id = R.string.my_inquiry_title),
-            style = LocalTypography.current.subtitle1,
+            style = LocalTypography.current.subtitle1(),
             color = FColor.TextPrimary
         )
 
@@ -321,7 +317,7 @@ private fun MenuList(
         Text(
             modifier = Modifier.weight(1f),
             text = stringResource(id = R.string.my_app_version_title),
-            style = LocalTypography.current.subtitle1,
+            style = LocalTypography.current.subtitle1(),
             color = FColor.TextPrimary
         )
 
@@ -329,8 +325,8 @@ private fun MenuList(
             text = BuildConfig.VERSION_NAME,
             style = fTextStyle(
                 fontWeight = FontWeight.W500,
-                fontSize = 16.sp,
-                lineHeight = 16.sp,
+                fontSize = 16.textDp,
+                lineHeight = 16.textDp,
                 color = FColor.Secondary1Light
             )
         )
@@ -352,7 +348,7 @@ private fun MenuList(
 
         Text(
             text = stringResource(id = R.string.my_logout_title),
-            style = LocalTypography.current.subtitle1,
+            style = LocalTypography.current.subtitle1(),
             color = FColor.TextPrimary
         )
     }
@@ -373,7 +369,7 @@ private fun MenuList(
 
         Text(
             text = stringResource(id = R.string.my_withdrawal_title),
-            style = LocalTypography.current.subtitle1,
+            style = LocalTypography.current.subtitle1(),
             color = FColor.TextPrimary
         )
     }

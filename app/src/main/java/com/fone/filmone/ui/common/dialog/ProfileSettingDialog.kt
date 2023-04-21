@@ -34,7 +34,7 @@ fun ProfileSettingDialog(
                         .clickableSingle { onAlbumClick() }
                         .padding(vertical = 15.5.dp),
                     text = stringResource(id = R.string.dialog_profile_setting_album),
-                    style = LocalTypography.current.subtitle1,
+                    style = LocalTypography.current.subtitle1(),
                     color = FColor.Divider2
                 )
                 Text(
@@ -43,7 +43,7 @@ fun ProfileSettingDialog(
                         .clickableSingle { onDefaultProfileClick() }
                         .padding(vertical = 15.5.dp),
                     text = stringResource(id = R.string.dialog_profile_setting_default_image),
-                    style = LocalTypography.current.subtitle1,
+                    style = LocalTypography.current.subtitle1(),
                     color = FColor.Divider2
                 )
             }

@@ -38,6 +38,7 @@ import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.fShadow
+import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
@@ -104,7 +105,7 @@ fun SignUpSecondScreen(
 
                     Text(
                         text = stringResource(id = R.string.sign_up_second_title),
-                        style = LocalTypography.current.h1
+                        style = LocalTypography.current.h1()
                     )
 
                     Spacer(modifier = Modifier.height(32.dp))
@@ -177,15 +178,15 @@ private fun NicknameComponent(
                 Row {
                     Text(
                         text = stringResource(id = R.string.sign_up_second_nickname_title),
-                        style = LocalTypography.current.subtitle1
+                        style = LocalTypography.current.subtitle1()
                     )
 
                     Text(
                         text = " *",
                         style = fTextStyle(
                             fontWeight = FontWeight.W500,
-                            fontSize = 16.sp,
-                            lineHeight = 19.2.sp,
+                            fontSize = 16.textDp,
+                            lineHeight = 19.2.textDp,
                             color = FColor.Error
                         )
                     )
@@ -262,15 +263,15 @@ private fun BirthdaySexComponent(
             Row {
                 Text(
                     text = stringResource(id = R.string.sign_up_second_birthday_sex_title),
-                    style = LocalTypography.current.subtitle1
+                    style = LocalTypography.current.subtitle1()
                 )
 
                 Text(
                     text = " *",
                     style = fTextStyle(
                         fontWeight = FontWeight.W500,
-                        fontSize = 16.sp,
-                        lineHeight = 19.2.sp,
+                        fontSize = 16.textDp,
+                        lineHeight = 19.2.textDp,
                         color = FColor.Error
                     )
                 )
@@ -278,7 +279,7 @@ private fun BirthdaySexComponent(
 
             Text(
                 text = stringResource(id = R.string.sign_up_second_birthday_sex_subtitle),
-                style = LocalTypography.current.label,
+                style = LocalTypography.current.label(),
                 color = FColor.DisablePlaceholder
             )
 
@@ -332,14 +333,14 @@ private fun ProfileComponent(
 
     Text(
         text = stringResource(id = R.string.sign_up_second_profile_title),
-        style = LocalTypography.current.subtitle1
+        style = LocalTypography.current.subtitle1()
     )
 
     Spacer(modifier = Modifier.height(2.dp))
 
     Text(
         text = stringResource(id = R.string.sign_up_second_profile_subtitle),
-        style = LocalTypography.current.label
+        style = LocalTypography.current.label()
     )
 
     Spacer(modifier = Modifier.height(8.dp))

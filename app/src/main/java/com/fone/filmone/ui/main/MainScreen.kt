@@ -14,8 +14,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
+import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.main.chat.ChatScreen
@@ -99,8 +99,8 @@ fun RowScope.MainBottomNavigationItem(
                 text = stringResource(id = bottomNavItems.title),
                 style = fTextStyle(
                     fontWeight = FontWeight.W400,
-                    fontSize = 12.sp,
-                    lineHeight = 12.sp,
+                    fontSize = 12.textDp,
+                    lineHeight = 12.textDp,
                     color = if (selectedBottomNavItem == bottomNavItems) {
                         FColor.Primary
                     } else {

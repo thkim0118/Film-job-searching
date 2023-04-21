@@ -22,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -31,6 +30,7 @@ import com.fone.filmone.data.datamodel.response.user.SocialLoginType
 import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.fShadow
+import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.theme.FColor
@@ -74,7 +74,7 @@ fun LoginScreen(
 
         Text(
             text = stringResource(id = R.string.login_title),
-            style = LocalTypography.current.h1,
+            style = LocalTypography.current.h1(),
             color = FColor.TextPrimary
         )
 
@@ -133,8 +133,8 @@ fun LoginScreen(
                 text = stringResource(id = R.string.login_inquiry_title),
                 style = fTextStyle(
                     fontWeight = FontWeight.W400,
-                    fontSize = 12.sp,
-                    lineHeight = 14.32.sp,
+                    fontSize = 12.textDp,
+                    lineHeight = 14.32.textDp,
                     color = FColor.Color9E9E9E
                 )
             )
@@ -149,8 +149,8 @@ fun LoginScreen(
                 text = stringResource(id = R.string.login_inquiry_text),
                 style = fTextStyle(
                     fontWeight = FontWeight.W500,
-                    fontSize = 12.sp,
-                    lineHeight = 14.4.sp,
+                    fontSize = 12.textDp,
+                    lineHeight = 14.4.textDp,
                     color = FColor.Color666666
                 )
             )
@@ -271,8 +271,8 @@ private fun LoginButtonContainer(
             text = stringResource(id = titleRes),
             style = fTextStyle(
                 fontWeight = FontWeight.W500,
-                fontSize = 14.sp,
-                lineHeight = 16.8.sp,
+                fontSize = 14.textDp,
+                lineHeight = 16.8.textDp,
                 color = textColor
             ),
         )

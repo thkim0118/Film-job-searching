@@ -134,7 +134,7 @@ private fun RowScope.CompetitionContent(
     ) {
         Text(
             text = title,
-            style = LocalTypography.current.subtitle2,
+            style = LocalTypography.current.subtitle2(),
             color = FColor.TextPrimary
         )
 
@@ -142,7 +142,7 @@ private fun RowScope.CompetitionContent(
 
         Text(
             text = host,
-            style = LocalTypography.current.b2,
+            style = LocalTypography.current.b2(),
             color = FColor.TextSecondary
         )
 
@@ -153,7 +153,7 @@ private fun RowScope.CompetitionContent(
         ) {
             Text(
                 text = dday,
-                style = LocalTypography.current.b2,
+                style = LocalTypography.current.b2(),
                 color = FColor.Secondary1Light
             )
 
@@ -168,7 +168,7 @@ private fun RowScope.CompetitionContent(
 
             Text(
                 text = viewCount,
-                style = LocalTypography.current.b2,
+                style = LocalTypography.current.b2(),
                 color = FColor.DisablePlaceholder
             )
         }
@@ -213,7 +213,7 @@ private fun EmptyScreen(
 
         Text(
             text = stringResource(id = R.string.scrap_empty_title),
-            style = LocalTypography.current.subtitle2,
+            style = LocalTypography.current.subtitle2(),
             color = FColor.TextPrimary
         )
     }

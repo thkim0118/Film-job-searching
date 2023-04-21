@@ -37,7 +37,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
@@ -71,7 +71,7 @@ fun FTextField(
     backgroundColor: Color = FColor.Divider2,
     errorBorderColor: Color = FColor.Error,
     cornerRounded: Int = 5,
-    textStyle: TextStyle = LocalTypography.current.b1,
+    textStyle: TextStyle = LocalTypography.current.b1(),
     textColor: Color = FColor.TextPrimary,
     fixedHeight: Dp = 42.dp,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -169,8 +169,8 @@ fun FTextField(
                 textStyle = textStyle.copy(
                     color = textColor,
                     fontWeight = FontWeight.W400,
-                    fontSize = 14.sp,
-                    lineHeight = 19.sp,
+                    fontSize = 14.textDp,
+                    lineHeight = 19.textDp,
                 ),
                 keyboardOptions = keyboardOptions,
                 keyboardActions = keyboardActions,
@@ -259,8 +259,8 @@ fun FTextField(
                                                 text = placeholder,
                                                 style = fTextStyle(
                                                     fontWeight = FontWeight.W400,
-                                                    fontSize = 14.sp,
-                                                    lineHeight = 19.sp,
+                                                    fontSize = 14.textDp,
+                                                    lineHeight = 19.textDp,
                                                     color = placeholderTextColor,
                                                 ),
                                                 overflow = TextOverflow.Ellipsis
@@ -307,8 +307,8 @@ fun FTextField(
                                     text = bottomType.errorText,
                                     style = fTextStyle(
                                         fontWeight = FontWeight.W400,
-                                        fontSize = 12.sp,
-                                        lineHeight = 14.4.sp,
+                                        fontSize = 12.textDp,
+                                        lineHeight = 14.4.textDp,
                                         color = FColor.Error
                                     )
                                 )
@@ -403,22 +403,22 @@ private fun FTextFieldBottomErrorTypePreview() {
                 Row {
                     Text(
                         text = "topText.title",
-                        style = LocalTypography.current.subtitle1
+                        style = LocalTypography.current.subtitle1()
                     )
 
                     Text(
                         text = " *",
                         style = fTextStyle(
                             fontWeight = FontWeight.W500,
-                            fontSize = 16.sp,
-                            lineHeight = 19.2.sp,
+                            fontSize = 16.textDp,
+                            lineHeight = 19.2.textDp,
                             color = FColor.Error
                         )
                     )
 
                     Text(
                         text = "topText.subtitle",
-                        style = LocalTypography.current.label,
+                        style = LocalTypography.current.label(),
                         color = FColor.DisablePlaceholder
                     )
 
@@ -446,22 +446,22 @@ private fun FTextFieldBottomWithFBorderButtonPreview() {
                     Row {
                         Text(
                             text = "topText.title",
-                            style = LocalTypography.current.subtitle1
+                            style = LocalTypography.current.subtitle1()
                         )
 
                         Text(
                             text = " *",
                             style = fTextStyle(
                                 fontWeight = FontWeight.W500,
-                                fontSize = 16.sp,
-                                lineHeight = 19.2.sp,
+                                fontSize = 16.textDp,
+                                lineHeight = 19.2.textDp,
                                 color = FColor.Error
                             )
                         )
 
                         Text(
                             text = "topText.subtitle",
-                            style = LocalTypography.current.label,
+                            style = LocalTypography.current.label(),
                             color = FColor.DisablePlaceholder
                         )
 
@@ -486,8 +486,8 @@ private fun FTextFieldBottomWithFBorderButtonPreview() {
                     text = "3:00",
                     style = fTextStyle(
                         fontWeight = FontWeight.W400,
-                        fontSize = 12.sp,
-                        lineHeight = 14.sp,
+                        fontSize = 12.textDp,
+                        lineHeight = 14.textDp,
                         color = FColor.ColorFF5841
                     )
                 )

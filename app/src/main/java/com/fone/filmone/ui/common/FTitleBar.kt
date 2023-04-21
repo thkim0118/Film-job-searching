@@ -13,9 +13,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
+import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 
@@ -56,8 +56,8 @@ fun FTitleBar(
             text = titleText,
             style = fTextStyle(
                 fontWeight = FontWeight.W700,
-                fontSize = 19.sp,
-                lineHeight = 26.sp,
+                fontSize = 19.textDp,
+                lineHeight = 26.textDp,
                 color = FColor.TextPrimary
             ),
             textAlign = TextAlign.Center

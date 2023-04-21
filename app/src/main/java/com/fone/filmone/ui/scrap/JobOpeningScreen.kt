@@ -93,7 +93,7 @@ private fun JobOpeningComponent(
 
             Text(
                 text = title,
-                style = LocalTypography.current.b1,
+                style = LocalTypography.current.b1(),
                 color = FColor.TextPrimary
             )
 
@@ -152,7 +152,7 @@ private fun Tags(
         ) {
             Text(
                 text = type.name,
-                style = LocalTypography.current.b3,
+                style = LocalTypography.current.b3(),
                 color = FColor.White
             )
         }
@@ -185,7 +185,7 @@ private fun CategoryTag(
     ) {
         Text(
             text = stringResource(id = category.stringRes),
-            style = LocalTypography.current.b3,
+            style = LocalTypography.current.b3(),
             color = FColor.Secondary1Light
         )
     }
@@ -268,7 +268,7 @@ private fun JobOpeningContent(
     Row {
         Text(
             text = title,
-            style = LocalTypography.current.b3,
+            style = LocalTypography.current.b3(),
             color = FColor.DisablePlaceholder
         )
 
@@ -276,7 +276,7 @@ private fun JobOpeningContent(
 
         Text(
             text = content,
-            style = LocalTypography.current.b3,
+            style = LocalTypography.current.b3(),
             color = FColor.TextSecondary
         )
     }
@@ -297,7 +297,7 @@ private fun EmptyScreen(
 
         Text(
             text = stringResource(id = R.string.scrap_empty_title),
-            style = LocalTypography.current.subtitle2,
+            style = LocalTypography.current.subtitle2(),
             color = FColor.TextPrimary
         )
     }

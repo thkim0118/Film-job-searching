@@ -22,7 +22,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.fone.filmone.R
@@ -31,10 +30,7 @@ import com.fone.filmone.data.datamodel.response.jobopenings.Category
 import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.dialog.ProfileSettingDialog
-import com.fone.filmone.ui.common.ext.clickableWithNoRipple
-import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
-import com.fone.filmone.ui.common.ext.fShadow
-import com.fone.filmone.ui.common.ext.toastPadding
+import com.fone.filmone.ui.common.ext.*
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
@@ -254,7 +250,7 @@ private fun NicknameComponent(
             ) {
                 Text(
                     text = stringResource(id = R.string.my_info_nickname_title),
-                    style = LocalTypography.current.subtitle2,
+                    style = LocalTypography.current.subtitle2(),
                     color = FColor.TextPrimary
                 )
 
@@ -264,8 +260,8 @@ private fun NicknameComponent(
                     text = stringResource(id = R.string.my_info_nickname_subtitle),
                     style = fTextStyle(
                         fontWeight = FontWeight.W400,
-                        fontSize = 12.sp,
-                        lineHeight = 14.sp,
+                        fontSize = 12.textDp,
+                        lineHeight = 14.textDp,
                         color = FColor.DisablePlaceholder
                     )
                 )
@@ -300,7 +296,7 @@ private fun JobComponent(
 
     Text(
         text = stringResource(id = R.string.my_info_job_choice_title),
-        style = LocalTypography.current.subtitle2,
+        style = LocalTypography.current.subtitle2(),
         color = FColor.TextPrimary
     )
 
@@ -348,15 +344,15 @@ private fun JobTag(
             style = if (isSelected) {
                 fTextStyle(
                     fontWeight = FontWeight.W500,
-                    fontSize = 14.sp,
-                    lineHeight = 16.8.sp,
+                    fontSize = 14.textDp,
+                    lineHeight = 16.8.textDp,
                     color = FColor.Primary
                 )
             } else {
                 fTextStyle(
                     fontWeight = FontWeight.W400,
-                    fontSize = 14.sp,
-                    lineHeight = 16.8.sp,
+                    fontSize = 14.textDp,
+                    lineHeight = 16.8.textDp,
                     color = FColor.DisablePlaceholder
                 )
             }
@@ -379,7 +375,7 @@ private fun InterestsComponent(
     ) {
         Text(
             text = stringResource(id = R.string.my_info_favorite_choice_title),
-            style = LocalTypography.current.subtitle1,
+            style = LocalTypography.current.subtitle1(),
             color = FColor.TextPrimary
         )
 
@@ -387,7 +383,7 @@ private fun InterestsComponent(
 
         Text(
             text = stringResource(id = R.string.my_info_favorite_choice_subtitle),
-            style = LocalTypography.current.label,
+            style = LocalTypography.current.label(),
             color = FColor.DisablePlaceholder
         )
     }
@@ -436,15 +432,15 @@ private fun InterestsTag(
             style = if (isSelected) {
                 fTextStyle(
                     fontWeight = FontWeight.W500,
-                    fontSize = 14.sp,
-                    lineHeight = 16.8.sp,
+                    fontSize = 14.textDp,
+                    lineHeight = 16.8.textDp,
                     color = FColor.Primary
                 )
             } else {
                 fTextStyle(
                     fontWeight = FontWeight.W400,
-                    fontSize = 14.sp,
-                    lineHeight = 16.8.sp,
+                    fontSize = 14.textDp,
+                    lineHeight = 16.8.textDp,
                     color = FColor.DisablePlaceholder
                 )
             }

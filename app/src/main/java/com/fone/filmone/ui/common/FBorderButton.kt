@@ -13,8 +13,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.fone.filmone.ui.common.ext.clickableSingle
+import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 
@@ -47,8 +46,8 @@ fun FBorderButton(
             text = text,
             style = fTextStyle(
                 fontWeight = FontWeight.W400,
-                fontSize = 14.sp,
-                lineHeight = 14.sp,
+                fontSize = 14.textDp,
+                lineHeight = 14.textDp,
                 color = if (enable) {
                     FColor.Primary
                 } else {

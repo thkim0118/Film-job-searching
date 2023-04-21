@@ -21,6 +21,7 @@ import com.fone.filmone.R
 import com.fone.filmone.ui.common.FButton
 import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
+import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.signup.SignUpCompleteViewModel
 import com.fone.filmone.ui.theme.FColor
 
@@ -58,7 +59,7 @@ fun SignUpCompleteScreen(
                     withStyle(
                         style = SpanStyle(
                             fontWeight = FontWeight.W700,
-                            fontSize = 19.sp,
+                            fontSize = 19.textDp,
                             color = FColor.TextPrimary,
                         )
                     ) {
@@ -67,7 +68,7 @@ fun SignUpCompleteScreen(
                     withStyle(
                         style = SpanStyle(
                             fontWeight = FontWeight.W500,
-                            fontSize = 19.sp,
+                            fontSize = 19.textDp,
                             color = FColor.TextPrimary
                         )
                     ) {
@@ -76,14 +77,14 @@ fun SignUpCompleteScreen(
                     withStyle(
                         style = SpanStyle(
                             fontWeight = FontWeight.W700,
-                            fontSize = 19.sp,
+                            fontSize = 19.textDp,
                             color = FColor.TextPrimary,
                         )
                     ) {
                         append(stringResource(id = R.string.sign_up_complete_title_2))
                     }
                 },
-                lineHeight = 26.sp,
+                lineHeight = 26.textDp,
                 textAlign = TextAlign.Center
             )
         }

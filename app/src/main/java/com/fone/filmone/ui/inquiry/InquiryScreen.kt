@@ -10,10 +10,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -67,7 +65,7 @@ fun InquiryScreen(
 
                     Text(
                         text = stringResource(id = R.string.inquiry_guide),
-                        style = LocalTypography.current.b3,
+                        style = LocalTypography.current.b3(),
                         color = FColor.TextSecondary
                     )
 
@@ -82,7 +80,7 @@ fun InquiryScreen(
 
                     Text(
                         text = stringResource(id = R.string.inquiry_type_title),
-                        style = LocalTypography.current.subtitle1,
+                        style = LocalTypography.current.subtitle1(),
                         color = FColor.TextPrimary
                     )
 
@@ -157,7 +155,7 @@ private fun EmailInputComponent(
         topText = {
             Text(
                 text = stringResource(id = R.string.inquiry_email_title),
-                style = LocalTypography.current.subtitle1
+                style = LocalTypography.current.subtitle1()
             )
 
             Spacer(modifier = Modifier.height(6.dp))
@@ -206,7 +204,7 @@ private fun InquiryTitleComponent(
         topText = {
             Text(
                 text = stringResource(id = R.string.inquiry_content_title),
-                style = LocalTypography.current.subtitle1
+                style = LocalTypography.current.subtitle1()
             )
 
             Spacer(modifier = Modifier.height(6.dp))
@@ -225,7 +223,7 @@ private fun InquiryDescriptionComponent(
         topText = {
             Text(
                 text = stringResource(id = R.string.inquiry_content_description),
-                style = LocalTypography.current.subtitle1
+                style = LocalTypography.current.subtitle1()
             )
 
             Spacer(modifier = Modifier.height(6.dp))
@@ -256,7 +254,7 @@ private fun PrivacyTermComponent(
 
         Text(
             text = stringResource(id = R.string.inquiry_privacy_term_title),
-            style = LocalTypography.current.subtitle1,
+            style = LocalTypography.current.subtitle1(),
             color = FColor.TextSecondary
         )
     }
@@ -267,7 +265,7 @@ private fun PrivacyTermComponent(
         modifier = Modifier
             .padding(start = (16 + 6).dp),
         text = stringResource(id = R.string.inquiry_privacy_term_subtitle),
-        style = LocalTypography.current.label,
+        style = LocalTypography.current.label(),
         color = FColor.DisablePlaceholder
     )
 }

@@ -24,7 +24,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -33,6 +32,7 @@ import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.dialog.SingleButtonDialog
 import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
+import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.signup.*
@@ -130,7 +130,7 @@ private fun SignUpMainScreen(
 
                 Text(
                     text = stringResource(id = R.string.sign_up_third_title),
-                    style = LocalTypography.current.h1
+                    style = LocalTypography.current.h1()
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -185,7 +185,7 @@ private fun PhoneVerificationComponent(
         topText = {
             Text(
                 text = stringResource(id = R.string.sign_up_third_phone_number_title),
-                style = LocalTypography.current.subtitle1
+                style = LocalTypography.current.subtitle1()
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -270,8 +270,8 @@ fun RetransmitComponent(
                 text = uiState.verificationTime,
                 style = fTextStyle(
                     fontWeight = FontWeight.W400,
-                    fontSize = 12.sp,
-                    lineHeight = 14.sp,
+                    fontSize = 12.textDp,
+                    lineHeight = 14.textDp,
                     color = FColor.ColorFF5841
                 )
             ),
@@ -282,7 +282,7 @@ fun RetransmitComponent(
 
         Text(
             text = stringResource(id = R.string.sign_up_third_phone_number_check_code_guide),
-            style = LocalTypography.current.label
+            style = LocalTypography.current.label()
         )
     }
 }
@@ -321,7 +321,7 @@ private fun TermComponent(
 
         Text(
             text = stringResource(id = R.string.sign_up_third_agree_all),
-            style = LocalTypography.current.h5,
+            style = LocalTypography.current.h5(),
             color = FColor.TextSecondary
         )
     }
@@ -349,7 +349,7 @@ private fun TermComponent(
             Text(
                 modifier = Modifier.weight(1f),
                 text = stringResource(id = R.string.sign_up_third_agree_term),
-                style = LocalTypography.current.h5,
+                style = LocalTypography.current.h5(),
                 color = FColor.DisablePlaceholder
             )
         }
@@ -402,7 +402,7 @@ private fun TermComponent(
             Text(
                 modifier = Modifier.weight(1f),
                 text = stringResource(id = R.string.sign_up_third_agree_privacy),
-                style = LocalTypography.current.h5,
+                style = LocalTypography.current.h5(),
                 color = FColor.DisablePlaceholder
             )
         }
@@ -460,7 +460,7 @@ private fun TermComponent(
             Text(
                 modifier = Modifier.weight(1f),
                 text = stringResource(id = R.string.sign_up_third_agree_marketing),
-                style = LocalTypography.current.h5,
+                style = LocalTypography.current.h5(),
                 color = FColor.DisablePlaceholder
             )
         }
@@ -511,8 +511,8 @@ fun TermContent(
         Text(
             text = termText, style = fTextStyle(
                 fontWeight = FontWeight.W400,
-                fontSize = 12.sp,
-                lineHeight = 16.sp,
+                fontSize = 12.textDp,
+                lineHeight = 16.textDp,
                 color = FColor.DisablePlaceholder
             )
         )

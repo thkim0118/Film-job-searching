@@ -28,6 +28,7 @@ import com.fone.filmone.ui.common.FButton
 import com.fone.filmone.ui.common.FTitleBar
 import com.fone.filmone.ui.common.TitleType
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
+import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
@@ -82,7 +83,7 @@ fun SignUpFirstScreen(
 
                 Text(
                     text = stringResource(id = R.string.sign_up_first_title),
-                    style = LocalTypography.current.h1,
+                    style = LocalTypography.current.h1(),
                     color = FColor.TextPrimary
                 )
 
@@ -173,8 +174,8 @@ private fun ChoiceTitle(
             text = title,
             style = fTextStyle(
                 fontWeight = FontWeight.W500,
-                fontSize = 15.sp,
-                lineHeight = 18.sp,
+                fontSize = 15.textDp,
+                lineHeight = 18.textDp,
                 color = FColor.TextPrimary
             )
         )
@@ -183,7 +184,7 @@ private fun ChoiceTitle(
 
         Text(
             text = subtitle,
-            style = LocalTypography.current.label,
+            style = LocalTypography.current.label(),
             color = FColor.DisablePlaceholder
         )
     }
@@ -238,15 +239,15 @@ private fun JobTag(
             style = if (isSelected) {
                 fTextStyle(
                     fontWeight = FontWeight.W500,
-                    fontSize = 14.sp,
-                    lineHeight = 16.8.sp,
+                    fontSize = 14.textDp,
+                    lineHeight = 16.8.textDp,
                     color = FColor.Primary
                 )
             } else {
                 fTextStyle(
                     fontWeight = FontWeight.W400,
-                    fontSize = 14.sp,
-                    lineHeight = 16.8.sp,
+                    fontSize = 14.textDp,
+                    lineHeight = 16.8.textDp,
                     color = FColor.DisablePlaceholder
                 )
             }
@@ -303,15 +304,15 @@ private fun InterestsTag(
             style = if (isSelected) {
                 fTextStyle(
                     fontWeight = FontWeight.W500,
-                    fontSize = 14.sp,
-                    lineHeight = 16.8.sp,
+                    fontSize = 14.textDp,
+                    lineHeight = 16.8.textDp,
                     color = FColor.Primary
                 )
             } else {
                 fTextStyle(
                     fontWeight = FontWeight.W400,
-                    fontSize = 14.sp,
-                    lineHeight = 16.8.sp,
+                    fontSize = 14.textDp,
+                    lineHeight = 16.8.textDp,
                     color = FColor.DisablePlaceholder
                 )
             }

@@ -15,9 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.Pretendard
@@ -42,8 +42,8 @@ fun SingleButtonDialog(
     val titleTextStyle = TextStyle(
         fontFamily = Pretendard,
         fontWeight = FontWeight.W400,
-        fontSize = 16.sp,
-        lineHeight = 22.sp,
+        fontSize = 16.textDp,
+        lineHeight = 22.textDp,
         color = FColor.TextPrimary,
         textAlign = TextAlign.Center
     )
@@ -51,8 +51,8 @@ fun SingleButtonDialog(
     val buttonTextStyle = TextStyle(
         fontFamily = Pretendard,
         fontWeight = FontWeight.W700,
-        fontSize = 16.sp,
-        lineHeight = 22.sp,
+        fontSize = 16.textDp,
+        lineHeight = 22.textDp,
         color = FColor.TextSecondary,
         textAlign = TextAlign.Center
     )

@@ -52,7 +52,7 @@ fun ListDialog(
                         .fillMaxWidth()
                         .padding(vertical = 14.dp),
                     text = titleText,
-                    style = LocalTypography.current.h4,
+                    style = LocalTypography.current.h4(),
                     color = FColor.White,
                     textAlign = TextAlign.Center
                 )
@@ -68,7 +68,7 @@ fun ListDialog(
                     Text(
                         modifier = Modifier.fillMaxWidth(),
                         text = buttonText,
-                        style = LocalTypography.current.button1,
+                        style = LocalTypography.current.button1(),
                         color = FColor.White,
                         textAlign = TextAlign.Center
                     )
