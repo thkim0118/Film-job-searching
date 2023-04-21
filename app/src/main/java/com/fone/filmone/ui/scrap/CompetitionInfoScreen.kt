@@ -37,7 +37,8 @@ fun CompetitionsScreen(
         if (competitionUiModels.isNotEmpty()) {
             LazyColumn(
                 modifier = Modifier
-                    .padding(start = 16.dp, end = 20.dp)
+                    .padding(start = 16.dp, end = 20.dp),
+                contentPadding = PaddingValues(top = 11.dp)
             ) {
                 items(competitionUiModels) {
                     CompetitionComponent(

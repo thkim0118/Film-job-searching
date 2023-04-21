@@ -51,7 +51,7 @@ class ScrapViewModel @Inject constructor(
         workTitle = "workTitle"
     )
 
-    val fakeJobContent = Content(
+    fun fakeJobContent() = Content(
         ageMax = 20,
         ageMin = 0,
         career = Career.IRRELEVANT,
@@ -78,7 +78,15 @@ class ScrapViewModel @Inject constructor(
     )
 
     val fakeJobOpenings = JobOpenings(
-        content = listOf(fakeJobContent, fakeJobContent, fakeJobContent, fakeJobContent),
+        content = listOf(
+            fakeJobContent(),
+            fakeJobContent(),
+            fakeJobContent(),
+            fakeJobContent(),
+            fakeJobContent(),
+            fakeJobContent(),
+            fakeJobContent()
+        ),
         empty = false,
         first = false,
         last = false,
@@ -96,7 +104,7 @@ class ScrapViewModel @Inject constructor(
         ranking = "ranking"
     )
 
-    val fakeCompetitionContent = com.fone.filmone.data.datamodel.response.competition.Content(
+    fun fakeCompetitionContent() = com.fone.filmone.data.datamodel.response.competition.Content(
         agency = "agency",
         competitionPrizes = listOf(fakeCompetitionPrizes),
         dday = "D-13",
@@ -115,7 +123,17 @@ class ScrapViewModel @Inject constructor(
     )
 
     val fakeCompetition = Competitions(
-        content = listOf(fakeCompetitionContent, fakeCompetitionContent, fakeCompetitionContent),
+        content = listOf(
+            fakeCompetitionContent(),
+            fakeCompetitionContent(),
+            fakeCompetitionContent(),
+            fakeCompetitionContent(),
+            fakeCompetitionContent(),
+            fakeCompetitionContent(),
+            fakeCompetitionContent(),
+            fakeCompetitionContent(),
+            fakeCompetitionContent()
+        ),
         empty = false,
         first = false,
         last = false,
