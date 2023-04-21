@@ -101,7 +101,9 @@ fun MyScreen(
 
             MenuList(
                 onRegisterListClick = {
-
+                    FOneNavigator.navigateTo(
+                        NavDestinationState(route = FOneDestinations.MyRegister.route)
+                    )
                 },
                 onInquiryClick = {
 

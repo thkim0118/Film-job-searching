@@ -164,4 +164,14 @@
     <string name="favorite_tab_actor_title">배우</string>
     <string name="favorite_tab_staff_title">스태프</string>
     <string name="favorite_empty_title">자주 찾는 사람을 찜 해보세요</string>
+
+    <!--    my register-->
+    <string name="my_register_title_text">나의 등록내역</string>
+    <string name="my_register_tab_recruitment_title">모집</string>
+    <string name="my_register_tab_profile_title">프로필</string>
+    <string name="my_register_recruitment_empty_title">함께할 사람을 찾고 있나요?</string>
+    <string name="my_register_recruitment_empty_subtitle_actor">배우 모집 바로가기</string>
+    <string name="my_register_recruitment_empty_subtitle_staff">스텝 모집 바로가기</string>
+    <string name="my_register_profile_empty_title">이런! 아직 프로필이 없어요.\n프로필을 등록하고 작업 제안을 받아보세요.</string>
+    <string name="my_register_profile_empty_subtitle">프로필 등록 바로가기</string>
 </resources>

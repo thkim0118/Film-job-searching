@@ -12,6 +12,7 @@ import com.fone.filmone.ui.inquiry.InquiryScreen
 import com.fone.filmone.ui.login.LoginScreen
 import com.fone.filmone.ui.main.MainScreen
 import com.fone.filmone.ui.myinfo.MyInfoScreen
+import com.fone.filmone.ui.myregister.MyRegisterScreen
 import com.fone.filmone.ui.scrap.ScrapScreen
 import com.fone.filmone.ui.signup.signUpNavGraph
 import com.fone.filmone.ui.splash.SplashScreen
@@ -61,6 +62,9 @@ fun FOneNavGraph(
         }
         composable(FOneDestinations.Favorite.route) {
             FavoriteScreen(navController = navController)
+        }
+        composable(FOneDestinations.MyRegister.route) {
+            MyRegisterScreen(navController = navController)
         }
     }
 }

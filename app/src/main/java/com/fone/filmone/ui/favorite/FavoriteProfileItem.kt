@@ -20,7 +20,7 @@ import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun ProfileItem(
+fun FavoriteProfileItem(
     modifier: Modifier = Modifier,
     imageUrl: String,
     name: String,
