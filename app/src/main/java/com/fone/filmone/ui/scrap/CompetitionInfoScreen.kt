@@ -208,9 +208,11 @@ private fun EmptyScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            imageVector = ImageVector.vectorResource(id = R.drawable.login_fone_logo),
+            imageVector = ImageVector.vectorResource(id = R.drawable.scrap_empty_image),
             contentDescription = null
         )
+
+        Spacer(modifier = Modifier.height(20.dp))
 
         Text(
             text = stringResource(id = R.string.scrap_empty_title),
