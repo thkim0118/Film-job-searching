@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -57,32 +58,40 @@ fun SignUpThirdScreen(
         navigateLoginScreen(navController)
     }
 
-    Box(
+    Scaffold(
         modifier = modifier
             .defaultSystemBarPadding()
             .toastPadding()
-            .fillMaxSize()
+            .fillMaxSize(),
+        snackbarHost = {
+            FToast(
+                modifier = modifier,
+                baseViewModel = viewModel,
+                hostState = it
+            )
+        }
     ) {
-        SignUpMainScreen(
-            navController = navController,
-            uiState = uiState,
-            onPhoneNumberChanged = viewModel::updatePhoneNumber,
-            onVerifyClick = viewModel::transmitVerificationCode,
-            onVerificationCheckClick = viewModel::checkVerificationCode,
-            onUpdateAllAgreeState = viewModel::updateAllAgreeState,
-            onUpdateAgreeState = viewModel::updateAgreeState,
-            onSignUpClick = { viewModel.signUp(signUpVo) }
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
+            SignUpMainScreen(
+                navController = navController,
+                uiState = uiState,
+                onPhoneNumberChanged = viewModel::updatePhoneNumber,
+                onVerifyClick = viewModel::transmitVerificationCode,
+                onVerificationCheckClick = viewModel::checkVerificationCode,
+                onUpdateAllAgreeState = viewModel::updateAllAgreeState,
+                onUpdateAgreeState = viewModel::updateAgreeState,
+                onSignUpClick = { viewModel.signUp(signUpVo) }
+            )
 
-        DialogScreen(
-            dialogState = dialogState,
-            onDismiss = viewModel::clearDialogState
-        )
-
-        FToast(
-            modifier = modifier,
-            baseViewModel = viewModel
-        )
+            DialogScreen(
+                dialogState = dialogState,
+                onDismiss = viewModel::clearDialogState
+            )
+        }
     }
 }
 

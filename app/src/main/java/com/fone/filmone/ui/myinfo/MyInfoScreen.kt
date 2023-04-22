@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -66,90 +67,96 @@ fun MyInfoScreen(
         }
     )
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
+    Scaffold(
+        modifier = Modifier,
+        snackbarHost = {
+            FToast(baseViewModel = viewModel, hostState = it)
+        }
     ) {
-        Column(
+        Box(
             modifier = modifier
                 .fillMaxSize()
-                .defaultSystemBarPadding()
-                .toastPadding()
+                .padding(it)
         ) {
-            FTitleBar(
-                titleType = TitleType.Back,
-                onBackClick = {
-                    navController.popBackStack()
-                }
-            )
-
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxSize()
-                    .verticalScroll(scrollState)
-                    .padding(horizontal = 16.dp)
+                    .defaultSystemBarPadding()
+                    .toastPadding()
             ) {
+                FTitleBar(
+                    titleType = TitleType.Back,
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
+
                 Column(
                     modifier = Modifier
-                        .fillMaxHeight()
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)
+                        .padding(horizontal = 16.dp)
                 ) {
-                    Spacer(modifier = Modifier.height(10.dp))
-
-                    ProfileImageComponent(
+                    Column(
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally),
-                        onClick = {
-                            viewModel.updateDialog(MyInfoDialogState.ProfileSetting)
-                        },
-                        imageUri = imageUri,
-                        uiState = uiState
-                    )
+                            .fillMaxHeight()
+                    ) {
+                        Spacer(modifier = Modifier.height(10.dp))
 
-                    Spacer(modifier = Modifier.height(23.dp))
+                        ProfileImageComponent(
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally),
+                            onClick = {
+                                viewModel.updateDialog(MyInfoDialogState.ProfileSetting)
+                            },
+                            imageUri = imageUri,
+                            uiState = uiState
+                        )
 
-                    NicknameComponent(
-                        onDuplicateCheckClick = viewModel::checkNicknameDuplicate,
-                        onUpdateNickname = viewModel::updateNickname,
-                        uiState = uiState
-                    )
+                        Spacer(modifier = Modifier.height(23.dp))
 
-                    Spacer(modifier = Modifier.height(42.dp))
+                        NicknameComponent(
+                            onDuplicateCheckClick = viewModel::checkNicknameDuplicate,
+                            onUpdateNickname = viewModel::updateNickname,
+                            uiState = uiState
+                        )
 
-                    JobComponent(
-                        onUpdateJob = viewModel::updateJob,
-                        uiState = uiState
+                        Spacer(modifier = Modifier.height(42.dp))
+
+                        JobComponent(
+                            onUpdateJob = viewModel::updateJob,
+                            uiState = uiState
+                        )
+
+                        Spacer(modifier = Modifier.height(40.dp))
+
+                        InterestsComponent(
+                            onUpdateInterests = viewModel::updateInterest,
+                            uiState = uiState
+                        )
+
+                        Spacer(modifier = Modifier.height(141.dp))
+                    }
+
+                    EditButton(
+                        uiState = uiState,
+                        onClick = viewModel::updateUserInfo
                     )
 
                     Spacer(modifier = Modifier.height(40.dp))
-
-                    InterestsComponent(
-                        onUpdateInterests = viewModel::updateInterest,
-                        uiState = uiState
-                    )
-
-                    Spacer(modifier = Modifier.height(141.dp))
                 }
-
-                EditButton(
-                    uiState = uiState,
-                    onClick = viewModel::updateUserInfo
-                )
-
-                Spacer(modifier = Modifier.height(40.dp))
             }
+
+            DialogScreen(
+                dialogState = dialogState,
+                launcher = launcher,
+                onDefaultImageRequestClick = {
+                    viewModel.updateDefaultProfile()
+                    imageUri = null
+                },
+                onDismiss = viewModel::clearDialog
+            )
         }
-
-        FToast(baseViewModel = viewModel)
-
-        DialogScreen(
-            dialogState = dialogState,
-            launcher = launcher,
-            onDefaultImageRequestClick = {
-                viewModel.updateDefaultProfile()
-                imageUri = null
-            },
-            onDismiss = viewModel::clearDialog
-        )
     }
 }
 

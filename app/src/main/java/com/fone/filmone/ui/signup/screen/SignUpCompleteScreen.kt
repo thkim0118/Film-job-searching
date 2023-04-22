@@ -2,6 +2,7 @@ package com.fone.filmone.ui.signup.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,7 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.FButton
@@ -34,75 +34,81 @@ fun SignUpCompleteScreen(
     nickname: String,
     viewModel: SignUpCompleteViewModel = hiltViewModel()
 ) {
-    Box(
-        modifier = modifier
-            .defaultSystemBarPadding()
-            .fillMaxSize()
+    Scaffold(
+        modifier = Modifier,
+        snackbarHost = {
+            FToast(baseViewModel = viewModel, hostState = it)
+        }
     ) {
-        Column(
-            modifier = Modifier
-                .align(Alignment.Center)
+        Box(
+            modifier = modifier
+                .defaultSystemBarPadding()
+                .fillMaxSize()
+                .padding(it)
         ) {
-            Image(
+            Column(
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
-                imageVector = ImageVector.vectorResource(id = R.drawable.sign_up_complete_check),
-                contentDescription = null
-            )
+                    .align(Alignment.Center)
+            ) {
+                Image(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.sign_up_complete_check),
+                    contentDescription = null
+                )
 
-            Spacer(modifier = Modifier.height(15.dp))
+                Spacer(modifier = Modifier.height(15.dp))
 
-            Text(
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally),
+                    text = buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.W700,
+                                fontSize = 19.textDp,
+                                color = FColor.TextPrimary,
+                            )
+                        ) {
+                            append(nickname)
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.W500,
+                                fontSize = 19.textDp,
+                                color = FColor.TextPrimary
+                            )
+                        ) {
+                            append(stringResource(id = R.string.sign_up_complete_title_1))
+                        }
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.W700,
+                                fontSize = 19.textDp,
+                                color = FColor.TextPrimary,
+                            )
+                        ) {
+                            append(stringResource(id = R.string.sign_up_complete_title_2))
+                        }
+                    },
+                    lineHeight = 26.textDp,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            FButton(
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
-                text = buildAnnotatedString {
-                    withStyle(
-                        style = SpanStyle(
-                            fontWeight = FontWeight.W700,
-                            fontSize = 19.textDp,
-                            color = FColor.TextPrimary,
-                        )
-                    ) {
-                        append(nickname)
-                    }
-                    withStyle(
-                        style = SpanStyle(
-                            fontWeight = FontWeight.W500,
-                            fontSize = 19.textDp,
-                            color = FColor.TextPrimary
-                        )
-                    ) {
-                        append(stringResource(id = R.string.sign_up_complete_title_1))
-                    }
-                    withStyle(
-                        style = SpanStyle(
-                            fontWeight = FontWeight.W700,
-                            fontSize = 19.textDp,
-                            color = FColor.TextPrimary,
-                        )
-                    ) {
-                        append(stringResource(id = R.string.sign_up_complete_title_2))
-                    }
-                },
-                lineHeight = 26.textDp,
-                textAlign = TextAlign.Center
-            )
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 38.dp, start = 20.dp, end = 20.dp),
+                title = stringResource(id = R.string.sign_up_complete_button_title),
+                enable = true
+            ) {
+                viewModel.signIn(
+                    accessToken = accessToken,
+                    email = email,
+                    socialLoginType = socialLoginType
+                )
+            }
         }
-
-        FButton(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 38.dp, start = 20.dp, end = 20.dp),
-            title = stringResource(id = R.string.sign_up_complete_button_title),
-            enable = true
-        ) {
-            viewModel.signIn(
-                accessToken = accessToken,
-                email = email,
-                socialLoginType = socialLoginType
-            )
-        }
-
-        FToast(baseViewModel = viewModel)
     }
 }

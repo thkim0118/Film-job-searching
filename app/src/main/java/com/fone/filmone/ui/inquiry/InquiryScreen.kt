@@ -3,6 +3,7 @@ package com.fone.filmone.ui.inquiry
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -34,14 +35,17 @@ fun InquiryScreen(
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
 
-    Box(
+    Scaffold(
         modifier = modifier
             .fillMaxSize()
             .defaultSystemBarPadding()
-            .toastPadding()
+            .toastPadding(),
+        snackbarHost = {
+            FToast(baseViewModel = viewModel, hostState = it)
+        }
     ) {
         Column(
-            modifier = Modifier
+            modifier = Modifier.padding(it)
         ) {
             FTitleBar(
                 titleType = TitleType.Close,
@@ -121,25 +125,6 @@ fun InquiryScreen(
 
                 Spacer(modifier = Modifier.height(38.dp))
             }
-        }
-
-        InquiryToast(
-            viewModel = viewModel,
-            uiState = uiState,
-            navController = navController
-        )
-    }
-}
-
-@Composable
-private fun BoxScope.InquiryToast(
-    viewModel: InquiryViewModel,
-    uiState: InquiryUiState,
-    navController: NavHostController
-) {
-    FToast(baseViewModel = viewModel) {
-        if (uiState.isInquirySuccess) {
-            navController.popBackStack()
         }
     }
 }

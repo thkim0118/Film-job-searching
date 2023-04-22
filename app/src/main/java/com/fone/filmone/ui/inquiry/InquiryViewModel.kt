@@ -23,6 +23,10 @@ class InquiryViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(InquiryUiState())
     val uiState: StateFlow<InquiryUiState> = _uiState.asStateFlow()
 
+    init {
+        showToast("TEST MESSAGE")
+    }
+
     fun updateEmail(email: String) {
         _uiState.update {
             it.copy(email = email)

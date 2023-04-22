@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -70,81 +71,87 @@ fun SignUpSecondScreen(
         navigateLoginScreen(navController)
     }
 
-    Box(
-        modifier = modifier
-            .defaultSystemBarPadding()
-            .fillMaxSize()
+    Scaffold(
+        modifier = Modifier,
+        snackbarHost = {
+            FToast(baseViewModel = viewModel, hostState = it)
+        }
     ) {
-        Column(
+        Box(
             modifier = modifier
+                .defaultSystemBarPadding()
                 .fillMaxSize()
+                .padding(it)
         ) {
-            FTitleBar(
-                titleType = TitleType.Back,
-                titleText = stringResource(id = R.string.sign_up_title_text),
-                onBackClick = {
-                    navigateLoginScreen(navController)
-                }
-            )
-
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxSize()
-                    .verticalScroll(scrollState)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(horizontal = 16.dp)
-                ) {
-                    Spacer(modifier = Modifier.height(40.dp))
-
-                    SignUpIndicator(indicatorType = IndicatorType.Second)
-
-                    Spacer(modifier = Modifier.height(14.dp))
-
-                    Text(
-                        text = stringResource(id = R.string.sign_up_second_title),
-                        style = LocalTypography.current.h1()
-                    )
-
-                    Spacer(modifier = Modifier.height(32.dp))
-
-                    NicknameComponent(
-                        uiState = uiState,
-                        onUpdateNickname = viewModel::updateNickname,
-                        onCheckDuplicateNickname = viewModel::checkNicknameDuplication
-                    )
-
-                    Spacer(modifier = Modifier.height(23.dp))
-
-                    BirthdaySexComponent(
-                        uiState = uiState,
-                        onUpdateBirthday = viewModel::updateBirthDay,
-                        onUpdateGender = viewModel::updateGender
-                    )
-
-                    Spacer(modifier = Modifier.height(40.dp))
-
-                    ProfileComponent(
-                        onUpdateProfileEncoding = viewModel::updateProfileUploadState,
-                        onUpdateProfileImage = viewModel::updateProfileImage
-                    )
-
-                    Spacer(modifier = Modifier.height(137.dp))
-                }
-
-                NextButton(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    signUpVo = signUpVo,
-                    uiState = uiState
+                FTitleBar(
+                    titleType = TitleType.Back,
+                    titleText = stringResource(id = R.string.sign_up_title_text),
+                    onBackClick = {
+                        navigateLoginScreen(navController)
+                    }
                 )
 
-                Spacer(modifier = Modifier.height(38.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .padding(horizontal = 16.dp)
+                    ) {
+                        Spacer(modifier = Modifier.height(40.dp))
+
+                        SignUpIndicator(indicatorType = IndicatorType.Second)
+
+                        Spacer(modifier = Modifier.height(14.dp))
+
+                        Text(
+                            text = stringResource(id = R.string.sign_up_second_title),
+                            style = LocalTypography.current.h1()
+                        )
+
+                        Spacer(modifier = Modifier.height(32.dp))
+
+                        NicknameComponent(
+                            uiState = uiState,
+                            onUpdateNickname = viewModel::updateNickname,
+                            onCheckDuplicateNickname = viewModel::checkNicknameDuplication
+                        )
+
+                        Spacer(modifier = Modifier.height(23.dp))
+
+                        BirthdaySexComponent(
+                            uiState = uiState,
+                            onUpdateBirthday = viewModel::updateBirthDay,
+                            onUpdateGender = viewModel::updateGender
+                        )
+
+                        Spacer(modifier = Modifier.height(40.dp))
+
+                        ProfileComponent(
+                            onUpdateProfileEncoding = viewModel::updateProfileUploadState,
+                            onUpdateProfileImage = viewModel::updateProfileImage
+                        )
+
+                        Spacer(modifier = Modifier.height(137.dp))
+                    }
+
+                    NextButton(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        signUpVo = signUpVo,
+                        uiState = uiState
+                    )
+
+                    Spacer(modifier = Modifier.height(38.dp))
+                }
             }
         }
-
-        FToast(baseViewModel = viewModel)
     }
 }
 
