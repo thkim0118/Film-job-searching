@@ -23,8 +23,7 @@ import kotlinx.coroutines.flow.onEach
 fun FOneNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-//    startDestination: String = FOneDestinations.Splash.route,
-    startDestination: String = FOneDestinations.Main.route,
+    startDestination: String = FOneDestinations.Splash.route,
 ) {
     LaunchedEffect(key1 = "navigation") {
         FOneNavigator.routeFlow.onEach { navigationState ->
@@ -42,7 +41,7 @@ fun FOneNavGraph(
         modifier = modifier
     ) {
         composable(FOneDestinations.Splash.route) {
-            SplashScreen(navController = navController)
+            SplashScreen()
         }
         composable(FOneDestinations.Login.route) {
             LoginScreen(navController = navController)

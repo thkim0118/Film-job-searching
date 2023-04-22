@@ -1,6 +1,9 @@
 package com.fone.filmone.framework.drivers
 
 import com.fone.filmone.domain.repository.auth.AuthRepository
+import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -35,6 +38,13 @@ class AuthInterceptor @Inject constructor(
                         .build()
 
                     return chain.proceed(newRequest)
+                } else {
+                    FOneNavigator.navigateTo(
+                        navDestinationState = NavDestinationState(
+                            route = FOneDestinations.Login.route,
+                            isPopAll = true
+                        )
+                    )
                 }
             }
         }
