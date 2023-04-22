@@ -35,6 +35,10 @@ fun InquiryScreen(
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
 
+    if (uiState.popScreen) {
+        navController.popBackStack()
+    }
+
     Scaffold(
         modifier = modifier
             .fillMaxSize()

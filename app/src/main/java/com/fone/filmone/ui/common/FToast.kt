@@ -21,6 +21,8 @@ import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 import kotlinx.coroutines.delay
 
+const val ToastDuration = 2_000L
+
 @Composable
 fun FToast(
     modifier: Modifier = Modifier,
@@ -61,7 +63,7 @@ fun FToast(
         }
 
         LaunchedEffect(true) {
-            delay(2_000)
+            delay(ToastDuration)
             snackbarData.dismiss()
             baseViewModel.clearToast()
             onDismiss()
