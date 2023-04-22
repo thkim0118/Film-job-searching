@@ -11,6 +11,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,12 +34,16 @@ import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MyScreen(
     modifier: Modifier = Modifier,
+    mainBottomSheetState: ModalBottomSheetState,
     viewModel: MyViewModel = hiltViewModel()
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
@@ -111,7 +116,9 @@ fun MyScreen(
                     )
                 },
                 onLogoutClick = {
-
+                    coroutineScope.launch {
+                        mainBottomSheetState.show()
+                    }
                 },
                 onWithdrawalClick = {
 
@@ -120,6 +127,7 @@ fun MyScreen(
         }
     }
 }
+
 
 @Composable
 private fun ProfileComponent(

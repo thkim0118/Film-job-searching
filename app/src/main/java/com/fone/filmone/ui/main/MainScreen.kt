@@ -1,19 +1,18 @@
 package com.fone.filmone.ui.main
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import com.fone.filmone.ui.common.bottomsheet.PairButtonBottomSheet
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
@@ -24,33 +23,78 @@ import com.fone.filmone.ui.main.job.JobScreen
 import com.fone.filmone.ui.main.model.BottomNavItem
 import com.fone.filmone.ui.main.my.MyScreen
 import com.fone.filmone.ui.theme.FColor
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
 ) {
+    val bottomSheetState =
+        rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val coroutineScope = rememberCoroutineScope()
     var selectedScreen by rememberSaveable { mutableStateOf(BottomNavItem.Home) }
 
-    Scaffold(
-        modifier = modifier
-            .defaultSystemBarPadding()
-            .toastPadding(),
-        bottomBar = {
-            MainBottomNavigation(
-                bottomNavItems = BottomNavItem.values(),
-                selectedScreen = selectedScreen,
-                onItemSelected = {
-                    selectedScreen = it
+    ModalBottomSheetLayout(
+        sheetState = bottomSheetState,
+        sheetShape = RoundedCornerShape(10.dp),
+        sheetContent = {
+            PairButtonBottomSheet(
+                content = {
+                    Spacer(modifier = Modifier.height(50.dp))
+
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(id = com.fone.filmone.R.string.my_logout_sheet_title),
+                        style = com.fone.filmone.ui.theme.LocalTypography.current.h2(),
+                        color = FColor.TextPrimary,
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(id = com.fone.filmone.R.string.my_logout_sheet_subtitle),
+                        style = com.fone.filmone.ui.theme.LocalTypography.current.h5(),
+                        color = FColor.TextSecondary,
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(modifier = Modifier.height(40.dp))
+                },
+                onLeftButtonClick = {
+                    coroutineScope.launch {
+                        bottomSheetState.hide()
+                    }
+                },
+                onRightButtonClick = {
+
                 }
             )
-        },
+        }
     ) {
-        Box(modifier = modifier.padding(it)) {
-            when (selectedScreen) {
-                BottomNavItem.Home -> HomeScreen()
-                BottomNavItem.Job -> JobScreen()
-                BottomNavItem.Chat -> ChatScreen()
-                BottomNavItem.My -> MyScreen()
+        Scaffold(
+            modifier = modifier
+                .defaultSystemBarPadding()
+                .toastPadding(),
+            bottomBar = {
+                MainBottomNavigation(
+                    bottomNavItems = BottomNavItem.values(),
+                    selectedScreen = selectedScreen,
+                    onItemSelected = {
+                        selectedScreen = it
+                    }
+                )
+            },
+        ) {
+            Box(modifier = modifier.padding(it)) {
+                when (selectedScreen) {
+                    BottomNavItem.Home -> HomeScreen()
+                    BottomNavItem.Job -> JobScreen()
+                    BottomNavItem.Chat -> ChatScreen()
+                    BottomNavItem.My -> MyScreen(mainBottomSheetState = bottomSheetState)
+                }
             }
         }
     }

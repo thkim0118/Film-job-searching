@@ -22,6 +22,8 @@
 
     <!--    common-->
     <string name="confirm">확인</string>
+    <string name="yes">네</string>
+    <string name="no">아니오</string>
 
     <!--    dialog-->
     <string name="dialog_profile_setting_title">프로필 사진 설정</string>
@@ -136,6 +138,8 @@
     <string name="my_app_version_title">앱 버전</string>
     <string name="my_logout_title">로그아웃</string>
     <string name="my_withdrawal_title">회원 탈퇴</string>
+    <string name="my_logout_sheet_title">로그아웃 하시겠습니까?</string>
+    <string name="my_logout_sheet_subtitle">깡총! 소셜 로그인 화면으로 돌아가요</string>
 
     <!--    my info-->
     <string name="my_info_nickname_title">닉네임</string>
