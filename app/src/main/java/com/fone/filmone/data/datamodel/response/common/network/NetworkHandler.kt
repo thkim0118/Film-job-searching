@@ -40,16 +40,7 @@ private fun <T> Response<NetworkResponse<T>>.parseNetworkResponse(): DataResult<
             Result.ce -> if (networkResponse.data != null) {
                 DataResult.Success(data = networkResponse.data)
             } else {
-                DataResult.EmptyData(
-                    dataFail = if (networkResponse.errorCode == null) {
-                        null
-                    } else {
-                        DataFail(
-                            errorCode = networkResponse.errorCode,
-                            message = networkResponse.message
-                        )
-                    }
-                )
+                DataResult.EmptyData
             }
             Result.FAIL -> {
                 DataResult.Fail(

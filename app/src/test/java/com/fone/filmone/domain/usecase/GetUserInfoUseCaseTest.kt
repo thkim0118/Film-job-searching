@@ -45,7 +45,7 @@ internal class GetUserInfoUseCaseTest {
 
         getUserInfoUseCase()
             .onSuccess { response ->
-                assert(response.user == user)
+                assert(response?.user == user)
             }.onFail {
                 assert(false)
             }
@@ -60,7 +60,7 @@ internal class GetUserInfoUseCaseTest {
 
         getUserInfoUseCase()
             .onSuccess { response ->
-                assert(response.user.nickname != "fail_nick_name")
+                assert(response?.user?.nickname != "fail_nick_name")
             }.onFail {
                 assert(false)
             }

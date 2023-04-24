@@ -4,10 +4,10 @@ import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.repository.user.UserRepository
 import javax.inject.Inject
 
-class LogoutUseCase @Inject constructor(
-    private val userRepository: UserRepository,
+class SignOutUseCase @Inject constructor(
+    private val userRepository: UserRepository
 ) {
     suspend operator fun invoke(): DataResult<Unit> {
-        return userRepository.logout()
+        return userRepository.signOut()
     }
 }

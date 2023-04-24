@@ -18,6 +18,7 @@ import androidx.navigation.NavHostController
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.bottomsheet.PairButtonBottomSheet
+import com.fone.filmone.ui.common.dialog.SingleButtonDialog
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
@@ -27,6 +28,9 @@ import com.fone.filmone.ui.main.home.HomeScreen
 import com.fone.filmone.ui.main.job.JobScreen
 import com.fone.filmone.ui.main.model.BottomNavItem
 import com.fone.filmone.ui.main.my.MyScreen
+import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.theme.FColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -43,6 +47,7 @@ fun MainScreen(
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     var selectedScreen by rememberSaveable { mutableStateOf(BottomNavItem.Home) }
+    val uiState by viewModel.uiState.collectAsState()
 
     BackHandler(true) {
         if (bottomSheetState.isVisible) {
@@ -70,7 +75,12 @@ fun MainScreen(
                 )
                 MainBottomSheetType.Withdrawal -> WithdrawalBottomSheet(
                     coroutineScope = coroutineScope,
-                    bottomSheetState = bottomSheetState
+                    bottomSheetState = bottomSheetState,
+                    onSignOutClick = {
+                        coroutineScope.launch {
+                            viewModel.signOut()
+                        }
+                    }
                 )
             }
         }
@@ -108,6 +118,22 @@ fun MainScreen(
                         }
                     )
                 }
+
+                MainDialog(
+                    dialogState = uiState.mainDialogState,
+                    onDismiss = {
+                        coroutineScope.launch {
+                            bottomSheetState.hide()
+                        }
+                        viewModel.clearDialog()
+                        FOneNavigator.navigateTo(
+                            navDestinationState = NavDestinationState(
+                                route = FOneDestinations.Login.route,
+                                isPopAll = true
+                            )
+                        )
+                    }
+                )
             }
         }
     }
@@ -222,7 +248,8 @@ private fun LogoutBottomSheet(
 private fun WithdrawalBottomSheet(
     modifier: Modifier = Modifier,
     coroutineScope: CoroutineScope,
-    bottomSheetState: ModalBottomSheetState
+    bottomSheetState: ModalBottomSheetState,
+    onSignOutClick: () -> Unit
 ) {
     PairButtonBottomSheet(
         modifier = modifier,
@@ -254,8 +281,30 @@ private fun WithdrawalBottomSheet(
                 bottomSheetState.hide()
             }
         },
-        onRightButtonClick = {
-
-        }
+        onRightButtonClick = onSignOutClick
     )
+}
+
+@Composable
+private fun MainDialog(
+    modifier: Modifier = Modifier,
+    dialogState: MainDialogState,
+    onDismiss: () -> Unit
+) {
+    when (dialogState) {
+        MainDialogState.Clear -> Unit
+        MainDialogState.WithdrawalComplete -> WithdrawalCompleteDialog(onDismiss = onDismiss)
+    }
+}
+
+@Composable
+private fun WithdrawalCompleteDialog(
+    onDismiss: () -> Unit
+) {
+    SingleButtonDialog(
+        titleText = stringResource(id = R.string.main_withdrawal_dialog_title),
+        buttonText = stringResource(id = R.string.confirm)
+    ) {
+        onDismiss()
+    }
 }

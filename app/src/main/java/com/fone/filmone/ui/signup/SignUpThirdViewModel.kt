@@ -191,6 +191,10 @@ class SignUpThirdViewModel @Inject constructor(
         }
 
         verifySmsCodeUseCase(code).onSuccess { isVerify ->
+            if (isVerify == null) {
+                return@onSuccess
+            }
+
             if (isVerify) {
                 updateDialogState(SignUpThirdDialogState.VerificationComplete)
                 updatePhoneNumberVerification()

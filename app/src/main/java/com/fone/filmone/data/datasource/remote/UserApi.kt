@@ -25,6 +25,9 @@ interface UserApi {
         @Body signInRequest: SigninRequest
     ): Response<NetworkResponse<SigninResponse>>
 
+    @PATCH("${Server.ApiVersion}/users/sign-out")
+    suspend fun signOut(): Response<NetworkResponse<Unit>>
+
     @GET("${Server.ApiVersion}/users")
     suspend fun getUserInfo(): Response<NetworkResponse<UserResponse>>
 

@@ -99,7 +99,7 @@ fun SingleButtonDialog(
 
 @Preview(showBackground = true)
 @Composable
-fun SingleButtonDialogPreview() {
+private fun SingleButtonDialogPreview() {
     FilmOneTheme {
         SingleButtonDialog(
             titleText = "Title",

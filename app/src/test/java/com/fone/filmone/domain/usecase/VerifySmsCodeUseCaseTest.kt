@@ -32,7 +32,7 @@ internal class VerifySmsCodeUseCaseTest {
 
         verifySmsCodeUpUseCase(code)
             .onSuccess {
-                assert(it)
+                assert(it == true)
             }.onFail {
                 assert(false)
             }
@@ -48,7 +48,7 @@ internal class VerifySmsCodeUseCaseTest {
 
         verifySmsCodeUpUseCase(code)
             .onSuccess {
-                assert(it.not())
+                assert(it?.not() == true)
             }.onFail {
                 assert(false)
             }

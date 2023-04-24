@@ -33,6 +33,10 @@ class AuthRepositoryImpl @Inject constructor(
         refreshTokenMutex.withLock {
             val currentAccessToken = tokenDataStore.getAccessToken()
 
+            if (accessToken.isNullOrEmpty() && currentAccessToken.isNullOrEmpty()) {
+                return ""
+            }
+
             if (accessToken == currentAccessToken) {
                 val result = handleNetwork {
                     tokenApi.refreshToken(

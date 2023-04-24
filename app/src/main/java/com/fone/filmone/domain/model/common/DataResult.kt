@@ -8,9 +8,7 @@ sealed class DataResult<out T> {
         val data: T
     ) : DataResult<T>()
 
-    data class EmptyData(
-        val dataFail: DataFail?
-    ) : DataResult<Nothing>()
+    object EmptyData : DataResult<Nothing>()
 
     data class Fail(
         val dataFail: DataFail
@@ -19,20 +17,34 @@ sealed class DataResult<out T> {
 
 suspend fun <T> DataResult<T>.onSuccess(
     dispatcher: CoroutineDispatcher,
-    action: suspend (value: T) -> Unit
+    action: suspend (value: T?) -> Unit
 ): DataResult<T> {
     if (this is DataResult.Success) {
         withContext(dispatcher) {
             action(data)
         }
     }
+
+    if (this is DataResult.EmptyData) {
+        withContext(dispatcher) {
+            action(null)
+        }
+    }
+
     return this
 }
 
-fun <T> DataResult<T>.onSuccess(action: (value: T) -> Unit): DataResult<T> {
+fun <T> DataResult<T>.onSuccess(
+    onSuccess: (value: T?) -> Unit,
+): DataResult<T> {
     if (this is DataResult.Success) {
-        action(data)
+        onSuccess(data)
     }
+
+    if (this is DataResult.EmptyData) {
+        onSuccess(null)
+    }
+
     return this
 }
 
@@ -80,13 +92,7 @@ fun <T> DataResult<T>.getOrNull(): T? {
 
 
 fun <T, R> DataResult<T>.toMappedDataResult(transform: (T) -> R) = when (this) {
-    is DataResult.EmptyData -> DataResult.EmptyData(
-        if (dataFail == null) {
-            null
-        } else {
-            DataFail(errorCode = dataFail.errorCode, message = dataFail.message)
-        }
-    )
+    is DataResult.EmptyData -> DataResult.EmptyData
     is DataResult.Fail -> DataResult.Fail(DataFail(dataFail.errorCode, dataFail.message))
     is DataResult.Success -> DataResult.Success(transform(data))
 

@@ -32,7 +32,7 @@ internal class GetCompetitionsUseCaseTest {
 
         getCompetitionsUseCase()
             .onSuccess {
-                assert(it.competitions.content.first().id == fakeCompetitionsResponse.competitions.content.first().id)
+                assert(it?.competitions?.content?.firstOrNull()?.id == fakeCompetitionsResponse.competitions.content.first().id)
             }
             .onFail {
                 assert(false)

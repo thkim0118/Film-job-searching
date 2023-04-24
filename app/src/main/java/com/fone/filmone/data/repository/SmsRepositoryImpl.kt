@@ -21,13 +21,18 @@ class SmsRepositoryImpl @Inject constructor(
 
     override fun verifySmsVerificationCode(code: String): DataResult<Boolean> {
         if (verificationCode.isEmpty()) {
-            return DataResult.EmptyData(null)
+            return DataResult.EmptyData
         }
 
-        return DataResult.Success(verificationCode == code).onSuccess { isVerify ->
-            if (isVerify) {
-                verificationCode = ""
+        return DataResult.Success(verificationCode == code)
+            .onSuccess { isVerify ->
+                if (isVerify == null) {
+                    return@onSuccess
+                }
+
+                if (isVerify) {
+                    verificationCode = ""
+                }
             }
-        }
     }
 }

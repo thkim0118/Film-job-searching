@@ -7,7 +7,6 @@ import com.fone.filmone.domain.repository.imageupload.ImageUploadRepository
 import com.fone.filmone.domain.repository.inquiry.InquiryRepository
 import com.fone.filmone.domain.repository.jobopenings.JobOpeningsRepository
 import com.fone.filmone.domain.repository.sms.SmsRepository
-import com.fone.filmone.domain.repository.token.TokenRepository
 import com.fone.filmone.domain.repository.user.UserRepository
 import dagger.Binds
 import dagger.Module
@@ -59,10 +58,4 @@ abstract class RepositoryModule {
     abstract fun bindsCompetitionsRepository(
         repository: CompetitionsRepositoryImpl
     ): CompetitionsRepository
-
-    @Singleton
-    @Binds
-    abstract fun bindsTokenRepository(
-        repository: TokenRepositoryImpl
-    ): TokenRepository
 }

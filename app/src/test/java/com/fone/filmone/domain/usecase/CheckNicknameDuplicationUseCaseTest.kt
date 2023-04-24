@@ -40,7 +40,7 @@ internal class CheckNicknameDuplicationUseCaseTest {
 
         checkNicknameDuplicationUseCase(testNickname)
             .onSuccess {
-                assert(it.not())
+                assert(it?.not() == true)
             }.onFail {
                 assert(false)
             }
@@ -62,7 +62,7 @@ internal class CheckNicknameDuplicationUseCaseTest {
 
         checkNicknameDuplicationUseCase(testNickname)
             .onSuccess {
-                assert(it)
+                assert(it == true)
             }.onFail {
                 assert(false)
             }

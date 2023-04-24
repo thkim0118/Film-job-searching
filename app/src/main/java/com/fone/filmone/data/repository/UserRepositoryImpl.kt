@@ -1,5 +1,6 @@
 package com.fone.filmone.data.repository
 
+import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
@@ -33,8 +34,17 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun signIn(signinRequest: SigninRequest): DataResult<SigninResponse> {
         return handleNetwork { userApi.signIn(signinRequest) }
             .onSuccess(dispatcher) { signInResponse ->
-                tokenDataStore.saveAccessToken(signInResponse.token.accessToken)
-                tokenDataStore.saveRefreshToken(signInResponse.token.refreshToken)
+                if (signInResponse != null) {
+                    tokenDataStore.saveAccessToken(signInResponse.token.accessToken)
+                    tokenDataStore.saveRefreshToken(signInResponse.token.refreshToken)
+                }
+            }
+    }
+
+    override suspend fun signOut(): DataResult<Unit> {
+        return handleNetwork { userApi.signOut() }
+            .onSuccess(dispatcher) {
+                tokenDataStore.clearToken()
             }
     }
 
@@ -48,5 +58,8 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun logout(): DataResult<Unit> {
         return handleNetwork { userApi.logout() }
+            .onSuccess(dispatcher) {
+                tokenDataStore.clearToken()
+            }
     }
 }

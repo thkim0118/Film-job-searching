@@ -42,7 +42,7 @@ class MyInfoViewModel @Inject constructor(
     private fun getUserInfo() = viewModelScope.launch {
         getUserInfoUseCase()
             .onSuccess { userResponse ->
-                val user = userResponse.user
+                val user = userResponse?.user ?: return@onSuccess
                 savedUserState = MyInfoUiState(
                     profileUrl = user.profileUrl,
                     nickname = user.nickname,
@@ -157,7 +157,7 @@ class MyInfoViewModel @Inject constructor(
         if (encodedProfile != null) {
             uploadImageUseCase(encodedProfile)
                 .onSuccess {
-                    updateUserInfoToRemote(it.imageUrl)
+                    updateUserInfoToRemote(it?.imageUrl ?: return@onSuccess)
                 }.onFail {
                     showToast(R.string.toast_profile_register_fail)
                 }

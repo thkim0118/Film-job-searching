@@ -88,6 +88,10 @@ class SignUpSecondViewModel @Inject constructor(
         // TODO Throttling.
         checkNicknameDuplicationUseCase(uiState.value.nickname)
             .onSuccess { isDuplicated ->
+                if (isDuplicated == null) {
+                    return@onSuccess
+                }
+
                 if (isDuplicated) {
                     _uiState.update { uiState ->
                         uiState.copy(isNicknameChecked = false, isNicknameDuplicated = true)
