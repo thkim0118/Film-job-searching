@@ -1,5 +1,6 @@
 package com.fone.filmone.ui.main
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -12,6 +13,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.fone.filmone.R
 import com.fone.filmone.ui.common.bottomsheet.PairButtonBottomSheet
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
@@ -23,55 +26,45 @@ import com.fone.filmone.ui.main.job.JobScreen
 import com.fone.filmone.ui.main.model.BottomNavItem
 import com.fone.filmone.ui.main.my.MyScreen
 import com.fone.filmone.ui.theme.FColor
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
+    navController: NavHostController,
 ) {
+    var bottomSheetType: MainBottomSheetType by remember { mutableStateOf(MainBottomSheetType.Logout) }
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     var selectedScreen by rememberSaveable { mutableStateOf(BottomNavItem.Home) }
 
+    BackHandler(true) {
+        if (bottomSheetState.isVisible) {
+            coroutineScope.launch {
+                bottomSheetState.hide()
+            }
+        } else {
+            navController.popBackStack()
+        }
+    }
+
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         sheetShape = RoundedCornerShape(10.dp),
         sheetContent = {
-            PairButtonBottomSheet(
-                content = {
-                    Spacer(modifier = Modifier.height(50.dp))
-
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(id = com.fone.filmone.R.string.my_logout_sheet_title),
-                        style = com.fone.filmone.ui.theme.LocalTypography.current.h2(),
-                        color = FColor.TextPrimary,
-                        textAlign = TextAlign.Center
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(id = com.fone.filmone.R.string.my_logout_sheet_subtitle),
-                        style = com.fone.filmone.ui.theme.LocalTypography.current.h5(),
-                        color = FColor.TextSecondary,
-                        textAlign = TextAlign.Center
-                    )
-
-                    Spacer(modifier = Modifier.height(40.dp))
-                },
-                onLeftButtonClick = {
-                    coroutineScope.launch {
-                        bottomSheetState.hide()
-                    }
-                },
-                onRightButtonClick = {
-
-                }
-            )
+            when (bottomSheetType) {
+                MainBottomSheetType.Logout -> LogoutBottomSheet(
+                    coroutineScope = coroutineScope,
+                    bottomSheetState = bottomSheetState
+                )
+                MainBottomSheetType.Withdrawal -> WithdrawalBottomSheet(
+                    coroutineScope = coroutineScope,
+                    bottomSheetState = bottomSheetState
+                )
+            }
         }
     ) {
         Scaffold(
@@ -93,7 +86,16 @@ fun MainScreen(
                     BottomNavItem.Home -> HomeScreen()
                     BottomNavItem.Job -> JobScreen()
                     BottomNavItem.Chat -> ChatScreen()
-                    BottomNavItem.My -> MyScreen(mainBottomSheetState = bottomSheetState)
+                    BottomNavItem.My -> MyScreen(
+                        onLogoutClick = {
+                            bottomSheetType = MainBottomSheetType.Logout
+                            coroutineScope.launch { bottomSheetState.show() }
+                        },
+                        onWithdrawalClick = {
+                            bottomSheetType = MainBottomSheetType.Withdrawal
+                            coroutineScope.launch { bottomSheetState.show() }
+                        }
+                    )
                 }
             }
         }
@@ -158,5 +160,91 @@ fun RowScope.MainBottomNavigationItem(
         unselectedContentColor = FColor.DisablePlaceholder,
         selected = selectedBottomNavItem == bottomNavItems,
         onClick = { onItemClick(bottomNavItems) }
+    )
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun LogoutBottomSheet(
+    modifier: Modifier = Modifier,
+    coroutineScope: CoroutineScope,
+    bottomSheetState: ModalBottomSheetState
+) {
+    PairButtonBottomSheet(
+        modifier = modifier,
+        content = {
+            Spacer(modifier = Modifier.height(50.dp))
+
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(id = R.string.my_logout_sheet_title),
+                style = com.fone.filmone.ui.theme.LocalTypography.current.h2(),
+                color = FColor.TextPrimary,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(id = R.string.my_logout_sheet_subtitle),
+                style = com.fone.filmone.ui.theme.LocalTypography.current.h5(),
+                color = FColor.TextSecondary,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(40.dp))
+        },
+        onLeftButtonClick = {
+            coroutineScope.launch {
+                bottomSheetState.hide()
+            }
+        },
+        onRightButtonClick = {
+
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun WithdrawalBottomSheet(
+    modifier: Modifier = Modifier,
+    coroutineScope: CoroutineScope,
+    bottomSheetState: ModalBottomSheetState
+) {
+    PairButtonBottomSheet(
+        modifier = modifier,
+        content = {
+            Spacer(modifier = Modifier.height(50.dp))
+
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(id = R.string.my_withdrawal_sheet_title),
+                style = com.fone.filmone.ui.theme.LocalTypography.current.h2(),
+                color = FColor.TextPrimary,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = stringResource(id = R.string.my_withdrawal_sheet_subtitle),
+                style = com.fone.filmone.ui.theme.LocalTypography.current.h5(),
+                color = FColor.TextSecondary,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(40.dp))
+        },
+        onLeftButtonClick = {
+            coroutineScope.launch {
+                bottomSheetState.hide()
+            }
+        },
+        onRightButtonClick = {
+
+        }
     )
 }

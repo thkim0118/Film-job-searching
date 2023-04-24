@@ -51,7 +51,7 @@ fun FOneNavGraph(
         }
         signUpNavGraph(navController = navController)
         composable(FOneDestinations.Main.route) {
-            MainScreen()
+            MainScreen(navController = navController)
         }
         composable(FOneDestinations.MyInfo.route) {
             MyInfoScreen(navController = navController)

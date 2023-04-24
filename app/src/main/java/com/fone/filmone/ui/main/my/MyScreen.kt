@@ -29,21 +29,22 @@ import com.fone.filmone.BuildConfig
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.ext.*
 import com.fone.filmone.ui.common.fTextStyle
+import com.fone.filmone.ui.main.MainBottomSheetType
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MyScreen(
     modifier: Modifier = Modifier,
-    mainBottomSheetState: ModalBottomSheetState,
-    viewModel: MyViewModel = hiltViewModel()
+    viewModel: MyViewModel = hiltViewModel(),
+    onLogoutClick: () -> Unit,
+    onWithdrawalClick: () -> Unit
 ) {
-    val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
@@ -116,12 +117,10 @@ fun MyScreen(
                     )
                 },
                 onLogoutClick = {
-                    coroutineScope.launch {
-                        mainBottomSheetState.show()
-                    }
+                    onLogoutClick()
                 },
                 onWithdrawalClick = {
-
+                    onWithdrawalClick()
                 }
             )
         }
