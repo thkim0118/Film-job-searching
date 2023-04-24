@@ -162,6 +162,26 @@
     <string name="job_opening_period_title">촬영기간</string>
     <string name="job_opening_job_type_part_title">배역</string>
     <string name="job_opening_job_type_field_title">분야</string>
+    <string name="job_opening_domain_planning">기획/제작</string>
+    <string name="job_opening_domain_scenario">시나리오</string>
+    <string name="job_opening_domain_director">연출</string>
+    <string name="job_opening_domain_filming">촬영</string>
+    <string name="job_opening_domain_gaffer">조명</string>
+    <string name="job_opening_domain_record">녹음</string>
+    <string name="job_opening_domain_painting">그림</string>
+    <string name="job_opening_domain_art">미술</string>
+    <string name="job_opening_domain_make_up">분장</string>
+    <string name="job_opening_domain_edit">편집</string>
+    <string name="job_opening_domain_music">음악</string>
+    <string name="job_opening_domain_picture">사진</string>
+    <string name="job_opening_domain_etc">기타</string>
+    <string name="job_opening_career_newcomer">신입</string>
+    <string name="job_opening_career_1year">1년 미만</string>
+    <string name="job_opening_career_3year">1~3년</string>
+    <string name="job_opening_career_6year">4~6년</string>
+    <string name="job_opening_career_10year">7~10년</string>
+    <string name="job_opening_career_10year_more">10년~</string>
+    <string name="job_opening_career_irrelevant">경력 무관</string>
 
     <!--    favorite-->
     <string name="favorite_title_text">찜한 프로필</string>
