@@ -45,4 +45,8 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun updateUserInfo(userUpdateRequest: UserUpdateRequest): DataResult<UserResponse> {
         return handleNetwork { userApi.updateUserInfo(userUpdateRequest) }
     }
+
+    override suspend fun logout(): DataResult<Unit> {
+        return handleNetwork { userApi.logout() }
+    }
 }

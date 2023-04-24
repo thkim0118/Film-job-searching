@@ -32,4 +32,7 @@ interface UserApi {
     suspend fun updateUserInfo(
         @Body userUpdateRequest: UserUpdateRequest
     ): Response<NetworkResponse<UserResponse>>
+
+    @POST("${Server.ApiVersion}/users/log-out")
+    suspend fun logout() :Response<NetworkResponse<Unit>>
 }

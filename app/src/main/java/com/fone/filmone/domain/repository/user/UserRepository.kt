@@ -12,4 +12,5 @@ interface UserRepository {
     suspend fun signIn(signinRequest: SigninRequest): DataResult<SigninResponse>
     suspend fun getUserInfo(): DataResult<UserResponse>
     suspend fun updateUserInfo(userUpdateRequest: UserUpdateRequest): DataResult<UserResponse>
+    suspend fun logout(): DataResult<Unit>
 }

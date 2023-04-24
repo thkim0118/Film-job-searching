@@ -38,6 +38,13 @@ class TokenDataStore @Inject constructor(
         }
     }
 
+    suspend fun clearToken() {
+        tokenDataStore.edit { preferences ->
+            preferences[ACCESS_TOKEN_KEY] = ""
+            preferences[REFRESH_TOKEN_KEY] = ""
+        }
+    }
+
     suspend fun getAccessToken(): String? {
         val preferences = tokenDataStore.data.map { preferences ->
             preferences[ACCESS_TOKEN_KEY]

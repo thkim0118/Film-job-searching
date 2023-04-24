@@ -13,8 +13,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.fone.filmone.R
+import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.bottomsheet.PairButtonBottomSheet
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
@@ -34,6 +36,7 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     var bottomSheetType: MainBottomSheetType by remember { mutableStateOf(MainBottomSheetType.Logout) }
     val bottomSheetState =
@@ -58,7 +61,12 @@ fun MainScreen(
             when (bottomSheetType) {
                 MainBottomSheetType.Logout -> LogoutBottomSheet(
                     coroutineScope = coroutineScope,
-                    bottomSheetState = bottomSheetState
+                    bottomSheetState = bottomSheetState,
+                    onLogoutClick = {
+                        coroutineScope.launch {
+                            viewModel.logout()
+                        }
+                    }
                 )
                 MainBottomSheetType.Withdrawal -> WithdrawalBottomSheet(
                     coroutineScope = coroutineScope,
@@ -80,6 +88,9 @@ fun MainScreen(
                     }
                 )
             },
+            snackbarHost = {
+                FToast(baseViewModel = viewModel, hostState = it)
+            }
         ) {
             Box(modifier = modifier.padding(it)) {
                 when (selectedScreen) {
@@ -168,7 +179,8 @@ fun RowScope.MainBottomNavigationItem(
 private fun LogoutBottomSheet(
     modifier: Modifier = Modifier,
     coroutineScope: CoroutineScope,
-    bottomSheetState: ModalBottomSheetState
+    bottomSheetState: ModalBottomSheetState,
+    onLogoutClick: () -> Unit
 ) {
     PairButtonBottomSheet(
         modifier = modifier,
@@ -200,9 +212,8 @@ private fun LogoutBottomSheet(
                 bottomSheetState.hide()
             }
         },
-        onRightButtonClick = {
+        onRightButtonClick = onLogoutClick
 
-        }
     )
 }
 
