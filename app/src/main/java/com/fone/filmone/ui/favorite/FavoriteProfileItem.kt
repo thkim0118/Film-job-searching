@@ -14,6 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.R
+import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 import com.skydoves.landscapist.ShimmerParams
@@ -56,7 +57,8 @@ fun FavoriteProfileItem(
             Image(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(top = 10.dp, end = 10.dp),
+                    .clickableSingle {  }
+                    .padding(10.dp),
                 imageVector = ImageVector.vectorResource(id = R.drawable.favorite_selected),
                 contentDescription = null
             )
@@ -64,7 +66,9 @@ fun FavoriteProfileItem(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Row {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(
                 text = name,
                 style = LocalTypography.current.h5(),

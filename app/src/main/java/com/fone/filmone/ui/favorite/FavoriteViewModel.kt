@@ -4,10 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.fone.filmone.domain.usecase.GetFavoriteProfilesUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,6 +13,92 @@ class FavoriteViewModel @Inject constructor(
 ) : BaseViewModel() {
     private val viewModelState = MutableStateFlow(FavoriteViewModelState())
 
+    val fakeActorModels = listOf(
+        FavoriteUiModel(
+            profileUrl = "https://picsum.photos/200",
+            name = "정용식",
+            info = "1985년생 (38살)"
+        ),
+        FavoriteUiModel(
+            profileUrl = "https://picsum.photos/200",
+            name = "정용식",
+            info = "1985년생 (38살)"
+        ),
+        FavoriteUiModel(
+            profileUrl = "https://picsum.photos/200",
+            name = "정용식",
+            info = "1985년생 (38살)"
+        ),
+        FavoriteUiModel(
+            profileUrl = "https://picsum.photos/200",
+            name = "정용식",
+            info = "1985년생 (38살)"
+        ),
+        FavoriteUiModel(
+            profileUrl = "https://picsum.photos/200",
+            name = "정용식",
+            info = "1985년생 (38살)"
+        ),
+        FavoriteUiModel(
+            profileUrl = "https://picsum.photos/200",
+            name = "정용식",
+            info = "1985년생 (38살)"
+        ),
+        FavoriteUiModel(
+            profileUrl = "https://picsum.photos/200",
+            name = "정용식",
+            info = "1985년생 (38살)"
+        ),
+        FavoriteUiModel(
+            profileUrl = "https://picsum.photos/200",
+            name = "정용식",
+            info = "1985년생 (38살)"
+        ),
+    )
+
+    val fakeStaffModels = listOf(
+        FavoriteUiModel(
+            profileUrl = "https://picsum.photos/200",
+            name = "황우슬혜",
+            info = "1985년생 (38살)"
+        ),
+        FavoriteUiModel(
+            profileUrl = "https://picsum.photos/200",
+            name = "황우슬혜",
+            info = "1985년생 (38살)"
+        ),
+        FavoriteUiModel(
+            profileUrl = "https://picsum.photos/200",
+            name = "황우슬혜",
+            info = "1985년생 (38살)"
+        ),
+        FavoriteUiModel(
+            profileUrl = "https://picsum.photos/200",
+            name = "황우슬혜",
+            info = "1985년생 (38살)"
+        ),
+        FavoriteUiModel(
+            profileUrl = "https://picsum.photos/200",
+            name = "황우슬혜",
+            info = "1985년생 (38살)"
+        ),
+        FavoriteUiModel(
+            profileUrl = "https://picsum.photos/200",
+            name = "황우슬혜",
+            info = "1985년생 (38살)"
+        ),
+        FavoriteUiModel(
+            profileUrl = "https://picsum.photos/200",
+            name = "황우슬혜",
+            info = "1985년생 (38살)"
+        ),
+        FavoriteUiModel(
+            profileUrl = "https://picsum.photos/200",
+            name = "황우슬혜",
+            info = "1985년생 (38살)"
+        ),
+    )
+
     val uiState = viewModelState
         .map(FavoriteViewModelState::toUiState)
         .stateIn(
@@ -23,6 +106,16 @@ class FavoriteViewModel @Inject constructor(
             SharingStarted.Eagerly,
             viewModelState.value.toUiState()
         )
+
+    init {
+        viewModelState.update {
+            it.copy(
+                actorProfiles = fakeActorModels,
+//                staffProfiles = fakeStaffModels,
+                staffProfiles = emptyList()
+            )
+        }
+    }
 }
 
 private data class FavoriteViewModelState(
@@ -50,11 +143,10 @@ data class FavoriteUiState(
     val staffUiState: ProfileUiState
 )
 
-
 data class FavoriteUiModel(
     val profileUrl: String,
     val name: String,
-    val age: String
+    val info: String
 )
 
 sealed interface ProfileUiState {

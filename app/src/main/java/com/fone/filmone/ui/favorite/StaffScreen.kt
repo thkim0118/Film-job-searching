@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,15 +19,34 @@ import com.fone.filmone.ui.theme.LocalTypography
 
 @Composable
 fun StaffScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    staffUiState: ProfileUiState
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
-        if (listOf<String>().isNotEmpty()) {
-            LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+    ) {
+        when (staffUiState) {
+            is ProfileUiState.HasItems -> {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    contentPadding = PaddingValues(vertical = 20.dp),
+                    verticalArrangement = Arrangement.spacedBy(14.dp),
+                    horizontalArrangement = Arrangement.spacedBy(26.dp)
+                ) {
+                    items(staffUiState.uiModels) {
+                        FavoriteProfileItem(
+                            imageUrl = it.profileUrl,
+                            name = it.name,
+                            info = it.info
+                        )
+                    }
+                }
             }
-        } else {
-            EmptyScreen(modifier = Modifier.align(Alignment.Center))
+            ProfileUiState.NoData -> {
+                EmptyScreen(modifier = Modifier.align(Alignment.Center))
+            }
         }
     }
 }

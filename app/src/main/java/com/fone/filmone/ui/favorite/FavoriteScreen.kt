@@ -13,12 +13,15 @@ import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.FTitleBar
@@ -34,9 +37,11 @@ import kotlinx.coroutines.launch
 fun FavoriteScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    viewModel: FavoriteViewModel = hiltViewModel()
 ) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(modifier = modifier.defaultSystemBarPadding()) {
         FTitleBar(
@@ -92,8 +97,8 @@ fun FavoriteScreen(
 
         HorizontalPager(pageCount = 2, state = pagerState) { page ->
             when (page) {
-                0 -> ActorScreen()
-                1 -> StaffScreen()
+                0 -> ActorScreen(actorUiState = uiState.actorUiState)
+                1 -> StaffScreen(staffUiState = uiState.staffUiState)
             }
         }
     }
