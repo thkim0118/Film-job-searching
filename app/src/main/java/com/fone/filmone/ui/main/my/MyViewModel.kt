@@ -1,6 +1,8 @@
 package com.fone.filmone.ui.main.my
 
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.data.datamodel.response.jobopenings.Type
+import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.data.datamodel.response.user.UserResponse
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.GetUserInfoUseCase
@@ -40,10 +42,14 @@ private data class MyViewModelState(
     val userResponse: UserResponse? = null
 ) {
     fun toUiState() = MyUiState(
-        nickname = userResponse?.user?.nickname ?: ""
+        nickname = userResponse?.user?.nickname ?: "",
+        profileUrl = userResponse?.user?.profileUrl ?: "",
+        job = userResponse?.user?.job ?: Job.NORMAL
     )
 }
 
 data class MyUiState(
-    val nickname: String
+    val nickname: String,
+    val profileUrl: String,
+    val job: Job
 )

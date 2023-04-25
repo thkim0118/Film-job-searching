@@ -11,11 +11,11 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.Placeholder
@@ -27,16 +27,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fone.filmone.BuildConfig
 import com.fone.filmone.R
+import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.ui.common.ext.*
 import com.fone.filmone.ui.common.fTextStyle
-import com.fone.filmone.ui.main.MainBottomSheetType
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
+import com.skydoves.landscapist.ShimmerParams
+import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
 fun MyScreen(
@@ -81,6 +81,8 @@ fun MyScreen(
             ProfileComponent(
                 modifier = Modifier,
                 nickname = uiState.nickname,
+                profileUrl = uiState.profileUrl,
+                job = uiState.job,
                 onClick = {
                     FOneNavigator.navigateTo(
                         NavDestinationState(route = FOneDestinations.MyInfo.route)
@@ -132,6 +134,8 @@ fun MyScreen(
 private fun ProfileComponent(
     modifier: Modifier = Modifier,
     nickname: String,
+    profileUrl: String,
+    job: Job,
     onClick: () -> Unit
 ) {
     Row(
@@ -140,13 +144,39 @@ private fun ProfileComponent(
             .padding(top = 16.dp, bottom = 15.dp, start = 24.dp, end = 18.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            modifier = Modifier
-                .clip(shape = CircleShape)
-                .size(68.dp),
-            imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
-            contentDescription = null
-        )
+        if (profileUrl.isEmpty()) {
+            Image(
+                modifier = Modifier
+                    .clip(shape = CircleShape)
+                    .size(68.dp),
+                imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
+                contentDescription = null
+            )
+        } else {
+            GlideImage(
+                modifier = modifier
+                    .size(68.dp)
+                    .clip(CircleShape),
+                shimmerParams = ShimmerParams(
+                    baseColor = MaterialTheme.colors.background,
+                    highlightColor = FColor.Gray700,
+                    durationMillis = 350,
+                    dropOff = 0.65f,
+                    tilt = 20f
+                ),
+
+                imageModel = profileUrl,
+                contentScale = ContentScale.Crop,
+                failure = {
+                    Image(
+                        modifier = Modifier
+                            .align(Alignment.Center),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
+                        contentDescription = null
+                    )
+                }
+            )
+        }
 
         Spacer(modifier = Modifier.width(12.dp))
 
@@ -159,7 +189,7 @@ private fun ProfileComponent(
         Spacer(modifier = Modifier.width(6.dp))
 
         Text(
-            text = "STAFF",
+            text = job.name,
             style = LocalTypography.current.subtitle2(),
             color = FColor.Primary
         )
