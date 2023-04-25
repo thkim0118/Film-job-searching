@@ -13,6 +13,7 @@ import com.fone.filmone.data.datamodel.response.competition.Competitions
 import com.fone.filmone.data.datamodel.response.competition.CompetitionsResponse
 import com.fone.filmone.data.datamodel.response.jobopenings.*
 import com.fone.filmone.data.datamodel.response.common.user.Gender
+import com.fone.filmone.domain.model.jobopenings.JobType
 import com.fone.filmone.domain.usecase.GetCompetitionsUseCase
 import com.fone.filmone.domain.usecase.GetMyJobOpeningsInfoUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
@@ -210,11 +211,6 @@ data class JobOpeningUiModel(
     val jobType: JobType,
     val casting: String
 )
-
-enum class JobType(@StringRes val stringRes: Int) {
-    PART(R.string.job_opening_job_type_part_title),
-    Field(R.string.job_opening_job_type_field_title)
-}
 
 data class CompetitionUiModel(
     val imageUrl: String,

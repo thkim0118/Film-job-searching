@@ -287,7 +287,6 @@ private fun WithdrawalBottomSheet(
 
 @Composable
 private fun MainDialog(
-    modifier: Modifier = Modifier,
     dialogState: MainDialogState,
     onDismiss: () -> Unit
 ) {
