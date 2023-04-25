@@ -140,7 +140,13 @@ fun MyInfoScreen(
 
                     EditButton(
                         uiState = uiState,
-                        onClick = viewModel::updateUserInfo
+                        onClick = {
+                            viewModel.updateUserInfo(
+                                onSuccess = {
+                                    navController.popBackStack()
+                                }
+                            )
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(40.dp))

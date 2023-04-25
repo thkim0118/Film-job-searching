@@ -151,22 +151,25 @@ class MyInfoViewModel @Inject constructor(
         updateEditButtonState()
     }
 
-    fun updateUserInfo() = viewModelScope.launch {
+    fun updateUserInfo(onSuccess: () -> Unit) = viewModelScope.launch {
         val encodedProfile: String? = _uiState.value.encodedProfile
 
         if (encodedProfile != null) {
             uploadImageUseCase(encodedProfile)
                 .onSuccess {
-                    updateUserInfoToRemote(it?.imageUrl ?: return@onSuccess)
+                    updateUserInfoToRemote(it?.imageUrl ?: return@onSuccess, onSuccess = onSuccess)
                 }.onFail {
                     showToast(R.string.toast_profile_register_fail)
                 }
         } else {
-            updateUserInfoToRemote()
+            updateUserInfoToRemote(onSuccess = onSuccess)
         }
     }
 
-    private fun updateUserInfoToRemote(profileUrl: String? = null) = viewModelScope.launch {
+    private fun updateUserInfoToRemote(
+        profileUrl: String? = null,
+        onSuccess: () -> Unit
+    ) = viewModelScope.launch {
         val currentUiState = _uiState.value
         updateUserInfoUseCase(
             interests = currentUiState.interests,
@@ -180,7 +183,7 @@ class MyInfoViewModel @Inject constructor(
                 return@launch
             }
         ).onSuccess {
-            // TODO 정보 수정 후 액션 추가 필요함.
+            onSuccess()
         }.onFail {
             showToast(it.message)
         }
