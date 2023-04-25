@@ -1,4 +1,4 @@
-package com.fone.filmone.data.datamodel.response.user
+package com.fone.filmone.data.datamodel.response.common.user
 
 import androidx.annotation.Keep
 import androidx.annotation.StringRes

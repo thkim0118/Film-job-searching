@@ -1,6 +1,5 @@
 package com.fone.filmone.data.repository
 
-import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
@@ -14,7 +13,7 @@ import com.fone.filmone.data.datasource.remote.UserApi
 import com.fone.filmone.di.IoDispatcher
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.repository.user.UserRepository
+import com.fone.filmone.domain.repository.UserRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 

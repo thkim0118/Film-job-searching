@@ -1,4 +1,4 @@
-package com.fone.filmone.domain.repository.auth
+package com.fone.filmone.domain.repository
 
 interface AuthRepository {
     suspend fun refreshToken(): String

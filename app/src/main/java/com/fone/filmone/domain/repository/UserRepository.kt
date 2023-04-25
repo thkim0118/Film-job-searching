@@ -1,4 +1,4 @@
-package com.fone.filmone.domain.repository.user
+package com.fone.filmone.domain.repository
 
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest

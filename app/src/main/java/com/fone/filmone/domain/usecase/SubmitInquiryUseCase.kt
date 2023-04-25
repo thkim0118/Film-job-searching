@@ -4,7 +4,7 @@ import com.fone.filmone.data.datamodel.request.inquiry.InquiryRequest
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.inquiry.InquiryVo
-import com.fone.filmone.domain.repository.inquiry.InquiryRepository
+import com.fone.filmone.domain.repository.InquiryRepository
 import javax.inject.Inject
 
 class SubmitInquiryUseCase @Inject constructor(

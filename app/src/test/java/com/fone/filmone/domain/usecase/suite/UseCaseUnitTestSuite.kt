@@ -18,6 +18,7 @@ import org.junit.runners.Suite
     VerifySmsCodeUseCaseTest::class,
     GetCompetitionsUseCaseTest::class,
     LogoutUseCaseTest::class,
-    SignOutUseCaseTest::class
+    SignOutUseCaseTest::class,
+    GetFavoriteProfilesUseCaseTest::class
 )
 class UseCaseUnitTestSuite

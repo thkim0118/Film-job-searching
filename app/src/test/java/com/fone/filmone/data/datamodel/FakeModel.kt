@@ -6,8 +6,12 @@ import com.fone.filmone.data.datamodel.request.inquiry.InquiryRequest
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
-import com.fone.filmone.data.datamodel.response.common.Pageable
-import com.fone.filmone.data.datamodel.response.common.Sort
+import com.fone.filmone.data.datamodel.response.common.paging.Pageable
+import com.fone.filmone.data.datamodel.response.common.paging.Sort
+import com.fone.filmone.data.datamodel.response.common.user.Career
+import com.fone.filmone.data.datamodel.response.common.user.Category
+import com.fone.filmone.data.datamodel.response.common.user.Domain
+import com.fone.filmone.data.datamodel.response.common.user.Gender
 import com.fone.filmone.data.datamodel.response.competition.CompetitionPrize
 import com.fone.filmone.data.datamodel.response.competition.Competitions
 import com.fone.filmone.data.datamodel.response.competition.CompetitionsResponse
@@ -15,6 +19,8 @@ import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse
 import com.fone.filmone.data.datamodel.response.inquiry.Question
 import com.fone.filmone.data.datamodel.response.jobopenings.*
+import com.fone.filmone.data.datamodel.response.profiles.FavoriteProfilesResponse
+import com.fone.filmone.data.datamodel.response.profiles.Profiles
 import com.fone.filmone.data.datamodel.response.user.*
 import com.fone.filmone.domain.model.inquiry.InquiryType
 import com.fone.filmone.domain.model.inquiry.InquiryVo
@@ -232,4 +238,42 @@ val fakeCompetition = Competitions(
 val fakeCompetitionsResponse = CompetitionsResponse(
     competitions = fakeCompetition,
     totalCount = 1
+)
+
+val fakeProfilesContent = com.fone.filmone.data.datamodel.response.profiles.Content(
+    age = 0,
+    birthday = "1234-01-01",
+    career = Career.LESS_THAN_10YEARS,
+    categories = listOf(Category.INDEPENDENT_FILM),
+    details = "detail",
+    domains = listOf(Domain.ART),
+    email = "email@test.com",
+    gender = Gender.IRRELEVANT,
+    height = 160,
+    hookingComment = "hookingComment",
+    id = 0,
+    isWant = true,
+    name = "name",
+    profileUrl = "profile.url",
+    profileUrls = listOf("profile.url"),
+    sns = "sns",
+    specialty = "specialty",
+    viewCount = 100,
+    weight = 50
+)
+
+val fakeProfiles = Profiles(
+    content = listOf(element = fakeProfilesContent),
+    empty = true,
+    first = true,
+    last = true,
+    number = 0,
+    numberOfElements = 0,
+    pageable = Pageable(),
+    size = 0,
+    sort = fakeSort
+)
+
+val fakeFavoriteProfilesResponse = FavoriteProfilesResponse(
+    profiles = fakeProfiles
 )

@@ -1,8 +1,8 @@
 package com.fone.filmone.data.datamodel.response.jobopenings
 
 import androidx.annotation.Keep
-import com.fone.filmone.data.datamodel.response.common.Pageable
-import com.fone.filmone.data.datamodel.response.common.Sort
+import com.fone.filmone.data.datamodel.response.common.paging.Pageable
+import com.fone.filmone.data.datamodel.response.common.paging.Sort
 
 @Keep
 data class JobOpenings(

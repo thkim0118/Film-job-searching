@@ -1,7 +1,7 @@
 package com.fone.filmone.ui.signup
 
 import androidx.lifecycle.ViewModel
-import com.fone.filmone.data.datamodel.response.jobopenings.Category
+import com.fone.filmone.data.datamodel.response.common.user.Category
 import com.fone.filmone.data.datamodel.response.user.Job
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

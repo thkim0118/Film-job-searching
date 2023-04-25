@@ -3,7 +3,7 @@ package com.fone.filmone.domain.usecase
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.response.user.SigninResponse
 import com.fone.filmone.domain.model.common.DataResult
-import com.fone.filmone.domain.repository.user.UserRepository
+import com.fone.filmone.domain.repository.UserRepository
 import javax.inject.Inject
 
 class SignInUseCase @Inject constructor(

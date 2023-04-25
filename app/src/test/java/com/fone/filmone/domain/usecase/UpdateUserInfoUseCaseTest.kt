@@ -7,7 +7,7 @@ import com.fone.filmone.data.datamodel.fakeUserUpdateRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
 import com.fone.filmone.data.datamodel.response.user.UserResponse
 import com.fone.filmone.domain.model.common.DataResult
-import com.fone.filmone.domain.repository.user.UserRepository
+import com.fone.filmone.domain.repository.UserRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule

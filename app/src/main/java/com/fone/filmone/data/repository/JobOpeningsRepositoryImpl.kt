@@ -4,7 +4,7 @@ import com.fone.filmone.data.datamodel.response.jobopenings.MyJobOpeningsRespons
 import com.fone.filmone.data.datamodel.response.common.network.handleNetwork
 import com.fone.filmone.data.datasource.remote.JobOpeningsApi
 import com.fone.filmone.domain.model.common.DataResult
-import com.fone.filmone.domain.repository.jobopenings.JobOpeningsRepository
+import com.fone.filmone.domain.repository.JobOpeningsRepository
 import javax.inject.Inject
 
 class JobOpeningsRepositoryImpl @Inject constructor(

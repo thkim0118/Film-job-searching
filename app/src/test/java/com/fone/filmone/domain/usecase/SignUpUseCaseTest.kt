@@ -10,7 +10,7 @@ import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.repository.user.UserRepository
+import com.fone.filmone.domain.repository.UserRepository
 import com.fone.filmone.ui.signup.model.SignUpVo
 import kotlinx.coroutines.runBlocking
 import org.junit.Before

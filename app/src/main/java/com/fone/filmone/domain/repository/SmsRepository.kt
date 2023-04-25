@@ -1,4 +1,4 @@
-package com.fone.filmone.domain.repository.sms
+package com.fone.filmone.domain.repository
 
 import com.fone.filmone.data.datamodel.request.sms.SmsRequest
 import com.fone.filmone.data.datamodel.response.sms.SmsTransmitResponse

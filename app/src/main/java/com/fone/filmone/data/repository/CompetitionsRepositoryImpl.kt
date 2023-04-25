@@ -4,7 +4,7 @@ import com.fone.filmone.data.datamodel.response.common.network.handleNetwork
 import com.fone.filmone.data.datamodel.response.competition.CompetitionsResponse
 import com.fone.filmone.data.datasource.remote.CompetitionsApi
 import com.fone.filmone.domain.model.common.DataResult
-import com.fone.filmone.domain.repository.competitions.CompetitionsRepository
+import com.fone.filmone.domain.repository.CompetitionsRepository
 import javax.inject.Inject
 
 class CompetitionsRepositoryImpl @Inject constructor(

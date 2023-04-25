@@ -5,7 +5,7 @@ import com.fone.filmone.data.datamodel.response.common.network.handleNetwork
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse
 import com.fone.filmone.data.datasource.remote.InquiryApi
 import com.fone.filmone.domain.model.common.DataResult
-import com.fone.filmone.domain.repository.inquiry.InquiryRepository
+import com.fone.filmone.domain.repository.InquiryRepository
 import javax.inject.Inject
 
 class InquiryRepositoryImpl @Inject constructor(

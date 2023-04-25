@@ -6,7 +6,7 @@ import com.fone.filmone.data.datamodel.response.user.Token
 import com.fone.filmone.data.datasource.local.TokenDataStore
 import com.fone.filmone.data.datasource.remote.TokenApi
 import com.fone.filmone.domain.model.common.getOrNull
-import com.fone.filmone.domain.repository.auth.AuthRepository
+import com.fone.filmone.domain.repository.AuthRepository
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject

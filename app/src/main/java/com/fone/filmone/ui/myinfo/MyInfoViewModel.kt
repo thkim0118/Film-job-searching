@@ -2,7 +2,7 @@ package com.fone.filmone.ui.myinfo
 
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
-import com.fone.filmone.data.datamodel.response.jobopenings.Category
+import com.fone.filmone.data.datamodel.response.common.user.Category
 import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess

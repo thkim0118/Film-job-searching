@@ -1,4 +1,4 @@
-package com.fone.filmone.domain.repository.inquiry
+package com.fone.filmone.domain.repository
 
 import com.fone.filmone.data.datamodel.request.inquiry.InquiryRequest
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse

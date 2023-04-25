@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.repository.sms.SmsRepository
+import com.fone.filmone.domain.repository.SmsRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test

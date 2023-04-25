@@ -1,7 +1,7 @@
 package com.fone.filmone.framework.drivers
 
 import com.fone.filmone.core.util.LogUtil
-import com.fone.filmone.domain.repository.auth.AuthRepository
+import com.fone.filmone.domain.repository.AuthRepository
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState

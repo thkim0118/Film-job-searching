@@ -2,7 +2,7 @@ package com.fone.filmone.di
 
 import com.fone.filmone.BuildConfig
 import com.fone.filmone.data.datasource.remote.*
-import com.fone.filmone.domain.repository.auth.AuthRepository
+import com.fone.filmone.domain.repository.AuthRepository
 import com.fone.filmone.framework.drivers.AuthInterceptor
 import dagger.Module
 import dagger.Provides
@@ -124,6 +124,11 @@ object NetworkModule {
     @Provides
     fun provideCompetitionsApi(retrofit: Retrofit): CompetitionsApi =
         retrofit.create(CompetitionsApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideProfilesApi(retrofit: Retrofit): ProfilesApi =
+        retrofit.create(ProfilesApi::class.java)
 }
 
 @Qualifier

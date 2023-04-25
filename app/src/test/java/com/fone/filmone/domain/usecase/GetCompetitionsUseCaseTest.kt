@@ -5,7 +5,7 @@ import com.fone.filmone.data.datamodel.fakeCompetitionsResponse
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.repository.competitions.CompetitionsRepository
+import com.fone.filmone.domain.repository.CompetitionsRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test

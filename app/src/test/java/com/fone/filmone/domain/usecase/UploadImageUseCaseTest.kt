@@ -4,13 +4,12 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.fone.filmone.data.datamodel.fakeImageUploadRequest
 import com.fone.filmone.data.datamodel.fakeImageUploadResponse
 import com.fone.filmone.data.datamodel.request.imageupload.ImageUploadRequest
-import com.fone.filmone.data.datamodel.request.imageupload.StageVariables
 import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
 import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.repository.imageupload.ImageUploadRepository
+import com.fone.filmone.domain.repository.ImageUploadRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule

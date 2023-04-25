@@ -6,14 +6,12 @@ import com.fone.filmone.data.datamodel.fakeInquiryResponse
 import com.fone.filmone.data.datamodel.fakeInquiryVo
 import com.fone.filmone.data.datamodel.request.inquiry.InquiryRequest
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse
-import com.fone.filmone.data.datamodel.response.inquiry.Question
 import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.model.inquiry.InquiryType
 import com.fone.filmone.domain.model.inquiry.InquiryVo
-import com.fone.filmone.domain.repository.inquiry.InquiryRepository
+import com.fone.filmone.domain.repository.InquiryRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
