@@ -1,11 +1,11 @@
-package com.fone.filmone.data.datamodel.response.jobopenings
+package com.fone.filmone.data.datamodel.response.common.profile
 
 import androidx.annotation.Keep
 import com.fone.filmone.data.datamodel.response.common.paging.Pageable
 import com.fone.filmone.data.datamodel.response.common.paging.Sort
 
 @Keep
-data class JobOpenings(
+data class Profiles(
     val content: List<Content>,
     val empty: Boolean,
     val first: Boolean,

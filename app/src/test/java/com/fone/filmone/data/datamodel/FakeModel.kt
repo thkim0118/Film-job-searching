@@ -6,6 +6,10 @@ import com.fone.filmone.data.datamodel.request.inquiry.InquiryRequest
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
+import com.fone.filmone.data.datamodel.response.common.jobopenings.Content
+import com.fone.filmone.data.datamodel.response.common.jobopenings.JobOpenings
+import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
+import com.fone.filmone.data.datamodel.response.common.jobopenings.Work
 import com.fone.filmone.data.datamodel.response.common.paging.Pageable
 import com.fone.filmone.data.datamodel.response.common.paging.Sort
 import com.fone.filmone.data.datamodel.response.common.user.Career
@@ -18,9 +22,9 @@ import com.fone.filmone.data.datamodel.response.competition.CompetitionsResponse
 import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse
 import com.fone.filmone.data.datamodel.response.inquiry.Question
-import com.fone.filmone.data.datamodel.response.jobopenings.*
-import com.fone.filmone.data.datamodel.response.profiles.FavoriteProfilesResponse
-import com.fone.filmone.data.datamodel.response.profiles.Profiles
+import com.fone.filmone.data.datamodel.response.profiles.favorite.FavoriteProfilesResponse
+import com.fone.filmone.data.datamodel.response.common.profile.Profiles
+import com.fone.filmone.data.datamodel.response.jobopenings.scrap.*
 import com.fone.filmone.data.datamodel.response.user.*
 import com.fone.filmone.domain.model.inquiry.InquiryType
 import com.fone.filmone.domain.model.inquiry.InquiryVo
@@ -194,7 +198,7 @@ val fakeJobOpenings = JobOpenings(
     sort = fakeSort
 )
 
-val fakeMyJobOpeningsResponse = MyJobOpeningsResponse(
+val fakeMyJobOpeningsScrapResponse = MyJobOpeningsScrapResponse(
     jobOpenings = fakeJobOpenings
 )
 
@@ -240,7 +244,7 @@ val fakeCompetitionsResponse = CompetitionsResponse(
     totalCount = 1
 )
 
-val fakeProfilesContent = com.fone.filmone.data.datamodel.response.profiles.Content(
+val fakeProfilesContent = com.fone.filmone.data.datamodel.response.common.profile.Content(
     age = 0,
     birthday = "1234-01-01",
     career = Career.LESS_THAN_10YEARS,

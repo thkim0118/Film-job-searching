@@ -1,8 +1,6 @@
 package com.fone.filmone.ui.scrap
 
-import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
-import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.response.common.paging.Pageable
 import com.fone.filmone.data.datamodel.response.common.paging.Sort
 import com.fone.filmone.data.datamodel.response.common.user.Career
@@ -11,11 +9,14 @@ import com.fone.filmone.data.datamodel.response.common.user.Domain
 import com.fone.filmone.data.datamodel.response.competition.CompetitionPrize
 import com.fone.filmone.data.datamodel.response.competition.Competitions
 import com.fone.filmone.data.datamodel.response.competition.CompetitionsResponse
-import com.fone.filmone.data.datamodel.response.jobopenings.*
 import com.fone.filmone.data.datamodel.response.common.user.Gender
+import com.fone.filmone.data.datamodel.response.common.jobopenings.Content
+import com.fone.filmone.data.datamodel.response.common.jobopenings.JobOpenings
+import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
+import com.fone.filmone.data.datamodel.response.common.jobopenings.Work
 import com.fone.filmone.domain.model.jobopenings.JobType
 import com.fone.filmone.domain.usecase.GetCompetitionsUseCase
-import com.fone.filmone.domain.usecase.GetMyJobOpeningsInfoUseCase
+import com.fone.filmone.domain.usecase.GetMyJobOpeningsScrapsUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -24,7 +25,7 @@ import kotlin.random.Random
 
 @HiltViewModel
 class ScrapViewModel @Inject constructor(
-    private val getMyJobOpeningsInfoUseCase: GetMyJobOpeningsInfoUseCase,
+    private val getMyJobOpeningsScrapsUseCase: GetMyJobOpeningsScrapsUseCase,
     private val getCompetitionsUseCase: GetCompetitionsUseCase,
 ) : BaseViewModel() {
     private val viewModelState = MutableStateFlow(ScarpViewModelState())

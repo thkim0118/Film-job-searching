@@ -1,6 +1,6 @@
 package com.fone.filmone.domain.usecase
 
-import com.fone.filmone.data.datamodel.response.profiles.FavoriteProfilesResponse
+import com.fone.filmone.data.datamodel.response.profiles.favorite.FavoriteProfilesResponse
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.repository.ProfilesRepository
 import javax.inject.Inject

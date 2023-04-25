@@ -3,7 +3,7 @@ package com.fone.filmone.ui.myregister
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.data.datamodel.response.common.user.Category
 import com.fone.filmone.data.datamodel.response.common.user.Gender
-import com.fone.filmone.data.datamodel.response.jobopenings.Type
+import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
 import com.fone.filmone.domain.model.jobopenings.JobType
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

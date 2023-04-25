@@ -1,7 +1,6 @@
 package com.fone.filmone.ui.main.my
 
 import androidx.lifecycle.viewModelScope
-import com.fone.filmone.data.datamodel.response.jobopenings.Type
 import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.data.datamodel.response.user.UserResponse
 import com.fone.filmone.domain.model.common.onSuccess
