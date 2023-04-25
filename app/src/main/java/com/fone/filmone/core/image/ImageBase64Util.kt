@@ -25,7 +25,7 @@ object ImageBase64Util {
             }
 
             val byteArrayOutputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, byteArrayOutputStream)
             byteArrayOutputStream.flush()
             byteArrayOutputStream.close()
 
