@@ -1,15 +1,20 @@
 package com.fone.filmone.ui.favorite
 
 import androidx.lifecycle.viewModelScope
-import com.fone.filmone.domain.usecase.GetFavoriteProfilesUseCase
+import com.fone.filmone.domain.model.common.getOrNull
+import com.fone.filmone.domain.model.common.onSuccess
+import com.fone.filmone.domain.usecase.GetFavoriteProfilesActorUseCase
+import com.fone.filmone.domain.usecase.GetFavoriteProfilesStaffUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
-    private val getFavoriteProfilesUseCase: GetFavoriteProfilesUseCase
+    private val getFavoriteProfilesActorUseCase: GetFavoriteProfilesActorUseCase,
+    private val getFavoriteProfilesStaffUseCase: GetFavoriteProfilesStaffUseCase
 ) : BaseViewModel() {
     private val viewModelState = MutableStateFlow(FavoriteViewModelState())
 
@@ -108,13 +113,42 @@ class FavoriteViewModel @Inject constructor(
         )
 
     init {
-        viewModelState.update {
-            it.copy(
-                actorProfiles = fakeActorModels,
-//                staffProfiles = fakeStaffModels,
-                staffProfiles = emptyList()
-            )
+        viewModelScope.launch {
+            val actorResponse = getFavoriteProfilesActorUseCase(page = 1).getOrNull()
+            val staffResponse = getFavoriteProfilesStaffUseCase(page = 1).getOrNull()
+
+            flowOf(actorResponse)
+                .combine(flowOf(staffResponse)) { actorResult, staffResult ->
+                    FavoriteViewModelState(
+                        actorProfiles = actorResult?.profiles?.content?.map { content ->
+                            FavoriteUiModel(
+                                profileUrl = content.profileUrl,
+                                name = content.name,
+                                info = content.birthday + content.age
+                            )
+                        } ?: emptyList(),
+                        staffProfiles = staffResult?.profiles?.content?.map { content ->
+                            FavoriteUiModel(
+                                profileUrl = content.profileUrl,
+                                name = content.name,
+                                info = content.birthday + content.age
+                            )
+                        } ?: emptyList()
+                    )
+                }.onEach { combinedViewModelState ->
+                    viewModelState.update {
+                        combinedViewModelState
+                    }
+                }.launchIn(viewModelScope)
         }
+
+//        viewModelState.update {
+//            it.copy(
+//                actorProfiles = fakeActorModels,
+////                staffProfiles = fakeStaffModels,
+//                staffProfiles = emptyList()
+//            )
+//        }
     }
 }
 

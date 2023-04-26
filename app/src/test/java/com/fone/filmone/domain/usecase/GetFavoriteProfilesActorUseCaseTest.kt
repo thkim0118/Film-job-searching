@@ -12,15 +12,15 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-internal class GetFavoriteProfilesUseCaseTest {
+internal class GetFavoriteProfilesActorUseCaseTest {
     @Rule
     @JvmField
     val rule = InstantTaskExecutorRule()
 
     private val profilesRepository = mock<ProfilesRepository>()
 
-    private val getFavoriteProfilesUseCase by lazy {
-        GetFavoriteProfilesUseCase(profilesRepository)
+    private val getFavoriteProfilesActorUseCase by lazy {
+        GetFavoriteProfilesActorUseCase(profilesRepository)
     }
 
     @Test
@@ -30,7 +30,7 @@ internal class GetFavoriteProfilesUseCaseTest {
                 DataResult.Success(fakeFavoriteProfilesResponse)
             )
 
-        getFavoriteProfilesUseCase()
+        getFavoriteProfilesActorUseCase()
             .onSuccess {
                 assert(true)
             }.onFail {

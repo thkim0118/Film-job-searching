@@ -19,6 +19,6 @@ import org.junit.runners.Suite
     GetCompetitionsUseCaseTest::class,
     LogoutUseCaseTest::class,
     SignOutUseCaseTest::class,
-    GetFavoriteProfilesUseCaseTest::class
+    GetFavoriteProfilesActorUseCaseTest::class
 )
 class UseCaseUnitTestSuite

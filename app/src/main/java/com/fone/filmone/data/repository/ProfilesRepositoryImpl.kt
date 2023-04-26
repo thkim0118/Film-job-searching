@@ -1,5 +1,6 @@
 package com.fone.filmone.data.repository
 
+import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.response.common.network.handleNetwork
 import com.fone.filmone.data.datamodel.response.profiles.favorite.FavoriteProfilesResponse
 import com.fone.filmone.data.datamodel.response.profiles.myregistrations.MyRegistrationsResponse
@@ -11,8 +12,12 @@ import javax.inject.Inject
 class ProfilesRepositoryImpl @Inject constructor(
     private val profilesApi: ProfilesApi
 ) : ProfilesRepository {
-    override suspend fun getFavoriteProfiles(): DataResult<FavoriteProfilesResponse> {
-        return handleNetwork { profilesApi.getFavoriteProfile() }
+    override suspend fun getFavoriteProfiles(
+        page: Int,
+        size: Int,
+        type: Type
+    ): DataResult<FavoriteProfilesResponse> {
+        return handleNetwork { profilesApi.getFavoriteProfile(page, size, type) }
     }
 
     override suspend fun getMyRegistrations(): DataResult<MyRegistrationsResponse> {
