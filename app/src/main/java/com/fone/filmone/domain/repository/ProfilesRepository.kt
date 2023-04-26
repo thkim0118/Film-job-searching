@@ -12,5 +12,8 @@ interface ProfilesRepository {
         type: Type
     ): DataResult<FavoriteProfilesResponse>
 
-    suspend fun getMyRegistrations(): DataResult<MyRegistrationsResponse>
+    suspend fun getMyRegistrations(
+        page: Int,
+        size: Int = 20,
+    ): DataResult<MyRegistrationsResponse>
 }

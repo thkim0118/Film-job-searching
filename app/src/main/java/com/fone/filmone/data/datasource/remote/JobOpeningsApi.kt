@@ -18,5 +18,8 @@ interface JobOpeningsApi {
     ): Response<NetworkResponse<JobOpeningsScrapResponse>>
 
     @GET("${Server.ApiVersion}/job-openings/my-registrations")
-    suspend fun getMyRegistrations(): Response<NetworkResponse<MyRegistrationJobOpeningsResponse>>
+    suspend fun getMyRegistrations(
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ): Response<NetworkResponse<MyRegistrationJobOpeningsResponse>>
 }

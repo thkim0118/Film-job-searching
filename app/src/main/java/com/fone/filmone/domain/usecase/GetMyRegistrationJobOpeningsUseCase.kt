@@ -8,7 +8,10 @@ import javax.inject.Inject
 class GetMyRegistrationJobOpeningsUseCase @Inject constructor(
     private val jobOpeningsRepository: JobOpeningsRepository
 ) {
-    suspend operator fun invoke(): DataResult<MyRegistrationJobOpeningsResponse> {
-        return jobOpeningsRepository.getMyRegistrations()
+    suspend operator fun invoke(
+        page: Int,
+        size: Int = 20
+    ): DataResult<MyRegistrationJobOpeningsResponse> {
+        return jobOpeningsRepository.getMyRegistrations(page = page, size = size)
     }
 }

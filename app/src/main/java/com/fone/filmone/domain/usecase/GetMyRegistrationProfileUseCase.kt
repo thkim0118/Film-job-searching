@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetMyRegistrationProfileUseCase @Inject constructor(
     private val profilesRepository: ProfilesRepository
 ) {
-    suspend operator fun invoke(): DataResult<MyRegistrationsResponse> {
-        return profilesRepository.getMyRegistrations()
+    suspend operator fun invoke(page: Int, size: Int = 20): DataResult<MyRegistrationsResponse> {
+        return profilesRepository.getMyRegistrations(page = page, size = size)
     }
 }

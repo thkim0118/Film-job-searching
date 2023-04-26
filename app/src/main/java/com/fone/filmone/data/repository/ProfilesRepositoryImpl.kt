@@ -20,7 +20,10 @@ class ProfilesRepositoryImpl @Inject constructor(
         return handleNetwork { profilesApi.getFavoriteProfile(page, size, type) }
     }
 
-    override suspend fun getMyRegistrations(): DataResult<MyRegistrationsResponse> {
-        return handleNetwork { profilesApi.getMyRegistrations() }
+    override suspend fun getMyRegistrations(
+        page: Int,
+        size: Int,
+    ): DataResult<MyRegistrationsResponse> {
+        return handleNetwork { profilesApi.getMyRegistrations(page, size) }
     }
 }

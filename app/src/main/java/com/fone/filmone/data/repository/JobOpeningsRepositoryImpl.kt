@@ -20,7 +20,10 @@ class JobOpeningsRepositoryImpl @Inject constructor(
         return handleNetwork { jobOpeningsApi.getScraps(page = page, size = size, type = type) }
     }
 
-    override suspend fun getMyRegistrations(): DataResult<MyRegistrationJobOpeningsResponse> {
-        return handleNetwork { jobOpeningsApi.getMyRegistrations() }
+    override suspend fun getMyRegistrations(
+        page: Int,
+        size: Int,
+    ): DataResult<MyRegistrationJobOpeningsResponse> {
+        return handleNetwork { jobOpeningsApi.getMyRegistrations(page = page, size = size) }
     }
 }

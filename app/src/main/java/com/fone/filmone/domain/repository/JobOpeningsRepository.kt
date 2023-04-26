@@ -11,5 +11,9 @@ interface JobOpeningsRepository {
         size: Int = 20,
         type: Type
     ): DataResult<JobOpeningsScrapResponse>
-    suspend fun getMyRegistrations(): DataResult<MyRegistrationJobOpeningsResponse>
+
+    suspend fun getMyRegistrations(
+        page: Int,
+        size: Int = 20,
+    ): DataResult<MyRegistrationJobOpeningsResponse>
 }

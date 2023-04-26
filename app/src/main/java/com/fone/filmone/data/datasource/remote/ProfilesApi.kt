@@ -19,5 +19,8 @@ interface ProfilesApi {
     ): Response<NetworkResponse<FavoriteProfilesResponse>>
 
     @GET("${Server.ApiVersion}/profiles/my-registrations")
-    suspend fun getMyRegistrations(): Response<NetworkResponse<MyRegistrationsResponse>>
+    suspend fun getMyRegistrations(
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ): Response<NetworkResponse<MyRegistrationsResponse>>
 }
