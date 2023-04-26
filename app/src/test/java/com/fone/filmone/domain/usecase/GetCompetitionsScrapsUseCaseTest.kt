@@ -12,25 +12,25 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-internal class GetCompetitionsUseCaseTest {
+internal class GetCompetitionsScrapsUseCaseTest {
     @Rule
     @JvmField
     val rule = InstantTaskExecutorRule()
 
     private val competitionsRepository = mock<CompetitionsRepository>()
 
-    private val getCompetitionsUseCase by lazy {
-        GetCompetitionsUseCase(competitionsRepository)
+    private val getCompetitionsScrapsUseCase by lazy {
+        GetCompetitionsScrapsUseCase(competitionsRepository)
     }
 
     @Test
     fun get_competitions_success(): Unit = runBlocking {
-        whenever(competitionsRepository.getCompetitions())
+        whenever(competitionsRepository.getScraps(page = 1))
             .thenReturn(
                 DataResult.Success(fakeCompetitionsResponse)
             )
 
-        getCompetitionsUseCase()
+        getCompetitionsScrapsUseCase(page = 1)
             .onSuccess {
                 assert(it?.competitions?.content?.firstOrNull()?.id == fakeCompetitionsResponse.competitions.content.first().id)
             }

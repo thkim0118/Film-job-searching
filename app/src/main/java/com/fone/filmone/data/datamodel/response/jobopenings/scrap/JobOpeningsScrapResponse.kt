@@ -4,6 +4,6 @@ import androidx.annotation.Keep
 import com.fone.filmone.data.datamodel.response.common.jobopenings.JobOpenings
 
 @Keep
-data class MyJobOpeningsScrapResponse(
+data class JobOpeningsScrapResponse(
     val jobOpenings: JobOpenings
 )

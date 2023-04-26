@@ -7,7 +7,7 @@ import org.junit.runners.Suite
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
     CheckNicknameDuplicationUseCaseTest::class,
-    GetMyJobOpeningsScrapsUseCaseTest::class,
+    GetJobOpeningsActorScrapsUseCaseTest::class,
     GetUserInfoUseCaseTest::class,
     RequestPhoneVerificationUseCaseTest::class,
     SignInUseCaseTest::class,
@@ -16,7 +16,7 @@ import org.junit.runners.Suite
     UpdateUserInfoUseCaseTest::class,
     UploadImageUseCaseTest::class,
     VerifySmsCodeUseCaseTest::class,
-    GetCompetitionsUseCaseTest::class,
+    GetCompetitionsScrapsUseCaseTest::class,
     LogoutUseCaseTest::class,
     SignOutUseCaseTest::class,
     GetFavoriteProfilesActorUseCaseTest::class

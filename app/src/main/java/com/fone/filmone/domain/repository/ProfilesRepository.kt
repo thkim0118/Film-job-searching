@@ -8,7 +8,7 @@ import com.fone.filmone.domain.model.common.DataResult
 interface ProfilesRepository {
     suspend fun getFavoriteProfiles(
         page: Int,
-        size: Int,
+        size: Int = 20,
         type: Type
     ): DataResult<FavoriteProfilesResponse>
 

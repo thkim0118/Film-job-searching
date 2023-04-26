@@ -2,7 +2,6 @@ package com.fone.filmone.ui.favorite
 
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.domain.model.common.getOrNull
-import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.GetFavoriteProfilesActorUseCase
 import com.fone.filmone.domain.usecase.GetFavoriteProfilesStaffUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
@@ -114,32 +113,29 @@ class FavoriteViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val actorResponse = getFavoriteProfilesActorUseCase(page = 1).getOrNull()
-            val staffResponse = getFavoriteProfilesStaffUseCase(page = 1).getOrNull()
+            val actorResponse = flowOf(getFavoriteProfilesActorUseCase(page = 1).getOrNull())
+            val staffResponse = flowOf(getFavoriteProfilesStaffUseCase(page = 1).getOrNull())
 
-            flowOf(actorResponse)
-                .combine(flowOf(staffResponse)) { actorResult, staffResult ->
-                    FavoriteViewModelState(
-                        actorProfiles = actorResult?.profiles?.content?.map { content ->
-                            FavoriteUiModel(
-                                profileUrl = content.profileUrl,
-                                name = content.name,
-                                info = content.birthday + content.age
-                            )
-                        } ?: emptyList(),
-                        staffProfiles = staffResult?.profiles?.content?.map { content ->
-                            FavoriteUiModel(
-                                profileUrl = content.profileUrl,
-                                name = content.name,
-                                info = content.birthday + content.age
-                            )
-                        } ?: emptyList()
-                    )
-                }.onEach { combinedViewModelState ->
-                    viewModelState.update {
-                        combinedViewModelState
-                    }
-                }.launchIn(viewModelScope)
+            combine(actorResponse, staffResponse) { actorResult, staffResult ->
+                FavoriteViewModelState(
+                    actorProfiles = actorResult?.profiles?.content?.map { content ->
+                        FavoriteUiModel(
+                            profileUrl = content.profileUrl,
+                            name = content.name,
+                            info = content.birthday + content.age
+                        )
+                    } ?: emptyList(),
+                    staffProfiles = staffResult?.profiles?.content?.map { content ->
+                        FavoriteUiModel(
+                            profileUrl = content.profileUrl,
+                            name = content.name,
+                            info = content.birthday + content.age
+                        )
+                    } ?: emptyList()
+                )
+            }.onEach { combinedViewModelState ->
+                viewModelState.update { combinedViewModelState }
+            }.launchIn(viewModelScope)
         }
 
 //        viewModelState.update {

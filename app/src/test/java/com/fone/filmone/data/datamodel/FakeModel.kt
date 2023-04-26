@@ -198,7 +198,7 @@ val fakeJobOpenings = JobOpenings(
     sort = fakeSort
 )
 
-val fakeMyJobOpeningsScrapResponse = MyJobOpeningsScrapResponse(
+val fakeJobOpeningsScrapResponse = JobOpeningsScrapResponse(
     jobOpenings = fakeJobOpenings
 )
 

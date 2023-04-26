@@ -5,10 +5,10 @@ import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.repository.CompetitionsRepository
 import javax.inject.Inject
 
-class GetCompetitionsUseCase @Inject constructor(
+class GetCompetitionsScrapsUseCase @Inject constructor(
     private val competitionsRepository: CompetitionsRepository
 ) {
-    suspend operator fun invoke(): DataResult<CompetitionsResponse> {
-        return competitionsRepository.getCompetitions()
+    suspend operator fun invoke(page: Int, size: Int = 20): DataResult<CompetitionsResponse> {
+        return competitionsRepository.getScraps(page = page, size = size)
     }
 }

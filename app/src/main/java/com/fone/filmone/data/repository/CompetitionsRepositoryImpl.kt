@@ -10,7 +10,10 @@ import javax.inject.Inject
 class CompetitionsRepositoryImpl @Inject constructor(
     private val competitionsApi: CompetitionsApi
 ) : CompetitionsRepository {
-    override suspend fun getCompetitions(): DataResult<CompetitionsResponse> {
-        return handleNetwork { competitionsApi.getCompetitions() }
+    override suspend fun getScraps(
+        page: Int,
+        size: Int
+    ): DataResult<CompetitionsResponse> {
+        return handleNetwork { competitionsApi.getScraps(page, size) }
     }
 }

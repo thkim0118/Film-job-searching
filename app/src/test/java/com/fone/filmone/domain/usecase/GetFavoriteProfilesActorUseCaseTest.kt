@@ -2,6 +2,7 @@ package com.fone.filmone.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.fone.filmone.data.datamodel.fakeFavoriteProfilesResponse
+import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
@@ -25,12 +26,12 @@ internal class GetFavoriteProfilesActorUseCaseTest {
 
     @Test
     fun get_favorite_profiles_success(): Unit = runBlocking {
-        whenever(profilesRepository.getFavoriteProfiles())
+        whenever(profilesRepository.getFavoriteProfiles(page = 1, type = Type.ACTOR))
             .thenReturn(
                 DataResult.Success(fakeFavoriteProfilesResponse)
             )
 
-        getFavoriteProfilesActorUseCase()
+        getFavoriteProfilesActorUseCase(page = 1)
             .onSuccess {
                 assert(true)
             }.onFail {

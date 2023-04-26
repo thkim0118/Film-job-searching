@@ -1,32 +1,36 @@
 package com.fone.filmone.ui.scrap
 
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.data.datamodel.response.common.jobopenings.Content
+import com.fone.filmone.data.datamodel.response.common.jobopenings.JobOpenings
+import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
+import com.fone.filmone.data.datamodel.response.common.jobopenings.Work
 import com.fone.filmone.data.datamodel.response.common.paging.Pageable
 import com.fone.filmone.data.datamodel.response.common.paging.Sort
 import com.fone.filmone.data.datamodel.response.common.user.Career
 import com.fone.filmone.data.datamodel.response.common.user.Category
 import com.fone.filmone.data.datamodel.response.common.user.Domain
+import com.fone.filmone.data.datamodel.response.common.user.Gender
 import com.fone.filmone.data.datamodel.response.competition.CompetitionPrize
 import com.fone.filmone.data.datamodel.response.competition.Competitions
 import com.fone.filmone.data.datamodel.response.competition.CompetitionsResponse
-import com.fone.filmone.data.datamodel.response.common.user.Gender
-import com.fone.filmone.data.datamodel.response.common.jobopenings.Content
-import com.fone.filmone.data.datamodel.response.common.jobopenings.JobOpenings
-import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
-import com.fone.filmone.data.datamodel.response.common.jobopenings.Work
+import com.fone.filmone.domain.model.common.getOrNull
 import com.fone.filmone.domain.model.jobopenings.JobType
-import com.fone.filmone.domain.usecase.GetCompetitionsUseCase
-import com.fone.filmone.domain.usecase.GetMyJobOpeningsScrapsUseCase
+import com.fone.filmone.domain.usecase.GetCompetitionsScrapsUseCase
+import com.fone.filmone.domain.usecase.GetJobOpeningsActorScrapsUseCase
+import com.fone.filmone.domain.usecase.GetJobOpeningsStaffScrapsUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.random.Random
 
 @HiltViewModel
 class ScrapViewModel @Inject constructor(
-    private val getMyJobOpeningsScrapsUseCase: GetMyJobOpeningsScrapsUseCase,
-    private val getCompetitionsUseCase: GetCompetitionsUseCase,
+    private val getJobOpeningsActorScrapsUseCase: GetJobOpeningsActorScrapsUseCase,
+    private val getJobOpeningsStaffScrapsUseCase: GetJobOpeningsStaffScrapsUseCase,
+    private val getCompetitionsScrapsUseCase: GetCompetitionsScrapsUseCase,
 ) : BaseViewModel() {
     private val viewModelState = MutableStateFlow(ScarpViewModelState())
 
@@ -155,22 +159,49 @@ class ScrapViewModel @Inject constructor(
     )
 
     init {
-        viewModelState.update {
-            it.copy(
-                jobOpenings = fakeJobOpenings,
-                competitionsResponse = fakeCompetitionsResponse
-            )
+        viewModelScope.launch {
+            val jobOpeningsActorResponse =
+                flowOf(getJobOpeningsActorScrapsUseCase(page = 1).getOrNull())
+            val jobOpeningsStaffResponse =
+                flowOf(getJobOpeningsStaffScrapsUseCase(page = 1).getOrNull())
+            val competitionsResponse = flowOf(getCompetitionsScrapsUseCase(page = 1).getOrNull())
+
+            combine(
+                jobOpeningsActorResponse,
+                jobOpeningsStaffResponse,
+                competitionsResponse
+            ) { actorResult, staffResult, competitionsResult ->
+                ScarpViewModelState(
+                    actorJobOpenings = actorResult?.jobOpenings,
+                    staffJobOpenings = staffResult?.jobOpenings,
+                    competitionsResponse = competitionsResult
+                )
+            }.onEach { combinedViewModelState ->
+                viewModelState.update { combinedViewModelState }
+            }.launchIn(viewModelScope)
         }
+
+//        viewModelState.update {
+//            it.copy(
+//                actorJobOpenings = fakeJobOpenings,
+//                competitionsResponse = fakeCompetitionsResponse
+//            )
+//        }
     }
 }
 
 private data class ScarpViewModelState(
-    val jobOpenings: JobOpenings? = null,
+    val actorJobOpenings: JobOpenings? = null,
+    val staffJobOpenings: JobOpenings? = null,
     val competitionsResponse: CompetitionsResponse? = null,
 ) {
-    fun toUiState(): ScrapUiState =
-        ScrapUiState(
-            jobOpenings = jobOpenings?.content?.map { content ->
+    fun toUiState(): ScrapUiState {
+        val actorContents = actorJobOpenings?.content ?: emptyList()
+        val staffContents = staffJobOpenings?.content ?: emptyList()
+        val combinedContents = (actorContents + staffContents).sortedBy { it.id }
+
+        return ScrapUiState(
+            jobOpenings = combinedContents.map { content ->
                 JobOpeningUiModel(
                     type = content.type,
                     categories = content.categories,
@@ -194,6 +225,7 @@ private data class ScarpViewModelState(
                 )
             } ?: emptyList()
         )
+    }
 }
 
 data class ScrapUiState(
