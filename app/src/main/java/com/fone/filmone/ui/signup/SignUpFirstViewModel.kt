@@ -1,8 +1,8 @@
 package com.fone.filmone.ui.signup
 
 import androidx.lifecycle.ViewModel
-import com.fone.filmone.domain.model.signup.Interests
-import com.fone.filmone.domain.model.signup.Job
+import com.fone.filmone.data.datamodel.response.common.user.Category
+import com.fone.filmone.data.datamodel.response.user.Job
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +22,7 @@ class SignUpFirstViewModel @Inject constructor(
         }
     }
 
-    fun updateInterest(interest: Interests, enable: Boolean) {
+    fun updateInterest(interest: Category, enable: Boolean) {
         _uiState.update { uiState ->
             uiState.copy(
                 interests = if (enable) {
@@ -37,5 +37,5 @@ class SignUpFirstViewModel @Inject constructor(
 
 data class SignUpFirstUiState(
     val job: Job?,
-    val interests: List<Interests>
+    val interests: List<Category>
 )

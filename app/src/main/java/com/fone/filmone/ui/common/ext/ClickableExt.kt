@@ -101,7 +101,7 @@ private class MultipleEventsCutterImpl : MultipleEventsCutter {
 
     override fun processEvent(event: () -> Unit) {
         if (now - lastEventTimeMs >= 1000L) {
-            event.invoke()
+            event()
         }
         lastEventTimeMs = now
     }

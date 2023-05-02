@@ -1,10 +1,10 @@
 package com.fone.filmone.domain.usecase
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.repository.sms.SmsRepository
+import com.fone.filmone.domain.repository.SmsRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
@@ -30,9 +30,9 @@ internal class VerifySmsCodeUseCaseTest {
                 DataResult.Success(true)
             )
 
-        verifySmsCodeUpUseCase.invoke(code)
+        verifySmsCodeUpUseCase(code)
             .onSuccess {
-                assert(it)
+                assert(it == true)
             }.onFail {
                 assert(false)
             }
@@ -46,9 +46,9 @@ internal class VerifySmsCodeUseCaseTest {
                 DataResult.Success(false)
             )
 
-        verifySmsCodeUpUseCase.invoke(code)
+        verifySmsCodeUpUseCase(code)
             .onSuccess {
-                assert(it.not())
+                assert(it?.not() == true)
             }.onFail {
                 assert(false)
             }

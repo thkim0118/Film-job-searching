@@ -43,14 +43,14 @@ fun FButton(
                     FColor.DisableBase
                 }
             )
-            .clickableSingle { onClick.invoke() },
+            .clickableSingle { onClick() },
     ) {
         Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.Center),
             text = title,
-            style = LocalTypography.current.button1,
+            style = LocalTypography.current.button1(),
             color = FColor.White,
             textAlign = TextAlign.Center
         )

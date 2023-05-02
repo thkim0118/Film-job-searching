@@ -1,6 +1,8 @@
 package com.fone.filmone.data.datamodel.response.user
 
 import androidx.annotation.Keep
+import com.fone.filmone.data.datamodel.response.common.user.Category
+import com.fone.filmone.data.datamodel.response.common.user.Gender
 
 @Keep
 data class User(
@@ -9,13 +11,13 @@ data class User(
     val birthday: String,
     val email: String,
     val enabled: Boolean,
-    val gender: String,
+    val gender: Gender,
     val id: Int,
-    val interests: List<String>,
+    val interests: List<Category>,
     val isReceiveMarketing: Boolean,
-    val job: String,
+    val job: Job,
     val nickname: String,
     val phoneNumber: String,
     val profileUrl: String,
-    val socialLoginType: String
+    val socialLoginType: SocialLoginType
 )

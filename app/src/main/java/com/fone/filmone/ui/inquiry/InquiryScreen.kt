@@ -3,6 +3,7 @@ package com.fone.filmone.ui.inquiry
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -34,14 +35,21 @@ fun InquiryScreen(
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
 
-    Box(
+    if (uiState.popScreen) {
+        navController.popBackStack()
+    }
+
+    Scaffold(
         modifier = modifier
             .fillMaxSize()
             .defaultSystemBarPadding()
-            .toastPadding()
+            .toastPadding(),
+        snackbarHost = {
+            FToast(baseViewModel = viewModel, hostState = it)
+        }
     ) {
         Column(
-            modifier = Modifier
+            modifier = Modifier.padding(it)
         ) {
             FTitleBar(
                 titleType = TitleType.Close,
@@ -65,7 +73,7 @@ fun InquiryScreen(
 
                     Text(
                         text = stringResource(id = R.string.inquiry_guide),
-                        style = LocalTypography.current.b3,
+                        style = LocalTypography.current.b3(),
                         color = FColor.TextSecondary
                     )
 
@@ -80,7 +88,7 @@ fun InquiryScreen(
 
                     Text(
                         text = stringResource(id = R.string.inquiry_type_title),
-                        style = LocalTypography.current.subtitle1,
+                        style = LocalTypography.current.subtitle1(),
                         color = FColor.TextPrimary
                     )
 
@@ -122,25 +130,6 @@ fun InquiryScreen(
                 Spacer(modifier = Modifier.height(38.dp))
             }
         }
-
-        InquiryToast(
-            viewModel = viewModel,
-            uiState = uiState,
-            navController = navController
-        )
-    }
-}
-
-@Composable
-private fun BoxScope.InquiryToast(
-    viewModel: InquiryViewModel,
-    uiState: InquiryUiState,
-    navController: NavHostController
-) {
-    FToast(baseViewModel = viewModel) {
-        if (uiState.isInquirySuccess) {
-            navController.popBackStack()
-        }
     }
 }
 
@@ -152,11 +141,14 @@ private fun EmailInputComponent(
     FTextField(
         text = uiState.email,
         onValueChange = onValueChanged,
-        topText = TopText(
-            title = stringResource(id = R.string.inquiry_email_title),
-            titleStar = false,
-            titleSpace = 6.dp
-        )
+        topText = {
+            Text(
+                text = stringResource(id = R.string.inquiry_email_title),
+                style = LocalTypography.current.subtitle1()
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+        }
     )
 }
 
@@ -169,7 +161,7 @@ private fun InquiryTypeComponent(
         FBorderButton(
             text = stringResource(id = InquiryType.USE_QUESTION.titleRes),
             enable = uiState.inquiryType == InquiryType.USE_QUESTION,
-            onClick = { onUpdateInquiryType.invoke(InquiryType.USE_QUESTION) }
+            onClick = { onUpdateInquiryType(InquiryType.USE_QUESTION) }
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -177,7 +169,7 @@ private fun InquiryTypeComponent(
         FBorderButton(
             text = stringResource(id = InquiryType.ALLIANCE.titleRes),
             enable = uiState.inquiryType == InquiryType.ALLIANCE,
-            onClick = { onUpdateInquiryType.invoke(InquiryType.ALLIANCE) }
+            onClick = { onUpdateInquiryType(InquiryType.ALLIANCE) }
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -185,7 +177,7 @@ private fun InquiryTypeComponent(
         FBorderButton(
             text = stringResource(id = InquiryType.VOICE_OF_THE_CUSTOMER.titleRes),
             enable = uiState.inquiryType == InquiryType.VOICE_OF_THE_CUSTOMER,
-            onClick = { onUpdateInquiryType.invoke(InquiryType.VOICE_OF_THE_CUSTOMER) }
+            onClick = { onUpdateInquiryType(InquiryType.VOICE_OF_THE_CUSTOMER) }
         )
     }
 }
@@ -198,11 +190,14 @@ private fun InquiryTitleComponent(
     FTextField(
         text = uiState.title,
         onValueChange = onValueChanged,
-        topText = TopText(
-            title = stringResource(id = R.string.inquiry_content_title),
-            titleStar = false,
-            titleSpace = 6.dp
-        )
+        topText = {
+            Text(
+                text = stringResource(id = R.string.inquiry_content_title),
+                style = LocalTypography.current.subtitle1()
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+        }
     )
 }
 
@@ -214,11 +209,14 @@ private fun InquiryDescriptionComponent(
     FTextField(
         text = uiState.description,
         onValueChange = onValueChanged,
-        topText = TopText(
-            title = stringResource(id = R.string.inquiry_content_description),
-            titleStar = false,
-            titleSpace = 6.dp
-        ),
+        topText = {
+            Text(
+                text = stringResource(id = R.string.inquiry_content_description),
+                style = LocalTypography.current.subtitle1()
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+        },
         placeholder = stringResource(id = R.string.inquiry_content_description_placeholder),
         singleLine = false,
         maxLines = Int.MAX_VALUE,
@@ -233,7 +231,7 @@ private fun PrivacyTermComponent(
 ) {
     Row(
         modifier = Modifier
-            .clickableWithNoRipple { onClick.invoke() },
+            .clickableWithNoRipple { onClick() },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         FRadioButton(
@@ -245,7 +243,7 @@ private fun PrivacyTermComponent(
 
         Text(
             text = stringResource(id = R.string.inquiry_privacy_term_title),
-            style = LocalTypography.current.subtitle1,
+            style = LocalTypography.current.subtitle1(),
             color = FColor.TextSecondary
         )
     }
@@ -256,7 +254,7 @@ private fun PrivacyTermComponent(
         modifier = Modifier
             .padding(start = (16 + 6).dp),
         text = stringResource(id = R.string.inquiry_privacy_term_subtitle),
-        style = LocalTypography.current.label,
+        style = LocalTypography.current.label(),
         color = FColor.DisablePlaceholder
     )
 }
@@ -271,7 +269,7 @@ private fun ColumnScope.SubmissionButton(
         title = stringResource(id = R.string.inquiry_button_title),
         enable = true
     ) {
-        onClick.invoke()
+        onClick()
     }
 }
 

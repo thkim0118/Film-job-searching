@@ -6,9 +6,33 @@
     <string name="naver_client_name">에프원</string>
     <string name="google_sign_in_client_id">499416246374-gt4tvjpp05s3c5dogo8ies3hrmth6u1u.apps.googleusercontent.com</string>
 
+    <!--    model-->
+    <string name="gender_irrelevant">무관</string>
+    <string name="gender_man">남자</string>
+    <string name="gender_woman">여자</string>
+    <string name="category_feature_film">장편영화</string>
+    <string name="category_short_film">단편영화</string>
+    <string name="category_independent_film">독립영화</string>
+    <string name="category_web_drama">웹 드라마</string>
+    <string name="category_movie">뮤비 / CF</string>
+    <string name="category_ott_drama">OTT/TV 드라마</string>
+    <string name="category_youtube">유튜브</string>
+    <string name="category_viral">홍보 / 바이럴</string>
+    <string name="category_etc">기타</string>
+
     <!--    common-->
     <string name="confirm">확인</string>
+    <string name="yes">네</string>
+    <string name="no">아니오</string>
+
+    <!--    dialog-->
+    <string name="dialog_profile_setting_title">프로필 사진 설정</string>
+    <string name="dialog_profile_setting_button_title">취소</string>
+    <string name="dialog_profile_setting_album">앨범에서 사진 선택</string>
+    <string name="dialog_profile_setting_default_image">기본 이미지로 변경</string>
+
     <!--toast-->
+    <string name="toast_empty_data">알 수 없는 문제가 발생했습니다.\n다시 시도해주세요.</string>
     <string name="toast_request_verification_code">인증번호를 전송하였습니다.</string>
     <string name="toast_request_verification_code_too_much">너무 많은 요청을 하셨습니다. 1분 뒤 다시 시도해 주세요.</string>
     <string name="toast_verification_time_is_expired">인증 시간이 만료되었습니다.</string>
@@ -99,4 +123,85 @@
     <string name="toast_inquiry_complete">제출이 완료되었습니다.</string>
     <string name="toast_inquiry_fail">제출에 실패하였습니다. 다시 시도해주세요.</string>
 
+    <!--    main-->
+    <string name="main_bottom_nav_home_title">홈</string>
+    <string name="main_bottom_nav_job_title">구인구직</string>
+    <string name="main_bottom_nav_chat_title">채팅</string>
+    <string name="main_bottom_nav_my_title">마이페이지</string>
+    <string name="main_withdrawal_dialog_title">회원탈퇴가 완료되었습니다.</string>
+
+    <!--    my-->
+    <string name="my_title">나의 F-ONE</string>
+    <string name="my_scrap_title">스크랩</string>
+    <string name="my_favorite_title">찜</string>
+    <string name="my_register_title">나의 등록내역</string>
+    <string name="my_inquiry_title">문의하기</string>
+    <string name="my_app_version_title">앱 버전</string>
+    <string name="my_logout_title">로그아웃</string>
+    <string name="my_withdrawal_title">회원 탈퇴</string>
+    <string name="my_logout_sheet_title">로그아웃 하시겠습니까?</string>
+    <string name="my_logout_sheet_subtitle">깡총! 소셜 로그인 화면으로 돌아가요</string>
+    <string name="my_withdrawal_sheet_title">…저희 이별하나요? 너무 아쉬워요</string>
+    <string name="my_withdrawal_sheet_subtitle">회원탈퇴를 진행할 경우 혜택 및\n게시글, 관심, 채팅 등 모든 정보가 삭제됩니다.</string>
+
+    <!--    my info-->
+    <string name="my_info_nickname_title">닉네임</string>
+    <string name="my_info_nickname_subtitle">※3~8자리의 숫자, 영어 한글만 가능합니다.</string>
+    <string name="my_info_nickname_duplicate_title">중복확인</string>
+    <string name="my_info_job_choice_title">직업 선택</string>
+    <string name="my_info_favorite_choice_title">관심사 선택</string>
+    <string name="my_info_favorite_choice_subtitle">(중복 선택 가능)</string>
+    <string name="my_info_button_title">수정하기</string>
+
+    <!--    scrap-->
+    <string name="scrap_title_text">스크랩</string>
+    <string name="scrap_empty_title">자주 찾는 게시물을 스크랩 해보세요.</string>
+    <string name="scrap_tab_job_openings_name">구인구직</string>
+    <string name="scrap_tab_competitions_name">공모전</string>
+    <!--    job opening-->
+    <string name="job_opening_deadline_title">모집마감일</string>
+    <string name="job_opening_director_title">제작</string>
+    <string name="job_opening_gender_title">성별</string>
+    <string name="job_opening_period_title">촬영기간</string>
+    <string name="job_opening_job_type_part_title">배역</string>
+    <string name="job_opening_job_type_field_title">분야</string>
+    <string name="job_opening_domain_planning">기획/제작</string>
+    <string name="job_opening_domain_scenario">시나리오</string>
+    <string name="job_opening_domain_director">연출</string>
+    <string name="job_opening_domain_filming">촬영</string>
+    <string name="job_opening_domain_gaffer">조명</string>
+    <string name="job_opening_domain_record">녹음</string>
+    <string name="job_opening_domain_painting">그림</string>
+    <string name="job_opening_domain_art">미술</string>
+    <string name="job_opening_domain_make_up">분장</string>
+    <string name="job_opening_domain_edit">편집</string>
+    <string name="job_opening_domain_music">음악</string>
+    <string name="job_opening_domain_picture">사진</string>
+    <string name="job_opening_domain_etc">기타</string>
+    <string name="job_opening_career_newcomer">신입</string>
+    <string name="job_opening_career_1year">1년 미만</string>
+    <string name="job_opening_career_3year">1~3년</string>
+    <string name="job_opening_career_6year">4~6년</string>
+    <string name="job_opening_career_10year">7~10년</string>
+    <string name="job_opening_career_10year_more">10년~</string>
+    <string name="job_opening_career_irrelevant">경력 무관</string>
+
+    <!--    favorite-->
+    <string name="favorite_title_text">찜한 프로필</string>
+    <string name="favorite_tab_actor_title">배우</string>
+    <string name="favorite_tab_staff_title">스태프</string>
+    <string name="favorite_empty_title">자주 찾는 사람을 찜 해보세요</string>
+
+    <!--    my register-->
+    <string name="my_register_title_text">나의 등록내역</string>
+    <string name="my_register_tab_recruitment_title">모집</string>
+    <string name="my_register_tab_profile_title">프로필</string>
+    <string name="my_register_recruitment_empty_title">함께할 사람을 찾고 있나요?</string>
+    <string name="my_register_recruitment_empty_subtitle_actor">배우 모집 바로가기</string>
+    <string name="my_register_recruitment_empty_subtitle_staff">스텝 모집 바로가기</string>
+    <string name="my_register_profile_empty_title">이런! 아직 프로필이 없어요.\n프로필을 등록하고 작업 제안을 받아보세요.</string>
+    <string name="my_register_profile_empty_subtitle">프로필 등록 바로가기</string>
+    <string name="my_register_edit_button_title">수정하기</string>
+    <string name="my_register_delete_button_title">삭제</string>
+    <string name="my_register_dialog_delete_title">게시글을 삭제하면 다시 되돌릴 수 없어요.\n정말 삭제 하시겠어요?</string>
 </resources>

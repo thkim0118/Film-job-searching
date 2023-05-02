@@ -6,10 +6,11 @@ import com.fone.filmone.core.login.SNSLoginUtil
 import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.model.signup.SocialLoginType
+import com.fone.filmone.data.datamodel.response.user.SocialLoginType
 import com.fone.filmone.domain.usecase.SignInUseCase
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.signup.model.SignUpVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -44,16 +45,23 @@ class LoginViewModel @Inject constructor(
         email: String,
         socialLoginType: String
     ) = viewModelScope.launch {
-        signInUseCase.invoke(accessToken, email, socialLoginType)
+        signInUseCase(accessToken, email, socialLoginType)
             .onSuccess {
-                FOneNavigator.navigateTo(FOneDestinations.Main)
+                FOneNavigator.navigateTo(
+                    NavDestinationState(
+                        route = FOneDestinations.Main.route,
+                        isPopAll = true
+                    )
+                )
             }.onFail {
                 FOneNavigator.navigateTo(
-                    FOneDestinations.SignUpFirst.getRouteWithArg(
-                        SignUpVo(
-                            accessToken = accessToken,
-                            email = email,
-                            socialLoginType = socialLoginType
+                    NavDestinationState(
+                        route = FOneDestinations.SignUpFirst.getRouteWithArg(
+                            SignUpVo(
+                                accessToken = accessToken,
+                                email = email,
+                                socialLoginType = socialLoginType
+                            )
                         )
                     )
                 )

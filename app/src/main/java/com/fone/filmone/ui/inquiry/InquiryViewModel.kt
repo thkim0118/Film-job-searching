@@ -1,5 +1,6 @@
 package com.fone.filmone.ui.inquiry
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
 import com.fone.filmone.domain.model.common.onFail
@@ -7,8 +8,10 @@ import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.model.inquiry.InquiryType
 import com.fone.filmone.domain.model.inquiry.InquiryVo
 import com.fone.filmone.domain.usecase.SubmitInquiryUseCase
+import com.fone.filmone.ui.common.ToastDuration
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -55,7 +58,7 @@ class InquiryViewModel @Inject constructor(
 
     fun submitInquiry() = viewModelScope.launch {
         // TODO Throttling
-        submitInquiryUseCase.invoke(
+        submitInquiryUseCase(
             with(uiState.value) {
                 InquiryVo(
                     email = email,
@@ -69,12 +72,20 @@ class InquiryViewModel @Inject constructor(
             _uiState.update {
                 it.copy(isInquirySuccess = true)
             }
-            showToast(R.string.toast_inquiry_complete)
+            showToastAndPopScreen(R.string.toast_inquiry_complete)
         }.onFail {
             _uiState.update {
                 it.copy(isInquirySuccess = false)
             }
             showToast(R.string.toast_inquiry_fail)
+        }
+    }
+
+    private fun showToastAndPopScreen(@StringRes messageRes: Int) = viewModelScope.launch {
+        showToast(messageRes)
+        delay(ToastDuration)
+        _uiState.update {
+            it.copy(popScreen = true)
         }
     }
 }
@@ -85,5 +96,6 @@ data class InquiryUiState(
     val title: String = "",
     val description: String = "",
     val isAgreePersonalInformation: Boolean = false,
-    val isInquirySuccess: Boolean = false
+    val isInquirySuccess: Boolean = false,
+    val popScreen: Boolean = false
 )

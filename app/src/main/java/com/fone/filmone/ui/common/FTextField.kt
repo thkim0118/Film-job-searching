@@ -37,7 +37,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
@@ -54,14 +54,15 @@ fun FTextField(
     autoCompletion: ((beforeValue: TextFieldValue, afterValue: TextFieldValue) -> TextFieldValue)? = null,
     textLimit: Int = Int.MAX_VALUE,
     onFocusChange: (Boolean) -> Unit = {},
-    topText: TopText = TopText(
-        title = "",
-        titleStar = false,
-        titleSpace = 0.dp
-    ),
+//    topText: TopText = TopText(
+//        title = "",
+//        titleStar = false,
+//        titleSpace = 0.dp
+//    ),
+    topText: @Composable ColumnScope.() -> Unit = {},
     bottomType: BottomType = BottomType.Empty,
     bottomSpacer: Dp = 0.dp,
-    borderButtons: List<BorderButton>? = null,
+    rightComponents: @Composable RowScope.() -> Unit = {},
     textFieldTail: FTextFieldTail? = null,
     singleLine: Boolean = true,
     maxLines: Int = 1,
@@ -70,7 +71,7 @@ fun FTextField(
     backgroundColor: Color = FColor.Divider2,
     errorBorderColor: Color = FColor.Error,
     cornerRounded: Int = 5,
-    textStyle: TextStyle = LocalTypography.current.b1,
+    textStyle: TextStyle = LocalTypography.current.b1(),
     textColor: Color = FColor.TextPrimary,
     fixedHeight: Dp = 42.dp,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -104,7 +105,7 @@ fun FTextField(
                 .focusRequester(focusRequester)
                 .onFocusChanged {
                     isFocused = it.isFocused
-                    onFocusChange.invoke(it.isFocused)
+                    onFocusChange(it.isFocused)
 
                     coroutineScope.launch {
                         textFieldValue = if (isFocused) {
@@ -123,7 +124,7 @@ fun FTextField(
                 onValueChange = {
                     if (it.text.isEmpty()) {
                         textFieldValue = it
-                        onValueChange.invoke(it.text)
+                        onValueChange(it.text)
                         return@BasicTextField
                     }
 
@@ -132,7 +133,7 @@ fun FTextField(
                     }
 
                     if (autoCompletion != null) {
-                        textFieldValue = autoCompletion.invoke(textFieldValue, it)
+                        textFieldValue = autoCompletion(textFieldValue, it)
                     }
 
                     if (pattern == null) {
@@ -141,7 +142,7 @@ fun FTextField(
                         } else {
                             it
                         }
-                        onValueChange.invoke(it.text)
+                        onValueChange(it.text)
                         return@BasicTextField
                     }
 
@@ -152,7 +153,7 @@ fun FTextField(
                             it
                         }
 
-                        onValueChange.invoke(
+                        onValueChange(
                             if (autoCompletion != null) {
                                 textFieldValue
                             } else {
@@ -168,8 +169,8 @@ fun FTextField(
                 textStyle = textStyle.copy(
                     color = textColor,
                     fontWeight = FontWeight.W400,
-                    fontSize = 14.sp,
-                    lineHeight = 19.sp,
+                    fontSize = 14.textDp,
+                    lineHeight = 19.textDp,
                 ),
                 keyboardOptions = keyboardOptions,
                 keyboardActions = keyboardActions,
@@ -181,36 +182,7 @@ fun FTextField(
                     Column(
                         modifier = Modifier
                     ) {
-                        if (topText.title.isNotEmpty()) {
-                            Row {
-                                Text(
-                                    text = topText.title,
-                                    style = LocalTypography.current.subtitle1
-                                )
-
-                                if (topText.titleStar) {
-                                    Text(
-                                        text = " *",
-                                        style = fTextStyle(
-                                            fontWeight = FontWeight.W500,
-                                            fontSize = 16.sp,
-                                            lineHeight = 19.2.sp,
-                                            color = FColor.Error
-                                        )
-                                    )
-                                }
-
-                                if (topText.subtitle.isNotEmpty()) {
-                                    Text(
-                                        text = topText.subtitle,
-                                        style = LocalTypography.current.label,
-                                        color = FColor.DisablePlaceholder
-                                    )
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.height(topText.titleSpace))
-                        }
+                        topText()
 
                         Row {
                             Box(
@@ -233,7 +205,7 @@ fun FTextField(
                                     )
                                     .indicatorLine(
                                         enabled,
-                                        bottomType is BottomType.Error && bottomType.isError,
+                                        false,
                                         interactionSource,
                                         TextFieldDefaults.textFieldColors(
                                             backgroundColor = backgroundColor,
@@ -262,7 +234,7 @@ fun FTextField(
                                                     .height(fixedHeight)
                                             ) {
                                                 // FIXME https://holykisa.tistory.com/74
-                                                innerTextField.invoke()
+                                                innerTextField()
                                             }
 
                                             if (textFieldTail != null) {
@@ -287,8 +259,8 @@ fun FTextField(
                                                 text = placeholder,
                                                 style = fTextStyle(
                                                     fontWeight = FontWeight.W400,
-                                                    fontSize = 14.sp,
-                                                    lineHeight = 19.sp,
+                                                    fontSize = 14.textDp,
+                                                    lineHeight = 19.textDp,
                                                     color = placeholderTextColor,
                                                 ),
                                                 overflow = TextOverflow.Ellipsis
@@ -315,17 +287,7 @@ fun FTextField(
                                 )
                             }
 
-                            borderButtons?.forEach { borderButton ->
-                                Spacer(modifier = Modifier.width(4.dp))
-
-                                FBorderButton(
-                                    text = borderButton.text,
-                                    enable = borderButton.enable,
-                                    onClick = {
-                                        borderButton.onClick.invoke()
-                                    }
-                                )
-                            }
+                            rightComponents()
                         }
 
                         when (bottomType) {
@@ -345,8 +307,8 @@ fun FTextField(
                                     text = bottomType.errorText,
                                     style = fTextStyle(
                                         fontWeight = FontWeight.W400,
-                                        fontSize = 12.sp,
-                                        lineHeight = 14.4.sp,
+                                        fontSize = 12.textDp,
+                                        lineHeight = 14.4.textDp,
                                         color = FColor.Error
                                     )
                                 )
@@ -437,11 +399,33 @@ private fun FTextFieldBottomErrorTypePreview() {
         FTextField(
             text = "Input Text",
             onValueChange = {},
-            topText = TopText(
-                title = "Title",
-                titleStar = true,
-                titleSpace = 8.dp
-            ),
+            topText = {
+                Row {
+                    Text(
+                        text = "topText.title",
+                        style = LocalTypography.current.subtitle1()
+                    )
+
+                    Text(
+                        text = " *",
+                        style = fTextStyle(
+                            fontWeight = FontWeight.W500,
+                            fontSize = 16.textDp,
+                            lineHeight = 19.2.textDp,
+                            color = FColor.Error
+                        )
+                    )
+
+                    Text(
+                        text = "topText.subtitle",
+                        style = LocalTypography.current.label(),
+                        color = FColor.DisablePlaceholder
+                    )
+
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+            },
             bottomType = BottomType.Error(
                 errorText = "에러 메시지 테스트 안내 문구입니다.",
                 isError = true
@@ -458,28 +442,52 @@ private fun FTextFieldBottomWithFBorderButtonPreview() {
             FTextField(
                 text = "Input Text",
                 onValueChange = {},
-                topText = TopText(
-                    title = "Title",
-                    titleStar = true,
-                    titleSpace = 8.dp
-                ),
+                topText = {
+                    Row {
+                        Text(
+                            text = "topText.title",
+                            style = LocalTypography.current.subtitle1()
+                        )
+
+                        Text(
+                            text = " *",
+                            style = fTextStyle(
+                                fontWeight = FontWeight.W500,
+                                fontSize = 16.textDp,
+                                lineHeight = 19.2.textDp,
+                                color = FColor.Error
+                            )
+                        )
+
+                        Text(
+                            text = "topText.subtitle",
+                            style = LocalTypography.current.label(),
+                            color = FColor.DisablePlaceholder
+                        )
+
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                },
                 bottomType = BottomType.Error(
                     errorText = "에러 메시지 테스트 안내 문구입니다.",
                     isError = true
                 ),
-                borderButtons = listOf(
-                    BorderButton(
+                rightComponents = {
+                    Spacer(modifier = Modifier.width(4.dp))
+
+                    FBorderButton(
                         text = "중복확인",
                         enable = true,
                         onClick = {}
                     )
-                ),
+                },
                 textFieldTail = FTextFieldTail.Text(
                     text = "3:00",
                     style = fTextStyle(
                         fontWeight = FontWeight.W400,
-                        fontSize = 12.sp,
-                        lineHeight = 14.sp,
+                        fontSize = 12.textDp,
+                        lineHeight = 14.textDp,
                         color = FColor.ColorFF5841
                     )
                 )

@@ -11,7 +11,7 @@ import com.fone.filmone.ui.signup.screen.SignUpFirstScreen
 import com.fone.filmone.ui.signup.screen.SignUpSecondScreen
 import com.fone.filmone.ui.signup.screen.SignUpThirdScreen
 
-fun NavGraphBuilder.signUpScreenComposable(
+fun NavGraphBuilder.signUpNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
@@ -70,12 +70,16 @@ fun NavGraphBuilder.signUpScreenComposable(
         val socialLoginType =
             navBackStackEntry.arguments?.getString(FOneDestinations.SignUpComplete.argSocialLoginType)
                 ?: return@composable
+        val nickname =
+            navBackStackEntry.arguments?.getString(FOneDestinations.SignUpComplete.argNickname)
+                ?: return@composable
 
         SignUpCompleteScreen(
             modifier = modifier,
             accessToken = accessToken,
             email = email,
-            socialLoginType = socialLoginType
+            socialLoginType = socialLoginType,
+            nickname = nickname
         )
     }
 }

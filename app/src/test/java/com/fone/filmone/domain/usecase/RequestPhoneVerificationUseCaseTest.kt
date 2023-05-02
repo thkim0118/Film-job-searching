@@ -1,12 +1,12 @@
 package com.fone.filmone.domain.usecase
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.fone.filmone.data.datamodel.response.sms.SmsTransmitResponse
 import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.repository.sms.SmsRepository
+import com.fone.filmone.domain.repository.SmsRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
@@ -30,7 +30,7 @@ internal class RequestPhoneVerificationUseCaseTest {
         val verificationCode = "123123"
 
         whenever(
-            requestPhoneVerificationUseCase.invoke(
+            requestPhoneVerificationUseCase(
                 phoneNumber = phoneNumber,
                 verificationCode = verificationCode
             )
@@ -40,7 +40,7 @@ internal class RequestPhoneVerificationUseCaseTest {
             )
         )
 
-        requestPhoneVerificationUseCase.invoke(
+        requestPhoneVerificationUseCase(
             phoneNumber = phoneNumber,
             verificationCode = verificationCode
         ).onSuccess {
@@ -56,7 +56,7 @@ internal class RequestPhoneVerificationUseCaseTest {
         val verificationCode = "123123"
 
         whenever(
-            requestPhoneVerificationUseCase.invoke(
+            requestPhoneVerificationUseCase(
                 phoneNumber = phoneNumber,
                 verificationCode = verificationCode
             )
@@ -66,7 +66,7 @@ internal class RequestPhoneVerificationUseCaseTest {
             )
         )
 
-        requestPhoneVerificationUseCase.invoke(
+        requestPhoneVerificationUseCase(
             phoneNumber = phoneNumber,
             verificationCode = verificationCode
         ).onSuccess {
@@ -82,7 +82,7 @@ internal class RequestPhoneVerificationUseCaseTest {
         val verificationCode = "123123"
 
         whenever(
-            requestPhoneVerificationUseCase.invoke(
+            requestPhoneVerificationUseCase(
                 phoneNumber = phoneNumber,
                 verificationCode = verificationCode
             )
@@ -92,7 +92,7 @@ internal class RequestPhoneVerificationUseCaseTest {
             )
         )
 
-        requestPhoneVerificationUseCase.invoke(
+        requestPhoneVerificationUseCase(
             phoneNumber = phoneNumber,
             verificationCode = verificationCode
         ).onSuccess {

@@ -1,13 +1,7 @@
 package com.fone.filmone.di
 
-import com.fone.filmone.data.repository.ImageUploadRepositoryImpl
-import com.fone.filmone.data.repository.InquiryRepositoryImpl
-import com.fone.filmone.data.repository.SmsRepositoryImpl
-import com.fone.filmone.data.repository.UserRepositoryImpl
-import com.fone.filmone.domain.repository.imageupload.ImageUploadRepository
-import com.fone.filmone.domain.repository.inquiry.InquiryRepository
-import com.fone.filmone.domain.repository.sms.SmsRepository
-import com.fone.filmone.domain.repository.user.UserRepository
+import com.fone.filmone.data.repository.*
+import com.fone.filmone.domain.repository.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,6 +11,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
+    @Singleton
+    @Binds
+    abstract fun bindsAuthRepository(
+        repository: AuthRepositoryImpl
+    ): AuthRepository
+
     @Singleton
     @Binds
     abstract fun bindsUserRepository(
@@ -40,4 +40,22 @@ abstract class RepositoryModule {
     abstract fun bindsInquiryRepository(
         repository: InquiryRepositoryImpl
     ): InquiryRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindsJobOpeningsRepository(
+        repository: JobOpeningsRepositoryImpl
+    ): JobOpeningsRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindsCompetitionsRepository(
+        repository: CompetitionsRepositoryImpl
+    ): CompetitionsRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindsProfileRepository(
+        repository: ProfilesRepositoryImpl
+    ): ProfilesRepository
 }

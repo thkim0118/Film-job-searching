@@ -8,6 +8,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,7 +25,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -33,9 +33,9 @@ import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.dialog.SingleButtonDialog
 import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
+import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.navigation.FOneDestinations
-import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.signup.*
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
@@ -58,33 +58,40 @@ fun SignUpThirdScreen(
         navigateLoginScreen(navController)
     }
 
-    Box(
+    Scaffold(
         modifier = modifier
             .defaultSystemBarPadding()
             .toastPadding()
-            .fillMaxSize()
+            .fillMaxSize(),
+        snackbarHost = {
+            FToast(
+                modifier = modifier,
+                baseViewModel = viewModel,
+                hostState = it
+            )
+        }
     ) {
-        SignUpMainScreen(
-            navController = navController,
-            signUpVo = signUpVo,
-            uiState = uiState,
-            onPhoneNumberChanged = viewModel::updatePhoneNumber,
-            onVerifyClick = viewModel::transmitVerificationCode,
-            onVerificationCheckClick = viewModel::checkVerificationCode,
-            onUpdateAllAgreeState = viewModel::updateAllAgreeState,
-            onUpdateAgreeState = viewModel::updateAgreeState,
-            onSignUpClick = { viewModel.signUp(signUpVo) }
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
+            SignUpMainScreen(
+                navController = navController,
+                uiState = uiState,
+                onPhoneNumberChanged = viewModel::updatePhoneNumber,
+                onVerifyClick = viewModel::transmitVerificationCode,
+                onVerificationCheckClick = viewModel::checkVerificationCode,
+                onUpdateAllAgreeState = viewModel::updateAllAgreeState,
+                onUpdateAgreeState = viewModel::updateAgreeState,
+                onSignUpClick = { viewModel.signUp(signUpVo) }
+            )
 
-        DialogScreen(
-            dialogState = dialogState,
-            onDismiss = viewModel::clearDialogState
-        )
-
-        FToast(
-            modifier = modifier,
-            baseViewModel = viewModel
-        )
+            DialogScreen(
+                dialogState = dialogState,
+                onDismiss = viewModel::clearDialogState
+            )
+        }
     }
 }
 
@@ -92,7 +99,6 @@ fun SignUpThirdScreen(
 private fun SignUpMainScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    signUpVo: SignUpVo,
     uiState: SignUpThirdUiState,
     onPhoneNumberChanged: (String) -> Unit,
     onVerifyClick: () -> Unit,
@@ -133,7 +139,7 @@ private fun SignUpMainScreen(
 
                 Text(
                     text = stringResource(id = R.string.sign_up_third_title),
-                    style = LocalTypography.current.h1
+                    style = LocalTypography.current.h1()
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
@@ -185,16 +191,21 @@ private fun PhoneVerificationComponent(
         onValueChange = onValueChanged,
         textLimit = 11,
         placeholder = stringResource(id = R.string.sign_up_third_phone_number_placeholder),
-        topText = TopText(
-            title = stringResource(id = R.string.sign_up_third_phone_number_title),
-            titleStar = false,
-            titleSpace = 8.dp
-        ),
+        topText = {
+            Text(
+                text = stringResource(id = R.string.sign_up_third_phone_number_title),
+                style = LocalTypography.current.subtitle1()
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+        },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Phone
         ),
-        borderButtons = listOf(
-            BorderButton(
+        rightComponents = {
+            Spacer(modifier = Modifier.width(4.dp))
+
+            FBorderButton(
                 text = stringResource(
                     id = when (uiState.phoneVerificationState) {
                         PhoneVerificationState.Complete -> R.string.sign_up_third_phone_number_verification
@@ -205,7 +216,7 @@ private fun PhoneVerificationComponent(
                 enable = uiState.phoneNumber.length >= 10 && uiState.phoneVerificationState != PhoneVerificationState.Complete,
                 onClick = onVerifyClick
             )
-        )
+        }
     )
 
     RetransmitComponent(
@@ -251,23 +262,25 @@ fun RetransmitComponent(
                 keyboardType = KeyboardType.NumberPassword
             ),
             placeholder = stringResource(id = R.string.sign_up_third_phone_number_verification_code_placeholder),
-            borderButtons = listOf(
-                BorderButton(
+            rightComponents = {
+                Spacer(modifier = Modifier.width(4.dp))
+
+                FBorderButton(
                     text = stringResource(id = R.string.sign_up_third_phone_number_check_code),
                     enable = enable,
                     onClick = {
                         if (enable) {
-                            onVerificationCheckClick.invoke(verificationCode)
+                            onVerificationCheckClick(verificationCode)
                         }
                     }
                 )
-            ),
+            },
             textFieldTail = FTextFieldTail.Text(
                 text = uiState.verificationTime,
                 style = fTextStyle(
                     fontWeight = FontWeight.W400,
-                    fontSize = 12.sp,
-                    lineHeight = 14.sp,
+                    fontSize = 12.textDp,
+                    lineHeight = 14.textDp,
                     color = FColor.ColorFF5841
                 )
             ),
@@ -278,7 +291,7 @@ fun RetransmitComponent(
 
         Text(
             text = stringResource(id = R.string.sign_up_third_phone_number_check_code_guide),
-            style = LocalTypography.current.label
+            style = LocalTypography.current.label()
         )
     }
 }
@@ -302,14 +315,14 @@ private fun TermComponent(
     Row(
         modifier = Modifier
             .clickableWithNoRipple {
-                onUpdateAllAgreeState.invoke()
+                onUpdateAllAgreeState()
             }
     ) {
         FRadioButton(
             modifier = Modifier.align(Alignment.CenterVertically),
             enable = uiState.isTermAllAgree,
             onClick = {
-                onUpdateAllAgreeState.invoke()
+                onUpdateAllAgreeState()
             }
         )
 
@@ -317,7 +330,7 @@ private fun TermComponent(
 
         Text(
             text = stringResource(id = R.string.sign_up_third_agree_all),
-            style = LocalTypography.current.h5,
+            style = LocalTypography.current.h5(),
             color = FColor.TextSecondary
         )
     }
@@ -345,7 +358,7 @@ private fun TermComponent(
             Text(
                 modifier = Modifier.weight(1f),
                 text = stringResource(id = R.string.sign_up_third_agree_term),
-                style = LocalTypography.current.h5,
+                style = LocalTypography.current.h5(),
                 color = FColor.DisablePlaceholder
             )
         }
@@ -398,7 +411,7 @@ private fun TermComponent(
             Text(
                 modifier = Modifier.weight(1f),
                 text = stringResource(id = R.string.sign_up_third_agree_privacy),
-                style = LocalTypography.current.h5,
+                style = LocalTypography.current.h5(),
                 color = FColor.DisablePlaceholder
             )
         }
@@ -456,7 +469,7 @@ private fun TermComponent(
             Text(
                 modifier = Modifier.weight(1f),
                 text = stringResource(id = R.string.sign_up_third_agree_marketing),
-                style = LocalTypography.current.h5,
+                style = LocalTypography.current.h5(),
                 color = FColor.DisablePlaceholder
             )
         }
@@ -507,8 +520,8 @@ fun TermContent(
         Text(
             text = termText, style = fTextStyle(
                 fontWeight = FontWeight.W400,
-                fontSize = 12.sp,
-                lineHeight = 16.sp,
+                fontSize = 12.textDp,
+                lineHeight = 16.textDp,
                 color = FColor.DisablePlaceholder
             )
         )
@@ -529,7 +542,7 @@ private fun ColumnScope.NextButton(
         enable = uiState.isRequiredTemAllAgree
     ) {
         if (uiState.isRequiredTemAllAgree) {
-            onClick.invoke()
+            onClick()
         }
     }
 }
@@ -558,7 +571,7 @@ private fun SignUpFailDialog(
         titleText = stringResource(id = R.string.sign_up_third_dialog_sign_up_fail_title),
         buttonText = stringResource(id = R.string.confirm)
     ) {
-        onClick.invoke()
+        onClick()
     }
 }
 
@@ -572,7 +585,7 @@ private fun VerificationCompleteDialog(
         titleText = stringResource(id = R.string.sign_up_third_dialog_verification_complete_title),
         buttonText = stringResource(id = R.string.confirm)
     ) {
-        onClick.invoke()
+        onClick()
     }
 }
 

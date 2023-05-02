@@ -1,14 +1,15 @@
 package com.fone.filmone.domain.usecase
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.fone.filmone.data.datamodel.fakeImageUploadRequest
+import com.fone.filmone.data.datamodel.fakeImageUploadResponse
 import com.fone.filmone.data.datamodel.request.imageupload.ImageUploadRequest
-import com.fone.filmone.data.datamodel.request.imageupload.StageVariables
 import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
 import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.repository.imageupload.ImageUploadRepository
+import com.fone.filmone.domain.repository.ImageUploadRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -32,14 +33,8 @@ internal class UploadImageUseCaseTest {
 
     @Before
     fun setUp() {
-        imageUploadRequest = ImageUploadRequest(
-            imageData = "",
-            resource = "/image-upload/user-profile",
-            stageVariables = StageVariables(
-                stage = "prod"
-            )
-        )
-        imageUploadResponse = ImageUploadResponse("")
+        imageUploadRequest = fakeImageUploadRequest
+        imageUploadResponse = fakeImageUploadResponse
     }
 
     @Test
@@ -49,7 +44,7 @@ internal class UploadImageUseCaseTest {
                 DataResult.Success(imageUploadResponse)
             )
 
-        uploadImageUseCase.invoke("")
+        uploadImageUseCase("")
             .onSuccess {
                 assert(true)
             }.onFail {
@@ -64,7 +59,7 @@ internal class UploadImageUseCaseTest {
                 DataResult.Fail(DataFail("", ""))
             )
 
-        uploadImageUseCase.invoke("")
+        uploadImageUseCase("")
             .onSuccess {
                 assert(false)
             }.onFail {

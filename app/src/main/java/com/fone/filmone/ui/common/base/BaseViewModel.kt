@@ -1,6 +1,8 @@
 package com.fone.filmone.ui.common.base
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -43,5 +45,12 @@ data class ToastEvent(
 ) {
     fun isEmptyMessage(): Boolean {
         return message.isEmpty() && messageRes == Int.MIN_VALUE
+    }
+
+    @Composable
+    fun getMessage(): String {
+        return message.ifEmpty {
+            stringResource(id = messageRes)
+        }
     }
 }

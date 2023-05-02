@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,6 +24,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,13 +33,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
 import com.fone.filmone.core.image.ImageBase64Util
-import com.fone.filmone.domain.model.signup.Gender
+import com.fone.filmone.data.datamodel.response.common.user.Gender
 import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.fShadow
+import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.signup.SignUpSecondUiState
 import com.fone.filmone.ui.signup.SignUpSecondViewModel
 import com.fone.filmone.ui.signup.components.IndicatorType
@@ -49,7 +53,6 @@ import com.fone.filmone.ui.theme.LocalTypography
 import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.glide.GlideImage
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 
@@ -67,73 +70,86 @@ fun SignUpSecondScreen(
         navigateLoginScreen(navController)
     }
 
-    Column(
-        modifier = modifier
-            .defaultSystemBarPadding()
-            .fillMaxSize()
+    Scaffold(
+        modifier = Modifier,
+        snackbarHost = {
+            FToast(baseViewModel = viewModel, hostState = it)
+        }
     ) {
-        FTitleBar(
-            titleType = TitleType.Back,
-            titleText = stringResource(id = R.string.sign_up_title_text),
-            onBackClick = {
-                navigateLoginScreen(navController)
-            }
-        )
-
-        Column(
-            modifier = Modifier
+        Box(
+            modifier = modifier
+                .defaultSystemBarPadding()
                 .fillMaxSize()
-                .verticalScroll(scrollState)
+                .padding(it)
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(horizontal = 16.dp)
+                modifier = modifier
+                    .fillMaxSize()
             ) {
-                Spacer(modifier = Modifier.height(40.dp))
-
-                SignUpIndicator(indicatorType = IndicatorType.Second)
-
-                Spacer(modifier = Modifier.height(14.dp))
-
-                Text(
-                    text = stringResource(id = R.string.sign_up_second_title),
-                    style = LocalTypography.current.h1
+                FTitleBar(
+                    titleType = TitleType.Back,
+                    titleText = stringResource(id = R.string.sign_up_title_text),
+                    onBackClick = {
+                        navigateLoginScreen(navController)
+                    }
                 )
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .padding(horizontal = 16.dp)
+                    ) {
+                        Spacer(modifier = Modifier.height(40.dp))
 
-                NicknameComponent(
-                    uiState = uiState,
-                    onUpdateNickname = viewModel::updateNickname,
-                    onCheckDuplicateNickname = viewModel::checkNicknameDuplication
-                )
+                        SignUpIndicator(indicatorType = IndicatorType.Second)
 
-                Spacer(modifier = Modifier.height(23.dp))
+                        Spacer(modifier = Modifier.height(14.dp))
 
-                BirthdaySexComponent(
-                    uiState = uiState,
-                    onUpdateBirthday = viewModel::updateBirthDay,
-                    onUpdateGender = viewModel::updateGender
-                )
+                        Text(
+                            text = stringResource(id = R.string.sign_up_second_title),
+                            style = LocalTypography.current.h1()
+                        )
 
-                Spacer(modifier = Modifier.height(40.dp))
+                        Spacer(modifier = Modifier.height(32.dp))
 
-                ProfileComponent(
-                    onUpdateProfileEncoding = viewModel::updateProfileEncoding,
-                    onUpdateProfileImage = viewModel::updateProfileImage
-                )
+                        NicknameComponent(
+                            uiState = uiState,
+                            onUpdateNickname = viewModel::updateNickname,
+                            onCheckDuplicateNickname = viewModel::checkNicknameDuplication
+                        )
 
-                Spacer(modifier = Modifier.height(137.dp))
+                        Spacer(modifier = Modifier.height(23.dp))
+
+                        BirthdaySexComponent(
+                            uiState = uiState,
+                            onUpdateBirthday = viewModel::updateBirthDay,
+                            onUpdateGender = viewModel::updateGender
+                        )
+
+                        Spacer(modifier = Modifier.height(40.dp))
+
+                        ProfileComponent(
+                            onUpdateProfileEncoding = viewModel::updateProfileUploadState,
+                            onUpdateProfileImage = viewModel::updateProfileImage
+                        )
+
+                        Spacer(modifier = Modifier.height(137.dp))
+                    }
+
+                    NextButton(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        signUpVo = signUpVo,
+                        uiState = uiState
+                    )
+
+                    Spacer(modifier = Modifier.height(38.dp))
+                }
             }
-
-            NextButton(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                signUpVo = signUpVo,
-                uiState = uiState
-            )
-
-            Spacer(modifier = Modifier.height(38.dp))
         }
     }
 }
@@ -164,13 +180,30 @@ private fun NicknameComponent(
             placeholder = stringResource(id = R.string.sign_up_second_nickname_placeholder),
             onValueChange = onUpdateNickname,
             pattern = Pattern.compile("^[ㄱ-ㅣ가-힣a-zA-Z\\d\\s]+$"),
-            topText = TopText(
-                title = stringResource(id = R.string.sign_up_second_nickname_title),
-                titleStar = true,
-                titleSpace = 8.dp
-            ),
-            borderButtons = listOf(
-                BorderButton(
+            topText = {
+                Row {
+                    Text(
+                        text = stringResource(id = R.string.sign_up_second_nickname_title),
+                        style = LocalTypography.current.subtitle1()
+                    )
+
+                    Text(
+                        text = " *",
+                        style = fTextStyle(
+                            fontWeight = FontWeight.W500,
+                            fontSize = 16.textDp,
+                            lineHeight = 19.2.textDp,
+                            color = FColor.Error
+                        )
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(6.dp))
+            },
+            rightComponents = {
+                Spacer(modifier = Modifier.width(4.dp))
+
+                FBorderButton(
                     text = stringResource(
                         id = if (uiState.isNicknameChecked) {
                             R.string.sign_up_second_nickname_check_duplicate_complete
@@ -185,14 +218,13 @@ private fun NicknameComponent(
                     },
                     onClick = {
                         if (uiState.isNicknameChecked.not()) {
-                            onCheckDuplicateNickname.invoke()
+                            onCheckDuplicateNickname()
                         }
                     }
                 )
-            ),
+            },
             enabled = uiState.isNicknameChecked.not(),
-            bottomType =
-            BottomType.Error(
+            bottomType = BottomType.Error(
                 errorText = stringResource(id = R.string.sign_up_second_nickname_error_title),
                 isError = uiState.isNicknameDuplicated
             )
@@ -233,28 +265,53 @@ private fun BirthdaySexComponent(
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number
         ),
-        topText = TopText(
-            title = stringResource(id = R.string.sign_up_second_birthday_sex_title),
-            subtitle = stringResource(id = R.string.sign_up_second_birthday_sex_subtitle),
-            titleStar = true,
-            titleSpace = 8.dp
-        ),
-        borderButtons = listOf(
-            BorderButton(
+        topText = {
+            Row {
+                Text(
+                    text = stringResource(id = R.string.sign_up_second_birthday_sex_title),
+                    style = LocalTypography.current.subtitle1()
+                )
+
+                Text(
+                    text = " *",
+                    style = fTextStyle(
+                        fontWeight = FontWeight.W500,
+                        fontSize = 16.textDp,
+                        lineHeight = 19.2.textDp,
+                        color = FColor.Error
+                    )
+                )
+            }
+
+            Text(
+                text = stringResource(id = R.string.sign_up_second_birthday_sex_subtitle),
+                style = LocalTypography.current.label(),
+                color = FColor.DisablePlaceholder
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+        },
+        rightComponents = {
+            Spacer(modifier = Modifier.width(4.dp))
+
+            FBorderButton(
                 text = stringResource(id = R.string.sign_up_second_birthday_sex_man),
                 enable = uiState.gender == Gender.MAN,
                 onClick = {
                     onUpdateGender(Gender.MAN)
                 }
-            ),
-            BorderButton(
+            )
+
+            Spacer(modifier = Modifier.width(4.dp))
+
+            FBorderButton(
                 text = stringResource(id = R.string.sign_up_second_birthday_sex_woman),
                 enable = uiState.gender == Gender.WOMAN,
                 onClick = {
                     onUpdateGender(Gender.WOMAN)
                 }
             )
-        ),
+        },
     )
 }
 
@@ -270,15 +327,11 @@ private fun ProfileComponent(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri: Uri? ->
             imageUri = uri
-            onUpdateProfileEncoding.invoke()
+            onUpdateProfileEncoding()
             coroutineScope.launch(Dispatchers.IO) {
                 uri?.let {
-                    ImageBase64Util.encodeToString(context, it)
-                        .collectLatest { encodeString: String? ->
-                            if (encodeString != null) {
-                                onUpdateProfileImage.invoke(encodeString)
-                            }
-                        }
+                    val encodeString = ImageBase64Util.encodeToString(context, it)
+                    onUpdateProfileImage(encodeString)
                 }
             }
         }
@@ -286,14 +339,14 @@ private fun ProfileComponent(
 
     Text(
         text = stringResource(id = R.string.sign_up_second_profile_title),
-        style = LocalTypography.current.subtitle1
+        style = LocalTypography.current.subtitle1()
     )
 
     Spacer(modifier = Modifier.height(2.dp))
 
     Text(
         text = stringResource(id = R.string.sign_up_second_profile_subtitle),
-        style = LocalTypography.current.label
+        style = LocalTypography.current.label()
     )
 
     Spacer(modifier = Modifier.height(8.dp))
@@ -363,7 +416,7 @@ private fun ColumnScope.NextButton(
     uiState: SignUpSecondUiState
 ) {
     val enable =
-        uiState.isNicknameChecked && uiState.isBirthDayChecked && uiState.isProfileEncoding.not() && uiState.gender != null
+        uiState.isNicknameChecked && uiState.isBirthDayChecked && uiState.isProfileUploading.not() && uiState.gender != null
 
     Spacer(modifier = Modifier.weight(1f))
 
@@ -374,12 +427,14 @@ private fun ColumnScope.NextButton(
         onClick = {
             if (enable) {
                 FOneNavigator.navigateTo(
-                    FOneDestinations.SignUpThird.getRouteWithArg(
-                        signUpVo.copy(
-                            nickname = uiState.nickname,
-                            birthday = uiState.birthday,
-                            gender = uiState.gender?.name ?: Gender.IRRELEVANT.name,
-                            encodingImage = uiState.encodingProfileImage
+                    NavDestinationState(
+                        route = FOneDestinations.SignUpThird.getRouteWithArg(
+                            signUpVo.copy(
+                                nickname = uiState.nickname,
+                                birthday = uiState.birthday,
+                                gender = uiState.gender?.name ?: Gender.IRRELEVANT.name,
+                                profileUrl = uiState.profileUrl
+                            )
                         )
                     )
                 )

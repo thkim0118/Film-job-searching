@@ -1,16 +1,17 @@
 package com.fone.filmone.domain.usecase
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.fone.filmone.data.datamodel.fakeSignUpRequest
+import com.fone.filmone.data.datamodel.fakeSignUpResponse
+import com.fone.filmone.data.datamodel.fakeSignUpVo
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
-import com.fone.filmone.data.datamodel.response.user.SignUpResponse
-import com.fone.filmone.data.datamodel.response.user.User
+import com.fone.filmone.data.datamodel.response.user.*
 import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.repository.user.UserRepository
+import com.fone.filmone.domain.repository.UserRepository
 import com.fone.filmone.ui.signup.model.SignUpVo
-import com.fone.filmone.ui.signup.model.SignUpVo.Companion.mapToSignUpRequest
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -33,56 +34,9 @@ internal class SignUpUseCaseTest {
 
     @Before
     fun setUp() {
-        signUpVo = SignUpVo(
-            accessToken = "accessToken",
-            agreeToPersonalInformation = true,
-            birthday = "birthday",
-            email = "email",
-            gender = "gender",
-            interests = listOf(),
-            isReceiveMarketing = true,
-            job = "job",
-            nickname = "nickname",
-            phoneNumber = "phoneNumber",
-            profileUrl = "profileUrl",
-            socialLoginType = "socialLoginType",
-            agreeToTermsOfServiceTermsOfUse = true
-        )
-
-        signUpRequest = SignUpRequest(
-            accessToken = "accessToken",
-            agreeToPersonalInformation = true,
-            birthday = "birthday",
-            email = "email",
-            gender = "gender",
-            interests = listOf(),
-            isReceiveMarketing = true,
-            job = "job",
-            nickname = "nickname",
-            phoneNumber = "phoneNumber",
-            profileUrl = "profileUrl",
-            socialLoginType = "socialLoginType",
-            agreeToTermsOfServiceTermsOfUse = true
-        )
-
-        signUpResponse = SignUpResponse(
-            User(
-                agreeToPersonalInformation = true,
-                agreeToTermsOfServiceTermsOfUse = true,
-                birthday = "birthday",
-                email = "email",
-                enabled = true,
-                gender = "gender",
-                id = 0,
-                interests = listOf(),
-                isReceiveMarketing = true,
-                job = "job",
-                nickname = "nickname",
-                phoneNumber = "phoneNumber",
-                profileUrl = "profileUrl",
-                socialLoginType = "socialLoginType"
-            )
-        )
+        signUpVo = fakeSignUpVo
+        signUpRequest = fakeSignUpRequest
+        signUpResponse = fakeSignUpResponse
     }
 
     @Test
@@ -92,7 +46,7 @@ internal class SignUpUseCaseTest {
                 DataResult.Success(signUpResponse)
             )
 
-        signUpUseCase.invoke(signUpVo)
+        signUpUseCase(signUpVo)
             .onSuccess {
                 assert(true)
             }.onFail {
@@ -105,7 +59,7 @@ internal class SignUpUseCaseTest {
         whenever(userRepository.signUp(signUpRequest))
             .thenReturn(DataResult.Fail(DataFail("", "")))
 
-        signUpUseCase.invoke(signUpVo)
+        signUpUseCase(signUpVo)
             .onSuccess {
                 assert(false)
             }.onFail {

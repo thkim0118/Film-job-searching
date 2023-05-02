@@ -1,16 +1,17 @@
 package com.fone.filmone.domain.usecase
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.fone.filmone.data.datamodel.fakeInquiryRequest
+import com.fone.filmone.data.datamodel.fakeInquiryResponse
+import com.fone.filmone.data.datamodel.fakeInquiryVo
 import com.fone.filmone.data.datamodel.request.inquiry.InquiryRequest
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse
-import com.fone.filmone.data.datamodel.response.inquiry.Question
 import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.model.inquiry.InquiryType
 import com.fone.filmone.domain.model.inquiry.InquiryVo
-import com.fone.filmone.domain.repository.inquiry.InquiryRepository
+import com.fone.filmone.domain.repository.InquiryRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -35,31 +36,9 @@ internal class SubmitInquiryUseCaseTest {
 
     @Before
     fun setUp() {
-        inquiryVo = InquiryVo(
-            agreeToPersonalInformation = true,
-            description = "description",
-            email = "email",
-            title = "title",
-            type = InquiryType.USE_QUESTION
-        )
-
-        inquiryRequest = InquiryRequest(
-            agreeToPersonalInformation = true,
-            description = "description",
-            email = "email",
-            title = "title",
-            type = InquiryType.USE_QUESTION.name
-        )
-        inquiryResponse = InquiryResponse(
-            Question(
-                id = 0,
-                agreeToPersonalInformation = true,
-                description = "description",
-                email = "email",
-                title = "title",
-                type = InquiryType.USE_QUESTION.name
-            )
-        )
+        inquiryVo = fakeInquiryVo
+        inquiryRequest = fakeInquiryRequest
+        inquiryResponse = fakeInquiryResponse
     }
 
     @Test
@@ -69,7 +48,7 @@ internal class SubmitInquiryUseCaseTest {
                 DataResult.Success(inquiryResponse)
             )
 
-        submitInquiryUseCase.invoke(inquiryVo)
+        submitInquiryUseCase(inquiryVo)
             .onSuccess {
                 assert(true)
             }.onFail {
@@ -84,7 +63,7 @@ internal class SubmitInquiryUseCaseTest {
                 DataResult.Fail(DataFail("", ""))
             )
 
-        submitInquiryUseCase.invoke(inquiryVo)
+        submitInquiryUseCase(inquiryVo)
             .onSuccess {
                 assert(false)
             }.onFail {

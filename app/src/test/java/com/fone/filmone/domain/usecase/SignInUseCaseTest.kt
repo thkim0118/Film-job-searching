@@ -1,15 +1,15 @@
 package com.fone.filmone.domain.usecase
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.fone.filmone.data.datamodel.fakeSigninRequest
+import com.fone.filmone.data.datamodel.fakeSigninResponse
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
-import com.fone.filmone.data.datamodel.response.user.SigninResponse
-import com.fone.filmone.data.datamodel.response.user.Token
-import com.fone.filmone.data.datamodel.response.user.User
+import com.fone.filmone.data.datamodel.response.user.*
 import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.repository.user.UserRepository
+import com.fone.filmone.domain.repository.UserRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -31,36 +31,8 @@ internal class SignInUseCaseTest {
 
     @Before
     fun setUp() {
-        signinRequest = SigninRequest(
-            "accessToken",
-            "email@email.com",
-            "google"
-        )
-        signinResponse = SigninResponse(
-            Token(
-                accessToken = signinRequest.accessToken,
-                expiresIn = 0,
-                issuedAt = "",
-                refreshToken = "",
-                tokenType = ""
-            ),
-            User(
-                agreeToPersonalInformation = true,
-                agreeToTermsOfServiceTermsOfUse = true,
-                birthday = "",
-                email = "",
-                enabled = true,
-                gender = "",
-                id = 0,
-                interests = listOf(),
-                isReceiveMarketing = true,
-                job = "",
-                nickname = "",
-                phoneNumber = "",
-                profileUrl = "",
-                socialLoginType = ""
-            )
-        )
+        signinRequest = fakeSigninRequest
+        signinResponse = fakeSigninResponse
     }
 
     @Test
@@ -70,7 +42,7 @@ internal class SignInUseCaseTest {
                 DataResult.Success(signinResponse)
             )
 
-        signInUseCase.invoke(
+        signInUseCase(
             signinRequest.accessToken,
             signinRequest.email,
             signinRequest.socialLoginType
@@ -89,7 +61,7 @@ internal class SignInUseCaseTest {
                 DataResult.Fail(dataFail = DataFail("", ""))
             )
 
-        signInUseCase.invoke(
+        signInUseCase(
             signinRequest.accessToken,
             signinRequest.email,
             signinRequest.socialLoginType

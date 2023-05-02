@@ -17,20 +17,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
-import com.fone.filmone.domain.model.signup.Interests
-import com.fone.filmone.domain.model.signup.Job
+import com.fone.filmone.data.datamodel.response.common.user.Category
+import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.ui.common.FButton
 import com.fone.filmone.ui.common.FTitleBar
 import com.fone.filmone.ui.common.TitleType
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
+import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.signup.SignUpFirstUiState
 import com.fone.filmone.ui.signup.SignUpFirstViewModel
 import com.fone.filmone.ui.signup.components.IndicatorType
@@ -81,7 +82,7 @@ fun SignUpFirstScreen(
 
                 Text(
                     text = stringResource(id = R.string.sign_up_first_title),
-                    style = LocalTypography.current.h1,
+                    style = LocalTypography.current.h1(),
                     color = FColor.TextPrimary
                 )
 
@@ -144,10 +145,12 @@ private fun ColumnScope.NextButton(
         onClick = {
             if (enable) {
                 FOneNavigator.navigateTo(
-                    FOneDestinations.SignUpSecond.getRouteWithArg(
-                        signUpVo.copy(
-                            job = uiState.job?.name ?: return@FButton,
-                            interests = uiState.interests.map { it.name }
+                    NavDestinationState(
+                        route = FOneDestinations.SignUpSecond.getRouteWithArg(
+                            signUpVo.copy(
+                                job = uiState.job?.name ?: return@FButton,
+                                interests = uiState.interests.map { it.name }
+                            )
                         )
                     )
                 )
@@ -170,8 +173,8 @@ private fun ChoiceTitle(
             text = title,
             style = fTextStyle(
                 fontWeight = FontWeight.W500,
-                fontSize = 15.sp,
-                lineHeight = 18.sp,
+                fontSize = 15.textDp,
+                lineHeight = 18.textDp,
                 color = FColor.TextPrimary
             )
         )
@@ -180,7 +183,7 @@ private fun ChoiceTitle(
 
         Text(
             text = subtitle,
-            style = LocalTypography.current.label,
+            style = LocalTypography.current.label(),
             color = FColor.DisablePlaceholder
         )
     }
@@ -235,15 +238,15 @@ private fun JobTag(
             style = if (isSelected) {
                 fTextStyle(
                     fontWeight = FontWeight.W500,
-                    fontSize = 14.sp,
-                    lineHeight = 16.8.sp,
+                    fontSize = 14.textDp,
+                    lineHeight = 16.8.textDp,
                     color = FColor.Primary
                 )
             } else {
                 fTextStyle(
                     fontWeight = FontWeight.W400,
-                    fontSize = 14.sp,
-                    lineHeight = 16.8.sp,
+                    fontSize = 14.textDp,
+                    lineHeight = 16.8.textDp,
                     color = FColor.DisablePlaceholder
                 )
             }
@@ -255,17 +258,17 @@ private fun JobTag(
 @Composable
 private fun InterestsTags(
     modifier: Modifier = Modifier,
-    currentInterests: List<Interests>,
-    onUpdateInterests: (Interests, Boolean) -> Unit
+    currentInterests: List<Category>,
+    onUpdateInterests: (Category, Boolean) -> Unit
 ) {
     FlowRow(
         modifier = modifier,
         maxItemsInEachRow = 3
     ) {
-        Interests.values().forEach { interests ->
+        Category.values().forEach { interests ->
             InterestsTag(
                 modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
-                interests = interests,
+                category = interests,
                 isSelected = currentInterests.find { it == interests } != null,
                 onClick = onUpdateInterests
             )
@@ -276,9 +279,9 @@ private fun InterestsTags(
 @Composable
 private fun InterestsTag(
     modifier: Modifier = Modifier,
-    interests: Interests,
+    category: Category,
     isSelected: Boolean,
-    onClick: (Interests, Boolean) -> Unit
+    onClick: (Category, Boolean) -> Unit
 ) {
     Box(
         modifier = modifier
@@ -291,24 +294,24 @@ private fun InterestsTag(
                 },
                 shape = RoundedCornerShape(90.dp)
             )
-            .clickable { onClick(interests, isSelected.not()) },
+            .clickable { onClick(category, isSelected.not()) },
     ) {
         Text(
             modifier = Modifier
                 .padding(horizontal = 20.dp, vertical = 8.dp),
-            text = interests.title,
+            text = stringResource(id = category.stringRes),
             style = if (isSelected) {
                 fTextStyle(
                     fontWeight = FontWeight.W500,
-                    fontSize = 14.sp,
-                    lineHeight = 16.8.sp,
+                    fontSize = 14.textDp,
+                    lineHeight = 16.8.textDp,
                     color = FColor.Primary
                 )
             } else {
                 fTextStyle(
                     fontWeight = FontWeight.W400,
-                    fontSize = 14.sp,
-                    lineHeight = 16.8.sp,
+                    fontSize = 14.textDp,
+                    lineHeight = 16.8.textDp,
                     color = FColor.DisablePlaceholder
                 )
             }
@@ -330,7 +333,7 @@ private fun JobTagsPreview() {
 @Composable
 private fun FavoriteTagsPreview() {
     InterestsTags(
-        currentInterests = Interests.values().toList(),
+        currentInterests = Category.values().toList(),
         onUpdateInterests = { _, _ -> }
     )
 }

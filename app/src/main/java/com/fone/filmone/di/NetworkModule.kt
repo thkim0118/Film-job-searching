@@ -1,10 +1,9 @@
 package com.fone.filmone.di
 
 import com.fone.filmone.BuildConfig
-import com.fone.filmone.data.datasource.remote.ImageUploadApi
-import com.fone.filmone.data.datasource.remote.InquiryApi
-import com.fone.filmone.data.datasource.remote.SmsApi
-import com.fone.filmone.data.datasource.remote.UserApi
+import com.fone.filmone.data.datasource.remote.*
+import com.fone.filmone.domain.repository.AuthRepository
+import com.fone.filmone.framework.drivers.AuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,16 +26,46 @@ object NetworkModule {
         "https://rho64ux05h.execute-api.ap-northeast-2.amazonaws.com/"
 
     @Provides
-    fun provideHttpClient(): OkHttpClient = OkHttpClient.Builder().apply {
-        connectTimeout(connectionTime, TimeUnit.MILLISECONDS)
-        if (BuildConfig.DEBUG) {
-            addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                }
-            )
-        }
-    }.build()
+    fun provideAuthInterceptor(authRepository: AuthRepository): AuthInterceptor =
+        AuthInterceptor(authRepository = authRepository)
+
+    @Provides
+    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient =
+        OkHttpClient.Builder().apply {
+            connectTimeout(connectionTime, TimeUnit.MILLISECONDS)
+            if (BuildConfig.DEBUG) {
+                addInterceptor(
+                    HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }
+                )
+            }
+
+            addInterceptor(authInterceptor)
+        }.build()
+
+    @AuthOkHttpClient
+    @Provides
+    fun provideAuthOkHttpClient(): OkHttpClient =
+        OkHttpClient.Builder().apply {
+            connectTimeout(connectionTime, TimeUnit.MILLISECONDS)
+            if (BuildConfig.DEBUG) {
+                addInterceptor(
+                    HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }
+                )
+            }
+        }.build()
+
+    @AuthRetrofit
+    @Provides
+    fun provideAuthRetrofit(@AuthOkHttpClient okHttpClient: OkHttpClient): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
     @SmsRetrofit
     @Provides
@@ -63,6 +92,11 @@ object NetworkModule {
 
     @Singleton
     @Provides
+    fun provideTokenApi(@AuthRetrofit retrofit: Retrofit): TokenApi =
+        retrofit.create(TokenApi::class.java)
+
+    @Singleton
+    @Provides
     fun provideSmsApi(@SmsRetrofit retrofit: Retrofit): SmsApi =
         retrofit.create(SmsApi::class.java)
 
@@ -80,7 +114,30 @@ object NetworkModule {
     @Provides
     fun provideInquiryApi(retrofit: Retrofit): InquiryApi =
         retrofit.create(InquiryApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideJobApi(retrofit: Retrofit): JobOpeningsApi =
+        retrofit.create(JobOpeningsApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideCompetitionsApi(retrofit: Retrofit): CompetitionsApi =
+        retrofit.create(CompetitionsApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideProfilesApi(retrofit: Retrofit): ProfilesApi =
+        retrofit.create(ProfilesApi::class.java)
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class AuthOkHttpClient
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class AuthRetrofit
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)

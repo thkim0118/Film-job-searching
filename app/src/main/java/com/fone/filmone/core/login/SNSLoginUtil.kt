@@ -3,7 +3,7 @@ package com.fone.filmone.core.login
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import com.fone.filmone.domain.model.signup.SocialLoginType
+import com.fone.filmone.data.datamodel.response.user.SocialLoginType
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 

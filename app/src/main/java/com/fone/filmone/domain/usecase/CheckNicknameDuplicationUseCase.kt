@@ -2,7 +2,7 @@ package com.fone.filmone.domain.usecase
 
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.toMappedDataResult
-import com.fone.filmone.domain.repository.user.UserRepository
+import com.fone.filmone.domain.repository.UserRepository
 import javax.inject.Inject
 
 class CheckNicknameDuplicationUseCase @Inject constructor(
