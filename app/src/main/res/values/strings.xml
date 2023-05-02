@@ -204,4 +204,11 @@
     <string name="my_register_edit_button_title">수정하기</string>
     <string name="my_register_delete_button_title">삭제</string>
     <string name="my_register_dialog_delete_title">게시글을 삭제하면 다시 되돌릴 수 없어요.\n정말 삭제 하시겠어요?</string>
+
+    <!--    job tab-->
+    <string name="job_tab_job_opening_title">모집</string>
+    <string name="job_tab_profile_title">프로필</string>
+    <string name="job_tab_main_filter_recent">최신순</string>
+    <string name="job_tab_main_filter_lookups">조회순</string>
+    <string name="job_tab_main_filter_due">마감임박순</string>
 </resources>
