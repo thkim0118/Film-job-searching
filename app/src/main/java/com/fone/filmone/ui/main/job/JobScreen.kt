@@ -176,6 +176,7 @@ private fun JobFloatingButton(
                                 shape = RoundedCornerShape(topStart = 6.dp, topEnd = 6.dp),
                                 color = FColor.Primary
                             )
+                            .clickableSingle {  }
                             .padding(horizontal = 17.dp, vertical = 11.dp),
                     ) {
                         Text(
@@ -202,6 +203,7 @@ private fun JobFloatingButton(
                                 shape = RoundedCornerShape(bottomStart = 6.dp, bottomEnd = 6.dp),
                                 color = FColor.Primary
                             )
+                            .clickableSingle {  }
                             .padding(horizontal = 17.dp, vertical = 11.dp),
                     ) {
                         Text(
