@@ -63,18 +63,33 @@ class MainViewModel @Inject constructor(
             it.copy(mainDialogState = MainDialogState.Clear)
         }
     }
+
+    fun showFloatingDimBackground() {
+        viewModelState.update {
+            it.copy(isFloatingClick = true)
+        }
+    }
+
+    fun hideFloatingDimBackground() {
+        viewModelState.update {
+            it.copy(isFloatingClick = false)
+        }
+    }
 }
 
 private data class MainViewModelState(
-    val mainDialogState: MainDialogState = MainDialogState.Clear
+    val mainDialogState: MainDialogState = MainDialogState.Clear,
+    val isFloatingClick: Boolean = false,
 ) {
     fun toUiState() = MainUiState(
-        mainDialogState = mainDialogState
+        mainDialogState = mainDialogState,
+        isFloatingClick = isFloatingClick
     )
 }
 
 data class MainUiState(
-    val mainDialogState: MainDialogState
+    val mainDialogState: MainDialogState,
+    val isFloatingClick: Boolean,
 )
 
 sealed interface MainDialogState {

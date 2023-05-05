@@ -12,8 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,13 +20,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.fone.filmone.R
-import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
-import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
-import com.fone.filmone.ui.common.ext.textDp
-import com.fone.filmone.ui.common.ext.toastPadding
+import com.fone.filmone.ui.common.ext.*
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
@@ -37,7 +34,9 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun JobScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isFloatingClick: Boolean,
+    onFloatingClick: (Boolean) -> Unit
 ) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
@@ -48,66 +47,102 @@ fun JobScreen(
             .defaultSystemBarPadding()
             .toastPadding(),
         topBar = {
-            TopAppBar(
-                backgroundColor = FColor.White,
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
+            Box {
+                TopAppBar(
+                    backgroundColor = FColor.White,
                 ) {
                     Row(
                         modifier = Modifier
-                            .clickableSingleWithNoRipple { },
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "STAFF",
-                            style = LocalTypography.current.h1(),
-                            color = FColor.TextPrimary
-                        )
+                        Row(
+                            modifier = Modifier
+                                .clickableSingleWithNoRipple { },
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "STAFF",
+                                style = LocalTypography.current.h1(),
+                                color = FColor.TextPrimary
+                            )
 
-                        Image(
-                            imageVector =
-                            ImageVector.vectorResource(id = R.drawable.job_tab_arrow_down),
-                            contentDescription = null
-                        )
+                            Image(
+                                imageVector =
+                                ImageVector.vectorResource(id = R.drawable.job_tab_arrow_down),
+                                contentDescription = null
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        IconButton(onClick = { }) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(id = R.drawable.job_tab_notification),
+                                contentDescription = null,
+                                tint = FColor.DisablePlaceholder
+                            )
+                        }
                     }
+                }
 
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    IconButton(onClick = { }) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.job_tab_notification),
-                            contentDescription = null,
-                            tint = FColor.DisablePlaceholder
-                        )
-                    }
+                if (isFloatingClick) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                            .background(color = FColor.DimColorThin)
+                            .clickableWithNoRipple {
+                                onFloatingClick(false)
+                            }
+                    )
                 }
             }
         },
         floatingActionButton = {
-            JobFloatingButton()
+            JobFloatingButton(
+                isFloatingClick = isFloatingClick,
+                onFloatingClick = { isClick ->
+                    onFloatingClick(isClick)
+                }
+            )
         },
         floatingActionButtonPosition = FabPosition.End,
         isFloatingActionButtonDocked = true
     ) {
-        Column(
+        Box(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize()
         ) {
-            JobHeader(
-                pagerState = pagerState,
-                coroutineScope = coroutineScope
-            )
+            Column(
+                modifier = Modifier
+                    .padding(it)
+                    .fillMaxSize()
+            ) {
+                JobHeader(
+                    pagerState = pagerState,
+                    coroutineScope = coroutineScope,
+                )
 
-            HorizontalPager(pageCount = JobTab.values().size, state = pagerState) { page ->
-                when (page) {
-                    0 -> JobTabJobOpeningsScreen()
-                    1 -> JobTabProfileScreen()
+                HorizontalPager(pageCount = JobTab.values().size, state = pagerState) { page ->
+                    when (page) {
+                        0 -> JobTabJobOpeningsScreen()
+                        1 -> JobTabProfileScreen()
+                    }
                 }
+            }
+
+            if (isFloatingClick) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = FColor.DimColorThin)
+                        .clickableWithNoRipple {
+                            onFloatingClick(false)
+                        }
+                )
             }
         }
     }
@@ -115,18 +150,92 @@ fun JobScreen(
 
 @Composable
 private fun JobFloatingButton(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isFloatingClick: Boolean,
+    onFloatingClick: (Boolean) -> Unit
 ) {
-    IconButton(
-        modifier = modifier
-            .clip(shape = CircleShape)
-            .background(shape = CircleShape, color = FColor.Primary),
-        onClick = {}
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd
     ) {
-        Image(
-            imageVector = ImageVector.vectorResource(id = R.drawable.job_tab_floating_image),
-            contentDescription = null
-        )
+        Column(
+            horizontalAlignment = Alignment.End
+        ) {
+            if (isFloatingClick) {
+                Column(
+                    modifier = Modifier
+                        .width(106.dp),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(shape = RoundedCornerShape(topStart = 6.dp, topEnd = 6.dp))
+                            .background(
+                                shape = RoundedCornerShape(topStart = 6.dp, topEnd = 6.dp),
+                                color = FColor.Primary
+                            )
+                            .padding(horizontal = 17.dp, vertical = 11.dp),
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = stringResource(id = R.string.job_tab_fab_actor),
+                            style = fTextStyle(
+                                fontWeight = FontWeight.W500,
+                                fontSize = 14.textDp,
+                                lineHeight = 18.textDp,
+                                color = FColor.BgBase
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    Divider(color = FColor.ColorF43663)
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(shape = RoundedCornerShape(bottomStart = 6.dp, bottomEnd = 6.dp))
+                            .background(
+                                shape = RoundedCornerShape(bottomStart = 6.dp, bottomEnd = 6.dp),
+                                color = FColor.Primary
+                            )
+                            .padding(horizontal = 17.dp, vertical = 11.dp),
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = stringResource(id = R.string.job_tab_fab_staff),
+                            style = fTextStyle(
+                                fontWeight = FontWeight.W500,
+                                fontSize = 14.textDp,
+                                lineHeight = 18.textDp,
+                                color = FColor.BgBase
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(6.dp))
+                }
+            }
+
+            IconButton(
+                modifier = modifier
+                    .clip(shape = CircleShape)
+                    .background(shape = CircleShape, color = FColor.Primary),
+                onClick = {
+                    onFloatingClick(isFloatingClick.not())
+                }
+            ) {
+                Image(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.job_tab_floating_image),
+                    contentDescription = null
+                )
+            }
+        }
     }
 }
 
@@ -135,7 +244,7 @@ private fun JobFloatingButton(
 private fun JobHeader(
     modifier: Modifier = Modifier,
     pagerState: PagerState,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
 ) {
     Column(
         modifier = modifier

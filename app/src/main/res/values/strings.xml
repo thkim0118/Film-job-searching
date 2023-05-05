@@ -211,4 +211,6 @@
     <string name="job_tab_main_filter_recent">최신순</string>
     <string name="job_tab_main_filter_lookups">조회순</string>
     <string name="job_tab_main_filter_due">마감임박순</string>
+    <string name="job_tab_fab_actor">배우 모집</string>
+    <string name="job_tab_fab_staff">스태프 모집</string>
 </resources>

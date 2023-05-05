@@ -1,6 +1,7 @@
 package com.fone.filmone.ui.main
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -19,9 +20,7 @@ import com.fone.filmone.R
 import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.bottomsheet.PairButtonBottomSheet
 import com.fone.filmone.ui.common.dialog.SingleButtonDialog
-import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
-import com.fone.filmone.ui.common.ext.textDp
-import com.fone.filmone.ui.common.ext.toastPadding
+import com.fone.filmone.ui.common.ext.*
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.main.chat.ChatScreen
 import com.fone.filmone.ui.main.home.HomeScreen
@@ -87,16 +86,33 @@ fun MainScreen(
     ) {
         Scaffold(
             modifier = modifier
+                .dimBackground(uiState.isFloatingClick)
                 .defaultSystemBarPadding()
                 .toastPadding(),
             bottomBar = {
-                MainBottomNavigation(
-                    bottomNavItems = BottomNavItem.values(),
-                    selectedScreen = selectedScreen,
-                    onItemSelected = {
-                        selectedScreen = it
+                Box {
+                    MainBottomNavigation(
+                        bottomNavItems = BottomNavItem.values(),
+                        selectedScreen = selectedScreen,
+                        onItemSelected = {
+                            if (selectedScreen != BottomNavItem.Job) {
+                                viewModel.hideFloatingDimBackground()
+                            }
+
+                            selectedScreen = it
+                        }
+                    )
+
+                    if (uiState.isFloatingClick) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(56.dp)
+                                .background(color = FColor.DimColorThin)
+                                .clickableWithNoRipple {}
+                        )
                     }
-                )
+                }
             },
             snackbarHost = {
                 FToast(baseViewModel = viewModel, hostState = it)
@@ -105,7 +121,16 @@ fun MainScreen(
             Box(modifier = modifier.padding(it)) {
                 when (selectedScreen) {
                     BottomNavItem.Home -> HomeScreen()
-                    BottomNavItem.Job -> JobScreen()
+                    BottomNavItem.Job -> JobScreen(
+                        isFloatingClick = uiState.isFloatingClick,
+                        onFloatingClick = { isClick ->
+                            if (isClick) {
+                                viewModel.showFloatingDimBackground()
+                            } else {
+                                viewModel.hideFloatingDimBackground()
+                            }
+                        }
+                    )
                     BottomNavItem.Chat -> ChatScreen()
                     BottomNavItem.My -> MyScreen(
                         onLogoutClick = {
