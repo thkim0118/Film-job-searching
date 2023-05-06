@@ -29,7 +29,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.fone.filmone.R
+import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
 import com.fone.filmone.ui.common.ext.*
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.shadow.BottomShadow
@@ -42,9 +44,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun JobScreen(
     modifier: Modifier = Modifier,
+    onJobOpeningsFilterClick: () -> Unit,
+    onProfileFilterClick: () -> Unit,
+    viewModel: JobScreenViewModel = hiltViewModel()
 ) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = modifier
@@ -53,6 +59,16 @@ fun JobScreen(
         JobHeader(
             pagerState = pagerState,
             coroutineScope = coroutineScope,
+            type = uiState.type,
+            onTypeClick = viewModel::updateType,
+            currentJobFilter = uiState.currentJobFilter,
+            onJobFilterClick = {
+                when (uiState.currentJobFilter) { // TODO 디버깅
+                    is JobFilter.JobOpenings -> onJobOpeningsFilterClick()
+                    is JobFilter.Profile -> onProfileFilterClick()
+                }
+            },
+            onUpdateCurrentJobFilter = viewModel::updateCurrentJobFilter
         )
 
         HorizontalPager(pageCount = JobTab.values().size, state = pagerState) { page ->
@@ -70,6 +86,11 @@ private fun JobHeader(
     modifier: Modifier = Modifier,
     pagerState: PagerState,
     coroutineScope: CoroutineScope,
+    type: Type,
+    onTypeClick: (Type) -> Unit,
+    currentJobFilter: JobFilter,
+    onJobFilterClick: () -> Unit,
+    onUpdateCurrentJobFilter: (JobTab) -> Unit,
 ) {
     var isTitleFilterClick by remember { mutableStateOf(false) }
 
@@ -98,7 +119,8 @@ private fun JobHeader(
                 },
             onClick = {
                 isTitleFilterClick = isTitleFilterClick.not()
-            }
+            },
+            type = type
         )
 
         JobTitleAlarmImage(
@@ -116,7 +138,10 @@ private fun JobHeader(
                     top.linkTo(titleBar.bottom)
                 },
             pagerState = pagerState,
-            coroutineScope = coroutineScope
+            coroutineScope = coroutineScope,
+            currentJobFilter = currentJobFilter,
+            onJobFilterClick = onJobFilterClick,
+            onUpdateCurrentJobFilter = onUpdateCurrentJobFilter
         )
 
         BottomShadow(
@@ -137,7 +162,13 @@ private fun JobHeader(
             exit = fadeOut(),
             visible = isTitleFilterClick
         ) {
-            JobTitleFilterBox()
+            JobTitleFilterBox(
+                currentType = type,
+                onTypeClick = {
+                    isTitleFilterClick = false
+                    onTypeClick(it)
+                }
+            )
         }
     }
 }
@@ -145,7 +176,8 @@ private fun JobHeader(
 @Composable
 private fun JobTitleContents(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    type: Type
 ) {
     Row(
         modifier = modifier
@@ -153,7 +185,7 @@ private fun JobTitleContents(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "STAFF",
+            text = type.name,
             style = LocalTypography.current.h1(),
             color = FColor.TextPrimary
         )
@@ -190,7 +222,14 @@ private fun JobFilterHeader(
     modifier: Modifier = Modifier,
     pagerState: PagerState,
     coroutineScope: CoroutineScope,
+    currentJobFilter: JobFilter,
+    onUpdateCurrentJobFilter: (JobTab) -> Unit,
+    onJobFilterClick: () -> Unit
 ) {
+    JobTab.values().find { it.index == pagerState.currentPage }?.let { jobTab ->
+        onUpdateCurrentJobFilter(jobTab)
+    }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -228,6 +267,7 @@ private fun JobFilterHeader(
             repeat(JobTab.values().size) { index ->
                 val jobTab = JobTab.values().find { it.index == index } ?: return@repeat
                 val selected = pagerState.currentPage == index
+
                 Tab(
                     modifier = Modifier
                         .zIndex(2f)
@@ -277,11 +317,13 @@ private fun JobFilterHeader(
                     .clip(shape = RoundedCornerShape(5.dp))
                     .background(shape = RoundedCornerShape(5.dp), color = FColor.White)
                     .padding(vertical = 7.dp, horizontal = 8.dp)
-                    .clickableSingleWithNoRipple { },
+                    .clickableSingleWithNoRipple {
+                        onJobFilterClick()
+                    },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(id = R.string.job_tab_main_filter_recent),
+                    text = stringResource(currentJobFilter.currentFilterType.titleRes),
                     style = LocalTypography.current.subtitle2(),
                     color = FColor.TextPrimary
                 )
@@ -311,7 +353,9 @@ private fun JobFilterHeader(
 
 @Composable
 private fun JobTitleFilterBox(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    currentType: Type,
+    onTypeClick: (Type) -> Unit
 ) {
     val shape = RoundedCornerShape(5.dp)
 
@@ -332,11 +376,17 @@ private fun JobTitleFilterBox(
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickableSingle { }
+                    .clickableSingle {
+                        onTypeClick(Type.ACTOR)
+                    }
                     .padding(vertical = 13.dp, horizontal = 13.dp),
-                text = stringResource(id = R.string.job_tab_title_actor),
+                text = Type.ACTOR.name,
                 style = fTextStyle(
-                    fontWeight = FontWeight.W700,
+                    fontWeight = if (currentType == Type.ACTOR) {
+                        FontWeight.W700
+                    } else {
+                        FontWeight.W500
+                    },
                     fontSize = 17.textDp,
                     lineHeight = 18.textDp,
                     color = FColor.TextPrimary
@@ -347,11 +397,17 @@ private fun JobTitleFilterBox(
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickableSingle { }
+                    .clickableSingle {
+                        onTypeClick(Type.STAFF)
+                    }
                     .padding(vertical = 13.dp, horizontal = 13.dp),
-                text = stringResource(id = R.string.job_tab_title_staff),
+                text = Type.STAFF.name,
                 style = fTextStyle(
-                    fontWeight = FontWeight.W700,
+                    fontWeight = if (currentType == Type.STAFF) {
+                        FontWeight.W700
+                    } else {
+                        FontWeight.W500
+                    },
                     fontSize = 17.textDp,
                     lineHeight = 18.textDp,
                     color = FColor.TextPrimary
@@ -362,108 +418,7 @@ private fun JobTitleFilterBox(
     }
 }
 
-@Composable
-private fun JobFloatingButton(
-    modifier: Modifier = Modifier,
-    isFloatingClick: Boolean,
-    onFloatingClick: (Boolean) -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.BottomEnd
-    ) {
-        Column(
-            horizontalAlignment = Alignment.End
-        ) {
-            if (isFloatingClick) {
-                Column(
-                    modifier = Modifier
-                        .width(106.dp),
-                    horizontalAlignment = Alignment.End
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(shape = RoundedCornerShape(topStart = 6.dp, topEnd = 6.dp))
-                            .background(
-                                shape = RoundedCornerShape(topStart = 6.dp, topEnd = 6.dp),
-                                color = FColor.Primary
-                            )
-                            .clickableSingle { }
-                            .padding(horizontal = 17.dp, vertical = 11.dp),
-                    ) {
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            text = stringResource(id = R.string.job_tab_fab_actor),
-                            style = fTextStyle(
-                                fontWeight = FontWeight.W500,
-                                fontSize = 14.textDp,
-                                lineHeight = 18.textDp,
-                                color = FColor.BgBase
-                            ),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-
-                    Divider(color = FColor.ColorF43663)
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(
-                                shape = RoundedCornerShape(
-                                    bottomStart = 6.dp,
-                                    bottomEnd = 6.dp
-                                )
-                            )
-                            .background(
-                                shape = RoundedCornerShape(
-                                    bottomStart = 6.dp,
-                                    bottomEnd = 6.dp
-                                ),
-                                color = FColor.Primary
-                            )
-                            .clickableSingle { }
-                            .padding(horizontal = 17.dp, vertical = 11.dp),
-                    ) {
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            text = stringResource(id = R.string.job_tab_fab_staff),
-                            style = fTextStyle(
-                                fontWeight = FontWeight.W500,
-                                fontSize = 14.textDp,
-                                lineHeight = 18.textDp,
-                                color = FColor.BgBase
-                            ),
-                            textAlign = TextAlign.Center
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(6.dp))
-                }
-            }
-
-            IconButton(
-                modifier = modifier
-                    .clip(shape = CircleShape)
-                    .background(shape = CircleShape, color = FColor.Primary),
-                onClick = {
-                    onFloatingClick(isFloatingClick.not())
-                }
-            ) {
-                Image(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.job_tab_floating_image),
-                    contentDescription = null
-                )
-            }
-        }
-    }
-}
-
-private enum class JobTab(
+enum class JobTab(
     @StringRes val titleRes: Int,
     val index: Int
 ) {

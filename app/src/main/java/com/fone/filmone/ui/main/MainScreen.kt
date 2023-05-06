@@ -85,6 +85,14 @@ fun MainScreen(
                         }
                     }
                 )
+                MainBottomSheetType.JobTabJopOpeningsFilter -> JobTabJobOpeningsFilterBottomSheet(
+                    coroutineScope = coroutineScope,
+                    bottomSheetState = bottomSheetState,
+                )
+                MainBottomSheetType.JobTabProfileFilter -> JobTabProfileFilterBottomSheet(
+                    coroutineScope = coroutineScope,
+                    bottomSheetState = bottomSheetState,
+                )
             }
         }
     ) {
@@ -146,7 +154,16 @@ fun MainScreen(
             Box(modifier = modifier.padding(it)) {
                 when (selectedScreen) {
                     BottomNavItem.Home -> HomeScreen()
-                    BottomNavItem.Job -> JobScreen()
+                    BottomNavItem.Job -> JobScreen(
+                        onJobOpeningsFilterClick = {
+                            bottomSheetType = MainBottomSheetType.JobTabJopOpeningsFilter
+                            coroutineScope.launch { bottomSheetState.show() }
+                        },
+                        onProfileFilterClick = {
+                            bottomSheetType = MainBottomSheetType.JobTabProfileFilter
+                            coroutineScope.launch { bottomSheetState.show() }
+                        }
+                    )
                     BottomNavItem.Chat -> ChatScreen()
                     BottomNavItem.My -> MyScreen(
                         onLogoutClick = {
@@ -340,6 +357,152 @@ private fun WithdrawalBottomSheet(
         },
         onRightButtonClick = onSignOutClick
     )
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun JobTabJobOpeningsFilterBottomSheet(
+    modifier: Modifier = Modifier,
+    coroutineScope: CoroutineScope,
+    bottomSheetState: ModalBottomSheetState,
+) {
+    Column(
+        modifier = modifier
+            .clip(shape = RoundedCornerShape(10.dp))
+            .background(shape = RoundedCornerShape(10.dp), color = FColor.White),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Spacer(
+            modifier = Modifier
+                .width(45.dp)
+                .height(4.dp)
+                .clip(shape = RoundedCornerShape(2.dp))
+                .background(shape = RoundedCornerShape(2.dp), color = FColor.Divider1)
+        )
+
+        Spacer(modifier = Modifier.height(14.dp))
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 6.dp, horizontal = 22.dp),
+            text = stringResource(id = R.string.job_tab_filter_title),
+            style = com.fone.filmone.ui.theme.LocalTypography.current.b3(),
+            color = FColor.DisablePlaceholder
+        )
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickableSingle { }
+                .padding(vertical = 12.dp, horizontal = 22.dp),
+            text = stringResource(id = R.string.job_tab_filter_recent),
+            style = fTextStyle(
+                fontWeight = FontWeight.W700,
+                fontSize = 14.textDp,
+                lineHeight = 18.textDp,
+                color = FColor.TextSecondary
+            )
+        )
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickableSingle { }
+                .padding(vertical = 12.dp, horizontal = 22.dp),
+            text = stringResource(id = R.string.job_tab_filter_view),
+            style = fTextStyle(
+                fontWeight = FontWeight.W700,
+                fontSize = 14.textDp,
+                lineHeight = 18.textDp,
+                color = FColor.TextSecondary
+            )
+        )
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickableSingle { }
+                .padding(vertical = 12.dp, horizontal = 22.dp),
+            text = stringResource(id = R.string.job_tab_filter_deadline),
+            style = fTextStyle(
+                fontWeight = FontWeight.W700,
+                fontSize = 14.textDp,
+                lineHeight = 18.textDp,
+                color = FColor.TextSecondary
+            )
+        )
+
+        Spacer(modifier = Modifier.height(30.dp))
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun JobTabProfileFilterBottomSheet(
+    modifier: Modifier = Modifier,
+    coroutineScope: CoroutineScope,
+    bottomSheetState: ModalBottomSheetState,
+) {
+    Column(
+        modifier = modifier
+            .clip(shape = RoundedCornerShape(10.dp))
+            .background(shape = RoundedCornerShape(10.dp), color = FColor.White),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Spacer(
+            modifier = Modifier
+                .width(45.dp)
+                .height(4.dp)
+                .clip(shape = RoundedCornerShape(2.dp))
+                .background(shape = RoundedCornerShape(2.dp), color = FColor.Divider1)
+        )
+
+        Spacer(modifier = Modifier.height(14.dp))
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 6.dp, horizontal = 22.dp),
+            text = stringResource(id = R.string.job_tab_filter_title),
+            style = com.fone.filmone.ui.theme.LocalTypography.current.b3(),
+            color = FColor.DisablePlaceholder
+        )
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickableSingle { }
+                .padding(vertical = 12.dp, horizontal = 22.dp),
+            text = stringResource(id = R.string.job_tab_filter_recent),
+            style = fTextStyle(
+                fontWeight = FontWeight.W700,
+                fontSize = 14.textDp,
+                lineHeight = 18.textDp,
+                color = FColor.TextSecondary
+            )
+        )
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickableSingle { }
+                .padding(vertical = 12.dp, horizontal = 22.dp),
+            text = stringResource(id = R.string.job_tab_filter_view),
+            style = fTextStyle(
+                fontWeight = FontWeight.W700,
+                fontSize = 14.textDp,
+                lineHeight = 18.textDp,
+                color = FColor.TextSecondary
+            )
+        )
+
+        Spacer(modifier = Modifier.height(30.dp))
+    }
 }
 
 @Composable
