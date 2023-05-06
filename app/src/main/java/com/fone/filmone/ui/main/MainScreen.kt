@@ -28,7 +28,9 @@ import com.fone.filmone.ui.common.ext.*
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.main.chat.ChatScreen
 import com.fone.filmone.ui.main.home.HomeScreen
+import com.fone.filmone.ui.main.job.JobFilterType
 import com.fone.filmone.ui.main.job.JobScreen
+import com.fone.filmone.ui.main.job.JobScreenViewModel
 import com.fone.filmone.ui.main.model.BottomNavItem
 import com.fone.filmone.ui.main.my.MyScreen
 import com.fone.filmone.ui.navigation.FOneDestinations
@@ -43,7 +45,8 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: MainViewModel = hiltViewModel()
+    viewModel: MainViewModel = hiltViewModel(),
+    jobScreenViewModel: JobScreenViewModel = hiltViewModel()
 ) {
     var bottomSheetType: MainBottomSheetType by remember { mutableStateOf(MainBottomSheetType.Logout) }
     val bottomSheetState =
@@ -54,9 +57,7 @@ fun MainScreen(
 
     BackHandler(true) {
         if (bottomSheetState.isVisible) {
-            coroutineScope.launch {
-                bottomSheetState.hide()
-            }
+            hideBottomSheet(coroutineScope, bottomSheetState)
         } else {
             navController.popBackStack()
         }
@@ -88,10 +89,16 @@ fun MainScreen(
                 MainBottomSheetType.JobTabJopOpeningsFilter -> JobTabJobOpeningsFilterBottomSheet(
                     coroutineScope = coroutineScope,
                     bottomSheetState = bottomSheetState,
+                    onJobFilterTypeClick = {
+                        jobScreenViewModel.updateJobFilter(it)
+                    }
                 )
                 MainBottomSheetType.JobTabProfileFilter -> JobTabProfileFilterBottomSheet(
                     coroutineScope = coroutineScope,
                     bottomSheetState = bottomSheetState,
+                    onJobFilterTypeClick = {
+                        jobScreenViewModel.updateJobFilter(it)
+                    }
                 )
             }
         }
@@ -155,6 +162,7 @@ fun MainScreen(
                 when (selectedScreen) {
                     BottomNavItem.Home -> HomeScreen()
                     BottomNavItem.Job -> JobScreen(
+//                        selectedJobFilterType = selectedJobFilterType,
                         onJobOpeningsFilterClick = {
                             bottomSheetType = MainBottomSheetType.JobTabJopOpeningsFilter
                             coroutineScope.launch { bottomSheetState.show() }
@@ -184,9 +192,7 @@ fun MainScreen(
                 MainDialog(
                     dialogState = uiState.mainDialogState,
                     onDismiss = {
-                        coroutineScope.launch {
-                            bottomSheetState.hide()
-                        }
+                        hideBottomSheet(coroutineScope, bottomSheetState)
                         viewModel.clearDialog()
                         FOneNavigator.navigateTo(
                             navDestinationState = NavDestinationState(
@@ -308,9 +314,7 @@ private fun LogoutBottomSheet(
             Spacer(modifier = Modifier.height(40.dp))
         },
         onLeftButtonClick = {
-            coroutineScope.launch {
-                bottomSheetState.hide()
-            }
+            hideBottomSheet(coroutineScope, bottomSheetState)
         },
         onRightButtonClick = onLogoutClick
 
@@ -351,9 +355,7 @@ private fun WithdrawalBottomSheet(
             Spacer(modifier = Modifier.height(40.dp))
         },
         onLeftButtonClick = {
-            coroutineScope.launch {
-                bottomSheetState.hide()
-            }
+            hideBottomSheet(coroutineScope, bottomSheetState)
         },
         onRightButtonClick = onSignOutClick
     )
@@ -365,6 +367,7 @@ private fun JobTabJobOpeningsFilterBottomSheet(
     modifier: Modifier = Modifier,
     coroutineScope: CoroutineScope,
     bottomSheetState: ModalBottomSheetState,
+    onJobFilterTypeClick: (JobFilterType) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -396,9 +399,12 @@ private fun JobTabJobOpeningsFilterBottomSheet(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickableSingle { }
+                .clickableSingle {
+                    onJobFilterTypeClick(JobFilterType.Recent)
+                    hideBottomSheet(coroutineScope, bottomSheetState)
+                }
                 .padding(vertical = 12.dp, horizontal = 22.dp),
-            text = stringResource(id = R.string.job_tab_filter_recent),
+            text = stringResource(id = JobFilterType.Recent.titleRes),
             style = fTextStyle(
                 fontWeight = FontWeight.W700,
                 fontSize = 14.textDp,
@@ -410,9 +416,12 @@ private fun JobTabJobOpeningsFilterBottomSheet(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickableSingle { }
+                .clickableSingle {
+                    onJobFilterTypeClick(JobFilterType.View)
+                    hideBottomSheet(coroutineScope, bottomSheetState)
+                }
                 .padding(vertical = 12.dp, horizontal = 22.dp),
-            text = stringResource(id = R.string.job_tab_filter_view),
+            text = stringResource(id = JobFilterType.View.titleRes),
             style = fTextStyle(
                 fontWeight = FontWeight.W700,
                 fontSize = 14.textDp,
@@ -424,9 +433,12 @@ private fun JobTabJobOpeningsFilterBottomSheet(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickableSingle { }
+                .clickableSingle {
+                    onJobFilterTypeClick(JobFilterType.Deadline)
+                    hideBottomSheet(coroutineScope, bottomSheetState)
+                }
                 .padding(vertical = 12.dp, horizontal = 22.dp),
-            text = stringResource(id = R.string.job_tab_filter_deadline),
+            text = stringResource(id = JobFilterType.Deadline.titleRes),
             style = fTextStyle(
                 fontWeight = FontWeight.W700,
                 fontSize = 14.textDp,
@@ -445,6 +457,7 @@ private fun JobTabProfileFilterBottomSheet(
     modifier: Modifier = Modifier,
     coroutineScope: CoroutineScope,
     bottomSheetState: ModalBottomSheetState,
+    onJobFilterTypeClick: (JobFilterType) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -476,9 +489,12 @@ private fun JobTabProfileFilterBottomSheet(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickableSingle { }
+                .clickableSingle {
+                    onJobFilterTypeClick(JobFilterType.Recent)
+                    hideBottomSheet(coroutineScope, bottomSheetState)
+                }
                 .padding(vertical = 12.dp, horizontal = 22.dp),
-            text = stringResource(id = R.string.job_tab_filter_recent),
+            text = stringResource(id = JobFilterType.Recent.titleRes),
             style = fTextStyle(
                 fontWeight = FontWeight.W700,
                 fontSize = 14.textDp,
@@ -490,9 +506,12 @@ private fun JobTabProfileFilterBottomSheet(
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickableSingle { }
+                .clickableSingle {
+                    onJobFilterTypeClick(JobFilterType.View)
+                    hideBottomSheet(coroutineScope, bottomSheetState)
+                }
                 .padding(vertical = 12.dp, horizontal = 22.dp),
-            text = stringResource(id = R.string.job_tab_filter_view),
+            text = stringResource(id = JobFilterType.View.titleRes),
             style = fTextStyle(
                 fontWeight = FontWeight.W700,
                 fontSize = 14.textDp,
@@ -502,6 +521,16 @@ private fun JobTabProfileFilterBottomSheet(
         )
 
         Spacer(modifier = Modifier.height(30.dp))
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+private fun hideBottomSheet(
+    coroutineScope: CoroutineScope,
+    bottomSheetState: ModalBottomSheetState,
+) {
+    coroutineScope.launch {
+        bottomSheetState.hide()
     }
 }
 

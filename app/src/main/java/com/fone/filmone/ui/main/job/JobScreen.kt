@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
@@ -63,7 +62,7 @@ fun JobScreen(
             onTypeClick = viewModel::updateType,
             currentJobFilter = uiState.currentJobFilter,
             onJobFilterClick = {
-                when (uiState.currentJobFilter) { // TODO 디버깅
+                when (uiState.currentJobFilter) {
                     is JobFilter.JobOpenings -> onJobOpeningsFilterClick()
                     is JobFilter.Profile -> onProfileFilterClick()
                 }
@@ -323,7 +322,7 @@ private fun JobFilterHeader(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(currentJobFilter.currentFilterType.titleRes),
+                    text = stringResource(currentJobFilter.currentJobFilterType.titleRes),
                     style = LocalTypography.current.subtitle2(),
                     color = FColor.TextPrimary
                 )

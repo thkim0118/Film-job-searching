@@ -71,21 +71,23 @@ class JobScreenViewModel @Inject constructor(
                 }
             }
         }
+        LogUtil.w("updateCurrentJobFilter :: ${uiState.value.currentJobFilter}")
     }
 
-    fun updateJobFilter(jobFilter: JobFilter) {
+    fun updateJobFilter(jobFilterType: JobFilterType) {
+        LogUtil.w("updateJobFilter :: $jobFilterType")
         viewModelState.update {
-            when (jobFilter) {
+            when (it.currentJobFilter) {
                 is JobFilter.JobOpenings -> {
                     it.copy(
-                        jobOpeningsFilter = jobFilter,
-                        currentJobFilter = jobFilter
+                        jobOpeningsFilter = JobFilter.JobOpenings(jobFilterType),
+                        currentJobFilter = JobFilter.JobOpenings(jobFilterType)
                     )
                 }
                 is JobFilter.Profile -> {
                     it.copy(
-                        profileFilter = jobFilter,
-                        currentJobFilter = jobFilter
+                        profileFilter = JobFilter.Profile(jobFilterType),
+                        currentJobFilter = JobFilter.Profile(jobFilterType)
                     )
                 }
             }
@@ -95,9 +97,9 @@ class JobScreenViewModel @Inject constructor(
 
 private data class JobScreenViewModelState(
     val userJob: Job = Job.ACTOR,
-    val currentJobFilter: JobFilter = JobFilter.JobOpenings(FilterType.Recent),
-    val jobOpeningsFilter: JobFilter = JobFilter.JobOpenings(FilterType.Recent),
-    val profileFilter: JobFilter = JobFilter.Profile(FilterType.Recent),
+    val currentJobFilter: JobFilter = JobFilter.JobOpenings(JobFilterType.Recent),
+    val jobOpeningsFilter: JobFilter = JobFilter.JobOpenings(JobFilterType.Recent),
+    val profileFilter: JobFilter = JobFilter.Profile(JobFilterType.Recent),
 ) {
     fun toUiState(): JobScreenUiState = JobScreenUiState(
         type = when (userJob) {
@@ -118,18 +120,18 @@ data class JobScreenUiState(
 )
 
 sealed interface JobFilter {
-    val currentFilterType: FilterType
+    val currentJobFilterType: JobFilterType
 
     data class JobOpenings(
-        override val currentFilterType: FilterType
+        override val currentJobFilterType: JobFilterType
     ) : JobFilter
 
     data class Profile(
-        override val currentFilterType: FilterType
+        override val currentJobFilterType: JobFilterType
     ) : JobFilter
 }
 
-enum class FilterType(@StringRes val titleRes: Int) {
+enum class JobFilterType(@StringRes val titleRes: Int) {
     Recent(R.string.job_tab_main_filter_recent),
     View(R.string.job_tab_main_filter_lookups),
     Deadline(R.string.job_tab_main_filter_due)
