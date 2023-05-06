@@ -28,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.fone.filmone.BuildConfig
 import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.response.user.Job
+import com.fone.filmone.ui.common.FTitleBar
 import com.fone.filmone.ui.common.ext.*
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.navigation.FOneDestinations
@@ -47,83 +48,86 @@ fun MyScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        stringResource(id = R.string.my_title),
-                        style = LocalTypography.current.h2(),
-                        color = FColor.TextPrimary
-                    )
-                },
-                backgroundColor = FColor.White,
-                elevation = 0.dp,
-                actions = {
-                    IconButton(onClick = { }) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.main_notification),
-                            contentDescription = null,
-                            tint = FColor.DisablePlaceholder
-                        )
-                    }
-                }
-            )
-        },
+    Column(
         modifier = modifier
-            .defaultSystemBarPadding()
-            .toastPadding()
+            .fillMaxSize()
     ) {
-        Column(
-            modifier = Modifier
-                .padding(it)
-        ) {
-            ProfileComponent(
-                modifier = Modifier,
-                nickname = uiState.nickname,
-                profileUrl = uiState.profileUrl,
-                job = uiState.job,
-                onClick = {
-                    FOneNavigator.navigateTo(
-                        NavDestinationState(route = FOneDestinations.MyInfo.route)
-                    )
-                }
-            )
+        MyTabTitleBar()
 
-            ScrapFavoriteComponent(
-                onScrapClick = {
-                    FOneNavigator.navigateTo(
-                        NavDestinationState(route = FOneDestinations.Scrap.route)
-                    )
-                },
-                onFavoriteClick = {
-                    FOneNavigator.navigateTo(
-                        NavDestinationState(route = FOneDestinations.Favorite.route)
-                    )
-                }
-            )
+        ProfileComponent(
+            modifier = Modifier,
+            nickname = uiState.nickname,
+            profileUrl = uiState.profileUrl,
+            job = uiState.job,
+            onClick = {
+                FOneNavigator.navigateTo(
+                    NavDestinationState(route = FOneDestinations.MyInfo.route)
+                )
+            }
+        )
 
-            Spacer(modifier = Modifier.height(20.dp))
+        ScrapFavoriteComponent(
+            onScrapClick = {
+                FOneNavigator.navigateTo(
+                    NavDestinationState(route = FOneDestinations.Scrap.route)
+                )
+            },
+            onFavoriteClick = {
+                FOneNavigator.navigateTo(
+                    NavDestinationState(route = FOneDestinations.Favorite.route)
+                )
+            }
+        )
 
-            Divider(thickness = 8.dp, color = FColor.Gray50)
+        Spacer(modifier = Modifier.height(20.dp))
 
-            MenuList(
-                onRegisterListClick = {
-                    FOneNavigator.navigateTo(
-                        NavDestinationState(route = FOneDestinations.MyRegister.route)
-                    )
-                },
-                onInquiryClick = {
-                    FOneNavigator.navigateTo(
-                        NavDestinationState(route = FOneDestinations.Inquiry.route)
-                    )
-                },
-                onLogoutClick = {
-                    onLogoutClick()
-                },
-                onWithdrawalClick = {
-                    onWithdrawalClick()
-                }
+        Divider(thickness = 8.dp, color = FColor.Gray50)
+
+        MenuList(
+            onRegisterListClick = {
+                FOneNavigator.navigateTo(
+                    NavDestinationState(route = FOneDestinations.MyRegister.route)
+                )
+            },
+            onInquiryClick = {
+                FOneNavigator.navigateTo(
+                    NavDestinationState(route = FOneDestinations.Inquiry.route)
+                )
+            },
+            onLogoutClick = {
+                onLogoutClick()
+            },
+            onWithdrawalClick = {
+                onWithdrawalClick()
+            }
+        )
+    }
+}
+
+@Composable
+private fun MyTabTitleBar(
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .heightIn(min = 50.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            stringResource(id = R.string.my_title),
+            style = LocalTypography.current.h2(),
+            color = FColor.TextPrimary
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        IconButton(onClick = { }) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.main_notification),
+                contentDescription = null,
+                tint = FColor.DisablePlaceholder
             )
         }
     }

@@ -213,4 +213,6 @@
     <string name="job_tab_main_filter_due">마감임박순</string>
     <string name="job_tab_fab_actor">배우 모집</string>
     <string name="job_tab_fab_staff">스태프 모집</string>
+    <string name="job_tab_title_actor">ACTOR</string>
+    <string name="job_tab_title_staff">STAFF</string>
 </resources>

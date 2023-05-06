@@ -1,13 +1,17 @@
 package com.fone.filmone.ui.main
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -89,6 +93,25 @@ fun MainScreen(
                 .dimBackground(uiState.isFloatingClick)
                 .defaultSystemBarPadding()
                 .toastPadding(),
+            floatingActionButton = {
+                when (selectedScreen) {
+                    BottomNavItem.Home -> Unit
+                    BottomNavItem.Job -> {
+                        JobFloatingButton(
+                            isFloatingClick = uiState.isFloatingClick,
+                            onFloatingClick = { isClick ->
+                                if (isClick) {
+                                    viewModel.showFloatingDimBackground()
+                                } else {
+                                    viewModel.hideFloatingDimBackground()
+                                }
+                            }
+                        )
+                    }
+                    BottomNavItem.Chat -> Unit
+                    BottomNavItem.My -> Unit
+                }
+            },
             bottomBar = {
                 Box {
                     MainBottomNavigation(
@@ -109,7 +132,9 @@ fun MainScreen(
                                 .fillMaxWidth()
                                 .height(56.dp)
                                 .background(color = FColor.DimColorThin)
-                                .clickableWithNoRipple {}
+                                .clickableWithNoRipple {
+                                    viewModel.hideFloatingDimBackground()
+                                }
                         )
                     }
                 }
@@ -121,16 +146,7 @@ fun MainScreen(
             Box(modifier = modifier.padding(it)) {
                 when (selectedScreen) {
                     BottomNavItem.Home -> HomeScreen()
-                    BottomNavItem.Job -> JobScreen(
-                        isFloatingClick = uiState.isFloatingClick,
-                        onFloatingClick = { isClick ->
-                            if (isClick) {
-                                viewModel.showFloatingDimBackground()
-                            } else {
-                                viewModel.hideFloatingDimBackground()
-                            }
-                        }
-                    )
+                    BottomNavItem.Job -> JobScreen()
                     BottomNavItem.Chat -> ChatScreen()
                     BottomNavItem.My -> MyScreen(
                         onLogoutClick = {
@@ -142,6 +158,10 @@ fun MainScreen(
                             coroutineScope.launch { bottomSheetState.show() }
                         }
                     )
+                }
+
+                if (uiState.isFloatingClick) {
+                    FloatingDimBackground(viewModel)
                 }
 
                 MainDialog(
@@ -162,6 +182,18 @@ fun MainScreen(
             }
         }
     }
+}
+
+@Composable
+private fun FloatingDimBackground(viewModel: MainViewModel) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = FColor.DimColorThin)
+            .clickableWithNoRipple {
+                viewModel.hideFloatingDimBackground()
+            }
+    )
 }
 
 @Composable
@@ -308,6 +340,107 @@ private fun WithdrawalBottomSheet(
         },
         onRightButtonClick = onSignOutClick
     )
+}
+
+@Composable
+private fun JobFloatingButton(
+    modifier: Modifier = Modifier,
+    isFloatingClick: Boolean,
+    onFloatingClick: (Boolean) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd
+    ) {
+        Column(
+            horizontalAlignment = Alignment.End
+        ) {
+            if (isFloatingClick) {
+                Column(
+                    modifier = Modifier
+                        .width(106.dp),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(shape = RoundedCornerShape(topStart = 6.dp, topEnd = 6.dp))
+                            .background(
+                                shape = RoundedCornerShape(topStart = 6.dp, topEnd = 6.dp),
+                                color = FColor.Primary
+                            )
+                            .clickableSingle { }
+                            .padding(horizontal = 17.dp, vertical = 11.dp),
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = stringResource(id = R.string.job_tab_fab_actor),
+                            style = fTextStyle(
+                                fontWeight = FontWeight.W500,
+                                fontSize = 14.textDp,
+                                lineHeight = 18.textDp,
+                                color = FColor.BgBase
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    Divider(color = FColor.ColorF43663)
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(
+                                shape = RoundedCornerShape(
+                                    bottomStart = 6.dp,
+                                    bottomEnd = 6.dp
+                                )
+                            )
+                            .background(
+                                shape = RoundedCornerShape(
+                                    bottomStart = 6.dp,
+                                    bottomEnd = 6.dp
+                                ),
+                                color = FColor.Primary
+                            )
+                            .clickableSingle { }
+                            .padding(horizontal = 17.dp, vertical = 11.dp),
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            text = stringResource(id = R.string.job_tab_fab_staff),
+                            style = fTextStyle(
+                                fontWeight = FontWeight.W500,
+                                fontSize = 14.textDp,
+                                lineHeight = 18.textDp,
+                                color = FColor.BgBase
+                            ),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(6.dp))
+                }
+            }
+
+            IconButton(
+                modifier = modifier
+                    .clip(shape = CircleShape)
+                    .background(shape = CircleShape, color = FColor.Primary),
+                onClick = {
+                    onFloatingClick(isFloatingClick.not())
+                }
+            ) {
+                Image(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.job_tab_floating_image),
+                    contentDescription = null
+                )
+            }
+        }
+    }
 }
 
 @Composable

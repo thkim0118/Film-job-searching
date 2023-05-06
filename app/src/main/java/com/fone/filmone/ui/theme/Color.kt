@@ -76,6 +76,8 @@ object FColor {
     val DimColorThin = Color(red = 0f, green = 0f, blue = 0f, alpha = 0.3f)
     val DimColorBasic = Color(red = 0f, green = 0f, blue = 0f, alpha = 0.5f)
 
+    val ShadowColor = Color(0x1A0B0A1E)
+
     val Kakao = Color(0xFFFEE500)
     val Naver = Color(0xFF03C75A)
 
