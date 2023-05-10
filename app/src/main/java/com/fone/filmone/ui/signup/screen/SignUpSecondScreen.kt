@@ -125,7 +125,7 @@ fun SignUpSecondScreen(
 
                         Spacer(modifier = Modifier.height(23.dp))
 
-                        BirthdaySexComponent(
+                        BirthdayGenderComponent(
                             uiState = uiState,
                             onUpdateBirthday = viewModel::updateBirthDay,
                             onUpdateGender = viewModel::updateGender
@@ -233,14 +233,14 @@ private fun NicknameComponent(
 }
 
 @Composable
-private fun BirthdaySexComponent(
+private fun BirthdayGenderComponent(
     uiState: SignUpSecondUiState,
     onUpdateBirthday: (String) -> Unit,
     onUpdateGender: (Gender) -> Unit,
 ) {
     FTextField(
         text = uiState.birthday,
-        placeholder = stringResource(id = R.string.sign_up_second_birthday_sex_placeholder),
+        placeholder = stringResource(id = R.string.sign_up_second_birthday_gender_placeholder),
         onValueChange = onUpdateBirthday,
         pattern = Pattern.compile("^[\\d\\s-]+$"),
         autoCompletion = { before, after ->
@@ -268,7 +268,7 @@ private fun BirthdaySexComponent(
         topText = {
             Row {
                 Text(
-                    text = stringResource(id = R.string.sign_up_second_birthday_sex_title),
+                    text = stringResource(id = R.string.sign_up_second_birthday_gender_title),
                     style = LocalTypography.current.subtitle1()
                 )
 
@@ -284,7 +284,7 @@ private fun BirthdaySexComponent(
             }
 
             Text(
-                text = stringResource(id = R.string.sign_up_second_birthday_sex_subtitle),
+                text = stringResource(id = R.string.sign_up_second_birthday_gender_subtitle),
                 style = LocalTypography.current.label(),
                 color = FColor.DisablePlaceholder
             )
@@ -295,7 +295,7 @@ private fun BirthdaySexComponent(
             Spacer(modifier = Modifier.width(4.dp))
 
             FBorderButton(
-                text = stringResource(id = R.string.sign_up_second_birthday_sex_man),
+                text = stringResource(id = R.string.sign_up_second_birthday_gender_man),
                 enable = uiState.gender == Gender.MAN,
                 onClick = {
                     onUpdateGender(Gender.MAN)
@@ -305,7 +305,7 @@ private fun BirthdaySexComponent(
             Spacer(modifier = Modifier.width(4.dp))
 
             FBorderButton(
-                text = stringResource(id = R.string.sign_up_second_birthday_sex_woman),
+                text = stringResource(id = R.string.sign_up_second_birthday_gender_woman),
                 enable = uiState.gender == Gender.WOMAN,
                 onClick = {
                     onUpdateGender(Gender.WOMAN)
