@@ -79,7 +79,7 @@ fun FavoriteProfileItem(
 
             Text(
                 text = info,
-                style = LocalTypography.current.b2(),
+                style = LocalTypography.current.b3(),
                 color = FColor.TextSecondary
             )
         }

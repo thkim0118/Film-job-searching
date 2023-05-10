@@ -82,13 +82,21 @@ class FTypography {
     @Composable
     fun b1(): TextStyle = TextStyle(
         fontFamily = Pretendard,
+        fontWeight = FontWeight.W700,
+        fontSize = 14.textDp,
+        lineHeight = 20.44.textDp
+    )
+
+    @Composable
+    fun b2(): TextStyle = TextStyle(
+        fontFamily = Pretendard,
         fontWeight = FontWeight.W400,
         fontSize = 14.textDp,
         lineHeight = 19.textDp
     )
 
     @Composable
-    fun b2(): TextStyle = TextStyle(
+    fun b3(): TextStyle = TextStyle(
         fontFamily = Pretendard,
         fontWeight = FontWeight.W500,
         fontSize = 13.textDp,
@@ -96,7 +104,7 @@ class FTypography {
     )
 
     @Composable
-    fun b3(): TextStyle = TextStyle(
+    fun b4(): TextStyle = TextStyle(
         fontFamily = Pretendard,
         fontWeight = FontWeight.W500,
         fontSize = 12.textDp,

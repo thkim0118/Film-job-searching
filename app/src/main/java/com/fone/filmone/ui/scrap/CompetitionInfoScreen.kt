@@ -143,7 +143,7 @@ private fun RowScope.CompetitionContent(
 
         Text(
             text = host,
-            style = LocalTypography.current.b2(),
+            style = LocalTypography.current.b3(),
             color = FColor.TextSecondary
         )
 
@@ -154,7 +154,7 @@ private fun RowScope.CompetitionContent(
         ) {
             Text(
                 text = dday,
-                style = LocalTypography.current.b2(),
+                style = LocalTypography.current.b3(),
                 color = FColor.Secondary1Light
             )
 
@@ -169,7 +169,7 @@ private fun RowScope.CompetitionContent(
 
             Text(
                 text = viewCount,
-                style = LocalTypography.current.b2(),
+                style = LocalTypography.current.b3(),
                 color = FColor.DisablePlaceholder
             )
         }

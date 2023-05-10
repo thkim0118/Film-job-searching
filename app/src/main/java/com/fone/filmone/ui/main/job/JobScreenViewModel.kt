@@ -71,11 +71,9 @@ class JobScreenViewModel @Inject constructor(
                 }
             }
         }
-        LogUtil.w("updateCurrentJobFilter :: ${uiState.value.currentJobFilter}")
     }
 
     fun updateJobFilter(jobFilterType: JobFilterType) {
-        LogUtil.w("updateJobFilter :: $jobFilterType")
         viewModelState.update {
             when (it.currentJobFilter) {
                 is JobFilter.JobOpenings -> {

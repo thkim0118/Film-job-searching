@@ -11,7 +11,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.TextFieldDefaults.indicatorLine
@@ -71,7 +70,7 @@ fun FTextField(
     backgroundColor: Color = FColor.Divider2,
     errorBorderColor: Color = FColor.Error,
     cornerRounded: Int = 5,
-    textStyle: TextStyle = LocalTypography.current.b1(),
+    textStyle: TextStyle = LocalTypography.current.b2(),
     textColor: Color = FColor.TextPrimary,
     fixedHeight: Dp = 42.dp,
     visualTransformation: VisualTransformation = VisualTransformation.None,

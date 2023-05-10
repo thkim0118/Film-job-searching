@@ -73,7 +73,7 @@ fun InquiryScreen(
 
                     Text(
                         text = stringResource(id = R.string.inquiry_guide),
-                        style = LocalTypography.current.b3(),
+                        style = LocalTypography.current.b4(),
                         color = FColor.TextSecondary
                     )
 

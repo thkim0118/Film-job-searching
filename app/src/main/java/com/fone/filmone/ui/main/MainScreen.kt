@@ -45,7 +45,7 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: MainViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = hiltViewModel(),
     jobScreenViewModel: JobScreenViewModel = hiltViewModel()
 ) {
     var bottomSheetType: MainBottomSheetType by remember { mutableStateOf(MainBottomSheetType.Logout) }
@@ -53,7 +53,8 @@ fun MainScreen(
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     var selectedScreen by rememberSaveable { mutableStateOf(BottomNavItem.Home) }
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by mainViewModel.uiState.collectAsState()
+    val jobUiState by jobScreenViewModel.uiState.collectAsState()
 
     BackHandler(true) {
         if (bottomSheetState.isVisible) {
@@ -73,7 +74,7 @@ fun MainScreen(
                     bottomSheetState = bottomSheetState,
                     onLogoutClick = {
                         coroutineScope.launch {
-                            viewModel.logout()
+                            mainViewModel.logout()
                         }
                     }
                 )
@@ -82,13 +83,14 @@ fun MainScreen(
                     bottomSheetState = bottomSheetState,
                     onSignOutClick = {
                         coroutineScope.launch {
-                            viewModel.signOut()
+                            mainViewModel.signOut()
                         }
                     }
                 )
                 MainBottomSheetType.JobTabJopOpeningsFilter -> JobTabJobOpeningsFilterBottomSheet(
                     coroutineScope = coroutineScope,
                     bottomSheetState = bottomSheetState,
+                    currentJobFilterType = jobUiState.currentJobFilter.currentJobFilterType,
                     onJobFilterTypeClick = {
                         jobScreenViewModel.updateJobFilter(it)
                     }
@@ -96,6 +98,7 @@ fun MainScreen(
                 MainBottomSheetType.JobTabProfileFilter -> JobTabProfileFilterBottomSheet(
                     coroutineScope = coroutineScope,
                     bottomSheetState = bottomSheetState,
+                    currentJobFilterType = jobUiState.currentJobFilter.currentJobFilterType,
                     onJobFilterTypeClick = {
                         jobScreenViewModel.updateJobFilter(it)
                     }
@@ -116,9 +119,9 @@ fun MainScreen(
                             isFloatingClick = uiState.isFloatingClick,
                             onFloatingClick = { isClick ->
                                 if (isClick) {
-                                    viewModel.showFloatingDimBackground()
+                                    mainViewModel.showFloatingDimBackground()
                                 } else {
-                                    viewModel.hideFloatingDimBackground()
+                                    mainViewModel.hideFloatingDimBackground()
                                 }
                             }
                         )
@@ -134,7 +137,7 @@ fun MainScreen(
                         selectedScreen = selectedScreen,
                         onItemSelected = {
                             if (selectedScreen != BottomNavItem.Job) {
-                                viewModel.hideFloatingDimBackground()
+                                mainViewModel.hideFloatingDimBackground()
                             }
 
                             selectedScreen = it
@@ -148,21 +151,20 @@ fun MainScreen(
                                 .height(56.dp)
                                 .background(color = FColor.DimColorThin)
                                 .clickableWithNoRipple {
-                                    viewModel.hideFloatingDimBackground()
+                                    mainViewModel.hideFloatingDimBackground()
                                 }
                         )
                     }
                 }
             },
             snackbarHost = {
-                FToast(baseViewModel = viewModel, hostState = it)
+                FToast(baseViewModel = mainViewModel, hostState = it)
             }
         ) {
             Box(modifier = modifier.padding(it)) {
                 when (selectedScreen) {
                     BottomNavItem.Home -> HomeScreen()
                     BottomNavItem.Job -> JobScreen(
-//                        selectedJobFilterType = selectedJobFilterType,
                         onJobOpeningsFilterClick = {
                             bottomSheetType = MainBottomSheetType.JobTabJopOpeningsFilter
                             coroutineScope.launch { bottomSheetState.show() }
@@ -186,14 +188,14 @@ fun MainScreen(
                 }
 
                 if (uiState.isFloatingClick) {
-                    FloatingDimBackground(viewModel)
+                    FloatingDimBackground(mainViewModel)
                 }
 
                 MainDialog(
                     dialogState = uiState.mainDialogState,
                     onDismiss = {
                         hideBottomSheet(coroutineScope, bottomSheetState)
-                        viewModel.clearDialog()
+                        mainViewModel.clearDialog()
                         FOneNavigator.navigateTo(
                             navDestinationState = NavDestinationState(
                                 route = FOneDestinations.Login.route,
@@ -367,6 +369,7 @@ private fun JobTabJobOpeningsFilterBottomSheet(
     modifier: Modifier = Modifier,
     coroutineScope: CoroutineScope,
     bottomSheetState: ModalBottomSheetState,
+    currentJobFilterType: JobFilterType,
     onJobFilterTypeClick: (JobFilterType) -> Unit
 ) {
     Column(
@@ -392,7 +395,7 @@ private fun JobTabJobOpeningsFilterBottomSheet(
                 .fillMaxWidth()
                 .padding(vertical = 6.dp, horizontal = 22.dp),
             text = stringResource(id = R.string.job_tab_filter_title),
-            style = com.fone.filmone.ui.theme.LocalTypography.current.b3(),
+            style = com.fone.filmone.ui.theme.LocalTypography.current.b4(),
             color = FColor.DisablePlaceholder
         )
 
@@ -409,7 +412,11 @@ private fun JobTabJobOpeningsFilterBottomSheet(
                 fontWeight = FontWeight.W700,
                 fontSize = 14.textDp,
                 lineHeight = 18.textDp,
-                color = FColor.TextSecondary
+                color = if (currentJobFilterType == JobFilterType.Recent) {
+                    FColor.Primary
+                } else {
+                    FColor.TextSecondary
+                }
             )
         )
 
@@ -426,7 +433,11 @@ private fun JobTabJobOpeningsFilterBottomSheet(
                 fontWeight = FontWeight.W700,
                 fontSize = 14.textDp,
                 lineHeight = 18.textDp,
-                color = FColor.TextSecondary
+                color = if (currentJobFilterType == JobFilterType.View) {
+                    FColor.Primary
+                } else {
+                    FColor.TextSecondary
+                }
             )
         )
 
@@ -443,7 +454,11 @@ private fun JobTabJobOpeningsFilterBottomSheet(
                 fontWeight = FontWeight.W700,
                 fontSize = 14.textDp,
                 lineHeight = 18.textDp,
-                color = FColor.TextSecondary
+                color = if (currentJobFilterType == JobFilterType.Deadline) {
+                    FColor.Primary
+                } else {
+                    FColor.TextSecondary
+                }
             )
         )
 
@@ -457,6 +472,7 @@ private fun JobTabProfileFilterBottomSheet(
     modifier: Modifier = Modifier,
     coroutineScope: CoroutineScope,
     bottomSheetState: ModalBottomSheetState,
+    currentJobFilterType: JobFilterType,
     onJobFilterTypeClick: (JobFilterType) -> Unit
 ) {
     Column(
@@ -482,7 +498,7 @@ private fun JobTabProfileFilterBottomSheet(
                 .fillMaxWidth()
                 .padding(vertical = 6.dp, horizontal = 22.dp),
             text = stringResource(id = R.string.job_tab_filter_title),
-            style = com.fone.filmone.ui.theme.LocalTypography.current.b3(),
+            style = com.fone.filmone.ui.theme.LocalTypography.current.b4(),
             color = FColor.DisablePlaceholder
         )
 
@@ -499,7 +515,11 @@ private fun JobTabProfileFilterBottomSheet(
                 fontWeight = FontWeight.W700,
                 fontSize = 14.textDp,
                 lineHeight = 18.textDp,
-                color = FColor.TextSecondary
+                color = if (currentJobFilterType == JobFilterType.Recent) {
+                    FColor.Primary
+                } else {
+                    FColor.TextSecondary
+                }
             )
         )
 
@@ -516,7 +536,11 @@ private fun JobTabProfileFilterBottomSheet(
                 fontWeight = FontWeight.W700,
                 fontSize = 14.textDp,
                 lineHeight = 18.textDp,
-                color = FColor.TextSecondary
+                color = if (currentJobFilterType == JobFilterType.View) {
+                    FColor.Primary
+                } else {
+                    FColor.TextSecondary
+                }
             )
         )
 

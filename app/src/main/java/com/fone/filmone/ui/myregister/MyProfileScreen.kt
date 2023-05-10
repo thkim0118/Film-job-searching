@@ -125,7 +125,7 @@ private fun RegisterProfileItem(
 
                 Text(
                     text = info,
-                    style = LocalTypography.current.b1(),
+                    style = LocalTypography.current.b2(),
                     color = FColor.TextSecondary
                 )
 

@@ -57,7 +57,7 @@ fun FToast(
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = snackbarData.message,
-                style = LocalTypography.current.b2(),
+                style = LocalTypography.current.b3(),
                 color = FColor.White
             )
         }
