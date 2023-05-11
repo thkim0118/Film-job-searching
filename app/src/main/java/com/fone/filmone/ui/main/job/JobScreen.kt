@@ -34,6 +34,9 @@ import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
 import com.fone.filmone.ui.common.ext.*
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.shadow.BottomShadow
+import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 import kotlinx.coroutines.CoroutineScope
@@ -139,8 +142,11 @@ private fun JobHeader(
             pagerState = pagerState,
             coroutineScope = coroutineScope,
             currentJobFilter = currentJobFilter,
-            onJobFilterClick = onJobFilterClick,
-            onUpdateCurrentJobFilter = onUpdateCurrentJobFilter
+            onListFilterClick = onJobFilterClick,
+            onUpdateCurrentJobFilter = onUpdateCurrentJobFilter,
+            onFilterIconClick = {
+                FOneNavigator.navigateTo(navDestinationState = NavDestinationState(route = FOneDestinations.ActorFilter.route))
+            }
         )
 
         BottomShadow(
@@ -223,7 +229,8 @@ private fun JobFilterHeader(
     coroutineScope: CoroutineScope,
     currentJobFilter: JobFilter,
     onUpdateCurrentJobFilter: (JobTab) -> Unit,
-    onJobFilterClick: () -> Unit
+    onListFilterClick: () -> Unit,
+    onFilterIconClick: () -> Unit
 ) {
     JobTab.values().find { it.index == pagerState.currentPage }?.let { jobTab ->
         onUpdateCurrentJobFilter(jobTab)
@@ -237,71 +244,7 @@ private fun JobFilterHeader(
     ) {
         Spacer(modifier = Modifier.height(22.dp))
 
-        TabRow(
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(6.dp))
-                .background(color = FColor.White, shape = RoundedCornerShape(6.dp)),
-            selectedTabIndex = pagerState.currentPage,
-            backgroundColor = FColor.White,
-            indicator = { tabPositions ->
-                Box(
-                    modifier = Modifier.padding(3.dp)
-                ) {
-                    TabRowDefaults.Indicator(
-                        modifier = Modifier
-                            .zIndex(1f)
-                            .tabIndicatorOffset(tabPositions[pagerState.currentPage])
-                            .fillMaxHeight()
-                            .clip(shape = RoundedCornerShape(5.dp))
-                            .background(
-                                shape = RoundedCornerShape(5.dp),
-                                color = FColor.Primary
-                            )
-                            .padding(3.dp),
-                        color = FColor.Primary
-                    )
-                }
-            }
-        ) {
-            repeat(JobTab.values().size) { index ->
-                val jobTab = JobTab.values().find { it.index == index } ?: return@repeat
-                val selected = pagerState.currentPage == index
-
-                Tab(
-                    modifier = Modifier
-                        .zIndex(2f)
-                        .padding(3.dp)
-                        .clip(shape = RoundedCornerShape(6.dp)),
-                    selected = selected,
-                    onClick = {
-                        coroutineScope.launch {
-                            pagerState.scrollToPage(index)
-                        }
-                    }
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 9.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = stringResource(jobTab.titleRes),
-                            style = fTextStyle(
-                                fontWeight = FontWeight.W500,
-                                fontSize = 14.textDp,
-                                lineHeight = 18.textDp,
-                                color = if (selected) {
-                                    FColor.BgBase
-                                } else {
-                                    FColor.DisablePlaceholder
-                                }
-                            )
-                        )
-                    }
-                }
-            }
-        }
+        JobTab(pagerState, coroutineScope)
 
         Spacer(modifier = Modifier.height(14.dp))
 
@@ -317,7 +260,7 @@ private fun JobFilterHeader(
                     .background(shape = RoundedCornerShape(5.dp), color = FColor.White)
                     .padding(vertical = 7.dp, horizontal = 8.dp)
                     .clickableSingleWithNoRipple {
-                        onJobFilterClick()
+                        onListFilterClick()
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -338,7 +281,7 @@ private fun JobFilterHeader(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            IconButton(onClick = { }) {
+            IconButton(onClick = { onFilterIconClick() }) {
                 Image(
                     imageVector = ImageVector.vectorResource(id = R.drawable.job_tab_main_filter),
                     contentDescription = null
@@ -347,6 +290,79 @@ private fun JobFilterHeader(
         }
 
         Spacer(modifier = Modifier.height(14.dp))
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun JobTab(
+    pagerState: PagerState,
+    coroutineScope: CoroutineScope
+) {
+    TabRow(
+        modifier = Modifier
+            .clip(shape = RoundedCornerShape(6.dp))
+            .background(color = FColor.White, shape = RoundedCornerShape(6.dp)),
+        selectedTabIndex = pagerState.currentPage,
+        backgroundColor = FColor.White,
+        indicator = { tabPositions ->
+            Box(
+                modifier = Modifier.padding(3.dp)
+            ) {
+                TabRowDefaults.Indicator(
+                    modifier = Modifier
+                        .zIndex(1f)
+                        .tabIndicatorOffset(tabPositions[pagerState.currentPage])
+                        .fillMaxHeight()
+                        .clip(shape = RoundedCornerShape(5.dp))
+                        .background(
+                            shape = RoundedCornerShape(5.dp),
+                            color = FColor.Primary
+                        )
+                        .padding(3.dp),
+                    color = FColor.Primary
+                )
+            }
+        }
+    ) {
+        repeat(JobTab.values().size) { index ->
+            val jobTab = JobTab.values().find { it.index == index } ?: return@repeat
+            val selected = pagerState.currentPage == index
+
+            Tab(
+                modifier = Modifier
+                    .zIndex(2f)
+                    .padding(3.dp)
+                    .clip(shape = RoundedCornerShape(6.dp)),
+                selected = selected,
+                onClick = {
+                    coroutineScope.launch {
+                        pagerState.scrollToPage(index)
+                    }
+                }
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 9.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(jobTab.titleRes),
+                        style = fTextStyle(
+                            fontWeight = FontWeight.W500,
+                            fontSize = 14.textDp,
+                            lineHeight = 18.textDp,
+                            color = if (selected) {
+                                FColor.BgBase
+                            } else {
+                                FColor.DisablePlaceholder
+                            }
+                        )
+                    )
+                }
+            }
+        }
     }
 }
 

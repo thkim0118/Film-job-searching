@@ -7,7 +7,7 @@
     <string name="google_sign_in_client_id">499416246374-gt4tvjpp05s3c5dogo8ies3hrmth6u1u.apps.googleusercontent.com</string>
 
     <!--    model-->
-    <string name="gender_irrelevant">무관</string>
+    <string name="gender_irrelevant">성별무관</string>
     <string name="gender_man">남자</string>
     <string name="gender_woman">여자</string>
     <string name="category_feature_film">장편영화</string>
@@ -77,11 +77,11 @@
     <string name="sign_up_second_nickname_check_duplicate">중복확인</string>
     <string name="sign_up_second_nickname_check_duplicate_complete">인증완료</string>
     <string name="sign_up_second_nickname_error_title">중복되는 닉네임입니다.</string>
-    <string name="sign_up_second_birthday_sex_title">생년월일 및 성별</string>
-    <string name="sign_up_second_birthday_sex_subtitle">성별과 생년월일의 정보는 변경이 불가능합니다.</string>
-    <string name="sign_up_second_birthday_sex_placeholder">YYYY-MM-DD</string>
-    <string name="sign_up_second_birthday_sex_man">남자</string>
-    <string name="sign_up_second_birthday_sex_woman">여자</string>
+    <string name="sign_up_second_birthday_gender_title">생년월일 및 성별</string>
+    <string name="sign_up_second_birthday_gender_subtitle">성별과 생년월일의 정보는 변경이 불가능합니다.</string>
+    <string name="sign_up_second_birthday_gender_placeholder">YYYY-MM-DD</string>
+    <string name="sign_up_second_birthday_gender_man">남자</string>
+    <string name="sign_up_second_birthday_gender_woman">여자</string>
     <string name="sign_up_second_profile_title">프로필 사진 등록</string>
     <string name="sign_up_second_profile_subtitle">필수 선택사항이 아니며 기본 프로필 사진이 등록됩니다.</string>
 
@@ -217,4 +217,18 @@
     <string name="job_tab_filter_recent">최신순</string>
     <string name="job_tab_filter_view">조회순</string>
     <string name="job_tab_filter_deadline">마감임박순</string>
+
+    <!--    actor filter-->
+    <string name="actor_filter_title">맞춤 정보</string>
+    <string name="actor_filter_gender_title">성별</string>
+    <string name="actor_filter_man">남자</string>
+    <string name="actor_filter_woman">여자</string>
+    <string name="actor_filter_irrelevant">성별무관</string>
+    <string name="actor_filter_all_select">전체선택</string>
+    <string name="actor_filter_age">나이</string>
+    <string name="actor_filter_age_range">%d살 ~ %d살 이상</string>
+    <string name="actor_filter_age_irrelevant">연령무관</string>
+    <string name="actor_filter_interests_title">관심사 선택</string>
+    <string name="actor_filter_button_title">보러가기</string>
+
 </resources>

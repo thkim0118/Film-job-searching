@@ -29,6 +29,8 @@ import com.fone.filmone.ui.common.TitleType
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.fTextStyle
+import com.fone.filmone.ui.common.tag.interests.InterestsTags
+import com.fone.filmone.ui.common.tag.job.JobTags
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
@@ -185,136 +187,6 @@ private fun ChoiceTitle(
             text = subtitle,
             style = LocalTypography.current.label(),
             color = FColor.DisablePlaceholder
-        )
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun JobTags(
-    modifier: Modifier = Modifier,
-    currentJob: Job?,
-    onUpdateJob: (Job) -> Unit
-) {
-    FlowRow(
-        modifier = modifier,
-        maxItemsInEachRow = 3
-    ) {
-        Job.values().forEach { job ->
-            JobTag(
-                modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
-                job = job,
-                isSelected = currentJob == job,
-                onClick = onUpdateJob
-            )
-        }
-    }
-}
-
-@Composable
-private fun JobTag(
-    modifier: Modifier = Modifier,
-    job: Job,
-    isSelected: Boolean,
-    onClick: (Job) -> Unit
-) {
-    Box(
-        modifier = modifier
-            .clip(shape = RoundedCornerShape(90.dp))
-            .background(
-                color = if (isSelected) {
-                    FColor.Red50
-                } else {
-                    FColor.BgGroupedBase
-                },
-                shape = RoundedCornerShape(90.dp)
-            )
-            .clickable { onClick(job) },
-    ) {
-        Text(
-            modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 8.dp),
-            text = job.name,
-            style = if (isSelected) {
-                fTextStyle(
-                    fontWeight = FontWeight.W500,
-                    fontSize = 14.textDp,
-                    lineHeight = 16.8.textDp,
-                    color = FColor.Primary
-                )
-            } else {
-                fTextStyle(
-                    fontWeight = FontWeight.W400,
-                    fontSize = 14.textDp,
-                    lineHeight = 16.8.textDp,
-                    color = FColor.DisablePlaceholder
-                )
-            }
-        )
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun InterestsTags(
-    modifier: Modifier = Modifier,
-    currentInterests: List<Category>,
-    onUpdateInterests: (Category, Boolean) -> Unit
-) {
-    FlowRow(
-        modifier = modifier,
-        maxItemsInEachRow = 3
-    ) {
-        Category.values().forEach { interests ->
-            InterestsTag(
-                modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
-                category = interests,
-                isSelected = currentInterests.find { it == interests } != null,
-                onClick = onUpdateInterests
-            )
-        }
-    }
-}
-
-@Composable
-private fun InterestsTag(
-    modifier: Modifier = Modifier,
-    category: Category,
-    isSelected: Boolean,
-    onClick: (Category, Boolean) -> Unit
-) {
-    Box(
-        modifier = modifier
-            .clip(shape = RoundedCornerShape(90.dp))
-            .background(
-                color = if (isSelected) {
-                    FColor.Red50
-                } else {
-                    FColor.BgGroupedBase
-                },
-                shape = RoundedCornerShape(90.dp)
-            )
-            .clickable { onClick(category, isSelected.not()) },
-    ) {
-        Text(
-            modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 8.dp),
-            text = stringResource(id = category.stringRes),
-            style = if (isSelected) {
-                fTextStyle(
-                    fontWeight = FontWeight.W500,
-                    fontSize = 14.textDp,
-                    lineHeight = 16.8.textDp,
-                    color = FColor.Primary
-                )
-            } else {
-                fTextStyle(
-                    fontWeight = FontWeight.W400,
-                    fontSize = 14.textDp,
-                    lineHeight = 16.8.textDp,
-                    color = FColor.DisablePlaceholder
-                )
-            }
         )
     }
 }
