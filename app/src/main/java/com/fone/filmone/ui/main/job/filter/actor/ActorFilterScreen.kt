@@ -256,6 +256,8 @@ private fun InterestsComponent(
             onTagClick = onUpdateInterestsAll
         )
 
+        Spacer(modifier = Modifier.height(8.dp))
+
         InterestsTags(
             currentInterests = currentInterests,
             onUpdateInterests = onUpdateInterests
