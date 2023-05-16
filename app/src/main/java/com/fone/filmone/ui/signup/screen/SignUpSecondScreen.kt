@@ -33,7 +33,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
 import com.fone.filmone.core.image.ImageBase64Util
-import com.fone.filmone.data.datamodel.response.common.user.Gender
+import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding

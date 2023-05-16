@@ -36,9 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.fone.filmone.R
-import com.fone.filmone.data.datamodel.response.common.user.Category
-import com.fone.filmone.data.datamodel.response.common.user.Domain
-import com.fone.filmone.data.datamodel.response.common.user.Gender
+import com.fone.filmone.data.datamodel.common.user.Category
+import com.fone.filmone.data.datamodel.common.user.Domain
+import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding

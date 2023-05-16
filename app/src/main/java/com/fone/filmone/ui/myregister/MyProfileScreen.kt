@@ -21,7 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.R
-import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
+import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.fShadow
 import com.fone.filmone.ui.theme.FColor

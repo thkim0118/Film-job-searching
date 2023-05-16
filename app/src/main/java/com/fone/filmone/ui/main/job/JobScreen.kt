@@ -30,7 +30,7 @@ import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fone.filmone.R
-import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
+import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.ui.common.ext.*
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.shadow.BottomShadow

@@ -1,8 +1,8 @@
-package com.fone.filmone.data.datamodel.response.common.profile
+package com.fone.filmone.data.datamodel.common.profile
 
 import androidx.annotation.Keep
-import com.fone.filmone.data.datamodel.response.common.paging.Pageable
-import com.fone.filmone.data.datamodel.response.common.paging.Sort
+import com.fone.filmone.data.datamodel.common.paging.Pageable
+import com.fone.filmone.data.datamodel.common.paging.Sort
 
 @Keep
 data class Profiles(

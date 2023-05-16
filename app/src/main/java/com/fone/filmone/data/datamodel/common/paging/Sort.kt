@@ -1,4 +1,4 @@
-package com.fone.filmone.data.datamodel.response.common.paging
+package com.fone.filmone.data.datamodel.common.paging
 
 import androidx.annotation.Keep
 

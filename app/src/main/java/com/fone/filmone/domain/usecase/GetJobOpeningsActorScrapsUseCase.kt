@@ -1,6 +1,6 @@
 package com.fone.filmone.domain.usecase
 
-import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
+import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.response.jobopenings.scrap.JobOpeningsScrapResponse
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.repository.JobOpeningsRepository

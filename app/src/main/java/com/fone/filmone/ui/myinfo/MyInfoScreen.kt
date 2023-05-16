@@ -27,7 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.fone.filmone.R
 import com.fone.filmone.core.image.ImageBase64Util
-import com.fone.filmone.data.datamodel.response.common.user.Category
+import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.dialog.ProfileSettingDialog

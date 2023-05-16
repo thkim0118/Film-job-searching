@@ -1,7 +1,7 @@
 package com.fone.filmone.domain.usecase
 
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
-import com.fone.filmone.data.datamodel.response.common.user.Category
+import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.data.datamodel.response.user.UserResponse
 import com.fone.filmone.domain.model.common.DataResult

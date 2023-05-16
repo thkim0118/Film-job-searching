@@ -1,7 +1,7 @@
 package com.fone.filmone.data.repository
 
 import com.fone.filmone.data.datamodel.request.user.RefreshTokenRequest
-import com.fone.filmone.data.datamodel.response.common.network.handleNetwork
+import com.fone.filmone.data.datamodel.common.network.handleNetwork
 import com.fone.filmone.data.datamodel.response.user.Token
 import com.fone.filmone.data.datasource.local.TokenDataStore
 import com.fone.filmone.data.datasource.remote.TokenApi

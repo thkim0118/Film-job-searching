@@ -3,7 +3,7 @@ package com.fone.filmone.ui.main.job
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
-import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
+import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.GetUserInfoUseCase

@@ -1,16 +1,16 @@
 package com.fone.filmone.ui.scrap
 
 import androidx.lifecycle.viewModelScope
-import com.fone.filmone.data.datamodel.response.common.jobopenings.Content
-import com.fone.filmone.data.datamodel.response.common.jobopenings.JobOpenings
-import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
-import com.fone.filmone.data.datamodel.response.common.jobopenings.Work
-import com.fone.filmone.data.datamodel.response.common.paging.Pageable
-import com.fone.filmone.data.datamodel.response.common.paging.Sort
-import com.fone.filmone.data.datamodel.response.common.user.Career
-import com.fone.filmone.data.datamodel.response.common.user.Category
-import com.fone.filmone.data.datamodel.response.common.user.Domain
-import com.fone.filmone.data.datamodel.response.common.user.Gender
+import com.fone.filmone.data.datamodel.common.jobopenings.Content
+import com.fone.filmone.data.datamodel.common.jobopenings.JobOpenings
+import com.fone.filmone.data.datamodel.common.jobopenings.Type
+import com.fone.filmone.data.datamodel.common.jobopenings.Work
+import com.fone.filmone.data.datamodel.common.paging.Pageable
+import com.fone.filmone.data.datamodel.common.paging.Sort
+import com.fone.filmone.data.datamodel.common.user.Career
+import com.fone.filmone.data.datamodel.common.user.Category
+import com.fone.filmone.data.datamodel.common.user.Domain
+import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.data.datamodel.response.competition.CompetitionPrize
 import com.fone.filmone.data.datamodel.response.competition.Competitions
 import com.fone.filmone.data.datamodel.response.competition.CompetitionsResponse

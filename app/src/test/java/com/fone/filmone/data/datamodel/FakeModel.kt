@@ -6,16 +6,16 @@ import com.fone.filmone.data.datamodel.request.inquiry.InquiryRequest
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
-import com.fone.filmone.data.datamodel.response.common.jobopenings.Content
-import com.fone.filmone.data.datamodel.response.common.jobopenings.JobOpenings
-import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
-import com.fone.filmone.data.datamodel.response.common.jobopenings.Work
-import com.fone.filmone.data.datamodel.response.common.paging.Pageable
-import com.fone.filmone.data.datamodel.response.common.paging.Sort
-import com.fone.filmone.data.datamodel.response.common.user.Career
-import com.fone.filmone.data.datamodel.response.common.user.Category
-import com.fone.filmone.data.datamodel.response.common.user.Domain
-import com.fone.filmone.data.datamodel.response.common.user.Gender
+import com.fone.filmone.data.datamodel.common.jobopenings.Content
+import com.fone.filmone.data.datamodel.common.jobopenings.JobOpenings
+import com.fone.filmone.data.datamodel.common.jobopenings.Type
+import com.fone.filmone.data.datamodel.common.jobopenings.Work
+import com.fone.filmone.data.datamodel.common.paging.Pageable
+import com.fone.filmone.data.datamodel.common.paging.Sort
+import com.fone.filmone.data.datamodel.common.user.Career
+import com.fone.filmone.data.datamodel.common.user.Category
+import com.fone.filmone.data.datamodel.common.user.Domain
+import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.data.datamodel.response.competition.CompetitionPrize
 import com.fone.filmone.data.datamodel.response.competition.Competitions
 import com.fone.filmone.data.datamodel.response.competition.CompetitionsResponse
@@ -23,7 +23,7 @@ import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse
 import com.fone.filmone.data.datamodel.response.inquiry.Question
 import com.fone.filmone.data.datamodel.response.profiles.favorite.FavoriteProfilesResponse
-import com.fone.filmone.data.datamodel.response.common.profile.Profiles
+import com.fone.filmone.data.datamodel.common.profile.Profiles
 import com.fone.filmone.data.datamodel.response.jobopenings.scrap.*
 import com.fone.filmone.data.datamodel.response.user.*
 import com.fone.filmone.domain.model.inquiry.InquiryType
@@ -244,7 +244,7 @@ val fakeCompetitionsResponse = CompetitionsResponse(
     totalCount = 1
 )
 
-val fakeProfilesContent = com.fone.filmone.data.datamodel.response.common.profile.Content(
+val fakeProfilesContent = com.fone.filmone.data.datamodel.common.profile.Content(
     age = 0,
     birthday = "1234-01-01",
     career = Career.LESS_THAN_10YEARS,

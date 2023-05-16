@@ -1,10 +1,10 @@
-package com.fone.filmone.data.datamodel.response.common.jobopenings
+package com.fone.filmone.data.datamodel.common.jobopenings
 
 import androidx.annotation.Keep
-import com.fone.filmone.data.datamodel.response.common.user.Career
-import com.fone.filmone.data.datamodel.response.common.user.Category
-import com.fone.filmone.data.datamodel.response.common.user.Domain
-import com.fone.filmone.data.datamodel.response.common.user.Gender
+import com.fone.filmone.data.datamodel.common.user.Career
+import com.fone.filmone.data.datamodel.common.user.Category
+import com.fone.filmone.data.datamodel.common.user.Domain
+import com.fone.filmone.data.datamodel.common.user.Gender
 
 @Keep
 data class Content(

@@ -1,4 +1,4 @@
-package com.fone.filmone.data.datamodel.response.common.jobopenings
+package com.fone.filmone.data.datamodel.common.jobopenings
 
 import androidx.annotation.Keep
 

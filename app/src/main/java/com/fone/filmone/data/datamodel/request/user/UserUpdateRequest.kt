@@ -1,7 +1,7 @@
 package com.fone.filmone.data.datamodel.request.user
 
 import androidx.annotation.Keep
-import com.fone.filmone.data.datamodel.response.common.user.Category
+import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.response.user.Job
 
 @Keep

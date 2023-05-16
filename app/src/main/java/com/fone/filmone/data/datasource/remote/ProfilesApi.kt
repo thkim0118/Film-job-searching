@@ -1,8 +1,8 @@
 package com.fone.filmone.data.datasource.remote
 
-import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
-import com.fone.filmone.data.datamodel.response.common.network.NetworkResponse
-import com.fone.filmone.data.datamodel.response.common.network.Server
+import com.fone.filmone.data.datamodel.common.jobopenings.Type
+import com.fone.filmone.data.datamodel.common.network.NetworkResponse
+import com.fone.filmone.data.datamodel.common.network.Server
 import com.fone.filmone.data.datamodel.response.profiles.favorite.FavoriteProfilesResponse
 import com.fone.filmone.data.datamodel.response.profiles.myregistrations.MyRegistrationsResponse
 import retrofit2.Response

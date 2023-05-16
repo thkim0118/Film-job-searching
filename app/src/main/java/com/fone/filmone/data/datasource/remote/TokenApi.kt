@@ -1,8 +1,8 @@
 package com.fone.filmone.data.datasource.remote
 
 import com.fone.filmone.data.datamodel.request.user.RefreshTokenRequest
-import com.fone.filmone.data.datamodel.response.common.network.NetworkResponse
-import com.fone.filmone.data.datamodel.response.common.network.Server
+import com.fone.filmone.data.datamodel.common.network.NetworkResponse
+import com.fone.filmone.data.datamodel.common.network.Server
 import com.fone.filmone.data.datamodel.response.user.Token
 import retrofit2.Response
 import retrofit2.http.Body

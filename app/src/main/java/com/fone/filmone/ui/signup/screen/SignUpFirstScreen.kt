@@ -21,7 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
-import com.fone.filmone.data.datamodel.response.common.user.Category
+import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.ui.common.FButton
 import com.fone.filmone.ui.common.FTitleBar

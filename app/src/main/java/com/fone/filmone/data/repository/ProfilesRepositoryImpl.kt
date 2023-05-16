@@ -1,7 +1,7 @@
 package com.fone.filmone.data.repository
 
-import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
-import com.fone.filmone.data.datamodel.response.common.network.handleNetwork
+import com.fone.filmone.data.datamodel.common.jobopenings.Type
+import com.fone.filmone.data.datamodel.common.network.handleNetwork
 import com.fone.filmone.data.datamodel.response.profiles.favorite.FavoriteProfilesResponse
 import com.fone.filmone.data.datamodel.response.profiles.myregistrations.MyRegistrationsResponse
 import com.fone.filmone.data.datasource.remote.ProfilesApi

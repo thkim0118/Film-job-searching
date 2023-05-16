@@ -1,7 +1,7 @@
 package com.fone.filmone.data.repository
 
 import com.fone.filmone.data.datamodel.request.sms.SmsRequest
-import com.fone.filmone.data.datamodel.response.common.network.handleNetwork
+import com.fone.filmone.data.datamodel.common.network.handleNetwork
 import com.fone.filmone.data.datamodel.response.sms.SmsTransmitResponse
 import com.fone.filmone.data.datasource.remote.SmsApi
 import com.fone.filmone.domain.model.common.DataResult

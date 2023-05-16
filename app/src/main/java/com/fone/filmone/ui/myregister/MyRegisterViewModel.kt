@@ -1,11 +1,11 @@
 package com.fone.filmone.ui.myregister
 
 import androidx.lifecycle.viewModelScope
-import com.fone.filmone.data.datamodel.response.common.jobopenings.JobOpenings
-import com.fone.filmone.data.datamodel.response.common.jobopenings.Type
-import com.fone.filmone.data.datamodel.response.common.profile.Profiles
-import com.fone.filmone.data.datamodel.response.common.user.Category
-import com.fone.filmone.data.datamodel.response.common.user.Gender
+import com.fone.filmone.data.datamodel.common.jobopenings.JobOpenings
+import com.fone.filmone.data.datamodel.common.jobopenings.Type
+import com.fone.filmone.data.datamodel.common.profile.Profiles
+import com.fone.filmone.data.datamodel.common.user.Category
+import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.domain.model.common.getOrNull
 import com.fone.filmone.domain.model.jobopenings.JobType
 import com.fone.filmone.domain.usecase.GetMyRegistrationJobOpeningsUseCase
