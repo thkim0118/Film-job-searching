@@ -5,7 +5,7 @@ import androidx.annotation.StringRes
 import com.fone.filmone.R
 
 @Keep
-enum class Domain(@StringRes titleRes: Int) {
+enum class Domain(@StringRes val stringRes: Int) {
     PLANNING(R.string.job_opening_domain_planning),
     SCENARIO(R.string.job_opening_domain_scenario),
     DIRECTOR(R.string.job_opening_domain_director),

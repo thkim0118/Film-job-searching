@@ -64,13 +64,21 @@ fun JobScreen(
             type = uiState.type,
             onTypeClick = viewModel::updateType,
             currentJobFilter = uiState.currentJobFilter,
-            onJobFilterClick = {
+            onJobSortingClick = {
                 when (uiState.currentJobFilter) {
                     is JobFilter.JobOpenings -> onJobOpeningsFilterClick()
                     is JobFilter.Profile -> onProfileFilterClick()
                 }
             },
-            onUpdateCurrentJobFilter = viewModel::updateCurrentJobFilter
+            onUpdateCurrentJobSorting = viewModel::updateCurrentJobFilter,
+            onFilterClick = {
+                val route = when (uiState.type) {
+                    Type.ACTOR -> FOneDestinations.ActorFilter.route
+                    Type.STAFF -> FOneDestinations.StaffFilter.route
+                }
+
+                FOneNavigator.navigateTo(navDestinationState = NavDestinationState(route = route))
+            }
         )
 
         HorizontalPager(pageCount = JobTab.values().size, state = pagerState) { page ->
@@ -91,8 +99,9 @@ private fun JobHeader(
     type: Type,
     onTypeClick: (Type) -> Unit,
     currentJobFilter: JobFilter,
-    onJobFilterClick: () -> Unit,
-    onUpdateCurrentJobFilter: (JobTab) -> Unit,
+    onJobSortingClick: () -> Unit,
+    onUpdateCurrentJobSorting: (JobTab) -> Unit,
+    onFilterClick: () -> Unit
 ) {
     var isTitleFilterClick by remember { mutableStateOf(false) }
 
@@ -142,11 +151,9 @@ private fun JobHeader(
             pagerState = pagerState,
             coroutineScope = coroutineScope,
             currentJobFilter = currentJobFilter,
-            onListFilterClick = onJobFilterClick,
-            onUpdateCurrentJobFilter = onUpdateCurrentJobFilter,
-            onFilterIconClick = {
-                FOneNavigator.navigateTo(navDestinationState = NavDestinationState(route = FOneDestinations.ActorFilter.route))
-            }
+            onListSortingItemClick = onJobSortingClick,
+            onUpdateCurrentJobSorting = onUpdateCurrentJobSorting,
+            onFilterIconClick = onFilterClick
         )
 
         BottomShadow(
@@ -228,12 +235,12 @@ private fun JobFilterHeader(
     pagerState: PagerState,
     coroutineScope: CoroutineScope,
     currentJobFilter: JobFilter,
-    onUpdateCurrentJobFilter: (JobTab) -> Unit,
-    onListFilterClick: () -> Unit,
+    onUpdateCurrentJobSorting: (JobTab) -> Unit,
+    onListSortingItemClick: () -> Unit,
     onFilterIconClick: () -> Unit
 ) {
     JobTab.values().find { it.index == pagerState.currentPage }?.let { jobTab ->
-        onUpdateCurrentJobFilter(jobTab)
+        onUpdateCurrentJobSorting(jobTab)
     }
 
     Column(
@@ -260,7 +267,7 @@ private fun JobFilterHeader(
                     .background(shape = RoundedCornerShape(5.dp), color = FColor.White)
                     .padding(vertical = 7.dp, horizontal = 8.dp)
                     .clickableSingleWithNoRipple {
-                        onListFilterClick()
+                        onListSortingItemClick()
                     },
                 verticalAlignment = Alignment.CenterVertically
             ) {

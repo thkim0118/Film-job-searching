@@ -1,4 +1,4 @@
-package com.fone.filmone.ui.main.job.filter.actor
+package com.fone.filmone.ui.main.job.filter.staff
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,21 +37,23 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.response.common.user.Category
+import com.fone.filmone.data.datamodel.response.common.user.Domain
 import com.fone.filmone.data.datamodel.response.common.user.Gender
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.tag.ToggleSelectTag
+import com.fone.filmone.ui.common.tag.domain.DomainTags
 import com.fone.filmone.ui.common.tag.interests.InterestsTags
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 
 @Composable
-fun ActorFilterScreen(
+fun StaffFilterScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: ActorFilterViewModel = hiltViewModel()
+    viewModel: StaffFilterViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
 
@@ -92,6 +94,14 @@ fun ActorFilterScreen(
             currentInterests = state.interests.toList(),
             onUpdateInterestsAll = viewModel::updateInterestSelectAll,
             onUpdateInterests = viewModel::updateInterest
+        )
+
+        Spacer(modifier = Modifier.height(26.dp))
+
+        DomainComponent(
+            currentDomains = state.domains.toList(),
+            onUpdateDomainAll = viewModel::updateDomainSelectAll,
+            onUpdateDomain = viewModel::updateDomain
         )
     }
 }
@@ -254,11 +264,34 @@ private fun InterestsComponent(
             onTagClick = onUpdateInterestsAll
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         InterestsTags(
             currentInterests = currentInterests,
             onUpdateInterests = onUpdateInterests
+        )
+    }
+}
+
+@Composable
+private fun DomainComponent(
+    modifier: Modifier = Modifier,
+    currentDomains: List<Domain>,
+    onUpdateDomainAll: () -> Unit,
+    onUpdateDomain: (Domain, Boolean) -> Unit
+) {
+    Column(modifier = modifier) {
+        FilterComponentTitle(
+            title = stringResource(id = R.string.job_filter_domain_title),
+            tagTitle = stringResource(id = R.string.job_filter_all_select),
+            onTagClick = onUpdateDomainAll
+        )
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        DomainTags(
+            currentDomains = currentDomains,
+            onUpdateDomain = onUpdateDomain
         )
     }
 }
