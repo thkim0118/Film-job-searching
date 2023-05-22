@@ -50,7 +50,6 @@ import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.tag.ToggleSelectTag
 import com.fone.filmone.ui.common.tag.interests.InterestsTags
-import com.fone.filmone.ui.main.job.JobScreenSharedViewModel
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 
@@ -59,7 +58,6 @@ fun ActorFilterScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     viewModel: ActorFilterViewModel = hiltViewModel(),
-    jobScreenSharedViewModel: JobScreenSharedViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()

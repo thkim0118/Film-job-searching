@@ -2,11 +2,16 @@ package com.fone.filmone.ui.main
 
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
+import com.fone.filmone.data.datamodel.common.jobopenings.Type
+import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
+import com.fone.filmone.domain.usecase.GetUserInfoUseCase
 import com.fone.filmone.domain.usecase.LogoutUseCase
 import com.fone.filmone.domain.usecase.SignOutUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
+import com.fone.filmone.ui.main.job.JobFilterType
+import com.fone.filmone.ui.main.job.JobTab
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
@@ -17,6 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    private val getUserInfoUseCase: GetUserInfoUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val signOutUseCase: SignOutUseCase,
 ) : BaseViewModel() {
@@ -30,6 +36,23 @@ class MainViewModel @Inject constructor(
             SharingStarted.Eagerly,
             viewModelState.value.toUiState()
         )
+
+    init {
+        initUserInfo()
+    }
+
+    private fun initUserInfo() = viewModelScope.launch {
+        getUserInfoUseCase()
+            .onSuccess { userResponse ->
+                if (userResponse == null) {
+                    return@onSuccess
+                }
+
+                viewModelState.update {
+                    it.copy(userJob = userResponse.user.job)
+                }
+            }
+    }
 
     suspend fun logout() = viewModelScope.launch {
         logoutUseCase()
@@ -75,24 +98,115 @@ class MainViewModel @Inject constructor(
             it.copy(isFloatingClick = false)
         }
     }
+
+    fun updateJobFilter(jobFilterType: JobFilterType) {
+        viewModelState.update {
+            when (it.currentJobSortingTab) {
+                is JobSorting.JobOpenings -> {
+                    when (it.userJob) {
+                        Job.STAFF -> {
+                            it.copy(
+                                staffJobOpeningsSorting = JobSorting.JobOpenings(jobFilterType),
+                                currentJobSortingTab = JobSorting.JobOpenings(jobFilterType)
+                            )
+                        }
+
+                        else -> {
+                            it.copy(
+                                actorJobOpeningsSorting = JobSorting.JobOpenings(jobFilterType),
+                                currentJobSortingTab = JobSorting.JobOpenings(jobFilterType)
+                            )
+                        }
+                    }
+                }
+
+                is JobSorting.Profile -> {
+                    when (it.userJob) {
+                        Job.STAFF -> {
+                            it.copy(
+                                staffJobOpeningsSorting = JobSorting.JobOpenings(jobFilterType),
+                                currentJobSortingTab = JobSorting.JobOpenings(jobFilterType)
+                            )
+                        }
+
+                        else -> {
+                            it.copy(
+                                actorJobOpeningsSorting = JobSorting.JobOpenings(jobFilterType),
+                                currentJobSortingTab = JobSorting.JobOpenings(jobFilterType)
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun updateCurrentJobFilterTab(jobTab: JobTab) {
+        viewModelState.update {
+            when (jobTab) {
+                JobTab.JOB_OPENING -> {
+                    it.copy(
+                        currentJobSortingTab = it.actorJobOpeningsSorting
+                    )
+                }
+
+                JobTab.PROFILE -> {
+                    it.copy(
+                        currentJobSortingTab = it.actorProfileSorting
+                    )
+                }
+            }
+        }
+    }
 }
 
 private data class MainViewModelState(
     val mainDialogState: MainDialogState = MainDialogState.Clear,
     val isFloatingClick: Boolean = false,
+    val userJob: Job = Job.ACTOR,
+    val currentJobSortingTab: JobSorting = JobSorting.JobOpenings(JobFilterType.Recent),
+    val actorJobOpeningsSorting: JobSorting = JobSorting.JobOpenings(JobFilterType.Recent),
+    val actorProfileSorting: JobSorting = JobSorting.Profile(JobFilterType.Recent),
+    val staffJobOpeningsSorting: JobSorting = JobSorting.JobOpenings(JobFilterType.Recent),
+    val staffProfileSorting: JobSorting = JobSorting.Profile(JobFilterType.Recent),
 ) {
     fun toUiState() = MainUiState(
+        type = convertJobToType(),
         mainDialogState = mainDialogState,
-        isFloatingClick = isFloatingClick
+        isFloatingClick = isFloatingClick,
+        currentJobSorting = currentJobSortingTab,
+        actorJobOpeningsSorting = actorJobOpeningsSorting,
+        actorProfileSorting = actorProfileSorting,
     )
+
+    fun convertJobToType(): Type = when (userJob) {
+        Job.STAFF -> Type.STAFF
+        else -> Type.ACTOR
+    }
 }
 
 data class MainUiState(
     val mainDialogState: MainDialogState,
     val isFloatingClick: Boolean,
+    val type: Type,
+    val currentJobSorting: JobSorting,
+    val actorJobOpeningsSorting: JobSorting,
+    val actorProfileSorting: JobSorting,
 )
 
 sealed interface MainDialogState {
     object Clear : MainDialogState
     object WithdrawalComplete : MainDialogState
+}
+
+sealed interface JobSorting {
+    val currentJobFilterType: JobFilterType
+
+    data class JobOpenings(
+        override val currentJobFilterType: JobFilterType
+    ) : JobSorting
+
+    data class Profile(
+        override val currentJobFilterType: JobFilterType
+    ) : JobSorting
 }

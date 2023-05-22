@@ -7,6 +7,7 @@ import com.fone.filmone.data.datasource.remote.JobOpeningsApi
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.jobopenings.JobTabFilterVo
 import com.fone.filmone.domain.repository.JobOpeningsRepository
+import retrofit2.http.Query
 import javax.inject.Inject
 
 class JobOpeningsRepositoryImpl @Inject constructor(
@@ -29,16 +30,25 @@ class JobOpeningsRepositoryImpl @Inject constructor(
 
     override suspend fun getJobOpeningsList(jobTabFilterVo: JobTabFilterVo): DataResult<JobOpeningsResponse> {
         return handleNetwork {
-            jobOpeningsApi.getJobOpeningsList(
-                jobTabFilterVo.ageMax,
-                jobTabFilterVo.ageMin,
-                jobTabFilterVo.categories,
-                jobTabFilterVo.domains,
-                jobTabFilterVo.genders,
-                jobTabFilterVo.page,
-                jobTabFilterVo.size,
-                jobTabFilterVo.sort,
-                jobTabFilterVo.type
+            jobOpeningsApi.getJobOpenings(
+                buildMap {
+                    putAll(
+                        mapOf(
+                            "ageMax" to jobTabFilterVo.ageMax,
+                            "ageMin" to jobTabFilterVo.ageMin,
+                            "categories" to jobTabFilterVo.categories,
+                            "genders" to jobTabFilterVo.genders,
+                            "page" to jobTabFilterVo.page,
+                            "size" to jobTabFilterVo.size,
+                            "sort" to jobTabFilterVo.sort,
+                            "type" to jobTabFilterVo.type,
+                        )
+                    )
+
+                    if (jobTabFilterVo.domains != null) {
+                        put("domains", jobTabFilterVo.domains)
+                    }
+                }
             )
         }
     }

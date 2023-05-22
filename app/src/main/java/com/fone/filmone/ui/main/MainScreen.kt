@@ -30,7 +30,6 @@ import com.fone.filmone.ui.main.chat.ChatScreen
 import com.fone.filmone.ui.main.home.HomeScreen
 import com.fone.filmone.ui.main.job.JobFilterType
 import com.fone.filmone.ui.main.job.JobScreen
-import com.fone.filmone.ui.main.job.JobScreenSharedViewModel
 import com.fone.filmone.ui.main.model.BottomNavItem
 import com.fone.filmone.ui.main.my.MyScreen
 import com.fone.filmone.ui.navigation.FOneDestinations
@@ -46,7 +45,6 @@ fun MainScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     mainViewModel: MainViewModel = hiltViewModel(),
-    jobScreenSharedViewModel: JobScreenSharedViewModel = hiltViewModel()
 ) {
     var bottomSheetType: MainBottomSheetType by remember { mutableStateOf(MainBottomSheetType.Logout) }
     val bottomSheetState =
@@ -54,7 +52,6 @@ fun MainScreen(
     val coroutineScope = rememberCoroutineScope()
     var selectedScreen by rememberSaveable { mutableStateOf(BottomNavItem.Home) }
     val uiState by mainViewModel.uiState.collectAsState()
-    val jobUiState by jobScreenSharedViewModel.uiState.collectAsState()
 
     BackHandler(true) {
         if (bottomSheetState.isVisible) {
@@ -78,6 +75,7 @@ fun MainScreen(
                         }
                     }
                 )
+
                 MainBottomSheetType.Withdrawal -> WithdrawalBottomSheet(
                     coroutineScope = coroutineScope,
                     bottomSheetState = bottomSheetState,
@@ -87,20 +85,22 @@ fun MainScreen(
                         }
                     }
                 )
+
                 MainBottomSheetType.JobTabJopOpeningsFilter -> JobTabJobOpeningsFilterBottomSheet(
                     coroutineScope = coroutineScope,
                     bottomSheetState = bottomSheetState,
-                    currentJobFilterType = jobUiState.currentJobSorting.currentJobFilterType,
+                    currentJobFilterType = uiState.currentJobSorting.currentJobFilterType,
                     onJobFilterTypeClick = {
-                        jobScreenSharedViewModel.updateJobFilter(it)
+                        mainViewModel.updateJobFilter(it)
                     }
                 )
+
                 MainBottomSheetType.JobTabProfileFilter -> JobTabProfileFilterBottomSheet(
                     coroutineScope = coroutineScope,
                     bottomSheetState = bottomSheetState,
-                    currentJobFilterType = jobUiState.currentJobSorting.currentJobFilterType,
+                    currentJobFilterType = uiState.currentJobSorting.currentJobFilterType,
                     onJobFilterTypeClick = {
-                        jobScreenSharedViewModel.updateJobFilter(it)
+                        mainViewModel.updateJobFilter(it)
                     }
                 )
             }
@@ -126,6 +126,7 @@ fun MainScreen(
                             }
                         )
                     }
+
                     BottomNavItem.Chat -> Unit
                     BottomNavItem.My -> Unit
                 }
@@ -165,6 +166,9 @@ fun MainScreen(
                 when (selectedScreen) {
                     BottomNavItem.Home -> HomeScreen()
                     BottomNavItem.Job -> JobScreen(
+                        currentJobSorting = uiState.currentJobSorting,
+                        userType = uiState.type,
+                        onUpdateCurrentJobSorting = mainViewModel::updateCurrentJobFilterTab,
                         onJobOpeningsFilterClick = {
                             bottomSheetType = MainBottomSheetType.JobTabJopOpeningsFilter
                             coroutineScope.launch { bottomSheetState.show() }
@@ -174,6 +178,7 @@ fun MainScreen(
                             coroutineScope.launch { bottomSheetState.show() }
                         }
                     )
+
                     BottomNavItem.Chat -> ChatScreen()
                     BottomNavItem.My -> MyScreen(
                         onLogoutClick = {

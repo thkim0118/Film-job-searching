@@ -1,5 +1,6 @@
 package com.fone.filmone.data.datamodel.common.network
 
+import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.data.datamodel.response.exception.EmptyNetworkBodyException
 import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult
@@ -8,6 +9,7 @@ import retrofit2.Response
 
 suspend fun <T> handleNetwork(block: suspend () -> Response<NetworkResponse<T>>): DataResult<T> {
     return try {
+        LogUtil.e("block :: $block")
         block().parseNetworkResponse()
     } catch (e: EmptyNetworkBodyException) {
         DataResult.Fail(

@@ -3,18 +3,18 @@ package com.fone.filmone.ui.main.job
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
+import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.data.datamodel.common.jobopenings.JobOpenings
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.profile.Profiles
 import com.fone.filmone.data.datamodel.common.user.Category
+import com.fone.filmone.data.datamodel.common.user.Domain
 import com.fone.filmone.data.datamodel.common.user.Gender
-import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.model.jobopenings.JobTabFilterVo
 import com.fone.filmone.domain.model.jobopenings.JobType
 import com.fone.filmone.domain.usecase.GetJobOpeningsListUseCase
 import com.fone.filmone.domain.usecase.GetProfileListUseCase
-import com.fone.filmone.domain.usecase.GetUserInfoUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +28,6 @@ import kotlin.random.Random
 
 @HiltViewModel
 class JobScreenSharedViewModel @Inject constructor(
-    private val getUserInfoUseCase: GetUserInfoUseCase,
     private val getJobOpeningsListUseCase: GetJobOpeningsListUseCase,
     private val getProfileListUseCase: GetProfileListUseCase,
 ) : BaseViewModel() {
@@ -42,22 +41,29 @@ class JobScreenSharedViewModel @Inject constructor(
             viewModelState.value.toUiState()
         )
 
-    init {
-        viewModelScope.launch {
-            getUserInfoUseCase()
-                .onSuccess { userResponse ->
-                    if (userResponse == null) {
-                        return@onSuccess
-                    }
+    fun initUserType(userType: Type) {
+        if (viewModelState.value.userType == null) {
+            viewModelState.update {
+                it.copy(userType = userType)
+            }
 
-                    viewModelState.update {
-                        it.copy(userJob = userResponse.user.job)
-                    }
-                }
+            val initJobTabFilterVo = JobTabFilterVo(
+                ageMax = 70,
+                ageMin = 1,
+                categories = Category.values().toList(),
+                domains = Domain.values().toList(),
+                genders = Gender.values().toList(),
+                type = userType
+            )
+
+            fetchActorJobOpenings(initJobTabFilterVo)
+            fetchActorProfile(initJobTabFilterVo)
+            fetchStaffJobOpenings(initJobTabFilterVo)
+            fetchStaffProfile(initJobTabFilterVo)
         }
     }
 
-    fun fetchActorJobOpeningsFilter(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
+    fun fetchActorJobOpenings(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
         getJobOpeningsListUseCase(jobTabFilterVo)
             .onSuccess { response ->
                 if (response != null) {
@@ -68,7 +74,7 @@ class JobScreenSharedViewModel @Inject constructor(
             }
     }
 
-    fun fetchActorProfileFilter(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
+    fun fetchActorProfile(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
         getProfileListUseCase(jobTabFilterVo)
             .onSuccess { response ->
                 if (response != null) {
@@ -79,7 +85,7 @@ class JobScreenSharedViewModel @Inject constructor(
             }
     }
 
-    fun fetchStaffJobOpeningsFilter(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
+    fun fetchStaffJobOpenings(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
         getJobOpeningsListUseCase(jobTabFilterVo)
             .onSuccess { response ->
                 if (response != null) {
@@ -90,7 +96,7 @@ class JobScreenSharedViewModel @Inject constructor(
             }
     }
 
-    fun fetchStaffProfileFilter(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
+    fun fetchStaffProfile(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
         getProfileListUseCase(jobTabFilterVo)
             .onSuccess { response ->
                 if (response != null) {
@@ -98,86 +104,20 @@ class JobScreenSharedViewModel @Inject constructor(
                         it.copy(staffProfiles = response.profiles)
                     }
                 }
+
+                LogUtil.i("response :: $response")
             }
     }
 
     fun updateType(type: Type) {
         viewModelState.update {
-            it.copy(
-                userJob = when (type) {
-                    Type.ACTOR -> Job.ACTOR
-                    Type.STAFF -> Job.STAFF
-                }
-            )
-        }
-    }
-
-    fun updateCurrentJobFilterTab(jobTab: JobTab) {
-        viewModelState.update {
-            when (jobTab) {
-                JobTab.JOB_OPENING -> {
-                    it.copy(
-                        currentJobSortingTab = it.actorJobOpeningsSorting
-                    )
-                }
-
-                JobTab.PROFILE -> {
-                    it.copy(
-                        currentJobSortingTab = it.actorProfileSorting
-                    )
-                }
-            }
-        }
-    }
-
-    fun updateJobFilter(jobFilterType: JobFilterType) {
-        viewModelState.update {
-            when (it.currentJobSortingTab) {
-                is JobSorting.JobOpenings -> {
-                    when (it.userJob) {
-                        Job.STAFF -> {
-                            it.copy(
-                                staffJobOpeningsSorting = JobSorting.JobOpenings(jobFilterType),
-                                currentJobSortingTab = JobSorting.JobOpenings(jobFilterType)
-                            )
-                        }
-                        else -> {
-                            it.copy(
-                                actorJobOpeningsSorting = JobSorting.JobOpenings(jobFilterType),
-                                currentJobSortingTab = JobSorting.JobOpenings(jobFilterType)
-                            )
-                        }
-                    }
-                }
-
-                is JobSorting.Profile -> {
-                    when (it.userJob) {
-                        Job.STAFF -> {
-                            it.copy(
-                                staffJobOpeningsSorting = JobSorting.JobOpenings(jobFilterType),
-                                currentJobSortingTab = JobSorting.JobOpenings(jobFilterType)
-                            )
-                        }
-                        else -> {
-                            it.copy(
-                                actorJobOpeningsSorting = JobSorting.JobOpenings(jobFilterType),
-                                currentJobSortingTab = JobSorting.JobOpenings(jobFilterType)
-                            )
-                        }
-                    }
-                }
-            }
+            it.copy(userType = type)
         }
     }
 }
 
 private data class JobScreenViewModelState(
-    val userJob: Job = Job.ACTOR,
-    val currentJobSortingTab: JobSorting = JobSorting.JobOpenings(JobFilterType.Recent),
-    val actorJobOpeningsSorting: JobSorting = JobSorting.JobOpenings(JobFilterType.Recent),
-    val actorProfileSorting: JobSorting = JobSorting.Profile(JobFilterType.Recent),
-    val staffJobOpeningsSorting: JobSorting = JobSorting.JobOpenings(JobFilterType.Recent),
-    val staffProfileSorting: JobSorting = JobSorting.Profile(JobFilterType.Recent),
+    val userType: Type? = null,
     val actorJobOpenings: JobOpenings? = null,
     val actorProfiles: Profiles? = null,
     val staffJobOpenings: JobOpenings? = null,
@@ -216,13 +156,7 @@ private data class JobScreenViewModelState(
     )
 ) {
     fun toUiState(): JobScreenUiState = JobScreenUiState(
-        type = when (userJob) {
-            Job.STAFF -> Type.STAFF
-            else -> Type.ACTOR
-        },
-        currentJobSorting = currentJobSortingTab,
-        actorJobOpeningsSorting = actorJobOpeningsSorting,
-        actorProfileSorting = actorProfileSorting,
+        type = userType,
         jobOpeningsUiModel = actorJobOpenings?.content?.map { content ->
             JobTabJobOpeningUiModel(
                 categories = content.categories,
@@ -247,25 +181,10 @@ private data class JobScreenViewModelState(
 }
 
 data class JobScreenUiState(
-    val type: Type,
-    val currentJobSorting: JobSorting,
-    val actorJobOpeningsSorting: JobSorting,
-    val actorProfileSorting: JobSorting,
+    val type: Type?,
     val jobOpeningsUiModel: List<JobTabJobOpeningUiModel>,
     val profileUiModels: List<ProfilesUiModel>,
 )
-
-sealed interface JobSorting {
-    val currentJobFilterType: JobFilterType
-
-    data class JobOpenings(
-        override val currentJobFilterType: JobFilterType
-    ) : JobSorting
-
-    data class Profile(
-        override val currentJobFilterType: JobFilterType
-    ) : JobSorting
-}
 
 enum class JobFilterType(@StringRes val titleRes: Int) {
     Recent(R.string.job_tab_main_filter_recent),

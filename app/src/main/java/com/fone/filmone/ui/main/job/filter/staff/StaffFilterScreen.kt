@@ -52,7 +52,6 @@ import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.tag.ToggleSelectTag
 import com.fone.filmone.ui.common.tag.domain.DomainTags
 import com.fone.filmone.ui.common.tag.interests.InterestsTags
-import com.fone.filmone.ui.main.job.JobScreenSharedViewModel
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 
@@ -61,7 +60,6 @@ fun StaffFilterScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     viewModel: StaffFilterViewModel = hiltViewModel(),
-    jobScreenSharedViewModel: JobScreenSharedViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()

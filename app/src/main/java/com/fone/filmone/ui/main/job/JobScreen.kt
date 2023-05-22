@@ -34,6 +34,7 @@ import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.ui.common.ext.*
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.shadow.BottomShadow
+import com.fone.filmone.ui.main.JobSorting
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
@@ -46,6 +47,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun JobScreen(
     modifier: Modifier = Modifier,
+    currentJobSorting: JobSorting,
+    userType: Type,
+    onUpdateCurrentJobSorting: (JobTab) -> Unit,
     onJobOpeningsFilterClick: () -> Unit,
     onProfileFilterClick: () -> Unit,
     viewModel: JobScreenSharedViewModel = hiltViewModel()
@@ -54,6 +58,10 @@ fun JobScreen(
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsState()
 
+    LaunchedEffect(key1 = userType) {
+        viewModel.initUserType(userType)
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -61,18 +69,18 @@ fun JobScreen(
         JobHeader(
             pagerState = pagerState,
             coroutineScope = coroutineScope,
-            type = uiState.type,
+            type = userType,
             onTypeClick = viewModel::updateType,
-            currentJobSorting = uiState.currentJobSorting,
+            currentJobSorting = currentJobSorting,
             onJobSortingClick = {
-                when (uiState.currentJobSorting) {
+                when (currentJobSorting) {
                     is JobSorting.JobOpenings -> onJobOpeningsFilterClick()
                     is JobSorting.Profile -> onProfileFilterClick()
                 }
             },
-            onUpdateCurrentJobSorting = viewModel::updateCurrentJobFilterTab,
+            onUpdateCurrentJobSorting = onUpdateCurrentJobSorting,
             onFilterClick = {
-                val route = when (uiState.type) {
+                val route = when (userType) {
                     Type.ACTOR -> FOneDestinations.ActorFilter.route
                     Type.STAFF -> FOneDestinations.StaffFilter.route
                 }
@@ -90,7 +98,9 @@ fun JobScreen(
                     }
                 )
 
-                1 -> JobTabProfileComponent()
+                1 -> JobTabProfileComponent(
+                    jobTabProfilesUiModels = uiState.profileUiModels
+                )
             }
         }
     }

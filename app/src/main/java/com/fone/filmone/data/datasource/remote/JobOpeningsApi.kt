@@ -11,6 +11,7 @@ import com.fone.filmone.data.datamodel.response.jobopenings.JobOpeningsResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 interface JobOpeningsApi {
     @GET("${Server.ApiVersion}/job-openings/scraps")
@@ -26,16 +27,8 @@ interface JobOpeningsApi {
         @Query("size") size: Int,
     ): Response<NetworkResponse<JobOpeningsResponse>>
 
-    @GET("${Server.ApiVersion}/jop-openings")
-    suspend fun getJobOpeningsList(
-        @Query("ageMax") ageMax: Int,
-        @Query("ageMin") ageMin: Int,
-        @Query("categories") categories: List<Category>,
-        @Query("domains") domains: List<Domain>?,
-        @Query("genders") genders: List<Gender>,
-        @Query("page") page: Int,
-        @Query("size") size: Int,
-        @Query("sort") sort: SortType,
-        @Query("type") type: Type,
+    @GET("${Server.ApiVersion}/job-openings/scraps")
+    suspend fun getJobOpenings(
+        @QueryMap queries: Map<String, Any>,
     ): Response<NetworkResponse<JobOpeningsResponse>>
 }
