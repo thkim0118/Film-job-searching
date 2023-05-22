@@ -7,7 +7,6 @@ import com.fone.filmone.data.datasource.remote.JobOpeningsApi
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.jobopenings.JobTabFilterVo
 import com.fone.filmone.domain.repository.JobOpeningsRepository
-import retrofit2.http.Query
 import javax.inject.Inject
 
 class JobOpeningsRepositoryImpl @Inject constructor(
@@ -30,7 +29,7 @@ class JobOpeningsRepositoryImpl @Inject constructor(
 
     override suspend fun getJobOpeningsList(jobTabFilterVo: JobTabFilterVo): DataResult<JobOpeningsResponse> {
         return handleNetwork {
-            jobOpeningsApi.getJobOpenings(
+            jobOpeningsApi.getJobOpeningList(
                 buildMap {
                     putAll(
                         mapOf(

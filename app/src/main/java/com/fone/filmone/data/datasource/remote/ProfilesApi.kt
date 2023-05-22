@@ -12,6 +12,18 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ProfilesApi {
+    @GET("${Server.ApiVersion}/profiles")
+    suspend fun getProfileList(
+        @Query("ageMax") ageMax: Int,
+        @Query("ageMin") ageMin: Int,
+        @Query("categories") categories: List<Category>,
+        @Query("genders") genders: List<Gender>,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("sort") sort: SortType,
+        @Query("type") type: Type,
+    ): Response<NetworkResponse<ProfilesResponse>>
+
     @GET("${Server.ApiVersion}/profiles/wants")
     suspend fun getFavoriteProfile(
         @Query("page") page: Int,
@@ -23,17 +35,5 @@ interface ProfilesApi {
     suspend fun getMyRegistrations(
         @Query("page") page: Int,
         @Query("size") size: Int,
-    ): Response<NetworkResponse<ProfilesResponse>>
-
-    @GET("${Server.ApiVersion}/profiles")
-    suspend fun getProfileList(
-        @Query("ageMax") ageMax: Int,
-        @Query("ageMin") ageMin: Int,
-        @Query("categories") categories: List<Category>,
-        @Query("genders") genders: List<Gender>,
-        @Query("page") page: Int,
-        @Query("size") size: Int,
-        @Query("sort") sort: SortType,
-        @Query("type") type: Type,
     ): Response<NetworkResponse<ProfilesResponse>>
 }
