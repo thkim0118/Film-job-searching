@@ -75,4 +75,8 @@ sealed class FOneDestinations(val route: String) {
     object MyRegister : FOneDestinations("my-register")
     object ActorFilter : FOneDestinations("actor-filter")
     object StaffFilter : FOneDestinations("staff_filter")
+    object RecruitingRegister : FOneDestinations("recruiting_register")
+    object RecruitingArticle : FOneDestinations("recruiting_article")
+    object ProfileRegister : FOneDestinations("profile_register")
+    object ProfileArticle : FOneDestinations("profile_article")
 }

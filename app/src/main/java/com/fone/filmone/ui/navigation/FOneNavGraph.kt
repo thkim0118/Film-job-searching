@@ -13,6 +13,10 @@ import com.fone.filmone.ui.login.LoginScreen
 import com.fone.filmone.ui.main.MainScreen
 import com.fone.filmone.ui.main.job.filter.actor.ActorFilterScreen
 import com.fone.filmone.ui.main.job.filter.staff.StaffFilterScreen
+import com.fone.filmone.ui.main.job.profile.article.ProfileArticleScreen
+import com.fone.filmone.ui.main.job.profile.register.ProfileRegisterScreen
+import com.fone.filmone.ui.main.job.recruiting.article.RecruitingArticleScreen
+import com.fone.filmone.ui.main.job.recruiting.register.RecruitingRegisterScreen
 import com.fone.filmone.ui.myinfo.MyInfoScreen
 import com.fone.filmone.ui.myregister.MyRegisterScreen
 import com.fone.filmone.ui.scrap.ScrapScreen
@@ -72,6 +76,18 @@ fun FOneNavGraph(
         }
         composable(FOneDestinations.StaffFilter.route) {
             StaffFilterScreen(navController = navController)
+        }
+        composable(FOneDestinations.RecruitingRegister.route) {
+            RecruitingRegisterScreen()
+        }
+        composable(FOneDestinations.RecruitingArticle.route) {
+            RecruitingArticleScreen()
+        }
+        composable(FOneDestinations.ProfileRegister.route) {
+            ProfileRegisterScreen()
+        }
+        composable(FOneDestinations.ProfileArticle.route) {
+            ProfileArticleScreen()
         }
     }
 }
