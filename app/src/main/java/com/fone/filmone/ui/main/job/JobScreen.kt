@@ -69,7 +69,7 @@ fun JobScreen(
         JobHeader(
             pagerState = pagerState,
             coroutineScope = coroutineScope,
-            type = userType,
+            type = uiState.type ?: userType,
             onTypeClick = viewModel::updateType,
             currentJobSorting = currentJobSorting,
             onJobSortingClick = {
@@ -80,7 +80,7 @@ fun JobScreen(
             },
             onUpdateCurrentJobSorting = onUpdateCurrentJobSorting,
             onFilterClick = {
-                val route = when (userType) {
+                val route = when (uiState.type ?: userType) {
                     Type.ACTOR -> FOneDestinations.ActorFilter.route
                     Type.STAFF -> FOneDestinations.StaffFilter.route
                 }
