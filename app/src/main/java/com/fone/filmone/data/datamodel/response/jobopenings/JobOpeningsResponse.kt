@@ -1,9 +1,9 @@
-package com.fone.filmone.data.datamodel.response.jobopenings.scrap
+package com.fone.filmone.data.datamodel.response.jobopenings
 
 import androidx.annotation.Keep
 import com.fone.filmone.data.datamodel.common.jobopenings.JobOpenings
 
 @Keep
-data class JobOpeningsScrapResponse(
+data class JobOpeningsResponse(
     val jobOpenings: JobOpenings
 )

@@ -48,7 +48,7 @@ fun JobScreen(
     modifier: Modifier = Modifier,
     onJobOpeningsFilterClick: () -> Unit,
     onProfileFilterClick: () -> Unit,
-    viewModel: JobScreenViewModel = hiltViewModel()
+    viewModel: JobScreenSharedViewModel = hiltViewModel()
 ) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
@@ -63,14 +63,14 @@ fun JobScreen(
             coroutineScope = coroutineScope,
             type = uiState.type,
             onTypeClick = viewModel::updateType,
-            currentJobFilter = uiState.currentJobFilter,
+            currentJobSorting = uiState.currentJobSorting,
             onJobSortingClick = {
-                when (uiState.currentJobFilter) {
-                    is JobFilter.JobOpenings -> onJobOpeningsFilterClick()
-                    is JobFilter.Profile -> onProfileFilterClick()
+                when (uiState.currentJobSorting) {
+                    is JobSorting.JobOpenings -> onJobOpeningsFilterClick()
+                    is JobSorting.Profile -> onProfileFilterClick()
                 }
             },
-            onUpdateCurrentJobSorting = viewModel::updateCurrentJobFilter,
+            onUpdateCurrentJobSorting = viewModel::updateCurrentJobFilterTab,
             onFilterClick = {
                 val route = when (uiState.type) {
                     Type.ACTOR -> FOneDestinations.ActorFilter.route
@@ -83,8 +83,14 @@ fun JobScreen(
 
         HorizontalPager(pageCount = JobTab.values().size, state = pagerState) { page ->
             when (page) {
-                0 -> JobTabJobOpeningsScreen()
-                1 -> JobTabProfileScreen()
+                0 -> JobTabJobOpeningsComponent(
+                    jobTabJobOpeningUiModels = uiState.jobOpeningsUiModel,
+                    onLastItemVisible = {
+
+                    }
+                )
+
+                1 -> JobTabProfileComponent()
             }
         }
     }
@@ -98,7 +104,7 @@ private fun JobHeader(
     coroutineScope: CoroutineScope,
     type: Type,
     onTypeClick: (Type) -> Unit,
-    currentJobFilter: JobFilter,
+    currentJobSorting: JobSorting,
     onJobSortingClick: () -> Unit,
     onUpdateCurrentJobSorting: (JobTab) -> Unit,
     onFilterClick: () -> Unit
@@ -150,7 +156,7 @@ private fun JobHeader(
                 },
             pagerState = pagerState,
             coroutineScope = coroutineScope,
-            currentJobFilter = currentJobFilter,
+            currentJobSorting = currentJobSorting,
             onListSortingItemClick = onJobSortingClick,
             onUpdateCurrentJobSorting = onUpdateCurrentJobSorting,
             onFilterIconClick = onFilterClick
@@ -234,7 +240,7 @@ private fun JobFilterHeader(
     modifier: Modifier = Modifier,
     pagerState: PagerState,
     coroutineScope: CoroutineScope,
-    currentJobFilter: JobFilter,
+    currentJobSorting: JobSorting,
     onUpdateCurrentJobSorting: (JobTab) -> Unit,
     onListSortingItemClick: () -> Unit,
     onFilterIconClick: () -> Unit
@@ -272,7 +278,7 @@ private fun JobFilterHeader(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(currentJobFilter.currentJobFilterType.titleRes),
+                    text = stringResource(currentJobSorting.currentJobFilterType.titleRes),
                     style = LocalTypography.current.subtitle2(),
                     color = FColor.TextPrimary
                 )

@@ -22,9 +22,8 @@ import com.fone.filmone.data.datamodel.response.competition.CompetitionsResponse
 import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse
 import com.fone.filmone.data.datamodel.response.inquiry.Question
-import com.fone.filmone.data.datamodel.response.profiles.favorite.FavoriteProfilesResponse
 import com.fone.filmone.data.datamodel.common.profile.Profiles
-import com.fone.filmone.data.datamodel.response.jobopenings.scrap.*
+import com.fone.filmone.data.datamodel.response.jobopenings.JobOpeningsResponse
 import com.fone.filmone.data.datamodel.response.user.*
 import com.fone.filmone.domain.model.inquiry.InquiryType
 import com.fone.filmone.domain.model.inquiry.InquiryVo
@@ -198,7 +197,7 @@ val fakeJobOpenings = JobOpenings(
     sort = fakeSort
 )
 
-val fakeJobOpeningsScrapResponse = JobOpeningsScrapResponse(
+val fakeJobOpeningsResponse = JobOpeningsResponse(
     jobOpenings = fakeJobOpenings
 )
 
@@ -278,6 +277,6 @@ val fakeProfiles = Profiles(
     sort = fakeSort
 )
 
-val fakeFavoriteProfilesResponse = FavoriteProfilesResponse(
+val fakeProfilesResponse = ProfilesResponse(
     profiles = fakeProfiles
 )

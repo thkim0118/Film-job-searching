@@ -2,10 +2,10 @@ package com.fone.filmone.data.repository
 
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.network.handleNetwork
-import com.fone.filmone.data.datamodel.response.jobopenings.myregistration.MyRegistrationJobOpeningsResponse
-import com.fone.filmone.data.datamodel.response.jobopenings.scrap.JobOpeningsScrapResponse
+import com.fone.filmone.data.datamodel.response.jobopenings.JobOpeningsResponse
 import com.fone.filmone.data.datasource.remote.JobOpeningsApi
 import com.fone.filmone.domain.model.common.DataResult
+import com.fone.filmone.domain.model.jobopenings.JobTabFilterVo
 import com.fone.filmone.domain.repository.JobOpeningsRepository
 import javax.inject.Inject
 
@@ -16,14 +16,30 @@ class JobOpeningsRepositoryImpl @Inject constructor(
         page: Int,
         size: Int,
         type: Type
-    ): DataResult<JobOpeningsScrapResponse> {
+    ): DataResult<JobOpeningsResponse> {
         return handleNetwork { jobOpeningsApi.getScraps(page = page, size = size, type = type) }
     }
 
     override suspend fun getMyRegistrations(
         page: Int,
         size: Int,
-    ): DataResult<MyRegistrationJobOpeningsResponse> {
+    ): DataResult<JobOpeningsResponse> {
         return handleNetwork { jobOpeningsApi.getMyRegistrations(page = page, size = size) }
+    }
+
+    override suspend fun getJobOpeningsList(jobTabFilterVo: JobTabFilterVo): DataResult<JobOpeningsResponse> {
+        return handleNetwork {
+            jobOpeningsApi.getJobOpeningsList(
+                jobTabFilterVo.ageMax,
+                jobTabFilterVo.ageMin,
+                jobTabFilterVo.categories,
+                jobTabFilterVo.domains,
+                jobTabFilterVo.genders,
+                jobTabFilterVo.page,
+                jobTabFilterVo.size,
+                jobTabFilterVo.sort,
+                jobTabFilterVo.type
+            )
+        }
     }
 }

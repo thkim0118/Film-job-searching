@@ -5,20 +5,25 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
 import androidx.compose.material.RangeSlider
+import androidx.compose.material.Scaffold
 import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -39,6 +44,7 @@ import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Domain
 import com.fone.filmone.data.datamodel.common.user.Gender
+import com.fone.filmone.ui.common.FButton
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
@@ -46,6 +52,7 @@ import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.tag.ToggleSelectTag
 import com.fone.filmone.ui.common.tag.domain.DomainTags
 import com.fone.filmone.ui.common.tag.interests.InterestsTags
+import com.fone.filmone.ui.main.job.JobScreenSharedViewModel
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 
@@ -53,56 +60,76 @@ import com.fone.filmone.ui.theme.LocalTypography
 fun StaffFilterScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: StaffFilterViewModel = hiltViewModel()
+    viewModel: StaffFilterViewModel = hiltViewModel(),
+    jobScreenSharedViewModel: JobScreenSharedViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
+    val scrollState = rememberScrollState()
 
-    Column(
+    Scaffold(
         modifier = modifier
             .defaultSystemBarPadding()
             .toastPadding()
             .padding(horizontal = 16.dp)
     ) {
-        ActorFilterTitle(
-            onRefreshClick = {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
+            ActorFilterTitle(
+                onRefreshClick = {
 
-            },
-            onCloseClick = {
-                navController.popBackStack()
+                },
+                onCloseClick = {
+                    navController.popBackStack()
+                }
+            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
+            ) {
+                Spacer(modifier = Modifier.height(24.dp))
+
+                GenderTagsComponent(
+                    currentGender = state.genders,
+                    onUpdateGender = viewModel::updateGender,
+                    onUpdateGenderAll = viewModel::updateGenderSelectAll
+                )
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                AgeComponent(
+                    ageRange = state.ageRange,
+                    onUpdateAgeReset = viewModel::updateAgeRangeReset,
+                    onUpdateAgeRange = viewModel::updateAgeRange
+                )
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                InterestsComponent(
+                    currentInterests = state.interests.toList(),
+                    onUpdateInterestsAll = viewModel::updateInterestSelectAll,
+                    onUpdateInterests = viewModel::updateInterest
+                )
+
+                Spacer(modifier = Modifier.height(26.dp))
+
+                DomainComponent(
+                    currentDomains = state.domains.toList(),
+                    onUpdateDomainAll = viewModel::updateDomainSelectAll,
+                    onUpdateDomain = viewModel::updateDomain
+                )
             }
-        )
 
-        Spacer(modifier = Modifier.height(24.dp))
+            NextButton(
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
 
-        GenderTagsComponent(
-            currentGender = state.genders,
-            onUpdateGender = viewModel::updateGender,
-            onUpdateGenderAll = viewModel::updateGenderSelectAll
-        )
-
-        Spacer(modifier = Modifier.height(30.dp))
-
-        AgeComponent(
-            ageRange = state.ageRange,
-            onUpdateAgeReset = viewModel::updateAgeRangeReset,
-            onUpdateAgeRange = viewModel::updateAgeRange
-        )
-
-        Spacer(modifier = Modifier.height(6.dp))
-
-        InterestsComponent(
-            currentInterests = state.interests.toList(),
-            onUpdateInterestsAll = viewModel::updateInterestSelectAll,
-            onUpdateInterests = viewModel::updateInterest
-        )
-
-        Spacer(modifier = Modifier.height(26.dp))
-
-        DomainComponent(
-            currentDomains = state.domains.toList(),
-            onUpdateDomainAll = viewModel::updateDomainSelectAll,
-            onUpdateDomain = viewModel::updateDomain
-        )
+            Spacer(modifier = Modifier.height(38.dp))
+        }
     }
 }
 
@@ -333,4 +360,23 @@ private fun FilterComponentTitle(
             )
         }
     }
+}
+
+@Composable
+private fun ColumnScope.NextButton(
+    modifier: Modifier = Modifier,
+) {
+    val enable = false
+
+    Spacer(modifier = Modifier.weight(1f))
+
+    FButton(
+        modifier = modifier,
+        title = stringResource(id = R.string.job_filter_button_title),
+        enable = enable,
+        onClick = {
+            if (enable) {
+            }
+        }
+    )
 }

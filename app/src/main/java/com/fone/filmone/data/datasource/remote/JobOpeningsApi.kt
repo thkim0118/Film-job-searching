@@ -1,10 +1,13 @@
 package com.fone.filmone.data.datasource.remote
 
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
-import com.fone.filmone.data.datamodel.response.jobopenings.scrap.JobOpeningsScrapResponse
 import com.fone.filmone.data.datamodel.common.network.NetworkResponse
 import com.fone.filmone.data.datamodel.common.network.Server
-import com.fone.filmone.data.datamodel.response.jobopenings.myregistration.MyRegistrationJobOpeningsResponse
+import com.fone.filmone.data.datamodel.common.paging.SortType
+import com.fone.filmone.data.datamodel.common.user.Category
+import com.fone.filmone.data.datamodel.common.user.Domain
+import com.fone.filmone.data.datamodel.common.user.Gender
+import com.fone.filmone.data.datamodel.response.jobopenings.JobOpeningsResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -15,11 +18,24 @@ interface JobOpeningsApi {
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("type") type: Type
-    ): Response<NetworkResponse<JobOpeningsScrapResponse>>
+    ): Response<NetworkResponse<JobOpeningsResponse>>
 
     @GET("${Server.ApiVersion}/job-openings/my-registrations")
     suspend fun getMyRegistrations(
         @Query("page") page: Int,
         @Query("size") size: Int,
-    ): Response<NetworkResponse<MyRegistrationJobOpeningsResponse>>
+    ): Response<NetworkResponse<JobOpeningsResponse>>
+
+    @GET("${Server.ApiVersion}/jop-openings")
+    suspend fun getJobOpeningsList(
+        @Query("ageMax") ageMax: Int,
+        @Query("ageMin") ageMin: Int,
+        @Query("categories") categories: List<Category>,
+        @Query("domains") domains: List<Domain>?,
+        @Query("genders") genders: List<Gender>,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("sort") sort: SortType,
+        @Query("type") type: Type,
+    ): Response<NetworkResponse<JobOpeningsResponse>>
 }

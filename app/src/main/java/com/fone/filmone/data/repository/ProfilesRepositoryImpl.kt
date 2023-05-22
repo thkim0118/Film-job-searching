@@ -2,10 +2,10 @@ package com.fone.filmone.data.repository
 
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.network.handleNetwork
-import com.fone.filmone.data.datamodel.response.profiles.favorite.FavoriteProfilesResponse
-import com.fone.filmone.data.datamodel.response.profiles.myregistrations.MyRegistrationsResponse
+import com.fone.filmone.data.datamodel.response.profiles.ProfilesResponse
 import com.fone.filmone.data.datasource.remote.ProfilesApi
 import com.fone.filmone.domain.model.common.DataResult
+import com.fone.filmone.domain.model.jobopenings.JobTabFilterVo
 import com.fone.filmone.domain.repository.ProfilesRepository
 import javax.inject.Inject
 
@@ -16,14 +16,29 @@ class ProfilesRepositoryImpl @Inject constructor(
         page: Int,
         size: Int,
         type: Type
-    ): DataResult<FavoriteProfilesResponse> {
+    ): DataResult<ProfilesResponse> {
         return handleNetwork { profilesApi.getFavoriteProfile(page, size, type) }
     }
 
     override suspend fun getMyRegistrations(
         page: Int,
         size: Int,
-    ): DataResult<MyRegistrationsResponse> {
+    ): DataResult<ProfilesResponse> {
         return handleNetwork { profilesApi.getMyRegistrations(page, size) }
+    }
+
+    override suspend fun getProfileList(jobTabFilterVo: JobTabFilterVo): DataResult<ProfilesResponse> {
+        return handleNetwork {
+            profilesApi.getProfileList(
+                jobTabFilterVo.ageMax,
+                jobTabFilterVo.ageMin,
+                jobTabFilterVo.categories,
+                jobTabFilterVo.genders,
+                jobTabFilterVo.page,
+                jobTabFilterVo.size,
+                jobTabFilterVo.sort,
+                jobTabFilterVo.type
+            )
+        }
     }
 }
