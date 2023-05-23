@@ -191,7 +191,7 @@ private fun PhoneVerificationComponent(
         onValueChange = onValueChanged,
         textLimit = 11,
         placeholder = stringResource(id = R.string.sign_up_third_phone_number_placeholder),
-        topText = {
+        topComponent = {
             Text(
                 text = stringResource(id = R.string.sign_up_third_phone_number_title),
                 style = LocalTypography.current.subtitle1()
@@ -275,15 +275,17 @@ fun RetransmitComponent(
                     }
                 )
             },
-            textFieldTail = FTextFieldTail.Text(
-                text = uiState.verificationTime,
-                style = fTextStyle(
-                    fontWeight = FontWeight.W400,
-                    fontSize = 12.textDp,
-                    lineHeight = 14.textDp,
-                    color = FColor.ColorFF5841
+            tailComponent = {
+                Text(
+                    text = uiState.verificationTime,
+                    style = fTextStyle(
+                        fontWeight = FontWeight.W400,
+                        fontSize = 12.textDp,
+                        lineHeight = 14.textDp,
+                        color = FColor.ColorFF5841
+                    )
                 )
-            ),
+            },
             enabled = isVisible
         )
 

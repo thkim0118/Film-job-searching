@@ -18,7 +18,6 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -53,16 +52,13 @@ fun FTextField(
     autoCompletion: ((beforeValue: TextFieldValue, afterValue: TextFieldValue) -> TextFieldValue)? = null,
     textLimit: Int = Int.MAX_VALUE,
     onFocusChange: (Boolean) -> Unit = {},
-//    topText: TopText = TopText(
-//        title = "",
-//        titleStar = false,
-//        titleSpace = 0.dp
-//    ),
-    topText: @Composable ColumnScope.() -> Unit = {},
-    bottomType: BottomType = BottomType.Empty,
-    bottomSpacer: Dp = 0.dp,
+    topComponent: @Composable ColumnScope.() -> Unit = {},
+    bottomComponent: @Composable ColumnScope.() -> Unit = {},
+    leftComponents: @Composable RowScope.() -> Unit = {},
     rightComponents: @Composable RowScope.() -> Unit = {},
-    textFieldTail: FTextFieldTail? = null,
+    rowComponentAlignment: Alignment.Vertical = Alignment.CenterVertically,
+    tailComponent: @Composable () -> Unit = {},
+    isError: Boolean = false,
     singleLine: Boolean = true,
     maxLines: Int = 1,
     readOnly: Boolean = false,
@@ -181,9 +177,11 @@ fun FTextField(
                     Column(
                         modifier = Modifier
                     ) {
-                        topText()
+                        topComponent()
 
-                        Row {
+                        Row(verticalAlignment = rowComponentAlignment) {
+                            leftComponents()
+
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
@@ -191,7 +189,7 @@ fun FTextField(
                                     .clip(shape = RoundedCornerShape(cornerRounded.dp))
                                     .border(
                                         width = 1.dp,
-                                        color = if (bottomType is BottomType.Error && bottomType.isError) {
+                                        color = if (isError) {
                                             errorBorderColor
                                         } else {
                                             FColor.Transparent
@@ -236,16 +234,7 @@ fun FTextField(
                                                 innerTextField()
                                             }
 
-                                            if (textFieldTail != null) {
-                                                when (textFieldTail) {
-                                                    is FTextFieldTail.Text -> {
-                                                        Text(
-                                                            text = textFieldTail.text,
-                                                            style = textFieldTail.style
-                                                        )
-                                                    }
-                                                }
-                                            }
+                                            tailComponent()
                                         }
                                     },
                                     placeholder = @Composable {
@@ -273,8 +262,7 @@ fun FTextField(
                                     label = null,
                                     singleLine = true,
                                     enabled = enabled,
-                                    isError = bottomType is BottomType.Error &&
-                                            bottomType.isError,
+                                    isError = isError,
                                     interactionSource = interactionSource,
                                     colors = TextFieldDefaults.textFieldColors(
                                         backgroundColor = backgroundColor,
@@ -289,71 +277,12 @@ fun FTextField(
                             rightComponents()
                         }
 
-                        when (bottomType) {
-                            BottomType.Empty -> Unit
-                            is BottomType.Error -> {
-                                Spacer(modifier = Modifier.height(3.dp))
-
-                                Text(
-                                    modifier = Modifier
-                                        .alpha(
-                                            if (bottomType.isError) {
-                                                1f
-                                            } else {
-                                                0f
-                                            }
-                                        ),
-                                    text = bottomType.errorText,
-                                    style = fTextStyle(
-                                        fontWeight = FontWeight.W400,
-                                        fontSize = 12.textDp,
-                                        lineHeight = 14.4.textDp,
-                                        color = FColor.Error
-                                    )
-                                )
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(bottomSpacer))
+                        bottomComponent()
                     }
                 }
             )
         }
     }
-}
-
-data class TopText(
-    val title: String,
-    val subtitle: String = "",
-    val titleStar: Boolean,
-    val titleSpace: Dp
-)
-
-sealed interface BottomType {
-    object Empty : BottomType
-
-    data class Error(
-        val errorText: String,
-        val isError: Boolean
-    ) : BottomType
-}
-
-data class BorderButton(
-    val text: String,
-    val enable: Boolean,
-    val onClick: () -> Unit
-)
-
-sealed interface ClickType {
-    data class Click(val onClick: () -> Unit) : ClickType
-    data class ClickSingle(val onClick: () -> Unit) : ClickType
-}
-
-sealed interface FTextFieldTail {
-    data class Text(
-        val text: String,
-        val style: TextStyle
-    ) : FTextFieldTail
 }
 
 @Preview(showBackground = true)
@@ -398,7 +327,7 @@ private fun FTextFieldBottomErrorTypePreview() {
         FTextField(
             text = "Input Text",
             onValueChange = {},
-            topText = {
+            topComponent = {
                 Row {
                     Text(
                         text = "topText.title",
@@ -425,10 +354,6 @@ private fun FTextFieldBottomErrorTypePreview() {
 
                 Spacer(modifier = Modifier.height(8.dp))
             },
-            bottomType = BottomType.Error(
-                errorText = "에러 메시지 테스트 안내 문구입니다.",
-                isError = true
-            )
         )
     }
 }
@@ -441,7 +366,7 @@ private fun FTextFieldBottomWithFBorderButtonPreview() {
             FTextField(
                 text = "Input Text",
                 onValueChange = {},
-                topText = {
+                topComponent = {
                     Row {
                         Text(
                             text = "topText.title",
@@ -468,10 +393,6 @@ private fun FTextFieldBottomWithFBorderButtonPreview() {
 
                     Spacer(modifier = Modifier.height(8.dp))
                 },
-                bottomType = BottomType.Error(
-                    errorText = "에러 메시지 테스트 안내 문구입니다.",
-                    isError = true
-                ),
                 rightComponents = {
                     Spacer(modifier = Modifier.width(4.dp))
 
@@ -481,15 +402,17 @@ private fun FTextFieldBottomWithFBorderButtonPreview() {
                         onClick = {}
                     )
                 },
-                textFieldTail = FTextFieldTail.Text(
-                    text = "3:00",
-                    style = fTextStyle(
-                        fontWeight = FontWeight.W400,
-                        fontSize = 12.textDp,
-                        lineHeight = 14.textDp,
-                        color = FColor.ColorFF5841
+                tailComponent = {
+                    Text(
+                        text = "3:00",
+                        style = fTextStyle(
+                            fontWeight = FontWeight.W400,
+                            fontSize = 12.textDp,
+                            lineHeight = 14.textDp,
+                            color = FColor.ColorFF5841
+                        )
                     )
-                )
+                }
             )
         }
     }

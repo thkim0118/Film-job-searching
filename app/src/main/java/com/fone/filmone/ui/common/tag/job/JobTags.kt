@@ -24,6 +24,7 @@ fun JobTags(
             SingleSelectTag(
                 modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
                 type = job,
+                title = job.name,
                 isSelected = currentJob == job,
                 onClick = onUpdateJob
             )

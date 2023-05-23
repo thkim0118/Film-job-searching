@@ -13,10 +13,14 @@ import com.fone.filmone.ui.login.LoginScreen
 import com.fone.filmone.ui.main.MainScreen
 import com.fone.filmone.ui.main.job.filter.actor.ActorFilterScreen
 import com.fone.filmone.ui.main.job.filter.staff.StaffFilterScreen
-import com.fone.filmone.ui.main.job.profile.article.ProfileArticleScreen
-import com.fone.filmone.ui.main.job.profile.register.ProfileRegisterScreen
-import com.fone.filmone.ui.main.job.recruiting.article.RecruitingArticleScreen
-import com.fone.filmone.ui.main.job.recruiting.register.RecruitingRegisterScreen
+import com.fone.filmone.ui.main.job.profile.article.actor.ActorProfileArticleScreen
+import com.fone.filmone.ui.main.job.profile.article.staff.StaffProfileArticleScreen
+import com.fone.filmone.ui.main.job.profile.register.actor.ActorProfileRegisterScreen
+import com.fone.filmone.ui.main.job.profile.register.staff.StaffProfileRegisterScreen
+import com.fone.filmone.ui.main.job.recruiting.article.actor.ActorRecruitingArticleScreen
+import com.fone.filmone.ui.main.job.recruiting.article.staff.StaffRecruitingArticleScreen
+import com.fone.filmone.ui.main.job.recruiting.register.actor.ActorRecruitingRegisterScreen
+import com.fone.filmone.ui.main.job.recruiting.register.staff.StaffRecruitingRegisterScreen
 import com.fone.filmone.ui.myinfo.MyInfoScreen
 import com.fone.filmone.ui.myregister.MyRegisterScreen
 import com.fone.filmone.ui.scrap.ScrapScreen
@@ -77,17 +81,29 @@ fun FOneNavGraph(
         composable(FOneDestinations.StaffFilter.route) {
             StaffFilterScreen(navController = navController)
         }
-        composable(FOneDestinations.RecruitingRegister.route) {
-            RecruitingRegisterScreen()
+        composable(FOneDestinations.ActorRecruitingRegister.route) {
+            ActorRecruitingRegisterScreen(navController = navController)
         }
-        composable(FOneDestinations.RecruitingArticle.route) {
-            RecruitingArticleScreen()
+        composable(FOneDestinations.StaffRecruitingRegister.route) {
+            StaffRecruitingRegisterScreen()
         }
-        composable(FOneDestinations.ProfileRegister.route) {
-            ProfileRegisterScreen()
+        composable(FOneDestinations.ActorRecruitingArticle.route) {
+            ActorRecruitingArticleScreen()
         }
-        composable(FOneDestinations.ProfileArticle.route) {
-            ProfileArticleScreen()
+        composable(FOneDestinations.StaffRecruitingArticle.route) {
+            StaffRecruitingArticleScreen()
+        }
+        composable(FOneDestinations.ActorProfileRegister.route) {
+            ActorProfileRegisterScreen()
+        }
+        composable(FOneDestinations.StaffProfileRegister.route) {
+            StaffProfileRegisterScreen()
+        }
+        composable(FOneDestinations.ActorProfileArticle.route) {
+            ActorProfileArticleScreen()
+        }
+        composable(FOneDestinations.StaffProfileArticle.route) {
+            StaffProfileArticleScreen()
         }
     }
 }

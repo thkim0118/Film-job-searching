@@ -1,4 +1,4 @@
-package com.fone.filmone.ui.common.tag.interests
+package com.fone.filmone.ui.common.tag.categories
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -15,22 +15,22 @@ import com.fone.filmone.ui.theme.FilmOneTheme
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun InterestsTags(
+fun CategoryTags(
     modifier: Modifier = Modifier,
-    currentInterests: List<Category>,
-    onUpdateInterests: (Category, Boolean) -> Unit
+    currentCategories: List<Category>,
+    onUpdateCategories: (Category, Boolean) -> Unit
 ) {
     FlowRow(
         modifier = modifier,
         maxItemsInEachRow = 3
     ) {
-        Category.values().forEach { interests ->
+        Category.values().forEach { category ->
             ToggleSelectTag(
                 modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
-                type = interests,
-                title = stringResource(id = interests.stringRes),
-                isSelected = currentInterests.find { it == interests } != null,
-                onClick = onUpdateInterests
+                type = category,
+                title = stringResource(id = category.stringRes),
+                isSelected = currentCategories.find { it == category } != null,
+                onClick = onUpdateCategories
             )
         }
     }
@@ -41,9 +41,9 @@ fun InterestsTags(
 private fun InterestsTagsPreview() {
     FilmOneTheme {
         Column {
-            InterestsTags(
-                currentInterests = listOf(),
-                onUpdateInterests = { _, _ -> }
+            CategoryTags(
+                currentCategories = listOf(),
+                onUpdateCategories = { _, _ -> }
             )
         }
     }

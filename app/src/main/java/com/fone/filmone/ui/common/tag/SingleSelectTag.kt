@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.fTextStyle
@@ -19,6 +20,7 @@ import com.fone.filmone.ui.theme.FColor
 fun <T : Enum<*>> SingleSelectTag(
     modifier: Modifier = Modifier,
     type: T,
+    title: String,
     isSelected: Boolean,
     onClick: (T) -> Unit
 ) {
@@ -38,7 +40,7 @@ fun <T : Enum<*>> SingleSelectTag(
         Text(
             modifier = Modifier
                 .padding(horizontal = 20.dp, vertical = 8.dp),
-            text = type.name,
+            text = title,
             style = if (isSelected) {
                 fTextStyle(
                     fontWeight = FontWeight.W500,
@@ -53,7 +55,8 @@ fun <T : Enum<*>> SingleSelectTag(
                     lineHeight = 16.8.textDp,
                     color = FColor.DisablePlaceholder
                 )
-            }
+            },
+            textAlign = TextAlign.Center
         )
     }
 }

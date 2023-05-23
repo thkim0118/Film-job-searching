@@ -5,7 +5,7 @@ import androidx.annotation.StringRes
 import com.fone.filmone.R
 
 @Keep
-enum class Career(@StringRes titleRes: Int) {
+enum class Career(@StringRes val titleRes: Int) {
     NEWCOMER(R.string.job_opening_career_newcomer),
     LESS_THAN_1YEARS(R.string.job_opening_career_1year),
     LESS_THAN_3YEARS(R.string.job_opening_career_3year),

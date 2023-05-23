@@ -141,7 +141,7 @@ private fun EmailInputComponent(
     FTextField(
         text = uiState.email,
         onValueChange = onValueChanged,
-        topText = {
+        topComponent = {
             Text(
                 text = stringResource(id = R.string.inquiry_email_title),
                 style = LocalTypography.current.subtitle1()
@@ -190,7 +190,7 @@ private fun InquiryTitleComponent(
     FTextField(
         text = uiState.title,
         onValueChange = onValueChanged,
-        topText = {
+        topComponent = {
             Text(
                 text = stringResource(id = R.string.inquiry_content_title),
                 style = LocalTypography.current.subtitle1()
@@ -209,7 +209,7 @@ private fun InquiryDescriptionComponent(
     FTextField(
         text = uiState.description,
         onValueChange = onValueChanged,
-        topText = {
+        topComponent = {
             Text(
                 text = stringResource(id = R.string.inquiry_content_description),
                 style = LocalTypography.current.subtitle1()

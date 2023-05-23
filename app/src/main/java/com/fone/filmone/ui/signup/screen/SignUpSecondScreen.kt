@@ -16,6 +16,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -180,7 +181,7 @@ private fun NicknameComponent(
             placeholder = stringResource(id = R.string.sign_up_second_nickname_placeholder),
             onValueChange = onUpdateNickname,
             pattern = Pattern.compile("^[ㄱ-ㅣ가-힣a-zA-Z\\d\\s]+$"),
-            topText = {
+            topComponent = {
                 Row {
                     Text(
                         text = stringResource(id = R.string.sign_up_second_nickname_title),
@@ -224,10 +225,28 @@ private fun NicknameComponent(
                 )
             },
             enabled = uiState.isNicknameChecked.not(),
-            bottomType = BottomType.Error(
-                errorText = stringResource(id = R.string.sign_up_second_nickname_error_title),
-                isError = uiState.isNicknameDuplicated
-            )
+            bottomComponent = {
+                Spacer(modifier = Modifier.height(3.dp))
+
+                Text(
+                    modifier = Modifier
+                        .alpha(
+                            if (uiState.isNicknameDuplicated) {
+                                1f
+                            } else {
+                                0f
+                            }
+                        ),
+                    text = stringResource(id = R.string.sign_up_second_nickname_error_title),
+                    style = fTextStyle(
+                        fontWeight = FontWeight.W400,
+                        fontSize = 12.textDp,
+                        lineHeight = 14.4.textDp,
+                        color = FColor.Error
+                    )
+                )
+            },
+            isError = uiState.isNicknameDuplicated
         )
     }
 }
@@ -265,7 +284,7 @@ private fun BirthdayGenderComponent(
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number
         ),
-        topText = {
+        topComponent = {
             Row {
                 Text(
                     text = stringResource(id = R.string.sign_up_second_birthday_gender_title),

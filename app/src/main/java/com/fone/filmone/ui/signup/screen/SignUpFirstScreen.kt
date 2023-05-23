@@ -1,10 +1,7 @@
 package com.fone.filmone.ui.signup.screen
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -12,7 +9,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,7 +25,7 @@ import com.fone.filmone.ui.common.TitleType
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.fTextStyle
-import com.fone.filmone.ui.common.tag.interests.InterestsTags
+import com.fone.filmone.ui.common.tag.categories.CategoryTags
 import com.fone.filmone.ui.common.tag.job.JobTags
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
@@ -111,9 +107,9 @@ fun SignUpFirstScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                InterestsTags(
-                    currentInterests = uiState.interests,
-                    onUpdateInterests = viewModel::updateInterest
+                CategoryTags(
+                    currentCategories = uiState.interests,
+                    onUpdateCategories = viewModel::updateInterest
                 )
 
                 Spacer(modifier = Modifier.height(203.dp))
@@ -204,9 +200,9 @@ private fun JobTagsPreview() {
 @Preview(showBackground = true)
 @Composable
 private fun FavoriteTagsPreview() {
-    InterestsTags(
-        currentInterests = Category.values().toList(),
-        onUpdateInterests = { _, _ -> }
+    CategoryTags(
+        currentCategories = Category.values().toList(),
+        onUpdateCategories = { _, _ -> }
     )
 }
 

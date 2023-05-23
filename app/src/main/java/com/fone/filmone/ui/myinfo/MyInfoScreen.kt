@@ -7,7 +7,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -32,7 +31,7 @@ import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.dialog.ProfileSettingDialog
 import com.fone.filmone.ui.common.ext.*
-import com.fone.filmone.ui.common.tag.interests.InterestsTags
+import com.fone.filmone.ui.common.tag.categories.CategoryTags
 import com.fone.filmone.ui.common.tag.job.JobTags
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
@@ -261,7 +260,7 @@ private fun NicknameComponent(
         text = nickname,
         modifier = modifier,
         onValueChange = onUpdateNickname,
-        topText = {
+        topComponent = {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -354,9 +353,9 @@ private fun InterestsComponent(
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    InterestsTags(
-        currentInterests = currentInterests,
-        onUpdateInterests = onUpdateInterests
+    CategoryTags(
+        currentCategories = currentInterests,
+        onUpdateCategories = onUpdateInterests
     )
 }
 

@@ -591,7 +591,14 @@ private fun JobFloatingButton(
                                 shape = RoundedCornerShape(topStart = 6.dp, topEnd = 6.dp),
                                 color = FColor.Primary
                             )
-                            .clickableSingle { }
+                            .clickableSingle {
+                                FOneNavigator.navigateTo(
+                                    navDestinationState = NavDestinationState(
+                                        route = FOneDestinations.ActorRecruitingRegister.route
+                                    )
+                                )
+                                onFloatingClick(isFloatingClick.not())
+                            }
                             .padding(horizontal = 17.dp, vertical = 11.dp),
                     ) {
                         Text(
@@ -626,7 +633,14 @@ private fun JobFloatingButton(
                                 ),
                                 color = FColor.Primary
                             )
-                            .clickableSingle { }
+                            .clickableSingle {
+                                FOneNavigator.navigateTo(
+                                    navDestinationState = NavDestinationState(
+                                        route = FOneDestinations.StaffRecruitingRegister.route
+                                    )
+                                )
+                                onFloatingClick(isFloatingClick.not())
+                            }
                             .padding(horizontal = 17.dp, vertical = 11.dp),
                     ) {
                         Text(

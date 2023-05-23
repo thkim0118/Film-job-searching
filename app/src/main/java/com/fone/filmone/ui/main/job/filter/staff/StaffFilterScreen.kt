@@ -51,7 +51,7 @@ import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.tag.ToggleSelectTag
 import com.fone.filmone.ui.common.tag.domain.DomainTags
-import com.fone.filmone.ui.common.tag.interests.InterestsTags
+import com.fone.filmone.ui.common.tag.categories.CategoryTags
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 
@@ -291,9 +291,9 @@ private fun InterestsComponent(
 
         Spacer(modifier = Modifier.height(6.dp))
 
-        InterestsTags(
-            currentInterests = currentInterests,
-            onUpdateInterests = onUpdateInterests
+        CategoryTags(
+            currentCategories = currentInterests,
+            onUpdateCategories = onUpdateInterests
         )
     }
 }

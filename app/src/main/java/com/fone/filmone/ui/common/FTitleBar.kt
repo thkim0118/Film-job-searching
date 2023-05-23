@@ -85,6 +85,47 @@ fun FTitleBar(
     }
 }
 
+@Composable
+fun FTitleBar(
+    modifier: Modifier = Modifier,
+    titleText: String = "",
+    leading: @Composable () -> Unit,
+    action: @Composable () -> Unit,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = 50.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Spacer(modifier = Modifier.width(16.dp))
+
+        leading()
+
+        Spacer(modifier = Modifier.width(11.dp))
+
+        Text(
+            modifier = Modifier.weight(1f),
+            text = titleText,
+            style = fTextStyle(
+                fontWeight = FontWeight.W700,
+                fontSize = 19.textDp,
+                lineHeight = 26.textDp,
+                color = FColor.TextPrimary
+            ),
+            textAlign = TextAlign.Center
+        )
+
+
+        Spacer(modifier = Modifier.width(11.dp))
+
+        action()
+
+        Spacer(modifier = Modifier.width(16.dp))
+    }
+}
+
+
 sealed interface TitleType {
     object Back : TitleType
     object Close : TitleType
