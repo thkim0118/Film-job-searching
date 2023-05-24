@@ -15,6 +15,8 @@ import androidx.compose.material.RangeSlider
 import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -25,8 +27,12 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.fone.filmone.R
+import com.fone.filmone.data.datamodel.common.user.Career
+import com.fone.filmone.data.datamodel.common.user.Category
+import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.ui.common.FBorderButton
 import com.fone.filmone.ui.common.FButton
 import com.fone.filmone.ui.common.FTextField
@@ -47,15 +53,16 @@ import com.fone.filmone.ui.theme.Pretendard
 @Composable
 fun ActorRecruitingRegisterScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: ActorRecruitingRegisterViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = modifier
             .defaultSystemBarPadding()
             .toastPadding()
-            .verticalScroll(scrollState)
     ) {
         TitleComponent(
             onBackClick = {
@@ -63,23 +70,48 @@ fun ActorRecruitingRegisterScreen(
             }
         )
 
-        Step1Component()
+        Column(
+            modifier = Modifier
+                .verticalScroll(scrollState)
+        ) {
+            Step1Component(
+                titleText = uiState.step1UiModel.titleText,
+                titleTextLimit = uiState.step1UiModel.titleTextLimit,
+                currentCategories = uiState.step1UiModel.categories.toList(),
+                deadlineDate = uiState.step1UiModel.deadlineDate,
+                recruitmentActor = uiState.step1UiModel.recruitmentActor,
+                recruitmentNumber = uiState.step1UiModel.recruitmentNumber,
+                currentGenders = uiState.step1UiModel.recruitmentGender.toList(),
+                defaultAgeRange = uiState.step1UiModel.defaultAgeRange,
+                currentAgeRange = uiState.step1UiModel.ageRange,
+                currentCareers = uiState.step1UiModel.careers.toList(),
+                onUpdateTitleText = viewModel::updateTitle,
+                onUpdateCategories = viewModel::updateCategory,
+                onUpdateDeadlineDate = viewModel::updateDeadlineDate,
+                onUpdateRecruitmentActor = viewModel::updateRecruitmentActor,
+                onUpdateRecruitmentNumber = viewModel::updateRecruitmentNumber,
+                onUpdateGender = viewModel::updateRecruitmentGender,
+                onUpdateAgeReset = viewModel::updateAgeRangeReset,
+                onUpdateAgeRange = viewModel::updateAgeRange,
+                onUpdateCareer = viewModel::updateCareer
+            )
 
-        Divider(thickness = 8.dp, color = FColor.Divider2)
+            Divider(thickness = 8.dp, color = FColor.Divider2)
 
-        Step2Component()
+            Step2Component()
 
-        Divider(thickness = 8.dp, color = FColor.Divider2)
+            Divider(thickness = 8.dp, color = FColor.Divider2)
 
-        Step3Component()
+            Step3Component()
 
-        Divider(thickness = 8.dp, color = FColor.Divider2)
+            Divider(thickness = 8.dp, color = FColor.Divider2)
 
-        Step4Component()
+            Step4Component()
 
-        Divider(thickness = 8.dp, color = FColor.Divider2)
+            Divider(thickness = 8.dp, color = FColor.Divider2)
 
-        Step5Component()
+            Step5Component()
+        }
     }
 }
 
@@ -114,7 +146,27 @@ private fun TitleComponent(
 }
 
 @Composable
-private fun Step1Component() {
+private fun Step1Component(
+    titleText: String,
+    titleTextLimit: Int,
+    currentCategories: List<Category>,
+    deadlineDate: String,
+    recruitmentActor: String,
+    recruitmentNumber: String,
+    currentGenders: List<Gender>,
+    defaultAgeRange: ClosedFloatingPointRange<Float>,
+    currentAgeRange: ClosedFloatingPointRange<Float>,
+    currentCareers: List<Career>,
+    onUpdateTitleText: (String) -> Unit,
+    onUpdateCategories: (Category, Boolean) -> Unit,
+    onUpdateDeadlineDate: (String) -> Unit,
+    onUpdateRecruitmentActor: (String) -> Unit,
+    onUpdateRecruitmentNumber: (String) -> Unit,
+    onUpdateGender: (Gender, Boolean) -> Unit,
+    onUpdateAgeReset: () -> Unit,
+    onUpdateAgeRange: (ClosedFloatingPointRange<Float>) -> Unit,
+    onUpdateCareer: (Career, Boolean) -> Unit
+) {
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -126,26 +178,17 @@ private fun Step1Component() {
 
         Spacer(modifier = Modifier.height(9.dp))
 
-        ContentTitleInputComponent()
+        ContentTitleInputComponent(
+            titleText = titleText,
+            titleTextLimit = titleTextLimit,
+            onUpdateTitleText = onUpdateTitleText
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        CategorySelectComponent()
-    }
-
-    Divider(thickness = 8.dp, color = FColor.Divider2)
-
-    Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-        Spacer(modifier = Modifier.height(20.dp))
-
-        RecruitmentInputComponent()
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        AgeComponent(
-            ageRange = 1f..70f,
-            onUpdateAgeReset = {},
-            onUpdateAgeRange = {}
+        CategorySelectComponent(
+            currentCategories = currentCategories,
+            onUpdateCategories = onUpdateCategories
         )
     }
 
@@ -154,7 +197,33 @@ private fun Step1Component() {
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
         Spacer(modifier = Modifier.height(20.dp))
 
-        CareerInputComponent()
+        RecruitmentInputComponent(
+            deadlineDate = deadlineDate,
+            recruitmentActor = recruitmentActor,
+            recruitmentNumber = recruitmentNumber,
+            currentGenders = currentGenders,
+            onUpdateDeadlineDate = onUpdateDeadlineDate,
+            onUpdateRecruitmentActor = onUpdateRecruitmentActor,
+            onUpdateRecruitmentNumber = onUpdateRecruitmentNumber,
+            onUpdateGender = onUpdateGender
+        )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        AgeComponent(
+            currentAgeRange = currentAgeRange,
+            defaultAgeRange = defaultAgeRange,
+            onUpdateAgeReset = onUpdateAgeReset,
+            onUpdateAgeRange = onUpdateAgeRange
+        )
+    }
+
+    Divider(thickness = 8.dp, color = FColor.Divider2)
+
+    Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+        Spacer(modifier = Modifier.height(20.dp))
+
+        CareerInputComponent(currentCareers = currentCareers, onUpdateCareer = onUpdateCareer)
 
         Spacer(modifier = Modifier.height(20.dp))
     }
@@ -393,7 +462,7 @@ private fun Step5Component(
         Spacer(modifier = Modifier.height(20.dp))
 
         LeftTitleTextField(
-            title = stringResource(id = R.string.recruiting_register_actor_manager_title),
+            title = stringResource(id = R.string.recruiting_register_actor_email_title),
             titleSpace = 13,
             text = "",
             onValueChanged = {},
@@ -412,7 +481,10 @@ private fun Step5Component(
 }
 
 @Composable
-private fun CareerInputComponent() {
+private fun CareerInputComponent(
+    currentCareers: List<Career>,
+    onUpdateCareer: (Career, Boolean) -> Unit
+) {
     TextWithRequiredTag(
         title = stringResource(id = R.string.recruiting_register_actor_career_title),
         tagTitle = stringResource(
@@ -428,15 +500,22 @@ private fun CareerInputComponent() {
     Spacer(modifier = Modifier.height(6.dp))
 
     CareerTags(
-        currentCareer = null,
-        onUpdateCareer = {
-
-        }
+        currentCareers = currentCareers,
+        onUpdateCareer = onUpdateCareer
     )
 }
 
 @Composable
-private fun RecruitmentInputComponent() {
+private fun RecruitmentInputComponent(
+    deadlineDate: String,
+    recruitmentActor: String,
+    recruitmentNumber: String,
+    currentGenders: List<Gender>,
+    onUpdateDeadlineDate: (String) -> Unit,
+    onUpdateRecruitmentActor: (String) -> Unit,
+    onUpdateRecruitmentNumber: (String) -> Unit,
+    onUpdateGender: (Gender, Boolean) -> Unit
+) {
     TextWithRequiredTag(
         title = stringResource(id = R.string.recruiting_register_actor_deadline_title),
         tagTitle = stringResource(id = R.string.recruiting_register_actor_always_recruiting),
@@ -448,14 +527,16 @@ private fun RecruitmentInputComponent() {
     Spacer(modifier = Modifier.height(6.dp))
 
     FTextField(
-        onValueChange = {},
+        text = deadlineDate,
+        onValueChange = onUpdateDeadlineDate,
         placeholder = stringResource(id = R.string.recruiting_register_actor_deadline_placeholder),
     )
 
     Spacer(modifier = Modifier.height(20.dp))
 
     FTextField(
-        onValueChange = {},
+        text = recruitmentActor,
+        onValueChange = onUpdateRecruitmentActor,
         leftComponents = {
             Text(
                 text = stringResource(id = R.string.recruiting_register_actor_target_role_title),
@@ -485,15 +566,16 @@ private fun RecruitmentInputComponent() {
     Spacer(modifier = Modifier.height(6.dp))
 
     FTextField(
-        onValueChange = {},
+        text = recruitmentNumber,
+        onValueChange = onUpdateRecruitmentNumber,
         rightComponents = {
             Spacer(modifier = Modifier.width(8.dp))
 
             FBorderButton(
                 text = stringResource(id = R.string.sign_up_second_birthday_gender_man),
-                enable = false,// uiState.gender == Gender.MAN,
+                enable = currentGenders.contains(Gender.MAN),
                 onClick = {
-//                        onUpdateGender(Gender.MAN)
+                    onUpdateGender(Gender.MAN, currentGenders.contains(Gender.MAN).not())
                 }
             )
 
@@ -501,9 +583,9 @@ private fun RecruitmentInputComponent() {
 
             FBorderButton(
                 text = stringResource(id = R.string.sign_up_second_birthday_gender_woman),
-                enable = false,//uiState.gender == Gender.WOMAN,
+                enable = currentGenders.contains(Gender.WOMAN),
                 onClick = {
-//                        onUpdateGender(Gender.WOMAN)
+                    onUpdateGender(Gender.WOMAN, currentGenders.contains(Gender.WOMAN).not())
                 }
             )
         }
@@ -511,7 +593,10 @@ private fun RecruitmentInputComponent() {
 }
 
 @Composable
-private fun CategorySelectComponent() {
+private fun CategorySelectComponent(
+    currentCategories: List<Category>,
+    onUpdateCategories: (Category, Boolean) -> Unit
+) {
     Row(
         modifier = Modifier,
         verticalAlignment = Alignment.CenterVertically
@@ -537,15 +622,19 @@ private fun CategorySelectComponent() {
     Spacer(modifier = Modifier.height(8.dp))
 
     CategoryTags(
-        currentCategories = listOf(),
-        onUpdateCategories = { category, enable -> }
+        currentCategories = currentCategories,
+        onUpdateCategories = onUpdateCategories
     )
 
     Spacer(modifier = Modifier.height(20.dp))
 }
 
 @Composable
-private fun ContentTitleInputComponent() {
+private fun ContentTitleInputComponent(
+    titleText: String,
+    titleTextLimit: Int,
+    onUpdateTitleText: (String) -> Unit
+) {
     TextWithRequired(
         title = stringResource(id = R.string.recruiting_register_actor_title),
         isRequired = true
@@ -554,11 +643,12 @@ private fun ContentTitleInputComponent() {
     Spacer(modifier = Modifier.height(8.dp))
 
     FTextField(
-        onValueChange = {},
+        text = titleText,
+        onValueChange = onUpdateTitleText,
         tailComponent = {
             TextLimitComponent(
-                currentTextSize = 0,
-                maxTextSize = 50
+                currentTextSize = titleText.length,
+                maxTextSize = titleTextLimit
             )
         }
     )
@@ -568,7 +658,8 @@ private fun ContentTitleInputComponent() {
 @Composable
 private fun AgeComponent(
     modifier: Modifier = Modifier,
-    ageRange: ClosedFloatingPointRange<Float>,
+    currentAgeRange: ClosedFloatingPointRange<Float>,
+    defaultAgeRange: ClosedFloatingPointRange<Float>,
     onUpdateAgeReset: () -> Unit,
     onUpdateAgeRange: (ClosedFloatingPointRange<Float>) -> Unit
 ) {
@@ -588,8 +679,8 @@ private fun AgeComponent(
         Text(
             text = stringResource(
                 id = R.string.job_filter_age_range,
-                ageRange.start.toInt(),
-                ageRange.endInclusive.toInt()
+                currentAgeRange.start.toInt(),
+                currentAgeRange.endInclusive.toInt()
             ),
             style = LocalTypography.current.b2(),
             color = FColor.TextSecondary
@@ -597,9 +688,9 @@ private fun AgeComponent(
 
         RangeSlider(
             modifier = Modifier.padding(0.dp),
-            value = ageRange,
+            value = currentAgeRange,
             onValueChange = onUpdateAgeRange,
-            valueRange = 1f..70f,
+            valueRange = defaultAgeRange,
             steps = 70,
             colors = SliderDefaults.colors(
                 thumbColor = FColor.Primary,
