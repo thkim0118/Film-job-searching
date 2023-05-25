@@ -532,8 +532,8 @@ private fun Step5Component(
         LeftTitleTextField(
             title = stringResource(id = R.string.recruiting_register_actor_manager_title),
             titleSpace = 13,
-            text = "",
-            onValueChanged = {},
+            text = manager,
+            onValueChanged = onUpdateManager,
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -541,8 +541,8 @@ private fun Step5Component(
         LeftTitleTextField(
             title = stringResource(id = R.string.recruiting_register_actor_email_title),
             titleSpace = 13,
-            text = "",
-            onValueChanged = {},
+            text = email,
+            onValueChanged = onUpdateEmail,
         )
 
         Spacer(modifier = Modifier.height(56.dp))
