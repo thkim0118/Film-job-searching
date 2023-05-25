@@ -137,11 +137,20 @@ fun ActorRecruitingRegisterScreen(
 
             Divider(thickness = 8.dp, color = FColor.Divider2)
 
-            Step4Component()
+            Step4Component(
+                detailInfo = uiState.step4UiModel.detailInfo,
+                detailInfoTextLimit = uiState.step4UiModel.detailInfoTextLimit,
+                onUpdateDetailInfo = viewModel::updateDetailInfo
+            )
 
             Divider(thickness = 8.dp, color = FColor.Divider2)
 
-            Step5Component()
+            Step5Component(
+                manager = uiState.step5UiModel.manager,
+                email = uiState.step5UiModel.email,
+                onUpdateManager = viewModel::updateManager,
+                onUpdateEmail = viewModel::updateEmail
+            )
         }
     }
 }
@@ -446,7 +455,10 @@ private fun Step3Component(
 
 @Composable
 private fun Step4Component(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    detailInfo: String,
+    detailInfoTextLimit: Int,
+    onUpdateDetailInfo: (String) -> Unit
 ) {
     Column(
         modifier = modifier.padding(horizontal = 20.dp)
@@ -477,16 +489,17 @@ private fun Step4Component(
         Spacer(modifier = Modifier.height(5.dp))
 
         FTextField(
-            onValueChange = {},
-            textLimit = 500,
+            text = detailInfo,
+            onValueChange = onUpdateDetailInfo,
+            textLimit = detailInfoTextLimit,
             fixedHeight = 134.dp,
             placeholder = stringResource(id = R.string.recruiting_register_actor_step_4_placeholder),
             bottomComponent = {
                 TextLimitComponent(
                     modifier = Modifier
                         .align(Alignment.End),
-                    currentTextSize = 0,
-                    maxTextSize = 500
+                    currentTextSize = detailInfo.length,
+                    maxTextSize = detailInfoTextLimit
                 )
             }
         )
@@ -497,7 +510,11 @@ private fun Step4Component(
 
 @Composable
 private fun Step5Component(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    manager: String,
+    email: String,
+    onUpdateManager: (String) -> Unit,
+    onUpdateEmail: (String) -> Unit
 ) {
     Column(
         modifier = modifier.padding(horizontal = 20.dp)
