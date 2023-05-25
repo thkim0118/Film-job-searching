@@ -216,6 +216,36 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
         }
     }
 
+    fun updateLocationTagEnable() {
+        viewModelState.update { state ->
+            state.copy(
+                step3UiModel = state.step3UiModel.copy(
+                    locationTagEnable = state.step3UiModel.locationTagEnable.not()
+                )
+            )
+        }
+    }
+
+    fun updatePeriodTagEnable() {
+        viewModelState.update { state ->
+            state.copy(
+                step3UiModel = state.step3UiModel.copy(
+                    periodTagEnable = state.step3UiModel.periodTagEnable.not()
+                )
+            )
+        }
+    }
+
+    fun updatePayTagEnable() {
+        viewModelState.update { state ->
+            state.copy(
+                step3UiModel = state.step3UiModel.copy(
+                    payTagEnable = state.step3UiModel.payTagEnable.not()
+                )
+            )
+        }
+    }
+
     fun updateDetailInfo(detailInfo: String) {
         viewModelState.update { state ->
             state.copy(
@@ -303,6 +333,9 @@ data class Step3UiModel(
     val location: String = "",
     val period: String = "",
     val pay: String = "",
+    val locationTagEnable: Boolean = false,
+    val periodTagEnable: Boolean = false,
+    val payTagEnable: Boolean = false,
 )
 
 data class Step4UiModel(

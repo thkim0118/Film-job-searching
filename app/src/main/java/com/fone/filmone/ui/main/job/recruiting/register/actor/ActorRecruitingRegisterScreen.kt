@@ -120,7 +120,20 @@ fun ActorRecruitingRegisterScreen(
 
             Divider(thickness = 8.dp, color = FColor.Divider2)
 
-            Step3Component()
+            Step3Component(
+                location = uiState.step3UiModel.location,
+                period = uiState.step3UiModel.period,
+                pay = uiState.step3UiModel.pay,
+                locationTagEnable = uiState.step3UiModel.locationTagEnable,
+                periodTagEnable = uiState.step3UiModel.periodTagEnable,
+                payTagEnable = uiState.step3UiModel.payTagEnable,
+                onLocationTagClick = viewModel::updateLocationTagEnable,
+                onPeriodTagClick = viewModel::updatePeriodTagEnable,
+                onPayTagClick = viewModel::updatePayTagEnable,
+                onUpdateLocation = viewModel::updateLocation,
+                onUpdatePeriod = viewModel::updatePeriod,
+                onUpdatePay = viewModel::updatePay
+            )
 
             Divider(thickness = 8.dp, color = FColor.Divider2)
 
@@ -348,7 +361,19 @@ private fun Step2Component(
 
 @Composable
 private fun Step3Component(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    location: String,
+    period: String,
+    pay: String,
+    locationTagEnable: Boolean,
+    periodTagEnable: Boolean,
+    payTagEnable: Boolean,
+    onLocationTagClick: () -> Unit,
+    onPeriodTagClick: () -> Unit,
+    onPayTagClick: () -> Unit,
+    onUpdateLocation: (String) -> Unit,
+    onUpdatePeriod: (String) -> Unit,
+    onUpdatePay: (String) -> Unit,
 ) {
     Column(
         modifier = modifier.padding(horizontal = 20.dp)
@@ -367,14 +392,15 @@ private fun Step3Component(
             title = stringResource(id = R.string.recruiting_register_actor_location_title),
             tagTitle = stringResource(id = R.string.recruiting_register_actor_location_undetermined),
             isRequired = false,
-            tagEnable = true,
-            onTagClick = {}
+            tagEnable = locationTagEnable,
+            onTagClick = onLocationTagClick
         )
 
         Spacer(modifier = Modifier.height(5.dp))
 
         FTextField(
-            onValueChange = {},
+            text = location,
+            onValueChange = onUpdateLocation,
             placeholder = stringResource(id = R.string.recruiting_register_actor_location_placeholder),
         )
 
@@ -384,14 +410,15 @@ private fun Step3Component(
             title = stringResource(id = R.string.recruiting_register_actor_period_title),
             tagTitle = stringResource(id = R.string.recruiting_register_actor_period_undetermined),
             isRequired = false,
-            tagEnable = true,
-            onTagClick = {}
+            tagEnable = periodTagEnable,
+            onTagClick = onPeriodTagClick
         )
 
         Spacer(modifier = Modifier.height(5.dp))
 
         FTextField(
-            onValueChange = {},
+            text = period,
+            onValueChange = onUpdatePeriod,
             placeholder = stringResource(id = R.string.recruiting_register_actor_period_placeholder),
         )
 
@@ -401,14 +428,15 @@ private fun Step3Component(
             title = stringResource(id = R.string.recruiting_register_actor_pay_title),
             tagTitle = stringResource(id = R.string.recruiting_register_actor_pay_undetermined),
             isRequired = false,
-            tagEnable = true,
-            onTagClick = {}
+            tagEnable = payTagEnable,
+            onTagClick = onPayTagClick
         )
 
         Spacer(modifier = Modifier.height(5.dp))
 
         FTextField(
-            onValueChange = {},
+            text = pay,
+            onValueChange = onUpdatePay,
             placeholder = stringResource(id = R.string.recruiting_register_actor_pay_placeholder),
         )
 
