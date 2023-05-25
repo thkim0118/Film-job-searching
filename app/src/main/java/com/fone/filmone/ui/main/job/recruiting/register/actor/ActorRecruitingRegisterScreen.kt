@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
@@ -23,8 +24,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -49,6 +52,7 @@ import com.fone.filmone.ui.main.job.common.TagComponent
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 import com.fone.filmone.ui.theme.Pretendard
+import java.util.regex.Pattern
 
 @Composable
 fun ActorRecruitingRegisterScreen(
@@ -528,8 +532,31 @@ private fun RecruitmentInputComponent(
 
     FTextField(
         text = deadlineDate,
-        onValueChange = onUpdateDeadlineDate,
         placeholder = stringResource(id = R.string.recruiting_register_actor_deadline_placeholder),
+        onValueChange = onUpdateDeadlineDate,
+        pattern = Pattern.compile("^[\\d\\s-]+$"),
+        autoCompletion = { before, after ->
+            if (before.text.length < after.text.length) {
+                when (after.text.length) {
+                    5, 8 -> after.copy(
+                        text = "${before.text}-${after.text.last()}",
+                        selection = TextRange(after.text.length + 1)
+                    )
+                    else -> after
+                }
+            } else {
+                when (after.text.length) {
+                    5, 8 -> after.copy(
+                        text = after.text.dropLast(1),
+                    )
+                    else -> after
+                }
+            }
+        },
+        textLimit = 10,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number
+        ),
     )
 
     Spacer(modifier = Modifier.height(20.dp))
@@ -644,6 +671,7 @@ private fun ContentTitleInputComponent(
 
     FTextField(
         text = titleText,
+        textLimit = titleTextLimit,
         onValueChange = onUpdateTitleText,
         tailComponent = {
             TextLimitComponent(
