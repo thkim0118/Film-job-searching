@@ -102,7 +102,21 @@ fun ActorRecruitingRegisterScreen(
 
             Divider(thickness = 8.dp, color = FColor.Divider2)
 
-            Step2Component()
+            Step2Component(
+                production = uiState.step2UiModel.production,
+                workTitle = uiState.step2UiModel.workTitle,
+                directorName = uiState.step2UiModel.directorName,
+                genre = uiState.step2UiModel.genre,
+                logLine = uiState.step2UiModel.logLine,
+                logLineTextLimit = uiState.step2UiModel.logLineTextLimit,
+                isLogLinePrivate = uiState.step2UiModel.isLogLinePrivate,
+                onUpdateProduction = viewModel::updateProduction,
+                onUpdateWorkTitle = viewModel::updateWorkTitle,
+                onUpdateDirectorName = viewModel::updateDirectorName,
+                onUpdateGenre = viewModel::updateGenre,
+                onUpdateLogLine = viewModel::updateLogLine,
+                onLogLineTagClick = viewModel::updateLogLinePrivate
+            )
 
             Divider(thickness = 8.dp, color = FColor.Divider2)
 
@@ -234,7 +248,21 @@ private fun Step1Component(
 }
 
 @Composable
-private fun Step2Component() {
+private fun Step2Component(
+    production: String,
+    workTitle: String,
+    directorName: String,
+    genre: String,
+    logLine: String,
+    logLineTextLimit: Int,
+    isLogLinePrivate: Boolean,
+    onUpdateProduction: (String) -> Unit,
+    onUpdateWorkTitle: (String) -> Unit,
+    onUpdateDirectorName: (String) -> Unit,
+    onUpdateGenre: (String) -> Unit,
+    onUpdateLogLine: (String) -> Unit,
+    onLogLineTagClick: () -> Unit
+) {
     Column(
         modifier = Modifier.padding(horizontal = 20.dp)
     ) {
@@ -252,8 +280,8 @@ private fun Step2Component() {
             title = stringResource(id = R.string.recruiting_register_actor_production_title),
             titleSpace = 28,
             placeholder = stringResource(id = R.string.recruiting_register_actor_production_placeholder),
-            text = "",
-            onValueChanged = {}
+            text = production,
+            onValueChanged = onUpdateProduction
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -262,8 +290,8 @@ private fun Step2Component() {
             title = stringResource(id = R.string.recruiting_register_actor_work_title),
             titleSpace = 28,
             placeholder = stringResource(id = R.string.recruiting_register_actor_work_placeholder),
-            text = "",
-            onValueChanged = {}
+            text = workTitle,
+            onValueChanged = onUpdateWorkTitle
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -272,8 +300,8 @@ private fun Step2Component() {
             title = stringResource(id = R.string.recruiting_register_actor_director_title),
             titleSpace = 28,
             placeholder = stringResource(id = R.string.recruiting_register_actor_director_placeholder),
-            text = "",
-            onValueChanged = {}
+            text = directorName,
+            onValueChanged = onUpdateDirectorName
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -282,8 +310,8 @@ private fun Step2Component() {
             title = stringResource(id = R.string.recruiting_register_actor_genre_title),
             titleSpace = 28,
             placeholder = stringResource(id = R.string.recruiting_register_actor_genre_placeholder),
-            text = "",
-            onValueChanged = {}
+            text = genre,
+            onValueChanged = onUpdateGenre
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -292,24 +320,24 @@ private fun Step2Component() {
             title = stringResource(id = R.string.recruiting_register_actor_log_line_title),
             tagTitle = stringResource(id = R.string.recruiting_register_actor_log_line_private),
             isRequired = false,
-            tagEnable = false,
-            onTagClick = {
-
-            }
+            tagEnable = isLogLinePrivate,
+            onTagClick = onLogLineTagClick
         )
 
         Spacer(modifier = Modifier.height(6.dp))
 
         FTextField(
-            onValueChange = {},
+            text = logLine,
+            onValueChange = onUpdateLogLine,
             fixedHeight = 134.dp,
             placeholder = stringResource(id = R.string.recruiting_register_actor_log_line_placeholder),
+            textLimit = logLineTextLimit,
             bottomComponent = {
                 TextLimitComponent(
                     modifier = Modifier
                         .align(Alignment.End),
-                    currentTextSize = 0,
-                    maxTextSize = 200
+                    currentTextSize = logLine.length,
+                    maxTextSize = logLineTextLimit
                 )
             }
         )
@@ -542,6 +570,7 @@ private fun RecruitmentInputComponent(
                         text = "${before.text}-${after.text.last()}",
                         selection = TextRange(after.text.length + 1)
                     )
+
                     else -> after
                 }
             } else {
@@ -549,6 +578,7 @@ private fun RecruitmentInputComponent(
                     5, 8 -> after.copy(
                         text = after.text.dropLast(1),
                     )
+
                     else -> after
                 }
             }

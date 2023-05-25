@@ -176,6 +176,16 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
         }
     }
 
+    fun updateLogLinePrivate() {
+        viewModelState.update { state ->
+            state.copy(
+                step2UiModel = state.step2UiModel.copy(
+                    isLogLinePrivate = state.step2UiModel.isLogLinePrivate.not()
+                )
+            )
+        }
+    }
+
     fun updateLocation(location: String) {
         viewModelState.update { state ->
             state.copy(
@@ -286,6 +296,7 @@ data class Step2UiModel(
     val genre: String = "",
     val logLine: String = "",
     val logLineTextLimit: Int = 200,
+    val isLogLinePrivate: Boolean = false,
 )
 
 data class Step3UiModel(
