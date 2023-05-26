@@ -16,8 +16,8 @@ interface ProfilesApi {
     suspend fun getProfileList(
         @Query("ageMax") ageMax: Int,
         @Query("ageMin") ageMin: Int,
-        @Query("categories") categories: List<Category>,
-        @Query("genders") genders: List<Gender>,
+        @Query("categories") categories: List<String>,
+        @Query("genders") genders: List<String>,
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("sort") sort: SortType,

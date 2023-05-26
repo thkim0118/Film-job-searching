@@ -29,25 +29,16 @@ class JobOpeningsRepositoryImpl @Inject constructor(
 
     override suspend fun getJobOpeningsList(jobTabFilterVo: JobTabFilterVo): DataResult<JobOpeningsResponse> {
         return handleNetwork {
-            jobOpeningsApi.getJobOpeningList(
-                buildMap {
-                    putAll(
-                        mapOf(
-                            "ageMax" to jobTabFilterVo.ageMax,
-                            "ageMin" to jobTabFilterVo.ageMin,
-                            "categories" to jobTabFilterVo.categories,
-                            "genders" to jobTabFilterVo.genders,
-                            "page" to jobTabFilterVo.page,
-                            "size" to jobTabFilterVo.size,
-                            "sort" to jobTabFilterVo.sort,
-                            "type" to jobTabFilterVo.type,
-                        )
-                    )
-
-                    if (jobTabFilterVo.domains != null) {
-                        put("domains", jobTabFilterVo.domains)
-                    }
-                }
+            jobOpeningsApi.fetchJobOpeningList(
+                jobTabFilterVo.ageMax,
+                jobTabFilterVo.ageMin,
+                jobTabFilterVo.categories.map { it.name },
+                jobTabFilterVo.domains?.map { it.name },
+                jobTabFilterVo.genders.map { it.name },
+                jobTabFilterVo.page,
+                jobTabFilterVo.size,
+                jobTabFilterVo.sort,
+                jobTabFilterVo.type,
             )
         }
     }

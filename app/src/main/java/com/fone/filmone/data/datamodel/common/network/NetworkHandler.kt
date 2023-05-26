@@ -9,13 +9,14 @@ import retrofit2.Response
 
 suspend fun <T> handleNetwork(block: suspend () -> Response<NetworkResponse<T>>): DataResult<T> {
     return try {
-        LogUtil.e("block :: $block")
         block().parseNetworkResponse()
     } catch (e: EmptyNetworkBodyException) {
+        LogUtil.e("[EmptyNetworkBodyException] Handle Error($block) :: $e")
         DataResult.Fail(
             dataFail = DataFail(e.dataFail.errorCode, e.dataFail.message)
         )
     } catch (e: Throwable) {
+        LogUtil.e("Handle Error($block) :: $e")
         DataResult.Fail(
             dataFail = DataFail(
                 errorCode = ErrorCode.ERROR_UNKNOWN,
