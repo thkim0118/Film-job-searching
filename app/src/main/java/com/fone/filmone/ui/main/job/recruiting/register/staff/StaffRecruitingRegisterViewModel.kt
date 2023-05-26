@@ -1,13 +1,16 @@
-package com.fone.filmone.ui.main.job.recruiting.register.actor
+package com.fone.filmone.ui.main.job.recruiting.register.staff
 
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.data.datamodel.common.user.Category
+import com.fone.filmone.data.datamodel.common.user.Domain
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -15,35 +18,43 @@ import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
-class ActorRecruitingRegisterViewModel @Inject constructor(
+class StaffRecruitingRegisterViewModel @Inject constructor(
 ) : BaseViewModel() {
-
-    private val viewModelState = MutableStateFlow(ActorRecruitingRegisterViewModelState())
+    private val viewModelState = MutableStateFlow(StaffRecruitingRegisterViewModelState())
 
     val uiState = viewModelState
-        .map(ActorRecruitingRegisterViewModelState::toUiState)
+        .map(StaffRecruitingRegisterViewModelState::toUiState)
         .stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
             viewModelState.value.toUiState()
         )
 
+    private val _dialogState =
+        MutableStateFlow<StaffRecruitingRegisterDialogState>(StaffRecruitingRegisterDialogState.Clear)
+    val dialogState: StateFlow<StaffRecruitingRegisterDialogState> = _dialogState.asStateFlow()
+
+    fun updateDialogState(dialogState: StaffRecruitingRegisterDialogState) {
+        _dialogState.value = dialogState
+    }
+
     fun updateTitle(title: String) {
         viewModelState.update {
             it.copy(
-                actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(titleText = title)
+                staffRecruitingStep1UiModel = it.staffRecruitingStep1UiModel.copy(titleText = title)
             )
         }
     }
 
     fun updateCategory(category: Category, enable: Boolean) {
-        viewModelState.update {
-            it.copy(
-                actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(
+        viewModelState.update { state ->
+            state.copy(
+                staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
                     categories = if (enable) {
-                        it.actorRecruitingStep1UiModel.categories + setOf(category)
+                        state.staffRecruitingStep1UiModel.categories + setOf(category)
                     } else {
-                        it.actorRecruitingStep1UiModel.categories.filterNot { it == category }.toSet()
+                        state.staffRecruitingStep1UiModel.categories.filterNot { it == category }
+                            .toSet()
                     }
                 )
             )
@@ -51,17 +62,25 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     }
 
     fun updateDeadlineDate(deadlineDate: String) {
-        viewModelState.update {
-            it.copy(
-                actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(deadlineDate = deadlineDate)
+        viewModelState.update { state ->
+            state.copy(
+                staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(deadlineDate = deadlineDate)
             )
         }
     }
 
-    fun updateRecruitmentActor(actor: String) {
-        viewModelState.update {
-            it.copy(
-                actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(recruitmentActor = actor)
+    fun updateRecruitmentDomains(domain: Domain, enable: Boolean) {
+        viewModelState.update { state ->
+            state.copy(
+                staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
+                    recruitmentDomains = if (enable) {
+                        state.staffRecruitingStep1UiModel.recruitmentDomains + setOf(domain)
+                    } else {
+                        state.staffRecruitingStep1UiModel.recruitmentDomains
+                            .filterNot { it == domain }
+                            .toSet()
+                    }
+                )
             )
         }
     }
@@ -69,7 +88,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updateRecruitmentNumber(number: String) {
         viewModelState.update {
             it.copy(
-                actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(recruitmentNumber = number)
+                staffRecruitingStep1UiModel = it.staffRecruitingStep1UiModel.copy(recruitmentNumber = number)
             )
         }
     }
@@ -77,11 +96,11 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updateRecruitmentGender(gender: Gender, enable: Boolean) {
         viewModelState.update { it ->
             it.copy(
-                actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(
+                staffRecruitingStep1UiModel = it.staffRecruitingStep1UiModel.copy(
                     recruitmentGender = if (enable) {
-                        it.actorRecruitingStep1UiModel.recruitmentGender + setOf(gender)
+                        it.staffRecruitingStep1UiModel.recruitmentGender + setOf(gender)
                     } else {
-                        it.actorRecruitingStep1UiModel.recruitmentGender
+                        it.staffRecruitingStep1UiModel.recruitmentGender
                             .filterNot { recruitmentGender -> recruitmentGender == gender }
                             .toSet()
                     }
@@ -93,7 +112,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updateAgeRangeReset() {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep1UiModel = state.actorRecruitingStep1UiModel.copy(
+                staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
                     ageRange = 1f..70f
                 )
             )
@@ -103,7 +122,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updateAgeRange(ageRange: ClosedFloatingPointRange<Float>) {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep1UiModel = state.actorRecruitingStep1UiModel.copy(
+                staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
                     ageRange = ageRange
                 )
             )
@@ -113,11 +132,11 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updateCareer(career: Career, enable: Boolean) {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep1UiModel = state.actorRecruitingStep1UiModel.copy(
+                staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
                     careers = if (enable) {
-                        state.actorRecruitingStep1UiModel.careers + setOf(career)
+                        state.staffRecruitingStep1UiModel.careers + setOf(career)
                     } else {
-                        state.actorRecruitingStep1UiModel.careers
+                        state.staffRecruitingStep1UiModel.careers
                             .filterNot { it == career }
                             .toSet()
                     }
@@ -129,7 +148,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updateProduction(production: String) {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep2UiModel = state.actorRecruitingStep2UiModel.copy(
+                staffRecruitingStep2UiModel = state.staffRecruitingStep2UiModel.copy(
                     production = production
                 )
             )
@@ -139,7 +158,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updateWorkTitle(workTitle: String) {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep2UiModel = state.actorRecruitingStep2UiModel.copy(
+                staffRecruitingStep2UiModel = state.staffRecruitingStep2UiModel.copy(
                     workTitle = workTitle
                 )
             )
@@ -149,7 +168,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updateDirectorName(directorName: String) {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep2UiModel = state.actorRecruitingStep2UiModel.copy(
+                staffRecruitingStep2UiModel = state.staffRecruitingStep2UiModel.copy(
                     directorName = directorName
                 )
             )
@@ -159,7 +178,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updateGenre(genre: String) {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep2UiModel = state.actorRecruitingStep2UiModel.copy(
+                staffRecruitingStep2UiModel = state.staffRecruitingStep2UiModel.copy(
                     genre = genre
                 )
             )
@@ -169,7 +188,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updateLogLine(logLine: String) {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep2UiModel = state.actorRecruitingStep2UiModel.copy(
+                staffRecruitingStep2UiModel = state.staffRecruitingStep2UiModel.copy(
                     logLine = logLine
                 )
             )
@@ -179,8 +198,8 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updateLogLinePrivate() {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep2UiModel = state.actorRecruitingStep2UiModel.copy(
-                    isLogLinePrivate = state.actorRecruitingStep2UiModel.isLogLinePrivate.not()
+                staffRecruitingStep2UiModel = state.staffRecruitingStep2UiModel.copy(
+                    isLogLinePrivate = state.staffRecruitingStep2UiModel.isLogLinePrivate.not()
                 )
             )
         }
@@ -189,7 +208,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updateLocation(location: String) {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep3UiModel = state.actorRecruitingStep3UiModel.copy(
+                staffRecruitingStep3UiModel = state.staffRecruitingStep3UiModel.copy(
                     location = location
                 )
             )
@@ -199,7 +218,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updatePeriod(period: String) {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep3UiModel = state.actorRecruitingStep3UiModel.copy(
+                staffRecruitingStep3UiModel = state.staffRecruitingStep3UiModel.copy(
                     period = period
                 )
             )
@@ -209,7 +228,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updatePay(pay: String) {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep3UiModel = state.actorRecruitingStep3UiModel.copy(
+                staffRecruitingStep3UiModel = state.staffRecruitingStep3UiModel.copy(
                     pay = pay
                 )
             )
@@ -219,8 +238,8 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updateLocationTagEnable() {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep3UiModel = state.actorRecruitingStep3UiModel.copy(
-                    locationTagEnable = state.actorRecruitingStep3UiModel.locationTagEnable.not()
+                staffRecruitingStep3UiModel = state.staffRecruitingStep3UiModel.copy(
+                    locationTagEnable = state.staffRecruitingStep3UiModel.locationTagEnable.not()
                 )
             )
         }
@@ -229,8 +248,8 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updatePeriodTagEnable() {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep3UiModel = state.actorRecruitingStep3UiModel.copy(
-                    periodTagEnable = state.actorRecruitingStep3UiModel.periodTagEnable.not()
+                staffRecruitingStep3UiModel = state.staffRecruitingStep3UiModel.copy(
+                    periodTagEnable = state.staffRecruitingStep3UiModel.periodTagEnable.not()
                 )
             )
         }
@@ -239,8 +258,8 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updatePayTagEnable() {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep3UiModel = state.actorRecruitingStep3UiModel.copy(
-                    payTagEnable = state.actorRecruitingStep3UiModel.payTagEnable.not()
+                staffRecruitingStep3UiModel = state.staffRecruitingStep3UiModel.copy(
+                    payTagEnable = state.staffRecruitingStep3UiModel.payTagEnable.not()
                 )
             )
         }
@@ -249,7 +268,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updateDetailInfo(detailInfo: String) {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep4UiModel = state.actorRecruitingStep4UiModel.copy(
+                staffRecruitingStep4UiModel = state.staffRecruitingStep4UiModel.copy(
                     detailInfo = detailInfo
                 )
             )
@@ -259,7 +278,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updateManager(manager: String) {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep5UiModel = state.actorRecruitingStep5UiModel.copy(
+                staffRecruitingStep5UiModel = state.staffRecruitingStep5UiModel.copy(
                     manager = manager
                 )
             )
@@ -269,7 +288,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     fun updateEmail(email: String) {
         viewModelState.update { state ->
             state.copy(
-                actorRecruitingStep5UiModel = state.actorRecruitingStep5UiModel.copy(
+                staffRecruitingStep5UiModel = state.staffRecruitingStep5UiModel.copy(
                     email = email
                 )
             )
@@ -282,36 +301,37 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     }
 }
 
-private data class ActorRecruitingRegisterViewModelState(
-    val actorRecruitingStep1UiModel: ActorRecruitingStep1UiModel = ActorRecruitingStep1UiModel(),
-    val actorRecruitingStep2UiModel: ActorRecruitingStep2UiModel = ActorRecruitingStep2UiModel(),
-    val actorRecruitingStep3UiModel: ActorRecruitingStep3UiModel = ActorRecruitingStep3UiModel(),
-    val actorRecruitingStep4UiModel: ActorRecruitingStep4UiModel = ActorRecruitingStep4UiModel(),
-    val actorRecruitingStep5UiModel: ActorRecruitingStep5UiModel = ActorRecruitingStep5UiModel()
+private data class StaffRecruitingRegisterViewModelState(
+    val staffRecruitingStep1UiModel: StaffRecruitingStep1UiModel = StaffRecruitingStep1UiModel(),
+    val staffRecruitingStep2UiModel: StaffRecruitingStep2UiModel = StaffRecruitingStep2UiModel(),
+    val staffRecruitingStep3UiModel: StaffRecruitingStep3UiModel = StaffRecruitingStep3UiModel(),
+    val staffRecruitingStep4UiModel: StaffRecruitingStep4UiModel = StaffRecruitingStep4UiModel(),
+    val staffRecruitingStep5UiModel: StaffRecruitingStep5UiModel = StaffRecruitingStep5UiModel()
 ) {
-    fun toUiState(): ActorRecruitingRegisterUiModel = ActorRecruitingRegisterUiModel(
-        actorRecruitingStep1UiModel = actorRecruitingStep1UiModel,
-        actorRecruitingStep2UiModel = actorRecruitingStep2UiModel,
-        actorRecruitingStep3UiModel = actorRecruitingStep3UiModel,
-        actorRecruitingStep4UiModel = actorRecruitingStep4UiModel,
-        actorRecruitingStep5UiModel = actorRecruitingStep5UiModel
-    )
+    fun toUiState(): StaffRecruitingRegisterUiModel =
+        StaffRecruitingRegisterUiModel(
+            staffRecruitingStep1UiModel = staffRecruitingStep1UiModel,
+            staffRecruitingStep2UiModel = staffRecruitingStep2UiModel,
+            staffRecruitingStep3UiModel = staffRecruitingStep3UiModel,
+            staffRecruitingStep4UiModel = staffRecruitingStep4UiModel,
+            staffRecruitingStep5UiModel = staffRecruitingStep5UiModel
+        )
 }
 
-data class ActorRecruitingRegisterUiModel(
-    val actorRecruitingStep1UiModel: ActorRecruitingStep1UiModel,
-    val actorRecruitingStep2UiModel: ActorRecruitingStep2UiModel,
-    val actorRecruitingStep3UiModel: ActorRecruitingStep3UiModel,
-    val actorRecruitingStep4UiModel: ActorRecruitingStep4UiModel,
-    val actorRecruitingStep5UiModel: ActorRecruitingStep5UiModel
+data class StaffRecruitingRegisterUiModel(
+    val staffRecruitingStep1UiModel: StaffRecruitingStep1UiModel,
+    val staffRecruitingStep2UiModel: StaffRecruitingStep2UiModel,
+    val staffRecruitingStep3UiModel: StaffRecruitingStep3UiModel,
+    val staffRecruitingStep4UiModel: StaffRecruitingStep4UiModel,
+    val staffRecruitingStep5UiModel: StaffRecruitingStep5UiModel
 )
 
-data class ActorRecruitingStep1UiModel(
+data class StaffRecruitingStep1UiModel(
     val titleText: String = "",
     val titleTextLimit: Int = 50,
     val categories: Set<Category> = emptySet(),
     val deadlineDate: String = "",
-    val recruitmentActor: String = "",
+    val recruitmentDomains: Set<Domain> = emptySet(),
     val recruitmentNumber: String = "",
     val recruitmentGender: Set<Gender> = emptySet(),
     val ageRange: ClosedFloatingPointRange<Float> = 1f..70f,
@@ -319,7 +339,7 @@ data class ActorRecruitingStep1UiModel(
     val careers: Set<Career> = emptySet()
 )
 
-data class ActorRecruitingStep2UiModel(
+data class StaffRecruitingStep2UiModel(
     val production: String = "",
     val workTitle: String = "",
     val directorName: String = "",
@@ -329,7 +349,7 @@ data class ActorRecruitingStep2UiModel(
     val isLogLinePrivate: Boolean = false,
 )
 
-data class ActorRecruitingStep3UiModel(
+data class StaffRecruitingStep3UiModel(
     val location: String = "",
     val period: String = "",
     val pay: String = "",
@@ -338,12 +358,19 @@ data class ActorRecruitingStep3UiModel(
     val payTagEnable: Boolean = false,
 )
 
-data class ActorRecruitingStep4UiModel(
+data class StaffRecruitingStep4UiModel(
     val detailInfo: String = "",
     val detailInfoTextLimit: Int = 500,
 )
 
-data class ActorRecruitingStep5UiModel(
+data class StaffRecruitingStep5UiModel(
     val manager: String = "",
     val email: String = "",
 )
+
+sealed class StaffRecruitingRegisterDialogState {
+    object Clear : StaffRecruitingRegisterDialogState()
+    data class DomainSelectDialog(
+        val selectedDomains: List<Domain>
+    ) : StaffRecruitingRegisterDialogState()
+}

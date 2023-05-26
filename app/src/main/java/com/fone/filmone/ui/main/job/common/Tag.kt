@@ -20,20 +20,26 @@ fun TagComponent(
     modifier: Modifier = Modifier,
     title: String,
     enable: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit = {},
+    clickable: Boolean = true
 ) {
+    val tagModifier = modifier
+        .clip(shape = RoundedCornerShape(100.dp))
+        .background(
+            shape = RoundedCornerShape(100.dp),
+            color = if (enable) {
+                FColor.Secondary1
+            } else {
+                FColor.DisableBase
+            }
+        )
+
+    if (clickable) {
+        tagModifier.clickable { onClick() }
+    }
+
     Box(
-        modifier = modifier
-            .clip(shape = RoundedCornerShape(100.dp))
-            .background(
-                shape = RoundedCornerShape(100.dp),
-                color = if (enable) {
-                    FColor.Secondary1
-                } else {
-                    FColor.DisableBase
-                }
-            )
-            .clickable { onClick() }
+        modifier = tagModifier
     ) {
         Text(
             modifier = Modifier

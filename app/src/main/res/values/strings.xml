@@ -291,10 +291,15 @@
     <string name="recruiting_register_staff_deadline_placeholder">YYYY-MM-DD</string>
     <string name="recruiting_register_staff_always_recruiting">상시모집</string>
     <string name="recruiting_register_staff_domain_title">분야</string>
+    <string name="recruiting_register_staff_domain_select_items">%d개 선택</string>
+    <string name="recruiting_register_staff_domain_select_all">전체선택</string>
     <string name="recruiting_register_staff_domain_postfix">분야 선택</string>
     <string name="recruiting_register_staff_domain_popup_title">분야를 선택해주세요.</string>
     <string name="recruiting_register_staff_target_personal">모집인원</string>
     <string name="recruiting_register_staff_gender_irrelevant">성별무관</string>
+    <string name="recruiting_register_staff_age_title">나이</string>
+    <string name="recruiting_register_staff_age_irrelevant">연령무관</string>
+    <string name="recruiting_register_staff_age_range">%d살~%d살 이상</string>
     <string name="recruiting_register_staff_career_title">모집자의 경력 설정</string>
     <string name="recruiting_register_staff_career_irrelevant">경력무관</string>
     <string name="recruiting_register_staff_step_2_title">STEP 2. 작품정보</string>

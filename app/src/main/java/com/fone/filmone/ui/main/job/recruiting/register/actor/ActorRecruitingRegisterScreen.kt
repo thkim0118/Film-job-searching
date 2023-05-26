@@ -79,16 +79,16 @@ fun ActorRecruitingRegisterScreen(
                 .verticalScroll(scrollState)
         ) {
             Step1Component(
-                titleText = uiState.step1UiModel.titleText,
-                titleTextLimit = uiState.step1UiModel.titleTextLimit,
-                currentCategories = uiState.step1UiModel.categories.toList(),
-                deadlineDate = uiState.step1UiModel.deadlineDate,
-                recruitmentActor = uiState.step1UiModel.recruitmentActor,
-                recruitmentNumber = uiState.step1UiModel.recruitmentNumber,
-                currentGenders = uiState.step1UiModel.recruitmentGender.toList(),
-                defaultAgeRange = uiState.step1UiModel.defaultAgeRange,
-                currentAgeRange = uiState.step1UiModel.ageRange,
-                currentCareers = uiState.step1UiModel.careers.toList(),
+                titleText = uiState.actorRecruitingStep1UiModel.titleText,
+                titleTextLimit = uiState.actorRecruitingStep1UiModel.titleTextLimit,
+                currentCategories = uiState.actorRecruitingStep1UiModel.categories.toList(),
+                deadlineDate = uiState.actorRecruitingStep1UiModel.deadlineDate,
+                recruitmentActor = uiState.actorRecruitingStep1UiModel.recruitmentActor,
+                recruitmentNumber = uiState.actorRecruitingStep1UiModel.recruitmentNumber,
+                currentGenders = uiState.actorRecruitingStep1UiModel.recruitmentGender.toList(),
+                defaultAgeRange = uiState.actorRecruitingStep1UiModel.defaultAgeRange,
+                currentAgeRange = uiState.actorRecruitingStep1UiModel.ageRange,
+                currentCareers = uiState.actorRecruitingStep1UiModel.careers.toList(),
                 onUpdateTitleText = viewModel::updateTitle,
                 onUpdateCategories = viewModel::updateCategory,
                 onUpdateDeadlineDate = viewModel::updateDeadlineDate,
@@ -103,13 +103,13 @@ fun ActorRecruitingRegisterScreen(
             Divider(thickness = 8.dp, color = FColor.Divider2)
 
             Step2Component(
-                production = uiState.step2UiModel.production,
-                workTitle = uiState.step2UiModel.workTitle,
-                directorName = uiState.step2UiModel.directorName,
-                genre = uiState.step2UiModel.genre,
-                logLine = uiState.step2UiModel.logLine,
-                logLineTextLimit = uiState.step2UiModel.logLineTextLimit,
-                isLogLinePrivate = uiState.step2UiModel.isLogLinePrivate,
+                production = uiState.actorRecruitingStep2UiModel.production,
+                workTitle = uiState.actorRecruitingStep2UiModel.workTitle,
+                directorName = uiState.actorRecruitingStep2UiModel.directorName,
+                genre = uiState.actorRecruitingStep2UiModel.genre,
+                logLine = uiState.actorRecruitingStep2UiModel.logLine,
+                logLineTextLimit = uiState.actorRecruitingStep2UiModel.logLineTextLimit,
+                isLogLinePrivate = uiState.actorRecruitingStep2UiModel.isLogLinePrivate,
                 onUpdateProduction = viewModel::updateProduction,
                 onUpdateWorkTitle = viewModel::updateWorkTitle,
                 onUpdateDirectorName = viewModel::updateDirectorName,
@@ -121,12 +121,12 @@ fun ActorRecruitingRegisterScreen(
             Divider(thickness = 8.dp, color = FColor.Divider2)
 
             Step3Component(
-                location = uiState.step3UiModel.location,
-                period = uiState.step3UiModel.period,
-                pay = uiState.step3UiModel.pay,
-                locationTagEnable = uiState.step3UiModel.locationTagEnable,
-                periodTagEnable = uiState.step3UiModel.periodTagEnable,
-                payTagEnable = uiState.step3UiModel.payTagEnable,
+                location = uiState.actorRecruitingStep3UiModel.location,
+                period = uiState.actorRecruitingStep3UiModel.period,
+                pay = uiState.actorRecruitingStep3UiModel.pay,
+                locationTagEnable = uiState.actorRecruitingStep3UiModel.locationTagEnable,
+                periodTagEnable = uiState.actorRecruitingStep3UiModel.periodTagEnable,
+                payTagEnable = uiState.actorRecruitingStep3UiModel.payTagEnable,
                 onLocationTagClick = viewModel::updateLocationTagEnable,
                 onPeriodTagClick = viewModel::updatePeriodTagEnable,
                 onPayTagClick = viewModel::updatePayTagEnable,
@@ -138,16 +138,16 @@ fun ActorRecruitingRegisterScreen(
             Divider(thickness = 8.dp, color = FColor.Divider2)
 
             Step4Component(
-                detailInfo = uiState.step4UiModel.detailInfo,
-                detailInfoTextLimit = uiState.step4UiModel.detailInfoTextLimit,
+                detailInfo = uiState.actorRecruitingStep4UiModel.detailInfo,
+                detailInfoTextLimit = uiState.actorRecruitingStep4UiModel.detailInfoTextLimit,
                 onUpdateDetailInfo = viewModel::updateDetailInfo
             )
 
             Divider(thickness = 8.dp, color = FColor.Divider2)
 
             Step5Component(
-                manager = uiState.step5UiModel.manager,
-                email = uiState.step5UiModel.email,
+                manager = uiState.actorRecruitingStep5UiModel.manager,
+                email = uiState.actorRecruitingStep5UiModel.email,
                 onUpdateManager = viewModel::updateManager,
                 onUpdateEmail = viewModel::updateEmail
             )
