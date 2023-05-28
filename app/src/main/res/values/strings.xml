@@ -395,7 +395,7 @@
     <string name="article_actor_recruitment_condition_title">모집조건</string>
     <string name="article_actor_recruitment_deadline_title">모집마감일</string>
     <string name="article_actor_recruitment_role_title">모집배역</string>
-    <string name="article_actor_recruitment_personal_title">모집인원</string>
+    <string name="article_actor_recruitment_number_of_recruits_title">모집인원</string>
     <string name="article_actor_recruitment_age_title">나이</string>
     <string name="article_actor_recruitment_career_title">경력</string>
     <string name="article_actor_work_info_title">작품정보</string>
