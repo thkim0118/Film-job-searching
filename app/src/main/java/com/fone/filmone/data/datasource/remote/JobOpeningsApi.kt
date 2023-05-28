@@ -5,8 +5,10 @@ import com.fone.filmone.data.datamodel.common.network.NetworkResponse
 import com.fone.filmone.data.datamodel.common.network.Server
 import com.fone.filmone.data.datamodel.common.paging.SortType
 import com.fone.filmone.data.datamodel.response.jobopenings.JobOpeningsResponse
+import com.fone.filmone.data.datamodel.response.jobopenings.detail.JobOpeningsDetailResponse
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface JobOpeningsApi {
@@ -35,4 +37,10 @@ interface JobOpeningsApi {
         @Query("page") page: Int,
         @Query("size") size: Int,
     ): Response<NetworkResponse<JobOpeningsResponse>>
+
+    @GET("${Server.ApiVersion}/job-openings/{jobOpeningId}")
+    suspend fun getJobOpeningDetail(
+        @Path("jobOpeningId") jobOpeningId: Int,
+        @Query("type") type: Type
+    ): Response<NetworkResponse<JobOpeningsDetailResponse>>
 }

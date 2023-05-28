@@ -3,6 +3,7 @@ package com.fone.filmone.data.repository
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.network.handleNetwork
 import com.fone.filmone.data.datamodel.response.jobopenings.JobOpeningsResponse
+import com.fone.filmone.data.datamodel.response.jobopenings.detail.JobOpeningsDetailResponse
 import com.fone.filmone.data.datasource.remote.JobOpeningsApi
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.jobopenings.JobTabFilterVo
@@ -39,6 +40,18 @@ class JobOpeningsRepositoryImpl @Inject constructor(
                 jobTabFilterVo.size,
                 jobTabFilterVo.sort,
                 jobTabFilterVo.type,
+            )
+        }
+    }
+
+    override suspend fun getJobOpeningDetail(
+        jobOpeningId: Int,
+        type: Type
+    ): DataResult<JobOpeningsDetailResponse> {
+        return handleNetwork {
+            jobOpeningsApi.getJobOpeningDetail(
+                jobOpeningId = jobOpeningId,
+                type = type
             )
         }
     }

@@ -390,4 +390,31 @@
     <string name="profile_register_staff_category_all">전체선택</string>
     <string name="profile_register_staff_register_button">등록하기</string>
 
+    <!--    actor article-->
+    <string name="article_actor_title_text">배우 모집</string>
+    <string name="article_actor_recruitment_condition_title">모집조건</string>
+    <string name="article_actor_recruitment_deadline_title">모집마감일</string>
+    <string name="article_actor_recruitment_role_title">모집배역</string>
+    <string name="article_actor_recruitment_personal_title">모집인원</string>
+    <string name="article_actor_recruitment_age_title">나이</string>
+    <string name="article_actor_recruitment_career_title">경력</string>
+    <string name="article_actor_work_info_title">작품정보</string>
+    <string name="article_actor_work_production_title">제작</string>
+    <string name="article_actor_work_title">제목</string>
+    <string name="article_actor_work_director_title">연출</string>
+    <string name="article_actor_work_genre_title">장르</string>
+    <string name="article_actor_work_log_line_title">로그라인</string>
+    <string name="article_actor_working_conditions_title">근무조건</string>
+    <string name="article_actor_location_title">촬영위치</string>
+    <string name="article_actor_period_title">촬영기간</string>
+    <string name="article_actor_pay_title">급여</string>
+    <string name="article_actor_detail_info_title">상세요강</string>
+    <string name="article_actor_manager_info">담당자정보</string>
+    <string name="article_actor_manager_name_title">담당자</string>
+    <string name="article_actor_email_title">이메일</string>
+    <string name="article_actor_guide_contents_1">본 정보는 게시된 담당자측에서 제공한 자료이며, 에프원은 기재된 내용에 대한 오류와 사용자가 이를 신뢰하여 취한 조취에 대해 책임을 지지 않습니다. 또한 누구든 본 정보를 통한 에프원 동의 없이 재 배포할 수 없습니다. 부적합한 공고는 신고하기를 통해 알려주세요.</string>
+    <string name="article_actor_guide_contents_2">구인구직이 아닌 광고 등의 목적으로 개인정보를 이용할 경우 법적 처벌을 받을 수 있습니다.</string>
+    <string name="article_actor_scrap_button_title">스크랩</string>
+    <string name="article_actor_contact_button_title">연락하기</string>
+    
 </resources>

@@ -2,6 +2,7 @@ package com.fone.filmone.domain.repository
 
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.response.jobopenings.JobOpeningsResponse
+import com.fone.filmone.data.datamodel.response.jobopenings.detail.JobOpeningsDetailResponse
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.jobopenings.JobTabFilterVo
 
@@ -20,4 +21,9 @@ interface JobOpeningsRepository {
     suspend fun getJobOpeningsList(
         jobTabFilterVo: JobTabFilterVo
     ): DataResult<JobOpeningsResponse>
+
+    suspend fun getJobOpeningDetail(
+        jobOpeningId: Int,
+        type: Type
+    ): DataResult<JobOpeningsDetailResponse>
 }
