@@ -1,7 +1,7 @@
 package com.fone.filmone.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.fone.filmone.data.datamodel.fakeJobOpeningsResponse
+import com.fone.filmone.data.datamodel.fakeJobOpeningsPagingResponse
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
@@ -30,7 +30,7 @@ internal class GetJobOpeningsActorScrapsUseCaseTest {
     fun get_my_job_openings_info_success(): Unit = runBlocking {
         whenever(jobOpeningsRepository.getJobOpeningsScraps(page = 1, type = Type.ACTOR))
             .thenReturn(
-                DataResult.Success(fakeJobOpeningsResponse)
+                DataResult.Success(fakeJobOpeningsPagingResponse)
             )
 
         getJobOpeningsActorScrapsUseCase(page = 1)

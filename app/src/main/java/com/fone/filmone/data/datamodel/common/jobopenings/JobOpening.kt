@@ -1,8 +1,6 @@
-package com.fone.filmone.data.datamodel.response.jobopenings.detail
+package com.fone.filmone.data.datamodel.common.jobopenings
 
 import androidx.annotation.Keep
-import com.fone.filmone.data.datamodel.common.jobopenings.Type
-import com.fone.filmone.data.datamodel.common.jobopenings.Work
 import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Domain

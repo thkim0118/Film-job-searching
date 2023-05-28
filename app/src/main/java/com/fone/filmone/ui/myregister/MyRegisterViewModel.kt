@@ -56,7 +56,7 @@ private data class MyRegisterViewModelState(
     val profiles: Profiles? = null
 ) {
     fun toUiState(): MyRegisterUiState = MyRegisterUiState(
-        registerPosts = jobOpenings?.content?.map { content ->
+        registerPosts = jobOpenings?.jobOpening?.map { content ->
             RegisterPostUiModel(
                 type = content.type,
                 categories = content.categories,

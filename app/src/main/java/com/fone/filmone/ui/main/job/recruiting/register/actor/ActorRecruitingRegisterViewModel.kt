@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Gender
+import com.fone.filmone.domain.usecase.RegisterJobOpeningUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ActorRecruitingRegisterViewModel @Inject constructor(
+    private val registerJobOpeningUseCase: RegisterJobOpeningUseCase
 ) : BaseViewModel() {
 
     private val viewModelState = MutableStateFlow(ActorRecruitingRegisterViewModelState())
@@ -27,6 +29,10 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
             SharingStarted.Eagerly,
             viewModelState.value.toUiState()
         )
+
+    fun registerJobOpening() {
+
+    }
 
     fun updateTitle(title: String) {
         viewModelState.update {
@@ -43,7 +49,8 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
                     categories = if (enable) {
                         it.actorRecruitingStep1UiModel.categories + setOf(category)
                     } else {
-                        it.actorRecruitingStep1UiModel.categories.filterNot { it == category }.toSet()
+                        it.actorRecruitingStep1UiModel.categories.filterNot { it == category }
+                            .toSet()
                     }
                 )
             )

@@ -2,7 +2,7 @@ package com.fone.filmone.ui.main.job.recruiting.article.actor
 
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.data.datamodel.common.user.Category
-import com.fone.filmone.data.datamodel.response.jobopenings.detail.JobOpeningsDetailResponse
+import com.fone.filmone.data.datamodel.response.jobopenings.detail.JobOpeningResponse
 import com.fone.filmone.domain.usecase.GetJobOpeningDetailUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,34 +30,34 @@ class ActorRecruitingArticleViewModel @Inject constructor(
 }
 
 private data class ActorRecruitingArticleViewModelState(
-    val jobOpeningsDetailResponse: JobOpeningsDetailResponse? = null
+    val jobOpeningResponse: JobOpeningResponse? = null
 ) {
-    fun toUiState(): ActorRecruitingArticleUiState = if (jobOpeningsDetailResponse != null) {
+    fun toUiState(): ActorRecruitingArticleUiState = if (jobOpeningResponse != null) {
         ActorRecruitingArticleUiState(
             date = "2022-10-11 15:45",// jobOpeningsDetailResponse.jobOpening.
-            viewCount = String.format("%,d", jobOpeningsDetailResponse.jobOpening.viewCount),
+            viewCount = String.format("%,d", jobOpeningResponse.jobOpening.viewCount),
             profileImageUrl = "", // TODO
             userNickname = "jobOpeningsDetailResponse.jobOpening",
-            userType = jobOpeningsDetailResponse.jobOpening.type.name,
-            categories = jobOpeningsDetailResponse.jobOpening.categories,
-            articleTitle = jobOpeningsDetailResponse.jobOpening.title,
-            deadline = jobOpeningsDetailResponse.jobOpening.deadline,
-            dday = jobOpeningsDetailResponse.jobOpening.dday,
-            role = jobOpeningsDetailResponse.jobOpening.casting,
-            numberOfRecruits = jobOpeningsDetailResponse.jobOpening.numberOfRecruits.toString(),
-            ageRange = jobOpeningsDetailResponse.jobOpening.ageMin.toString() + jobOpeningsDetailResponse.jobOpening.ageMax.toString(),
-            career = jobOpeningsDetailResponse.jobOpening.career.name,
-            production = jobOpeningsDetailResponse.jobOpening.work.produce,
-            workTitle = jobOpeningsDetailResponse.jobOpening.work.workTitle,
-            director = jobOpeningsDetailResponse.jobOpening.work.director,
-            genre = jobOpeningsDetailResponse.jobOpening.work.genre,
-            logLine = jobOpeningsDetailResponse.jobOpening.work.logline,
-            location = jobOpeningsDetailResponse.jobOpening.work.location,
-            period = jobOpeningsDetailResponse.jobOpening.work.period,
-            pay = jobOpeningsDetailResponse.jobOpening.work.pay,
-            detailInfo = jobOpeningsDetailResponse.jobOpening.work.details,
-            manager = jobOpeningsDetailResponse.jobOpening.work.manager,
-            email = jobOpeningsDetailResponse.jobOpening.work.email
+            userType = jobOpeningResponse.jobOpening.type.name,
+            categories = jobOpeningResponse.jobOpening.categories,
+            articleTitle = jobOpeningResponse.jobOpening.title,
+            deadline = jobOpeningResponse.jobOpening.deadline,
+            dday = jobOpeningResponse.jobOpening.dday,
+            role = jobOpeningResponse.jobOpening.casting,
+            numberOfRecruits = jobOpeningResponse.jobOpening.numberOfRecruits.toString(),
+            ageRange = jobOpeningResponse.jobOpening.ageMin.toString() + jobOpeningResponse.jobOpening.ageMax.toString(),
+            career = jobOpeningResponse.jobOpening.career.name,
+            production = jobOpeningResponse.jobOpening.work.produce,
+            workTitle = jobOpeningResponse.jobOpening.work.workTitle,
+            director = jobOpeningResponse.jobOpening.work.director,
+            genre = jobOpeningResponse.jobOpening.work.genre,
+            logLine = jobOpeningResponse.jobOpening.work.logline,
+            location = jobOpeningResponse.jobOpening.work.location,
+            period = jobOpeningResponse.jobOpening.work.period,
+            pay = jobOpeningResponse.jobOpening.work.pay,
+            detailInfo = jobOpeningResponse.jobOpening.work.details,
+            manager = jobOpeningResponse.jobOpening.work.manager,
+            email = jobOpeningResponse.jobOpening.work.email
         )
     } else {
         ActorRecruitingArticleUiState(

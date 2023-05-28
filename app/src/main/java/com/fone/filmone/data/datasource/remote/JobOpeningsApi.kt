@@ -4,10 +4,13 @@ import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.network.NetworkResponse
 import com.fone.filmone.data.datamodel.common.network.Server
 import com.fone.filmone.data.datamodel.common.paging.SortType
-import com.fone.filmone.data.datamodel.response.jobopenings.JobOpeningsResponse
-import com.fone.filmone.data.datamodel.response.jobopenings.detail.JobOpeningsDetailResponse
+import com.fone.filmone.data.datamodel.request.jobopening.JobOpeningsRegisterRequest
+import com.fone.filmone.data.datamodel.response.jobopenings.JobOpeningsPagingResponse
+import com.fone.filmone.data.datamodel.response.jobopenings.detail.JobOpeningResponse
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -23,24 +26,29 @@ interface JobOpeningsApi {
         @Query("size") size: Int,
         @Query("sort") sort: SortType,
         @Query("type") type: Type
-    ): Response<NetworkResponse<JobOpeningsResponse>>
+    ): Response<NetworkResponse<JobOpeningsPagingResponse>>
 
     @GET("${Server.ApiVersion}/job-openings/scraps")
     suspend fun getScraps(
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("type") type: Type
-    ): Response<NetworkResponse<JobOpeningsResponse>>
+    ): Response<NetworkResponse<JobOpeningsPagingResponse>>
 
     @GET("${Server.ApiVersion}/job-openings/my-registrations")
     suspend fun getMyRegistrations(
         @Query("page") page: Int,
         @Query("size") size: Int,
-    ): Response<NetworkResponse<JobOpeningsResponse>>
+    ): Response<NetworkResponse<JobOpeningsPagingResponse>>
 
     @GET("${Server.ApiVersion}/job-openings/{jobOpeningId}")
     suspend fun getJobOpeningDetail(
         @Path("jobOpeningId") jobOpeningId: Int,
         @Query("type") type: Type
-    ): Response<NetworkResponse<JobOpeningsDetailResponse>>
+    ): Response<NetworkResponse<JobOpeningResponse>>
+
+    @POST("${Server.ApiVersion}/job-openings")
+    suspend fun registerJobOpening(
+        @Body jobOpeningsRegisterRequest: JobOpeningsRegisterRequest
+    ): Response<NetworkResponse<JobOpeningResponse>>
 }

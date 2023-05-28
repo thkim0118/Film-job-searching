@@ -6,7 +6,7 @@ import com.fone.filmone.data.datamodel.common.paging.Sort
 
 @Keep
 data class JobOpenings(
-    val content: List<Content>,
+    val jobOpening: List<JobOpening>,
     val empty: Boolean,
     val first: Boolean,
     val last: Boolean,

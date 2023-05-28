@@ -6,7 +6,7 @@ import com.fone.filmone.data.datamodel.request.inquiry.InquiryRequest
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
-import com.fone.filmone.data.datamodel.common.jobopenings.Content
+import com.fone.filmone.data.datamodel.common.jobopenings.JobOpening
 import com.fone.filmone.data.datamodel.common.jobopenings.JobOpenings
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.jobopenings.Work
@@ -23,7 +23,7 @@ import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse
 import com.fone.filmone.data.datamodel.response.inquiry.Question
 import com.fone.filmone.data.datamodel.common.profile.Profiles
-import com.fone.filmone.data.datamodel.response.jobopenings.JobOpeningsResponse
+import com.fone.filmone.data.datamodel.response.jobopenings.JobOpeningsPagingResponse
 import com.fone.filmone.data.datamodel.response.user.*
 import com.fone.filmone.domain.model.inquiry.InquiryType
 import com.fone.filmone.domain.model.inquiry.InquiryVo
@@ -159,7 +159,7 @@ val fakeWork = Work(
     workTitle = "workTitle"
 )
 
-val fakeJobContent = Content(
+val fakeJobJobOpening = JobOpening(
     ageMax = 20,
     ageMin = 0,
     career = Career.IRRELEVANT,
@@ -186,7 +186,7 @@ val fakeSort = Sort(
 )
 
 val fakeJobOpenings = JobOpenings(
-    content = listOf(fakeJobContent),
+    jobOpening = listOf(fakeJobJobOpening),
     empty = false,
     first = false,
     last = false,
@@ -197,7 +197,7 @@ val fakeJobOpenings = JobOpenings(
     sort = fakeSort
 )
 
-val fakeJobOpeningsResponse = JobOpeningsResponse(
+val fakeJobOpeningsPagingResponse = JobOpeningsPagingResponse(
     jobOpenings = fakeJobOpenings
 )
 

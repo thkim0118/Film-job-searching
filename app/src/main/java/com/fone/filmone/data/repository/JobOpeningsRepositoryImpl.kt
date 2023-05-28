@@ -2,8 +2,9 @@ package com.fone.filmone.data.repository
 
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.network.handleNetwork
-import com.fone.filmone.data.datamodel.response.jobopenings.JobOpeningsResponse
-import com.fone.filmone.data.datamodel.response.jobopenings.detail.JobOpeningsDetailResponse
+import com.fone.filmone.data.datamodel.request.jobopening.JobOpeningsRegisterRequest
+import com.fone.filmone.data.datamodel.response.jobopenings.JobOpeningsPagingResponse
+import com.fone.filmone.data.datamodel.response.jobopenings.detail.JobOpeningResponse
 import com.fone.filmone.data.datasource.remote.JobOpeningsApi
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.jobopenings.JobTabFilterVo
@@ -17,18 +18,18 @@ class JobOpeningsRepositoryImpl @Inject constructor(
         page: Int,
         size: Int,
         type: Type
-    ): DataResult<JobOpeningsResponse> {
+    ): DataResult<JobOpeningsPagingResponse> {
         return handleNetwork { jobOpeningsApi.getScraps(page = page, size = size, type = type) }
     }
 
     override suspend fun getMyRegistrations(
         page: Int,
         size: Int,
-    ): DataResult<JobOpeningsResponse> {
+    ): DataResult<JobOpeningsPagingResponse> {
         return handleNetwork { jobOpeningsApi.getMyRegistrations(page = page, size = size) }
     }
 
-    override suspend fun getJobOpeningsList(jobTabFilterVo: JobTabFilterVo): DataResult<JobOpeningsResponse> {
+    override suspend fun getJobOpeningsList(jobTabFilterVo: JobTabFilterVo): DataResult<JobOpeningsPagingResponse> {
         return handleNetwork {
             jobOpeningsApi.fetchJobOpeningList(
                 jobTabFilterVo.ageMax,
@@ -47,12 +48,18 @@ class JobOpeningsRepositoryImpl @Inject constructor(
     override suspend fun getJobOpeningDetail(
         jobOpeningId: Int,
         type: Type
-    ): DataResult<JobOpeningsDetailResponse> {
+    ): DataResult<JobOpeningResponse> {
         return handleNetwork {
             jobOpeningsApi.getJobOpeningDetail(
                 jobOpeningId = jobOpeningId,
                 type = type
             )
+        }
+    }
+
+    override suspend fun registerJobOpening(jobOpeningsRegisterRequest: JobOpeningsRegisterRequest): DataResult<JobOpeningResponse> {
+        return handleNetwork {
+            jobOpeningsApi.registerJobOpening(jobOpeningsRegisterRequest)
         }
     }
 }

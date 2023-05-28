@@ -157,7 +157,7 @@ private data class JobScreenViewModelState(
 ) {
     fun toUiState(): JobScreenUiState = JobScreenUiState(
         type = userType,
-        jobOpeningsUiModel = actorJobOpenings?.content?.map { content ->
+        jobOpeningsUiModel = actorJobOpenings?.jobOpening?.map { content ->
             JobTabJobOpeningUiModel(
                 categories = content.categories,
                 title = content.title,

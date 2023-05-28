@@ -1,7 +1,7 @@
 package com.fone.filmone.ui.scrap
 
 import androidx.lifecycle.viewModelScope
-import com.fone.filmone.data.datamodel.common.jobopenings.Content
+import com.fone.filmone.data.datamodel.common.jobopenings.JobOpening
 import com.fone.filmone.data.datamodel.common.jobopenings.JobOpenings
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.jobopenings.Work
@@ -68,7 +68,7 @@ class ScrapViewModel @Inject constructor(
         workTitle = "workTitle"
     )
 
-    fun fakeJobContent() = Content(
+    fun fakeJobContent() = JobOpening(
         ageMax = 20,
         ageMin = 0,
         career = Career.IRRELEVANT,
@@ -95,7 +95,7 @@ class ScrapViewModel @Inject constructor(
     )
 
     val fakeJobOpenings = JobOpenings(
-        content = listOf(
+        jobOpening = listOf(
             fakeJobContent(),
             fakeJobContent(),
             fakeJobContent(),
@@ -204,8 +204,8 @@ private data class ScarpViewModelState(
     val competitionsResponse: CompetitionsResponse? = null,
 ) {
     fun toUiState(): ScrapUiState {
-        val actorContents = actorJobOpenings?.content ?: emptyList()
-        val staffContents = staffJobOpenings?.content ?: emptyList()
+        val actorContents = actorJobOpenings?.jobOpening ?: emptyList()
+        val staffContents = staffJobOpenings?.jobOpening ?: emptyList()
         val combinedContents = (actorContents + staffContents).sortedBy { it.id }
 
         return ScrapUiState(
