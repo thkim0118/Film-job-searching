@@ -102,7 +102,7 @@ fun StaffRecruitingRegisterScreen(
                     currentGenders = uiState.staffRecruitingStep1UiModel.recruitmentGender.toList(),
                     defaultAgeRange = uiState.staffRecruitingStep1UiModel.defaultAgeRange,
                     currentAgeRange = uiState.staffRecruitingStep1UiModel.ageRange,
-                    currentCareers = uiState.staffRecruitingStep1UiModel.careers.toList(),
+                    currentCareers = uiState.staffRecruitingStep1UiModel.career,
                     onUpdateTitleText = viewModel::updateTitle,
                     onUpdateCategories = viewModel::updateCategory,
                     onUpdateDeadlineDate = viewModel::updateDeadlineDate,
@@ -221,7 +221,7 @@ private fun Step1Component(
     currentGenders: List<Gender>,
     defaultAgeRange: ClosedFloatingPointRange<Float>,
     currentAgeRange: ClosedFloatingPointRange<Float>,
-    currentCareers: List<Career>,
+    currentCareers: Career?,
     onUpdateTitleText: (String) -> Unit,
     onUpdateCategories: (Category, Boolean) -> Unit,
     onUpdateDeadlineDate: (String) -> Unit,
@@ -584,7 +584,7 @@ private fun Step5Component(
 
 @Composable
 private fun CareerInputComponent(
-    currentCareers: List<Career>,
+    currentCareers: Career?,
     onUpdateCareer: (Career, Boolean) -> Unit
 ) {
     TextWithRequiredTag(

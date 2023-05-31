@@ -133,12 +133,10 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
         viewModelState.update { state ->
             state.copy(
                 staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
-                    careers = if (enable) {
-                        state.staffRecruitingStep1UiModel.careers + setOf(career)
+                    career = if (enable) {
+                        career
                     } else {
-                        state.staffRecruitingStep1UiModel.careers
-                            .filterNot { it == career }
-                            .toSet()
+                        null
                     }
                 )
             )
@@ -336,7 +334,7 @@ data class StaffRecruitingStep1UiModel(
     val recruitmentGender: Set<Gender> = emptySet(),
     val ageRange: ClosedFloatingPointRange<Float> = 1f..70f,
     val defaultAgeRange: ClosedFloatingPointRange<Float> = 1f..70f,
-    val careers: Set<Career> = emptySet()
+    val career: Career? = null
 )
 
 data class StaffRecruitingStep2UiModel(

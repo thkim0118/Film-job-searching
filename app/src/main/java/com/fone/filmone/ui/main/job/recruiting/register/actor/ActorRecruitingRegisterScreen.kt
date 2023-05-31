@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.RangeSlider
+import androidx.compose.material.Scaffold
 import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +42,7 @@ import com.fone.filmone.ui.common.FBorderButton
 import com.fone.filmone.ui.common.FButton
 import com.fone.filmone.ui.common.FTextField
 import com.fone.filmone.ui.common.FTitleBar
+import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
@@ -64,108 +66,119 @@ fun ActorRecruitingRegisterScreen(
     val scrollState = rememberScrollState()
     val uiState by viewModel.uiState.collectAsState()
 
-    Column(
+    Scaffold(
         modifier = modifier
             .defaultSystemBarPadding()
-            .toastPadding()
+            .toastPadding(),
+        snackbarHost = {
+            FToast(baseViewModel = viewModel, hostState = it)
+        }
     ) {
-        TitleComponent(
-            onBackClick = {
-                navController.popBackStack()
-            }
-        )
-
         Column(
             modifier = Modifier
-                .verticalScroll(scrollState)
+                .padding(it)
         ) {
-            Step1Component(
-                titleText = uiState.actorRecruitingStep1UiModel.titleText,
-                titleTextLimit = uiState.actorRecruitingStep1UiModel.titleTextLimit,
-                currentCategories = uiState.actorRecruitingStep1UiModel.categories.toList(),
-                deadlineDate = uiState.actorRecruitingStep1UiModel.deadlineDate,
-                deadlineDateTagEnable = uiState.actorRecruitingStep1UiModel.deadlineDateTagEnable,
-                recruitmentActor = uiState.actorRecruitingStep1UiModel.recruitmentActor,
-                recruitmentNumber = uiState.actorRecruitingStep1UiModel.recruitmentNumber,
-                currentGenders = uiState.actorRecruitingStep1UiModel.recruitmentGender.toList(),
-                genderTagEnable = uiState.actorRecruitingStep1UiModel.genderTagEnable,
-                defaultAgeRange = uiState.actorRecruitingStep1UiModel.defaultAgeRange,
-                currentAgeRange = uiState.actorRecruitingStep1UiModel.ageRange,
-                currentCareers = uiState.actorRecruitingStep1UiModel.careers.toList(),
-                ageTagEnable = uiState.actorRecruitingStep1UiModel.ageTagEnable,
-                careerTagEnable = uiState.actorRecruitingStep1UiModel.careerTagEnable,
-                onUpdateTitleText = viewModel::updateTitle,
-                onUpdateCategories = viewModel::updateCategory,
-                onUpdateDeadlineDate = viewModel::updateDeadlineDate,
-                onUpdateRecruitmentActor = viewModel::updateRecruitmentActor,
-                onUpdateRecruitmentNumber = viewModel::updateRecruitmentNumber,
-                onUpdateGender = viewModel::updateRecruitmentGender,
-                onUpdateAgeReset = viewModel::updateAgeRangeReset,
-                onUpdateAgeRange = viewModel::updateAgeRange,
-                onUpdateCareer = viewModel::updateCareer,
-                onUpdateDeadlineTag = viewModel::updateDeadlineTag,
-                onUpdateGenderTag = viewModel::updateGenderTag,
-                onUpdateCareerTag = viewModel::updateCareerTag
+            TitleComponent(
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                onRegisterClick = viewModel::registerJobOpening
             )
 
-            Divider(thickness = 8.dp, color = FColor.Divider2)
+            Column(
+                modifier = Modifier
+                    .verticalScroll(scrollState)
+            ) {
+                Step1Component(
+                    titleText = uiState.actorRecruitingStep1UiModel.titleText,
+                    titleTextLimit = uiState.actorRecruitingStep1UiModel.titleTextLimit,
+                    currentCategories = uiState.actorRecruitingStep1UiModel.categories.toList(),
+                    deadlineDate = uiState.actorRecruitingStep1UiModel.deadlineDate,
+                    deadlineDateTagEnable = uiState.actorRecruitingStep1UiModel.deadlineDateTagEnable,
+                    recruitmentActor = uiState.actorRecruitingStep1UiModel.recruitmentActor,
+                    recruitmentNumber = uiState.actorRecruitingStep1UiModel.recruitmentNumber,
+                    currentGender = uiState.actorRecruitingStep1UiModel.recruitmentGender,
+                    genderTagEnable = uiState.actorRecruitingStep1UiModel.genderTagEnable,
+                    defaultAgeRange = uiState.actorRecruitingStep1UiModel.defaultAgeRange,
+                    currentAgeRange = uiState.actorRecruitingStep1UiModel.ageRange,
+                    currentCareer = uiState.actorRecruitingStep1UiModel.career,
+                    ageTagEnable = uiState.actorRecruitingStep1UiModel.ageTagEnable,
+                    careerTagEnable = uiState.actorRecruitingStep1UiModel.careerTagEnable,
+                    onUpdateTitleText = viewModel::updateTitle,
+                    onUpdateCategories = viewModel::updateCategory,
+                    onUpdateDeadlineDate = viewModel::updateDeadlineDate,
+                    onUpdateRecruitmentActor = viewModel::updateRecruitmentActor,
+                    onUpdateRecruitmentNumber = viewModel::updateRecruitmentNumber,
+                    onUpdateGender = viewModel::updateRecruitmentGender,
+                    onUpdateAgeReset = viewModel::updateAgeRangeReset,
+                    onUpdateAgeRange = viewModel::updateAgeRange,
+                    onUpdateCareer = viewModel::updateCareer,
+                    onUpdateDeadlineTag = viewModel::updateDeadlineTag,
+                    onUpdateGenderTag = viewModel::updateGenderTag,
+                    onUpdateCareerTag = viewModel::updateCareerTag
+                )
 
-            Step2Component(
-                production = uiState.actorRecruitingStep2UiModel.production,
-                workTitle = uiState.actorRecruitingStep2UiModel.workTitle,
-                directorName = uiState.actorRecruitingStep2UiModel.directorName,
-                genre = uiState.actorRecruitingStep2UiModel.genre,
-                logLine = uiState.actorRecruitingStep2UiModel.logLine,
-                logLineTextLimit = uiState.actorRecruitingStep2UiModel.logLineTextLimit,
-                logLineTagEnable = uiState.actorRecruitingStep2UiModel.isLogLineTagEnable,
-                onUpdateProduction = viewModel::updateProduction,
-                onUpdateWorkTitle = viewModel::updateWorkTitle,
-                onUpdateDirectorName = viewModel::updateDirectorName,
-                onUpdateGenre = viewModel::updateGenre,
-                onUpdateLogLine = viewModel::updateLogLine,
-                onUpdateLogLineTag = viewModel::updateLogLineTag
-            )
+                Divider(thickness = 8.dp, color = FColor.Divider2)
 
-            Divider(thickness = 8.dp, color = FColor.Divider2)
+                Step2Component(
+                    production = uiState.actorRecruitingStep2UiModel.production,
+                    workTitle = uiState.actorRecruitingStep2UiModel.workTitle,
+                    directorName = uiState.actorRecruitingStep2UiModel.directorName,
+                    genre = uiState.actorRecruitingStep2UiModel.genre,
+                    logLine = uiState.actorRecruitingStep2UiModel.logLine,
+                    logLineTextLimit = uiState.actorRecruitingStep2UiModel.logLineTextLimit,
+                    logLineTagEnable = uiState.actorRecruitingStep2UiModel.isLogLineTagEnable,
+                    onUpdateProduction = viewModel::updateProduction,
+                    onUpdateWorkTitle = viewModel::updateWorkTitle,
+                    onUpdateDirectorName = viewModel::updateDirectorName,
+                    onUpdateGenre = viewModel::updateGenre,
+                    onUpdateLogLine = viewModel::updateLogLine,
+                    onUpdateLogLineTag = viewModel::updateLogLineTag
+                )
 
-            Step3Component(
-                location = uiState.actorRecruitingStep3UiModel.location,
-                period = uiState.actorRecruitingStep3UiModel.period,
-                pay = uiState.actorRecruitingStep3UiModel.pay,
-                locationTagEnable = uiState.actorRecruitingStep3UiModel.locationTagEnable,
-                periodTagEnable = uiState.actorRecruitingStep3UiModel.periodTagEnable,
-                payTagEnable = uiState.actorRecruitingStep3UiModel.payTagEnable,
-                onUpdateLocationTag = viewModel::updateLocationTagEnable,
-                onUpdatePeriodTag = viewModel::updatePeriodTagEnable,
-                onUpdatePayTag = viewModel::updatePayTagEnable,
-                onUpdateLocation = viewModel::updateLocation,
-                onUpdatePeriod = viewModel::updatePeriod,
-                onUpdatePay = viewModel::updatePay
-            )
+                Divider(thickness = 8.dp, color = FColor.Divider2)
 
-            Divider(thickness = 8.dp, color = FColor.Divider2)
+                Step3Component(
+                    location = uiState.actorRecruitingStep3UiModel.location,
+                    period = uiState.actorRecruitingStep3UiModel.period,
+                    pay = uiState.actorRecruitingStep3UiModel.pay,
+                    locationTagEnable = uiState.actorRecruitingStep3UiModel.locationTagEnable,
+                    periodTagEnable = uiState.actorRecruitingStep3UiModel.periodTagEnable,
+                    payTagEnable = uiState.actorRecruitingStep3UiModel.payTagEnable,
+                    onUpdateLocationTag = viewModel::updateLocationTagEnable,
+                    onUpdatePeriodTag = viewModel::updatePeriodTagEnable,
+                    onUpdatePayTag = viewModel::updatePayTagEnable,
+                    onUpdateLocation = viewModel::updateLocation,
+                    onUpdatePeriod = viewModel::updatePeriod,
+                    onUpdatePay = viewModel::updatePay
+                )
 
-            Step4Component(
-                detailInfo = uiState.actorRecruitingStep4UiModel.detailInfo,
-                detailInfoTextLimit = uiState.actorRecruitingStep4UiModel.detailInfoTextLimit,
-                onUpdateDetailInfo = viewModel::updateDetailInfo
-            )
+                Divider(thickness = 8.dp, color = FColor.Divider2)
 
-            Divider(thickness = 8.dp, color = FColor.Divider2)
+                Step4Component(
+                    detailInfo = uiState.actorRecruitingStep4UiModel.detailInfo,
+                    detailInfoTextLimit = uiState.actorRecruitingStep4UiModel.detailInfoTextLimit,
+                    onUpdateDetailInfo = viewModel::updateDetailInfo
+                )
 
-            Step5Component(
-                manager = uiState.actorRecruitingStep5UiModel.manager,
-                email = uiState.actorRecruitingStep5UiModel.email,
-                onUpdateManager = viewModel::updateManager,
-                onUpdateEmail = viewModel::updateEmail
-            )
+                Divider(thickness = 8.dp, color = FColor.Divider2)
+
+                Step5Component(
+                    manager = uiState.actorRecruitingStep5UiModel.manager,
+                    email = uiState.actorRecruitingStep5UiModel.email,
+                    onUpdateManager = viewModel::updateManager,
+                    onUpdateEmail = viewModel::updateEmail,
+                    onRegisterClick = viewModel::registerJobOpening
+                )
+            }
         }
     }
 }
 
 @Composable
 private fun TitleComponent(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onRegisterClick: () -> Unit
 ) {
     FTitleBar(
         titleText = stringResource(id = R.string.recruiting_register_actor_title_text),
@@ -180,7 +193,7 @@ private fun TitleComponent(
         action = {
             Text(
                 modifier = Modifier
-                    .clickableSingle { },
+                    .clickableSingle { onRegisterClick() },
                 text = stringResource(id = R.string.recruiting_register_actor_title_right_button),
                 style = fTextStyle(
                     fontWeight = FontWeight.W500,
@@ -202,12 +215,12 @@ private fun Step1Component(
     deadlineDateTagEnable: Boolean,
     recruitmentActor: String,
     recruitmentNumber: String,
-    currentGenders: List<Gender>,
+    currentGender: Gender?,
     genderTagEnable: Boolean,
     defaultAgeRange: ClosedFloatingPointRange<Float>,
     currentAgeRange: ClosedFloatingPointRange<Float>,
     ageTagEnable: Boolean,
-    currentCareers: List<Career>,
+    currentCareer: Career?,
     careerTagEnable: Boolean,
     onUpdateTitleText: (String) -> Unit,
     onUpdateCategories: (Category, Boolean) -> Unit,
@@ -256,7 +269,7 @@ private fun Step1Component(
             deadlineDate = deadlineDate,
             recruitmentActor = recruitmentActor,
             recruitmentNumber = recruitmentNumber,
-            currentGenders = currentGenders,
+            currentGender = currentGender,
             deadlineDateTagEnable = deadlineDateTagEnable,
             genderTagEnable = genderTagEnable,
             onUpdateDeadlineDate = onUpdateDeadlineDate,
@@ -284,7 +297,7 @@ private fun Step1Component(
         Spacer(modifier = Modifier.height(20.dp))
 
         CareerInputComponent(
-            currentCareers = currentCareers,
+            currentCareer = currentCareer,
             careerTagEnable = careerTagEnable,
             onUpdateCareer = onUpdateCareer,
             onUpdateCareerTag = onUpdateCareerTag
@@ -380,6 +393,7 @@ private fun Step2Component(
             onValueChange = onUpdateLogLine,
             fixedHeight = 134.dp,
             maxLines = Int.MAX_VALUE,
+            singleLine = false,
             placeholder = stringResource(id = R.string.recruiting_register_actor_log_line_placeholder),
             textLimit = logLineTextLimit,
             bottomComponent = {
@@ -549,6 +563,8 @@ private fun Step4Component(
             text = detailInfo,
             onValueChange = onUpdateDetailInfo,
             textLimit = detailInfoTextLimit,
+            maxLines = Int.MAX_VALUE,
+            singleLine = false,
             fixedHeight = 134.dp,
             placeholder = stringResource(id = R.string.recruiting_register_actor_step_4_placeholder),
             bottomComponent = {
@@ -571,7 +587,8 @@ private fun Step5Component(
     manager: String,
     email: String,
     onUpdateManager: (String) -> Unit,
-    onUpdateEmail: (String) -> Unit
+    onUpdateEmail: (String) -> Unit,
+    onRegisterClick: () -> Unit
 ) {
     Column(
         modifier = modifier.padding(horizontal = 20.dp)
@@ -606,8 +623,10 @@ private fun Step5Component(
 
         FButton(
             title = stringResource(id = R.string.recruiting_register_actor_register_button_title),
-            enable = false,
-            onClick = {}
+            enable = true,
+            onClick = {
+                onRegisterClick()
+            }
         )
 
         Spacer(modifier = Modifier.height(38.dp))
@@ -616,7 +635,7 @@ private fun Step5Component(
 
 @Composable
 private fun CareerInputComponent(
-    currentCareers: List<Career>,
+    currentCareer: Career?,
     careerTagEnable: Boolean,
     onUpdateCareer: (Career, Boolean) -> Unit,
     onUpdateCareerTag: (Boolean) -> Unit
@@ -636,7 +655,7 @@ private fun CareerInputComponent(
     Spacer(modifier = Modifier.height(6.dp))
 
     CareerTags(
-        currentCareers = currentCareers,
+        currentCareers = currentCareer,
         onUpdateCareer = onUpdateCareer
     )
 }
@@ -647,7 +666,7 @@ private fun RecruitmentInputComponent(
     deadlineDateTagEnable: Boolean,
     recruitmentActor: String,
     recruitmentNumber: String,
-    currentGenders: List<Gender>,
+    currentGender: Gender?,
     genderTagEnable: Boolean,
     onUpdateDeadlineDate: (String) -> Unit,
     onUpdateDeadlineTag: (Boolean) -> Unit,
@@ -747,9 +766,9 @@ private fun RecruitmentInputComponent(
 
             FBorderButton(
                 text = stringResource(id = R.string.sign_up_second_birthday_gender_man),
-                enable = currentGenders.contains(Gender.MAN),
+                enable = currentGender == Gender.MAN,
                 onClick = {
-                    onUpdateGender(Gender.MAN, currentGenders.contains(Gender.MAN).not())
+                    onUpdateGender(Gender.MAN, (currentGender == Gender.MAN).not())
                 }
             )
 
@@ -757,12 +776,15 @@ private fun RecruitmentInputComponent(
 
             FBorderButton(
                 text = stringResource(id = R.string.sign_up_second_birthday_gender_woman),
-                enable = currentGenders.contains(Gender.WOMAN),
+                enable = currentGender == Gender.WOMAN,
                 onClick = {
-                    onUpdateGender(Gender.WOMAN, currentGenders.contains(Gender.WOMAN).not())
+                    onUpdateGender(Gender.WOMAN, (currentGender == Gender.WOMAN).not())
                 }
             )
-        }
+        },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number
+        )
     )
 }
 

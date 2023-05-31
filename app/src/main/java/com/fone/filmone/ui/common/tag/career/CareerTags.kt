@@ -14,7 +14,7 @@ import com.fone.filmone.ui.common.tag.ToggleSelectTag
 @Composable
 fun CareerTags(
     modifier: Modifier = Modifier,
-    currentCareers: List<Career>,
+    currentCareers: Career?,
     onUpdateCareer: (Career, Boolean) -> Unit
 ) {
     val careerTags = Career.values().dropLast(1)
@@ -30,7 +30,7 @@ fun CareerTags(
                     .padding(end = 8.dp, bottom = 8.dp),
                 type = career,
                 title = stringResource(id = career.titleRes),
-                isSelected = currentCareers.find { it == career } != null,
+                isSelected = currentCareers == career,
                 onClick = onUpdateCareer
             )
         }

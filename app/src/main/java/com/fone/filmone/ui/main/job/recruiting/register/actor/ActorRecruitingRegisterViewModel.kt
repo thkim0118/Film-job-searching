@@ -1,9 +1,16 @@
 package com.fone.filmone.ui.main.job.recruiting.register.actor
 
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.R
+import com.fone.filmone.core.util.LogUtil
+import com.fone.filmone.data.datamodel.common.jobopenings.Type
+import com.fone.filmone.data.datamodel.common.jobopenings.Work
 import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Gender
+import com.fone.filmone.data.datamodel.request.jobopening.JobOpeningsRegisterRequest
+import com.fone.filmone.domain.model.common.onFail
+import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.RegisterJobOpeningUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,6 +19,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 import javax.inject.Inject
 
@@ -31,7 +39,162 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
         )
 
     fun registerJobOpening() {
+        val isValidationPassed = checkValidation()
 
+        if (isValidationPassed) {
+            register()
+        } else {
+            return
+        }
+    }
+
+    private fun register() = viewModelScope.launch {
+        val step1UiModel = uiState.value.actorRecruitingStep1UiModel
+        val step2UiModel = uiState.value.actorRecruitingStep2UiModel
+        val step3UiModel = uiState.value.actorRecruitingStep3UiModel
+        val step4UiModel = uiState.value.actorRecruitingStep4UiModel
+        val step5UiModel = uiState.value.actorRecruitingStep5UiModel
+
+        registerJobOpeningUseCase(
+            JobOpeningsRegisterRequest(
+                ageMax = step1UiModel.ageRange.endInclusive.toInt(),
+                ageMin = step1UiModel.ageRange.start.toInt(),
+                career = step1UiModel.career ?: Career.IRRELEVANT,
+                casting = step1UiModel.recruitmentActor,
+                categories = step1UiModel.categories.map { it.name },
+                deadline = step1UiModel.deadlineDate,
+                domains = null,
+                gender = step1UiModel.recruitmentGender ?: Gender.IRRELEVANT,
+                numberOfRecruits = step1UiModel.recruitmentNumber.toInt(),
+                title = step1UiModel.titleText,
+                type = Type.ACTOR,
+                work = Work(
+                    produce = step2UiModel.production,
+                    workTitle = step2UiModel.workTitle,
+                    director = step2UiModel.directorName,
+                    genre = step2UiModel.genre,
+                    logline = step2UiModel.logLine,
+                    location = step3UiModel.location,
+                    period = step3UiModel.period,
+                    pay = step3UiModel.pay,
+                    details = step4UiModel.detailInfo,
+                    manager = step5UiModel.manager,
+                    email = step5UiModel.email,
+                )
+            )
+        ).onSuccess { response ->
+            if (response == null) {
+                return@onSuccess
+            }
+
+            LogUtil.d("onSuccess :: ${response.jobOpening}")
+        }.onFail {
+            LogUtil.e("fail :: $it")
+        }
+    }
+
+    private fun checkValidation(): Boolean {
+        if (isInvalidateStep1()) {
+            return false
+        }
+
+        if (isInvalidateStep2()) {
+            return false
+        }
+
+        if (isInvalidateStep4()) {
+            return false
+        }
+
+        if (isInvalidateStep5()) {
+            return false
+        }
+
+        return true
+    }
+
+    private fun isInvalidateStep1(): Boolean {
+        val step1UiModel = uiState.value.actorRecruitingStep1UiModel
+
+        if (step1UiModel.deadlineDateTagEnable.not() && step1UiModel.deadlineDate.isEmpty()) {
+            showToast(R.string.toast_recruiting_register_fail)
+            return true
+        }
+
+        if (step1UiModel.deadlineDateTagEnable && isDeadlineDateInvalid(step1UiModel.deadlineDate)) {
+            showToast(R.string.toast_recruiting_register_fail)
+            return true
+        }
+
+        if (step1UiModel.categories.isEmpty()) {
+            showToast(R.string.toast_recruiting_register_fail)
+            return true
+        }
+
+        if (step1UiModel.recruitmentNumber.isEmpty()) {
+            showToast(R.string.toast_recruiting_register_fail)
+            return true
+        }
+
+        return false
+    }
+
+    private fun isDeadlineDateInvalid(birthday: String): Boolean {
+        val birthDayPattern = Pattern.compile("^(\\d{4})-(0[1-9]|1[0-2])-(0\\d|[1-2]\\d|3[0-1])+$")
+        return birthDayPattern.matcher(birthday).matches()
+    }
+
+    private fun isInvalidateStep2(): Boolean {
+        val step2UiModel = uiState.value.actorRecruitingStep2UiModel
+
+        if (step2UiModel.production.isEmpty()) {
+            showToast(R.string.toast_recruiting_register_fail)
+            return true
+        }
+
+        if (step2UiModel.workTitle.isEmpty()) {
+            showToast(R.string.toast_recruiting_register_fail)
+            return true
+        }
+
+        if (step2UiModel.directorName.isEmpty()) {
+            showToast(R.string.toast_recruiting_register_fail)
+            return true
+        }
+
+        if (step2UiModel.genre.isEmpty()) {
+            showToast(R.string.toast_recruiting_register_fail)
+            return true
+        }
+
+        return false
+    }
+
+    private fun isInvalidateStep4(): Boolean {
+        val step4UiModel = uiState.value.actorRecruitingStep4UiModel
+
+        if (step4UiModel.detailInfo.isEmpty()) {
+            showToast(R.string.toast_recruiting_register_fail)
+            return true
+        }
+
+        return false
+    }
+
+    private fun isInvalidateStep5(): Boolean {
+        val step5UiModel = uiState.value.actorRecruitingStep5UiModel
+
+        if (step5UiModel.manager.isEmpty()) {
+            showToast(R.string.toast_recruiting_register_fail)
+            return true
+        }
+
+        if (step5UiModel.email.isEmpty()) {
+            showToast(R.string.toast_recruiting_register_fail)
+            return true
+        }
+
+        return false
     }
 
     fun updateTitle(title: String) {
@@ -112,17 +275,11 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
             it.copy(
                 actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(
                     recruitmentGender = if (enable) {
-                        it.actorRecruitingStep1UiModel.recruitmentGender + setOf(gender)
+                        gender
                     } else {
-                        it.actorRecruitingStep1UiModel.recruitmentGender
-                            .filterNot { recruitmentGender -> recruitmentGender == gender }
-                            .toSet()
+                        null
                     },
-                    genderTagEnable = if (enable && it.actorRecruitingStep1UiModel.recruitmentGender.isEmpty()) {
-                        false
-                    } else {
-                        it.actorRecruitingStep1UiModel.genderTagEnable
-                    }
+                    genderTagEnable = enable.not()
                 )
             )
         }
@@ -134,7 +291,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
                 actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(
                     genderTagEnable = enable,
                     recruitmentGender = if (enable) {
-                        emptySet()
+                        null
                     } else {
                         it.actorRecruitingStep1UiModel.recruitmentGender
                     }
@@ -167,26 +324,14 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
 
     fun updateCareer(career: Career, enable: Boolean) {
         viewModelState.update { state ->
-            val restCareer = state.actorRecruitingStep1UiModel.careers
-                .filterNot { it == career }
-                .toSet()
-
             state.copy(
                 actorRecruitingStep1UiModel = state.actorRecruitingStep1UiModel.copy(
-                    careers = if (enable) {
-                        state.actorRecruitingStep1UiModel.careers + setOf(career)
+                    career = if (enable) {
+                        career
                     } else {
-                        restCareer
+                        null
                     },
-                    careerTagEnable = if (enable) {
-                        false
-                    } else {
-                        if (restCareer.isEmpty()) {
-                            true
-                        } else {
-                            state.actorRecruitingStep1UiModel.careerTagEnable
-                        }
-                    }
+                    careerTagEnable = enable.not()
                 )
             )
         }
@@ -197,10 +342,10 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
             state.copy(
                 actorRecruitingStep1UiModel = state.actorRecruitingStep1UiModel.copy(
                     careerTagEnable = enable,
-                    careers = if (enable) {
-                        emptySet()
+                    career = if (enable) {
+                        null
                     } else {
-                        state.actorRecruitingStep1UiModel.careers
+                        state.actorRecruitingStep1UiModel.career
                     }
                 )
             )
@@ -378,11 +523,6 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
             )
         }
     }
-
-    private fun isDeadlineDateValid(birthday: String): Boolean {
-        val birthDayPattern = Pattern.compile("^(\\d{4})-(0[1-9]|1[0-2])-(0\\d|[1-2]\\d|3[0-1])+$")
-        return birthDayPattern.matcher(birthday).matches()
-    }
 }
 
 private data class ActorRecruitingRegisterViewModelState(
@@ -417,12 +557,12 @@ data class ActorRecruitingStep1UiModel(
     val deadlineDateTagEnable: Boolean = true,
     val recruitmentActor: String = "",
     val recruitmentNumber: String = "",
-    val recruitmentGender: Set<Gender> = emptySet(),
+    val recruitmentGender: Gender? = null,
     val genderTagEnable: Boolean = true,
     val ageRange: ClosedFloatingPointRange<Float> = 1f..70f,
     val ageTagEnable: Boolean = true,
     val defaultAgeRange: ClosedFloatingPointRange<Float> = 1f..70f,
-    val careers: Set<Career> = emptySet(),
+    val career: Career? = null,
     val careerTagEnable: Boolean = true,
 )
 
