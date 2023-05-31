@@ -635,7 +635,7 @@ private fun RecruitmentInputComponent(
         placeholder = stringResource(id = R.string.recruiting_register_staff_deadline_placeholder),
         onValueChange = onUpdateDeadlineDate,
         pattern = Pattern.compile("^[\\d\\s-]+$"),
-        autoCompletion = { before, after ->
+        onTextChanged = { before, after ->
             if (before.text.length < after.text.length) {
                 when (after.text.length) {
                     5, 8 -> after.copy(

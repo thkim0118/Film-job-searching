@@ -33,10 +33,11 @@ fun TagComponent(
                 FColor.DisableBase
             }
         )
-
-    if (clickable) {
-        tagModifier.clickable { onClick() }
-    }
+        .clickable {
+            if (clickable) {
+                onClick()
+            }
+        }
 
     Box(
         modifier = tagModifier

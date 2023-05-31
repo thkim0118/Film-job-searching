@@ -27,6 +27,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -83,12 +84,16 @@ fun ActorRecruitingRegisterScreen(
                 titleTextLimit = uiState.actorRecruitingStep1UiModel.titleTextLimit,
                 currentCategories = uiState.actorRecruitingStep1UiModel.categories.toList(),
                 deadlineDate = uiState.actorRecruitingStep1UiModel.deadlineDate,
+                deadlineDateTagEnable = uiState.actorRecruitingStep1UiModel.deadlineDateTagEnable,
                 recruitmentActor = uiState.actorRecruitingStep1UiModel.recruitmentActor,
                 recruitmentNumber = uiState.actorRecruitingStep1UiModel.recruitmentNumber,
                 currentGenders = uiState.actorRecruitingStep1UiModel.recruitmentGender.toList(),
+                genderTagEnable = uiState.actorRecruitingStep1UiModel.genderTagEnable,
                 defaultAgeRange = uiState.actorRecruitingStep1UiModel.defaultAgeRange,
                 currentAgeRange = uiState.actorRecruitingStep1UiModel.ageRange,
                 currentCareers = uiState.actorRecruitingStep1UiModel.careers.toList(),
+                ageTagEnable = uiState.actorRecruitingStep1UiModel.ageTagEnable,
+                careerTagEnable = uiState.actorRecruitingStep1UiModel.careerTagEnable,
                 onUpdateTitleText = viewModel::updateTitle,
                 onUpdateCategories = viewModel::updateCategory,
                 onUpdateDeadlineDate = viewModel::updateDeadlineDate,
@@ -97,7 +102,10 @@ fun ActorRecruitingRegisterScreen(
                 onUpdateGender = viewModel::updateRecruitmentGender,
                 onUpdateAgeReset = viewModel::updateAgeRangeReset,
                 onUpdateAgeRange = viewModel::updateAgeRange,
-                onUpdateCareer = viewModel::updateCareer
+                onUpdateCareer = viewModel::updateCareer,
+                onUpdateDeadlineTag = viewModel::updateDeadlineTag,
+                onUpdateGenderTag = viewModel::updateGenderTag,
+                onUpdateCareerTag = viewModel::updateCareerTag
             )
 
             Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -109,13 +117,13 @@ fun ActorRecruitingRegisterScreen(
                 genre = uiState.actorRecruitingStep2UiModel.genre,
                 logLine = uiState.actorRecruitingStep2UiModel.logLine,
                 logLineTextLimit = uiState.actorRecruitingStep2UiModel.logLineTextLimit,
-                isLogLinePrivate = uiState.actorRecruitingStep2UiModel.isLogLinePrivate,
+                logLineTagEnable = uiState.actorRecruitingStep2UiModel.isLogLineTagEnable,
                 onUpdateProduction = viewModel::updateProduction,
                 onUpdateWorkTitle = viewModel::updateWorkTitle,
                 onUpdateDirectorName = viewModel::updateDirectorName,
                 onUpdateGenre = viewModel::updateGenre,
                 onUpdateLogLine = viewModel::updateLogLine,
-                onLogLineTagClick = viewModel::updateLogLinePrivate
+                onUpdateLogLineTag = viewModel::updateLogLineTag
             )
 
             Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -127,9 +135,9 @@ fun ActorRecruitingRegisterScreen(
                 locationTagEnable = uiState.actorRecruitingStep3UiModel.locationTagEnable,
                 periodTagEnable = uiState.actorRecruitingStep3UiModel.periodTagEnable,
                 payTagEnable = uiState.actorRecruitingStep3UiModel.payTagEnable,
-                onLocationTagClick = viewModel::updateLocationTagEnable,
-                onPeriodTagClick = viewModel::updatePeriodTagEnable,
-                onPayTagClick = viewModel::updatePayTagEnable,
+                onUpdateLocationTag = viewModel::updateLocationTagEnable,
+                onUpdatePeriodTag = viewModel::updatePeriodTagEnable,
+                onUpdatePayTag = viewModel::updatePayTagEnable,
                 onUpdateLocation = viewModel::updateLocation,
                 onUpdatePeriod = viewModel::updatePeriod,
                 onUpdatePay = viewModel::updatePay
@@ -191,21 +199,28 @@ private fun Step1Component(
     titleTextLimit: Int,
     currentCategories: List<Category>,
     deadlineDate: String,
+    deadlineDateTagEnable: Boolean,
     recruitmentActor: String,
     recruitmentNumber: String,
     currentGenders: List<Gender>,
+    genderTagEnable: Boolean,
     defaultAgeRange: ClosedFloatingPointRange<Float>,
     currentAgeRange: ClosedFloatingPointRange<Float>,
+    ageTagEnable: Boolean,
     currentCareers: List<Career>,
+    careerTagEnable: Boolean,
     onUpdateTitleText: (String) -> Unit,
     onUpdateCategories: (Category, Boolean) -> Unit,
     onUpdateDeadlineDate: (String) -> Unit,
     onUpdateRecruitmentActor: (String) -> Unit,
     onUpdateRecruitmentNumber: (String) -> Unit,
     onUpdateGender: (Gender, Boolean) -> Unit,
+    onUpdateDeadlineTag: (Boolean) -> Unit,
+    onUpdateGenderTag: (Boolean) -> Unit,
     onUpdateAgeReset: () -> Unit,
     onUpdateAgeRange: (ClosedFloatingPointRange<Float>) -> Unit,
-    onUpdateCareer: (Career, Boolean) -> Unit
+    onUpdateCareer: (Career, Boolean) -> Unit,
+    onUpdateCareerTag: (Boolean) -> Unit,
 ) {
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
         Spacer(modifier = Modifier.height(20.dp))
@@ -242,10 +257,14 @@ private fun Step1Component(
             recruitmentActor = recruitmentActor,
             recruitmentNumber = recruitmentNumber,
             currentGenders = currentGenders,
+            deadlineDateTagEnable = deadlineDateTagEnable,
+            genderTagEnable = genderTagEnable,
             onUpdateDeadlineDate = onUpdateDeadlineDate,
             onUpdateRecruitmentActor = onUpdateRecruitmentActor,
             onUpdateRecruitmentNumber = onUpdateRecruitmentNumber,
-            onUpdateGender = onUpdateGender
+            onUpdateGender = onUpdateGender,
+            onUpdateDeadlineTag = onUpdateDeadlineTag,
+            onUpdateGenderTag = onUpdateGenderTag
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -253,6 +272,7 @@ private fun Step1Component(
         AgeComponent(
             currentAgeRange = currentAgeRange,
             defaultAgeRange = defaultAgeRange,
+            ageTagEnable = ageTagEnable,
             onUpdateAgeReset = onUpdateAgeReset,
             onUpdateAgeRange = onUpdateAgeRange
         )
@@ -263,7 +283,12 @@ private fun Step1Component(
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
         Spacer(modifier = Modifier.height(20.dp))
 
-        CareerInputComponent(currentCareers = currentCareers, onUpdateCareer = onUpdateCareer)
+        CareerInputComponent(
+            currentCareers = currentCareers,
+            careerTagEnable = careerTagEnable,
+            onUpdateCareer = onUpdateCareer,
+            onUpdateCareerTag = onUpdateCareerTag
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
     }
@@ -277,13 +302,13 @@ private fun Step2Component(
     genre: String,
     logLine: String,
     logLineTextLimit: Int,
-    isLogLinePrivate: Boolean,
+    logLineTagEnable: Boolean,
     onUpdateProduction: (String) -> Unit,
     onUpdateWorkTitle: (String) -> Unit,
     onUpdateDirectorName: (String) -> Unit,
     onUpdateGenre: (String) -> Unit,
     onUpdateLogLine: (String) -> Unit,
-    onLogLineTagClick: () -> Unit
+    onUpdateLogLineTag: (Boolean) -> Unit
 ) {
     Column(
         modifier = Modifier.padding(horizontal = 20.dp)
@@ -342,8 +367,10 @@ private fun Step2Component(
             title = stringResource(id = R.string.recruiting_register_actor_log_line_title),
             tagTitle = stringResource(id = R.string.recruiting_register_actor_log_line_private),
             isRequired = false,
-            tagEnable = isLogLinePrivate,
-            onTagClick = onLogLineTagClick
+            tagEnable = logLineTagEnable,
+            onTagClick = {
+                onUpdateLogLineTag(logLineTagEnable.not())
+            }
         )
 
         Spacer(modifier = Modifier.height(6.dp))
@@ -352,6 +379,7 @@ private fun Step2Component(
             text = logLine,
             onValueChange = onUpdateLogLine,
             fixedHeight = 134.dp,
+            maxLines = Int.MAX_VALUE,
             placeholder = stringResource(id = R.string.recruiting_register_actor_log_line_placeholder),
             textLimit = logLineTextLimit,
             bottomComponent = {
@@ -361,7 +389,11 @@ private fun Step2Component(
                     currentTextSize = logLine.length,
                     maxTextSize = logLineTextLimit
                 )
-            }
+            },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Default,
+                keyboardType = KeyboardType.Text
+            ),
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -377,9 +409,9 @@ private fun Step3Component(
     locationTagEnable: Boolean,
     periodTagEnable: Boolean,
     payTagEnable: Boolean,
-    onLocationTagClick: () -> Unit,
-    onPeriodTagClick: () -> Unit,
-    onPayTagClick: () -> Unit,
+    onUpdateLocationTag: (Boolean) -> Unit,
+    onUpdatePeriodTag: (Boolean) -> Unit,
+    onUpdatePayTag: (Boolean) -> Unit,
     onUpdateLocation: (String) -> Unit,
     onUpdatePeriod: (String) -> Unit,
     onUpdatePay: (String) -> Unit,
@@ -402,7 +434,9 @@ private fun Step3Component(
             tagTitle = stringResource(id = R.string.recruiting_register_actor_location_undetermined),
             isRequired = false,
             tagEnable = locationTagEnable,
-            onTagClick = onLocationTagClick
+            onTagClick = {
+                onUpdateLocationTag(locationTagEnable.not())
+            }
         )
 
         Spacer(modifier = Modifier.height(5.dp))
@@ -411,6 +445,11 @@ private fun Step3Component(
             text = location,
             onValueChange = onUpdateLocation,
             placeholder = stringResource(id = R.string.recruiting_register_actor_location_placeholder),
+            placeholderTextColor = if (locationTagEnable) {
+                FColor.DisableBase
+            } else {
+                FColor.DisablePlaceholder
+            }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -420,7 +459,9 @@ private fun Step3Component(
             tagTitle = stringResource(id = R.string.recruiting_register_actor_period_undetermined),
             isRequired = false,
             tagEnable = periodTagEnable,
-            onTagClick = onPeriodTagClick
+            onTagClick = {
+                onUpdatePeriodTag(periodTagEnable.not())
+            }
         )
 
         Spacer(modifier = Modifier.height(5.dp))
@@ -429,6 +470,11 @@ private fun Step3Component(
             text = period,
             onValueChange = onUpdatePeriod,
             placeholder = stringResource(id = R.string.recruiting_register_actor_period_placeholder),
+            placeholderTextColor = if (periodTagEnable) {
+                FColor.DisableBase
+            } else {
+                FColor.DisablePlaceholder
+            }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -438,7 +484,9 @@ private fun Step3Component(
             tagTitle = stringResource(id = R.string.recruiting_register_actor_pay_undetermined),
             isRequired = false,
             tagEnable = payTagEnable,
-            onTagClick = onPayTagClick
+            onTagClick = {
+                onUpdatePayTag(payTagEnable.not())
+            }
         )
 
         Spacer(modifier = Modifier.height(5.dp))
@@ -447,6 +495,15 @@ private fun Step3Component(
             text = pay,
             onValueChange = onUpdatePay,
             placeholder = stringResource(id = R.string.recruiting_register_actor_pay_placeholder),
+            placeholderTextColor = if (payTagEnable) {
+                FColor.DisableBase
+            } else {
+                FColor.DisablePlaceholder
+            },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Default,
+                keyboardType = KeyboardType.Number
+            )
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -560,7 +617,9 @@ private fun Step5Component(
 @Composable
 private fun CareerInputComponent(
     currentCareers: List<Career>,
-    onUpdateCareer: (Career, Boolean) -> Unit
+    careerTagEnable: Boolean,
+    onUpdateCareer: (Career, Boolean) -> Unit,
+    onUpdateCareerTag: (Boolean) -> Unit
 ) {
     TextWithRequiredTag(
         title = stringResource(id = R.string.recruiting_register_actor_career_title),
@@ -568,9 +627,9 @@ private fun CareerInputComponent(
             id = R.string.recruiting_register_actor_career_irrelevant
         ),
         isRequired = false,
-        tagEnable = false, // TODO 설정
+        tagEnable = careerTagEnable,
         onTagClick = {
-
+            onUpdateCareerTag(careerTagEnable.not())
         }
     )
 
@@ -585,20 +644,26 @@ private fun CareerInputComponent(
 @Composable
 private fun RecruitmentInputComponent(
     deadlineDate: String,
+    deadlineDateTagEnable: Boolean,
     recruitmentActor: String,
     recruitmentNumber: String,
     currentGenders: List<Gender>,
+    genderTagEnable: Boolean,
     onUpdateDeadlineDate: (String) -> Unit,
+    onUpdateDeadlineTag: (Boolean) -> Unit,
     onUpdateRecruitmentActor: (String) -> Unit,
     onUpdateRecruitmentNumber: (String) -> Unit,
-    onUpdateGender: (Gender, Boolean) -> Unit
+    onUpdateGender: (Gender, Boolean) -> Unit,
+    onUpdateGenderTag: (Boolean) -> Unit
 ) {
     TextWithRequiredTag(
         title = stringResource(id = R.string.recruiting_register_actor_deadline_title),
         tagTitle = stringResource(id = R.string.recruiting_register_actor_always_recruiting),
         isRequired = true,
-        tagEnable = false,
-        onTagClick = {}
+        tagEnable = deadlineDateTagEnable,
+        onTagClick = {
+            onUpdateDeadlineTag(deadlineDateTagEnable.not())
+        }
     )
 
     Spacer(modifier = Modifier.height(6.dp))
@@ -606,9 +671,14 @@ private fun RecruitmentInputComponent(
     FTextField(
         text = deadlineDate,
         placeholder = stringResource(id = R.string.recruiting_register_actor_deadline_placeholder),
+        placeholderTextColor = if (deadlineDateTagEnable) {
+            FColor.DisableBase
+        } else {
+            FColor.DisablePlaceholder
+        },
         onValueChange = onUpdateDeadlineDate,
         pattern = Pattern.compile("^[\\d\\s-]+$"),
-        autoCompletion = { before, after ->
+        onTextChanged = { before, after ->
             if (before.text.length < after.text.length) {
                 when (after.text.length) {
                     5, 8 -> after.copy(
@@ -661,8 +731,10 @@ private fun RecruitmentInputComponent(
         title = stringResource(id = R.string.recruiting_register_actor_target_personal),
         tagTitle = stringResource(id = R.string.recruiting_register_actor_gender_irrelevant),
         isRequired = true,
-        tagEnable = false,
-        onTagClick = {}
+        tagEnable = genderTagEnable,
+        onTagClick = {
+            onUpdateGenderTag(genderTagEnable.not())
+        }
     )
 
     Spacer(modifier = Modifier.height(6.dp))
@@ -763,17 +835,18 @@ private fun AgeComponent(
     modifier: Modifier = Modifier,
     currentAgeRange: ClosedFloatingPointRange<Float>,
     defaultAgeRange: ClosedFloatingPointRange<Float>,
+    ageTagEnable: Boolean,
     onUpdateAgeReset: () -> Unit,
-    onUpdateAgeRange: (ClosedFloatingPointRange<Float>) -> Unit
+    onUpdateAgeRange: (ClosedFloatingPointRange<Float>) -> Unit,
 ) {
     Column(
         modifier = modifier
     ) {
         TextWithRequiredTag(
             title = stringResource(id = R.string.recruiting_register_actor_age_title),
-            tagTitle = stringResource(id = R.string.recruiting_register_actor_gender_irrelevant),
+            tagTitle = stringResource(id = R.string.recruiting_register_actor_age_irrelevant),
             isRequired = false,
-            tagEnable = false,
+            tagEnable = ageTagEnable,
             onTagClick = onUpdateAgeReset
         )
 

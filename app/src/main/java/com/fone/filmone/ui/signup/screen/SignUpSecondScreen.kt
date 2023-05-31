@@ -262,7 +262,7 @@ private fun BirthdayGenderComponent(
         placeholder = stringResource(id = R.string.sign_up_second_birthday_gender_placeholder),
         onValueChange = onUpdateBirthday,
         pattern = Pattern.compile("^[\\d\\s-]+$"),
-        autoCompletion = { before, after ->
+        onTextChanged = { before, after ->
             if (before.text.length < after.text.length) {
                 when (after.text.length) {
                     5, 8 -> after.copy(

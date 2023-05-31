@@ -49,7 +49,7 @@ fun FTextField(
     placeholder: String = "",
     onValueChange: (String) -> Unit,
     pattern: Pattern? = null,
-    autoCompletion: ((beforeValue: TextFieldValue, afterValue: TextFieldValue) -> TextFieldValue)? = null,
+    onTextChanged: ((beforeValue: TextFieldValue, afterValue: TextFieldValue) -> TextFieldValue)? = null,
     textLimit: Int = Int.MAX_VALUE,
     onFocusChange: (Boolean) -> Unit = {},
     topComponent: @Composable ColumnScope.() -> Unit = {},
@@ -127,12 +127,12 @@ fun FTextField(
                         return@BasicTextField
                     }
 
-                    if (autoCompletion != null) {
-                        textFieldValue = autoCompletion(textFieldValue, it)
+                    if (onTextChanged != null) {
+                        textFieldValue = onTextChanged(textFieldValue, it)
                     }
 
                     if (pattern == null) {
-                        textFieldValue = if (autoCompletion != null) {
+                        textFieldValue = if (onTextChanged != null) {
                             textFieldValue
                         } else {
                             it
@@ -142,14 +142,14 @@ fun FTextField(
                     }
 
                     if (pattern.matcher(it.text).matches()) {
-                        textFieldValue = if (autoCompletion != null) {
+                        textFieldValue = if (onTextChanged != null) {
                             textFieldValue
                         } else {
                             it
                         }
 
                         onValueChange(
-                            if (autoCompletion != null) {
+                            if (onTextChanged != null) {
                                 textFieldValue
                             } else {
                                 it
