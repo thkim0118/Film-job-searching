@@ -30,6 +30,7 @@ import com.fone.filmone.ui.main.chat.ChatScreen
 import com.fone.filmone.ui.main.home.HomeScreen
 import com.fone.filmone.ui.main.job.JobFilterType
 import com.fone.filmone.ui.main.job.JobScreen
+import com.fone.filmone.ui.main.job.JobTab
 import com.fone.filmone.ui.main.model.BottomNavItem
 import com.fone.filmone.ui.main.my.MyScreen
 import com.fone.filmone.ui.navigation.FOneDestinations
@@ -51,6 +52,7 @@ fun MainScreen(
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     var selectedScreen by rememberSaveable { mutableStateOf(BottomNavItem.Home) }
+    var jobTabScreen by remember { mutableStateOf(JobTab.JOB_OPENING) }
     val uiState by mainViewModel.uiState.collectAsState()
 
     BackHandler(true) {
@@ -116,6 +118,7 @@ fun MainScreen(
                     BottomNavItem.Home -> Unit
                     BottomNavItem.Job -> {
                         JobFloatingButton(
+                            currentJobTab = jobTabScreen,
                             isFloatingClick = uiState.isFloatingClick,
                             onFloatingClick = { isClick ->
                                 if (isClick) {
@@ -176,6 +179,9 @@ fun MainScreen(
                         onProfileFilterClick = {
                             bottomSheetType = MainBottomSheetType.JobTabProfileFilter
                             coroutineScope.launch { bottomSheetState.show() }
+                        },
+                        onJobPageChanged = { jobTab ->
+                            jobTabScreen = jobTab
                         }
                     )
 
@@ -566,6 +572,7 @@ private fun hideBottomSheet(
 @Composable
 private fun JobFloatingButton(
     modifier: Modifier = Modifier,
+    currentJobTab: JobTab,
     isFloatingClick: Boolean,
     onFloatingClick: (Boolean) -> Unit
 ) {
@@ -594,7 +601,11 @@ private fun JobFloatingButton(
                             .clickableSingle {
                                 FOneNavigator.navigateTo(
                                     navDestinationState = NavDestinationState(
-                                        route = FOneDestinations.ActorRecruitingRegister.route
+                                        route = if (currentJobTab == JobTab.JOB_OPENING) {
+                                            FOneDestinations.ActorRecruitingRegister.route
+                                        } else {
+                                            FOneDestinations.ActorProfileRegister.route
+                                        }
                                     )
                                 )
                                 onFloatingClick(isFloatingClick.not())
@@ -604,7 +615,13 @@ private fun JobFloatingButton(
                         Text(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            text = stringResource(id = R.string.job_tab_fab_actor),
+                            text = stringResource(
+                                id = if (currentJobTab == JobTab.JOB_OPENING) {
+                                    R.string.job_tab_fab_actor
+                                } else {
+                                    R.string.job_tab_profile_fab_actor
+                                }
+                            ),
                             style = fTextStyle(
                                 fontWeight = FontWeight.W500,
                                 fontSize = 14.textDp,
@@ -636,7 +653,11 @@ private fun JobFloatingButton(
                             .clickableSingle {
                                 FOneNavigator.navigateTo(
                                     navDestinationState = NavDestinationState(
-                                        route = FOneDestinations.StaffRecruitingRegister.route
+                                        route = if (currentJobTab == JobTab.JOB_OPENING) {
+                                            FOneDestinations.StaffRecruitingRegister.route
+                                        } else {
+                                            FOneDestinations.StaffProfileRegister.route
+                                        }
                                     )
                                 )
                                 onFloatingClick(isFloatingClick.not())
@@ -646,7 +667,13 @@ private fun JobFloatingButton(
                         Text(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            text = stringResource(id = R.string.job_tab_fab_staff),
+                            text = stringResource(
+                                id = if (currentJobTab == JobTab.JOB_OPENING) {
+                                    R.string.job_tab_fab_staff
+                                } else {
+                                    R.string.job_tab_profile_fab_staff
+                                }
+                            ),
                             style = fTextStyle(
                                 fontWeight = FontWeight.W500,
                                 fontSize = 14.textDp,
@@ -670,7 +697,14 @@ private fun JobFloatingButton(
                 }
             ) {
                 Image(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.job_tab_floating_image),
+                    imageVector = ImageVector.vectorResource(
+                        id =
+                        if (currentJobTab == JobTab.JOB_OPENING) {
+                            R.drawable.job_tab_floating_image
+                        } else {
+                            R.drawable.job_tab_profile_floating_image
+                        }
+                    ),
                     contentDescription = null
                 )
             }

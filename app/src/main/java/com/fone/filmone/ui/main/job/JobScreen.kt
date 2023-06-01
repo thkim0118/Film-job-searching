@@ -52,6 +52,7 @@ fun JobScreen(
     onUpdateCurrentJobSorting: (JobTab) -> Unit,
     onJobOpeningsFilterClick: () -> Unit,
     onProfileFilterClick: () -> Unit,
+    onJobPageChanged: (JobTab) -> Unit,
     viewModel: JobScreenSharedViewModel = hiltViewModel()
 ) {
     val pagerState = rememberPagerState()
@@ -91,16 +92,22 @@ fun JobScreen(
 
         HorizontalPager(pageCount = JobTab.values().size, state = pagerState) { page ->
             when (page) {
-                0 -> JobTabJobOpeningsComponent(
-                    jobTabJobOpeningUiModels = uiState.jobOpeningsUiModel,
-                    onLastItemVisible = {
+                JobTab.JOB_OPENING.index -> {
+                    onJobPageChanged(JobTab.JOB_OPENING)
+                    JobTabJobOpeningsComponent(
+                        jobTabJobOpeningUiModels = uiState.jobOpeningsUiModel,
+                        onLastItemVisible = {
 
-                    }
-                )
+                        }
+                    )
+                }
 
-                1 -> JobTabProfileComponent(
-                    jobTabProfilesUiModels = uiState.profileUiModels
-                )
+                JobTab.PROFILE.index -> {
+                    onJobPageChanged(JobTab.PROFILE)
+                    JobTabProfileComponent(
+                        jobTabProfilesUiModels = uiState.profileUiModels
+                    )
+                }
             }
         }
     }
