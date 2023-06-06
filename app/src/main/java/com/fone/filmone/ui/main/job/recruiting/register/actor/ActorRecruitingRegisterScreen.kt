@@ -51,10 +51,12 @@ import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.tag.career.CareerTags
 import com.fone.filmone.ui.common.tag.categories.CategoryTags
-import com.fone.filmone.ui.main.job.common.TagComponent
+import com.fone.filmone.ui.main.job.common.LeftTitleTextField
+import com.fone.filmone.ui.main.job.common.TextLimitComponent
+import com.fone.filmone.ui.main.job.common.TextWithRequired
+import com.fone.filmone.ui.main.job.common.TextWithRequiredTag
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
-import com.fone.filmone.ui.theme.Pretendard
 import java.util.regex.Pattern
 
 @Composable
@@ -899,123 +901,4 @@ private fun AgeComponent(
             ),
         )
     }
-}
-
-@Composable
-private fun TextWithRequired(
-    modifier: Modifier = Modifier,
-    title: String,
-    isRequired: Boolean
-) {
-    Text(
-        modifier = modifier,
-        text = buildAnnotatedString {
-            withStyle(
-                style = SpanStyle(
-                    fontWeight = FontWeight.W500,
-                    color = FColor.TextPrimary
-                )
-            ) {
-                append(title)
-            }
-            if (isRequired) {
-                withStyle(
-                    style = SpanStyle(
-                        fontWeight = FontWeight.W500,
-                        color = FColor.Error
-                    )
-                ) {
-                    append(" *")
-                }
-            }
-        },
-        fontFamily = Pretendard,
-        fontSize = 15.textDp,
-        lineHeight = 20.textDp,
-    )
-}
-
-@Composable
-private fun TextWithRequiredTag(
-    modifier: Modifier = Modifier,
-    title: String,
-    tagTitle: String,
-    isRequired: Boolean,
-    tagEnable: Boolean,
-    onTagClick: () -> Unit
-) {
-    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-        TextWithRequired(
-            title = title,
-            isRequired = isRequired
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        TagComponent(
-            title = tagTitle,
-            enable = tagEnable,
-            onClick = {
-                onTagClick()
-            }
-        )
-    }
-}
-
-@Composable
-private fun LeftTitleTextField(
-    modifier: Modifier = Modifier,
-    title: String,
-    placeholder: String = "",
-    titleSpace: Int,
-    text: String,
-    onValueChanged: (String) -> Unit
-) {
-    FTextField(
-        modifier = modifier,
-        text = text,
-        onValueChange = onValueChanged,
-        leftComponents = {
-            TextWithRequired(
-                title = title,
-                isRequired = true
-            )
-
-            Spacer(modifier = Modifier.width(titleSpace.dp))
-        },
-        placeholder = placeholder
-    )
-}
-
-@Composable
-private fun TextLimitComponent(
-    modifier: Modifier = Modifier,
-    currentTextSize: Int,
-    maxTextSize: Int,
-) {
-    Text(
-        modifier = modifier,
-        text = buildAnnotatedString {
-            withStyle(
-                SpanStyle(color = FColor.TextSecondary)
-            ) {
-                append(currentTextSize.toString())
-            }
-
-            withStyle(
-                style = SpanStyle(color = FColor.DisableBase)
-            ) {
-                append("/")
-            }
-
-            withStyle(
-                style = SpanStyle(color = FColor.DisableBase)
-            ) {
-                append(maxTextSize.toString())
-            }
-        },
-        fontWeight = FontWeight.W400,
-        fontSize = 12.textDp,
-        lineHeight = 17.textDp
-    )
 }

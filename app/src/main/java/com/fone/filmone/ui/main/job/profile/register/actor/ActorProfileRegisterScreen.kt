@@ -5,12 +5,17 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,6 +38,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fone.filmone.R
@@ -40,9 +46,12 @@ import com.fone.filmone.ui.common.FTitleBar
 import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
+import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
+import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.theme.FColor
+import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.Pretendard
 import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.glide.GlideImage
@@ -57,12 +66,17 @@ fun ActorProfileRegisterScreen(
 
     Scaffold(
         modifier = modifier
-            .fillMaxSize(),
+            .defaultSystemBarPadding()
+            .toastPadding(),
         snackbarHost = {
             FToast(baseViewModel = viewModel, hostState = it)
         }
     ) {
-        Column(modifier = Modifier.padding(it)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
             TitleComponent(
                 onBackClick = {
 
@@ -139,7 +153,7 @@ private fun PictureComponent(
                     }
                 )
         ) {
-            Row(
+            Column(
                 modifier = Modifier.align(Alignment.Center)
             ) {
                 Image(
@@ -148,6 +162,8 @@ private fun PictureComponent(
                 )
 
                 Text(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally),
                     text = buildAnnotatedString {
                         withStyle(
                             SpanStyle(
@@ -239,12 +255,25 @@ private fun PictureComponent(
         }
     }
 
-    Column(modifier = modifier) {
+    Column(modifier = modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(20.dp))
 
-        // TODO 사진 리스트 LazyRow 로 만들어야함.
+        Row(modifier = Modifier) {
+            PictureRegisterItem(modifier = Modifier.padding(start = 16.dp))
+
+            LazyRow(
+                modifier = Modifier,
+                contentPadding = PaddingValues(horizontal = 7.dp)
+            ) {
+                itemsIndexed(pictureUriList) { index, uri ->
+                    RegisteredPicture(imageUri = uri, isRepresentativeItem = index == 0)
+                }
+            }
+        }
 
         Text(
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp, top = 5.dp),
             text = stringResource(id = R.string.profile_register_actor_gallery_hint),
             style = fTextStyle(
                 fontWeight = FontWeight.W500,
@@ -277,4 +306,12 @@ private fun CategorySelectComponent(
     modifier: Modifier = Modifier
 ) {
 
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ActorProfileRegisterScreenPreview() {
+    FilmOneTheme {
+        ActorProfileRegisterScreen()
+    }
 }
