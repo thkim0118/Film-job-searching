@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.R
+import com.fone.filmone.ui.common.component.ProfileItem
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 
@@ -36,7 +37,7 @@ fun ActorScreen(
                     horizontalArrangement = Arrangement.spacedBy(26.dp)
                 ) {
                     items(actorUiState.uiModels) {
-                        FavoriteProfileItem(
+                        ProfileItem(
                             imageUrl = it.profileUrl,
                             name = it.name,
                             info = it.info

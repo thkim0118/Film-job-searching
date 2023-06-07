@@ -3,7 +3,6 @@ package com.fone.filmone.ui.main.job
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
-import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.data.datamodel.common.jobopenings.JobOpenings
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.profile.Profiles
@@ -104,8 +103,6 @@ class JobScreenSharedViewModel @Inject constructor(
                         it.copy(staffProfiles = response.profiles)
                     }
                 }
-
-                LogUtil.i("response :: $response")
             }
     }
 
@@ -174,7 +171,7 @@ private data class JobScreenViewModelState(
             ProfilesUiModel(
                 profileUrl = content.profileUrl,
                 name = content.name,
-                info = content.birthday + content.age
+                info = "${content.birthday.slice(0..3)}년생 (${content.age}살)"
             )
         } ?: emptyList()
     )

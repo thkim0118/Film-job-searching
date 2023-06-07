@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.fone.filmone.ui.common.component.ProfileItem
 
 @Composable
 fun JobTabProfileComponent(
@@ -29,7 +30,7 @@ fun JobTabProfileComponent(
             horizontalArrangement = Arrangement.spacedBy(26.dp)
         ) {
             items(jobTabProfilesUiModels) {
-                JobTabProfileItem(
+                ProfileItem(
                     imageUrl = it.profileUrl,
                     name = it.name,
                     info = it.info
