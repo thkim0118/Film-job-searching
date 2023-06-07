@@ -57,6 +57,7 @@ import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.tag.career.CareerTags
 import com.fone.filmone.ui.common.tag.categories.CategoryTags
+import com.fone.filmone.ui.main.job.common.DomainInputComponent
 import com.fone.filmone.ui.main.job.common.LeftTitleTextField
 import com.fone.filmone.ui.main.job.common.TagComponent
 import com.fone.filmone.ui.main.job.common.TextLimitComponent
@@ -710,93 +711,6 @@ private fun RecruitmentInputComponent(
             )
         }
     )
-}
-
-@Composable
-private fun DomainInputComponent(
-    modifier: Modifier = Modifier,
-    selectedDomains: List<Domain>,
-    onUpdateDomains: () -> Unit
-) {
-    Row(
-        modifier = modifier
-            .background(color = FColor.BgGroupedBase)
-            .padding(vertical = 13.dp, horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        TextWithRequired(
-            title = stringResource(id = R.string.recruiting_register_staff_domain_title),
-            isRequired = true,
-        )
-
-        Spacer(modifier = Modifier.width(28.dp))
-
-        SelectedDomainComponent(
-            selectedDomains = selectedDomains,
-            onDomainClick = onUpdateDomains
-        )
-    }
-}
-
-@Composable
-private fun SelectedDomainComponent(
-    modifier: Modifier = Modifier,
-    selectedDomains: List<Domain>,
-    onDomainClick: () -> Unit
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .heightIn(min = 42.dp)
-            .clip(shape = RoundedCornerShape(5.dp))
-            .background(shape = RoundedCornerShape(5.dp), color = FColor.BgBase)
-            .clickableSingle { onDomainClick() },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Spacer(modifier = Modifier.weight(1f))
-
-        when {
-            selectedDomains.size == Domain.values().size -> {
-                TagComponent(
-                    title = stringResource(id = R.string.recruiting_register_staff_domain_select_all),
-                    enable = true,
-                    clickable = false
-                )
-            }
-
-            selectedDomains.size >= 3 -> {
-                TagComponent(
-                    title = stringResource(
-                        id = R.string.recruiting_register_staff_domain_select_items,
-                        selectedDomains.size
-                    ),
-                    enable = true,
-                    clickable = false
-                )
-            }
-
-            else -> {
-                selectedDomains.forEach {
-                    TagComponent(
-                        title = stringResource(id = it.stringRes),
-                        enable = true,
-                        clickable = false
-                    )
-
-                    Spacer(modifier = Modifier.width(6.dp))
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.width(16.dp))
-
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.staff_recruting_right_arrow),
-            contentDescription = null
-        )
-
-        Spacer(modifier = Modifier.width(13.dp))
-    }
 }
 
 @Composable
