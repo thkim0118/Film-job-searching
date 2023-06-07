@@ -1,5 +1,6 @@
 package com.fone.filmone.ui.main.job.common
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
@@ -14,6 +15,8 @@ fun LeftTitleTextField(
     placeholder: String = "",
     titleSpace: Int,
     text: String,
+    isRequired: Boolean = true,
+    tailComponent: @Composable () -> Unit = {},
     onValueChanged: (String) -> Unit
 ) {
     FTextField(
@@ -23,11 +26,12 @@ fun LeftTitleTextField(
         leftComponents = {
             TextWithRequired(
                 title = title,
-                isRequired = true
+                isRequired = isRequired
             )
 
             Spacer(modifier = Modifier.width(titleSpace.dp))
         },
+        tailComponent = tailComponent,
         placeholder = placeholder
     )
 }

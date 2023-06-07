@@ -760,33 +760,11 @@ private fun RecruitmentInputComponent(
 
     Spacer(modifier = Modifier.height(6.dp))
 
-    FTextField(
-        text = recruitmentNumber,
-        onValueChange = onUpdateRecruitmentNumber,
-        rightComponents = {
-            Spacer(modifier = Modifier.width(8.dp))
-
-            FBorderButton(
-                text = stringResource(id = R.string.sign_up_second_birthday_gender_man),
-                enable = currentGender == Gender.MAN,
-                onClick = {
-                    onUpdateGender(Gender.MAN, (currentGender == Gender.MAN).not())
-                }
-            )
-
-            Spacer(modifier = Modifier.width(6.dp))
-
-            FBorderButton(
-                text = stringResource(id = R.string.sign_up_second_birthday_gender_woman),
-                enable = currentGender == Gender.WOMAN,
-                onClick = {
-                    onUpdateGender(Gender.WOMAN, (currentGender == Gender.WOMAN).not())
-                }
-            )
-        },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Number
-        )
+    RecruitmentNumberInputComponent(
+        recruitmentNumber = recruitmentNumber,
+        currentGender = currentGender,
+        onUpdateRecruitmentNumber = onUpdateRecruitmentNumber,
+        onUpdateGender = onUpdateGender
     )
 }
 
@@ -901,4 +879,43 @@ private fun AgeComponent(
             ),
         )
     }
+}
+
+@Composable
+private fun RecruitmentNumberInputComponent(
+    modifier: Modifier = Modifier,
+    recruitmentNumber: String,
+    currentGender: Gender?,
+    onUpdateRecruitmentNumber: (String) -> Unit,
+    onUpdateGender: (Gender, Boolean) -> Unit,
+) {
+    FTextField(
+        modifier = modifier,
+        text = recruitmentNumber,
+        onValueChange = onUpdateRecruitmentNumber,
+        rightComponents = {
+            Spacer(modifier = Modifier.width(8.dp))
+
+            FBorderButton(
+                text = stringResource(id = R.string.sign_up_second_birthday_gender_man),
+                enable = currentGender == Gender.MAN,
+                onClick = {
+                    onUpdateGender(Gender.MAN, (currentGender == Gender.MAN).not())
+                }
+            )
+
+            Spacer(modifier = Modifier.width(6.dp))
+
+            FBorderButton(
+                text = stringResource(id = R.string.sign_up_second_birthday_gender_woman),
+                enable = currentGender == Gender.WOMAN,
+                onClick = {
+                    onUpdateGender(Gender.WOMAN, (currentGender == Gender.WOMAN).not())
+                }
+            )
+        },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number
+        )
+    )
 }

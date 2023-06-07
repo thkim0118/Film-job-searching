@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.onEach
 fun FOneNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = FOneDestinations.Splash.route,
+    startDestination: String = FOneDestinations.Main.route,
 ) {
     LaunchedEffect(key1 = "navigation") {
         FOneNavigator.routeFlow.onEach { navigationState ->
@@ -94,7 +94,7 @@ fun FOneNavGraph(
             StaffRecruitingArticleScreen()
         }
         composable(FOneDestinations.ActorProfileRegister.route) {
-            ActorProfileRegisterScreen()
+            ActorProfileRegisterScreen(navController = navController)
         }
         composable(FOneDestinations.StaffProfileRegister.route) {
             StaffProfileRegisterScreen()
