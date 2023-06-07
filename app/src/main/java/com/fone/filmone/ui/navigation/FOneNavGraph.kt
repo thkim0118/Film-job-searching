@@ -97,7 +97,7 @@ fun FOneNavGraph(
             ActorProfileRegisterScreen(navController = navController)
         }
         composable(FOneDestinations.StaffProfileRegister.route) {
-            StaffProfileRegisterScreen()
+            StaffProfileRegisterScreen(navController = navController)
         }
         composable(FOneDestinations.ActorProfileArticle.route) {
             ActorProfileArticleScreen()

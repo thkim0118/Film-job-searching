@@ -723,7 +723,7 @@ private fun CategorySelectComponent(
         verticalAlignment = Alignment.CenterVertically
     ) {
         TextWithRequired(
-            title = stringResource(id = R.string.profile_register_staff_category_title),
+            title = stringResource(id = R.string.profile_register_category_title),
             isRequired = true
         )
 
