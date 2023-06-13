@@ -34,6 +34,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
 import com.fone.filmone.core.image.ImageBase64Util
+import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.ui.common.*
 import com.fone.filmone.ui.common.ext.clickableWithNoRipple
@@ -261,7 +262,7 @@ private fun BirthdayGenderComponent(
         text = uiState.birthday,
         placeholder = stringResource(id = R.string.sign_up_second_birthday_gender_placeholder),
         onValueChange = onUpdateBirthday,
-        pattern = Pattern.compile("^[\\d\\s-]+$"),
+        pattern = Pattern.compile(PatternUtil.dateRegex),
         onTextChanged = { before, after ->
             if (before.text.length < after.text.length) {
                 when (after.text.length) {

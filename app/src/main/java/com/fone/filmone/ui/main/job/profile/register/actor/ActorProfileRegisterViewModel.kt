@@ -1,7 +1,7 @@
 package com.fone.filmone.ui.main.job.profile.register.actor
 
-import android.net.Uri
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Gender
@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
@@ -186,23 +185,11 @@ class ActorProfileRegisterViewModel @Inject constructor(
 
     private fun updateRegisterButtonState() {
         val modelState = viewModelState.value
-        val birthDayPattern = Pattern.compile("^(\\d{4})-(0[1-9]|1[0-2])-(0\\d|[1-2]\\d|3[0-1])+$")
-        val emailPattern = Pattern.compile(
-            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
-                    "\\@" +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-                    "(" +
-                    "\\." +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{1,25}" +
-                    ")+"
-        )
 
         val isEnable = modelState.name.isNotEmpty() && modelState.hookingComments.isNotEmpty() &&
-                modelState.birthday.isNotEmpty() && birthDayPattern.matcher(modelState.birthday)
-            .matches() &&
+                modelState.birthday.isNotEmpty() && PatternUtil.isValidDate(modelState.birthday) &&
                 modelState.height.isNotEmpty() && modelState.weight.isNotEmpty() && modelState.email.isNotEmpty() &&
-                emailPattern.matcher(modelState.email)
-                    .matches() && modelState.detailInfo.isNotEmpty()
+                PatternUtil.isValidEmail(modelState.email) && modelState.detailInfo.isNotEmpty()
 
         viewModelState.update { state ->
             state.copy(registerButtonEnable = isEnable)

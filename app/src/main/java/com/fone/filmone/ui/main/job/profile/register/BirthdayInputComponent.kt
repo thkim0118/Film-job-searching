@@ -12,6 +12,7 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.R
+import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.ui.common.FBorderButton
 import com.fone.filmone.ui.common.FTextField
@@ -50,7 +51,7 @@ fun BirthdayInputComponent(
             placeholder = stringResource(id = R.string.profile_register_birth_placeholder),
             placeholderTextColor = FColor.DisablePlaceholder,
             onValueChange = onUpdateBirthday,
-            pattern = Pattern.compile("^[\\d\\s-]+$"),
+            pattern = Pattern.compile(PatternUtil.dateRegex),
             onTextChanged = { before, after ->
                 if (before.text.length < after.text.length) {
                     when (after.text.length) {

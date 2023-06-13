@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.fone.filmone.R
+import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Gender
@@ -698,7 +699,7 @@ private fun RecruitmentInputComponent(
             FColor.DisablePlaceholder
         },
         onValueChange = onUpdateDeadlineDate,
-        pattern = Pattern.compile("^[\\d\\s-]+$"),
+        pattern = Pattern.compile(PatternUtil.dateRegex),
         onTextChanged = { before, after ->
             if (before.text.length < after.text.length) {
                 when (after.text.length) {

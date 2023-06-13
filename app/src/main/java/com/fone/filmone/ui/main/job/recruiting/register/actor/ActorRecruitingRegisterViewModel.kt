@@ -3,6 +3,7 @@ package com.fone.filmone.ui.main.job.recruiting.register.actor
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
 import com.fone.filmone.core.util.LogUtil
+import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.jobopenings.Work
 import com.fone.filmone.data.datamodel.common.user.Career
@@ -20,7 +21,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
@@ -121,7 +121,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
             return true
         }
 
-        if (step1UiModel.deadlineDateTagEnable && isDeadlineDateInvalid(step1UiModel.deadlineDate)) {
+        if (step1UiModel.deadlineDateTagEnable && PatternUtil.isValidDate(step1UiModel.deadlineDate).not()) {
             showToast(R.string.toast_recruiting_register_fail)
             return true
         }
@@ -137,11 +137,6 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
         }
 
         return false
-    }
-
-    private fun isDeadlineDateInvalid(birthday: String): Boolean {
-        val birthDayPattern = Pattern.compile("^(\\d{4})-(0[1-9]|1[0-2])-(0\\d|[1-2]\\d|3[0-1])+$")
-        return birthDayPattern.matcher(birthday).matches()
     }
 
     private fun isInvalidateStep2(): Boolean {

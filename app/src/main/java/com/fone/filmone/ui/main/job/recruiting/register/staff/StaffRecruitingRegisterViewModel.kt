@@ -1,6 +1,7 @@
 package com.fone.filmone.ui.main.job.recruiting.register.staff
 
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Domain
@@ -34,6 +35,14 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
         MutableStateFlow<StaffRecruitingRegisterDialogState>(StaffRecruitingRegisterDialogState.Clear)
     val dialogState: StateFlow<StaffRecruitingRegisterDialogState> = _dialogState.asStateFlow()
 
+    fun register() {
+        val state = viewModelState.value
+
+        if (state.registerButtonEnable.not()) {
+            return
+        }
+    }
+
     fun updateDialogState(dialogState: StaffRecruitingRegisterDialogState) {
         _dialogState.value = dialogState
     }
@@ -44,6 +53,8 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
                 staffRecruitingStep1UiModel = it.staffRecruitingStep1UiModel.copy(titleText = title)
             )
         }
+
+        updateRegisterButtonState()
     }
 
     fun updateCategory(category: Category, enable: Boolean) {
@@ -59,6 +70,8 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
                 )
             )
         }
+
+        updateRegisterButtonState()
     }
 
     fun updateDeadlineDate(deadlineDate: String) {
@@ -67,6 +80,8 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
                 staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(deadlineDate = deadlineDate)
             )
         }
+
+        updateRegisterButtonState()
     }
 
     fun updateRecruitmentDomains(domains: Set<Domain>) {
@@ -77,24 +92,30 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
                 )
             )
         }
+
+        updateRegisterButtonState()
     }
 
     fun updateRecruitmentNumber(number: String) {
-        viewModelState.update {
-            it.copy(
-                staffRecruitingStep1UiModel = it.staffRecruitingStep1UiModel.copy(recruitmentNumber = number)
+        viewModelState.update { state ->
+            state.copy(
+                staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
+                    recruitmentNumber = number
+                )
             )
         }
+
+        updateRegisterButtonState()
     }
 
     fun updateRecruitmentGender(gender: Gender, enable: Boolean) {
-        viewModelState.update { it ->
-            it.copy(
-                staffRecruitingStep1UiModel = it.staffRecruitingStep1UiModel.copy(
+        viewModelState.update { state ->
+            state.copy(
+                staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
                     recruitmentGender = if (enable) {
-                        it.staffRecruitingStep1UiModel.recruitmentGender + setOf(gender)
+                        state.staffRecruitingStep1UiModel.recruitmentGender + setOf(gender)
                     } else {
-                        it.staffRecruitingStep1UiModel.recruitmentGender
+                        state.staffRecruitingStep1UiModel.recruitmentGender
                             .filterNot { recruitmentGender -> recruitmentGender == gender }
                             .toSet()
                     }
@@ -145,6 +166,8 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
                 )
             )
         }
+
+        updateRegisterButtonState()
     }
 
     fun updateWorkTitle(workTitle: String) {
@@ -155,6 +178,8 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
                 )
             )
         }
+
+        updateRegisterButtonState()
     }
 
     fun updateDirectorName(directorName: String) {
@@ -165,6 +190,8 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
                 )
             )
         }
+
+        updateRegisterButtonState()
     }
 
     fun updateGenre(genre: String) {
@@ -175,6 +202,8 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
                 )
             )
         }
+
+        updateRegisterButtonState()
     }
 
     fun updateLogLine(logLine: String) {
@@ -265,6 +294,8 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
                 )
             )
         }
+
+        updateRegisterButtonState()
     }
 
     fun updateManager(manager: String) {
@@ -275,6 +306,8 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
                 )
             )
         }
+
+        updateRegisterButtonState()
     }
 
     fun updateEmail(email: String) {
@@ -285,11 +318,26 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
                 )
             )
         }
+
+        updateRegisterButtonState()
     }
 
-    private fun isDeadlineDateValid(birthday: String): Boolean {
-        val birthDayPattern = Pattern.compile("^(\\d{4})-(0[1-9]|1[0-2])-(0\\d|[1-2]\\d|3[0-1])+$")
-        return birthDayPattern.matcher(birthday).matches()
+    private fun updateRegisterButtonState() {
+        val modelState = viewModelState.value
+
+
+        val enable =
+            modelState.staffRecruitingStep1UiModel.titleText.isNotEmpty() && modelState.staffRecruitingStep1UiModel.categories.isNotEmpty() &&
+                    PatternUtil.isValidDate(modelState.staffRecruitingStep1UiModel.deadlineDate) &&
+                    modelState.staffRecruitingStep1UiModel.recruitmentDomains.isNotEmpty() && modelState.staffRecruitingStep1UiModel.recruitmentNumber.isNotEmpty() &&
+                    modelState.staffRecruitingStep2UiModel.production.isNotEmpty() && modelState.staffRecruitingStep2UiModel.workTitle.isNotEmpty() &&
+                    modelState.staffRecruitingStep2UiModel.directorName.isNotEmpty() && modelState.staffRecruitingStep2UiModel.genre.isNotEmpty() &&
+                    modelState.staffRecruitingStep4UiModel.detailInfo.isNotEmpty() && modelState.staffRecruitingStep5UiModel.manager.isNotEmpty() &&
+                    PatternUtil.isValidEmail(modelState.staffRecruitingStep5UiModel.email)
+
+        viewModelState.update { state ->
+            state.copy(registerButtonEnable = enable)
+        }
     }
 }
 
@@ -298,7 +346,8 @@ private data class StaffRecruitingRegisterViewModelState(
     val staffRecruitingStep2UiModel: StaffRecruitingStep2UiModel = StaffRecruitingStep2UiModel(),
     val staffRecruitingStep3UiModel: StaffRecruitingStep3UiModel = StaffRecruitingStep3UiModel(),
     val staffRecruitingStep4UiModel: StaffRecruitingStep4UiModel = StaffRecruitingStep4UiModel(),
-    val staffRecruitingStep5UiModel: StaffRecruitingStep5UiModel = StaffRecruitingStep5UiModel()
+    val staffRecruitingStep5UiModel: StaffRecruitingStep5UiModel = StaffRecruitingStep5UiModel(),
+    val registerButtonEnable: Boolean = false,
 ) {
     fun toUiState(): StaffRecruitingRegisterUiModel =
         StaffRecruitingRegisterUiModel(
@@ -306,7 +355,8 @@ private data class StaffRecruitingRegisterViewModelState(
             staffRecruitingStep2UiModel = staffRecruitingStep2UiModel,
             staffRecruitingStep3UiModel = staffRecruitingStep3UiModel,
             staffRecruitingStep4UiModel = staffRecruitingStep4UiModel,
-            staffRecruitingStep5UiModel = staffRecruitingStep5UiModel
+            staffRecruitingStep5UiModel = staffRecruitingStep5UiModel,
+            registerButtonEnable = registerButtonEnable,
         )
 }
 
@@ -315,7 +365,8 @@ data class StaffRecruitingRegisterUiModel(
     val staffRecruitingStep2UiModel: StaffRecruitingStep2UiModel,
     val staffRecruitingStep3UiModel: StaffRecruitingStep3UiModel,
     val staffRecruitingStep4UiModel: StaffRecruitingStep4UiModel,
-    val staffRecruitingStep5UiModel: StaffRecruitingStep5UiModel
+    val staffRecruitingStep5UiModel: StaffRecruitingStep5UiModel,
+    val registerButtonEnable: Boolean,
 )
 
 data class StaffRecruitingStep1UiModel(

@@ -6,9 +6,12 @@ import com.fone.filmone.data.datamodel.common.network.Server
 import com.fone.filmone.data.datamodel.common.paging.SortType
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Gender
+import com.fone.filmone.data.datamodel.request.profile.ProfileRegisterRequest
 import com.fone.filmone.data.datamodel.response.profiles.ProfilesResponse
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface ProfilesApi {
@@ -35,5 +38,10 @@ interface ProfilesApi {
     suspend fun getMyRegistrations(
         @Query("page") page: Int,
         @Query("size") size: Int,
+    ): Response<NetworkResponse<ProfilesResponse>>
+
+    @POST("${Server.ApiVersion}/profiles")
+    suspend fun registerProfile(
+        @Body profileRegisterRequest: ProfileRegisterRequest
     ): Response<NetworkResponse<ProfilesResponse>>
 }

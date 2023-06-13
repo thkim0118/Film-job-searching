@@ -77,9 +77,7 @@ fun ActorProfileRegisterScreen(
                 onBackClick = {
                     navController.popBackStack()
                 },
-                onRegisterClick = {
-
-                }
+                onRegisterClick = viewModel::register
             )
 
             Column(

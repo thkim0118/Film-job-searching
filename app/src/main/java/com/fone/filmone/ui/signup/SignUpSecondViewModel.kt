@@ -2,6 +2,7 @@ package com.fone.filmone.ui.signup
 
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
+import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.domain.model.common.getOrNull
 import com.fone.filmone.domain.model.common.isFail
 import com.fone.filmone.domain.model.common.onSuccess
@@ -15,7 +16,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
@@ -72,9 +72,8 @@ class SignUpSecondViewModel @Inject constructor(
     }
 
     private fun updateBirthDayChecked(birthday: String) {
-        val birthDayPattern = Pattern.compile("^(\\d{4})-(0[1-9]|1[0-2])-(0\\d|[1-2]\\d|3[0-1])+$")
         _uiState.update {
-            it.copy(isBirthDayChecked = birthDayPattern.matcher(birthday).matches())
+            it.copy(isBirthDayChecked = PatternUtil.isValidDate(birthday))
         }
     }
 

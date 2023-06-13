@@ -83,9 +83,7 @@ fun StaffProfileRegisterScreen(
                     onBackClick = {
                         navController.popBackStack()
                     },
-                    onRegisterClick = {
-
-                    }
+                    onRegisterClick = viewModel::register
                 )
 
                 Column(modifier = Modifier.verticalScroll(scrollState)) {

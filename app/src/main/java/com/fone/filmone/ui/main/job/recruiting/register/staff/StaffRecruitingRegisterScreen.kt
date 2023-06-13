@@ -1,24 +1,19 @@
 package com.fone.filmone.ui.main.job.recruiting.register.staff
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
 import androidx.compose.material.RangeSlider
 import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
@@ -27,7 +22,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -41,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.fone.filmone.R
+import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Domain
@@ -59,7 +54,6 @@ import com.fone.filmone.ui.common.tag.career.CareerTags
 import com.fone.filmone.ui.common.tag.categories.CategoryTags
 import com.fone.filmone.ui.main.job.common.DomainInputComponent
 import com.fone.filmone.ui.main.job.common.LeftTitleTextField
-import com.fone.filmone.ui.main.job.common.TagComponent
 import com.fone.filmone.ui.main.job.common.TextLimitComponent
 import com.fone.filmone.ui.main.job.common.TextWithRequired
 import com.fone.filmone.ui.main.job.common.TextWithRequiredTag
@@ -89,7 +83,8 @@ fun StaffRecruitingRegisterScreen(
             TitleComponent(
                 onBackClick = {
                     navController.popBackStack()
-                }
+                },
+                onRegisterClick = viewModel::register
             )
 
             Column(
@@ -173,7 +168,8 @@ fun StaffRecruitingRegisterScreen(
                     manager = uiState.staffRecruitingStep5UiModel.manager,
                     email = uiState.staffRecruitingStep5UiModel.email,
                     onUpdateManager = viewModel::updateManager,
-                    onUpdateEmail = viewModel::updateEmail
+                    onUpdateEmail = viewModel::updateEmail,
+                    onRegisterClick = viewModel::register
                 )
             }
         }
@@ -190,7 +186,8 @@ fun StaffRecruitingRegisterScreen(
 
 @Composable
 private fun TitleComponent(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onRegisterClick: () -> Unit
 ) {
     FTitleBar(
         titleText = stringResource(id = R.string.recruiting_register_staff_title_text),
@@ -205,7 +202,7 @@ private fun TitleComponent(
         action = {
             Text(
                 modifier = Modifier
-                    .clickableSingle { },
+                    .clickableSingle { onRegisterClick() },
                 text = stringResource(id = R.string.recruiting_register_staff_title_right_button),
                 style = fTextStyle(
                     fontWeight = FontWeight.W500,
@@ -547,7 +544,8 @@ private fun Step5Component(
     manager: String,
     email: String,
     onUpdateManager: (String) -> Unit,
-    onUpdateEmail: (String) -> Unit
+    onUpdateEmail: (String) -> Unit,
+    onRegisterClick: () -> Unit
 ) {
     Column(
         modifier = modifier.padding(horizontal = 20.dp)
@@ -583,7 +581,7 @@ private fun Step5Component(
         FButton(
             title = stringResource(id = R.string.recruiting_register_staff_register_button_title),
             enable = false,
-            onClick = {}
+            onClick = { onRegisterClick() }
         )
 
         Spacer(modifier = Modifier.height(38.dp))
@@ -642,7 +640,7 @@ private fun RecruitmentInputComponent(
         text = deadlineDate,
         placeholder = stringResource(id = R.string.recruiting_register_staff_deadline_placeholder),
         onValueChange = onUpdateDeadlineDate,
-        pattern = Pattern.compile("^[\\d\\s-]+$"),
+        pattern = Pattern.compile(PatternUtil.dateRegex),
         onTextChanged = { before, after ->
             if (before.text.length < after.text.length) {
                 when (after.text.length) {
