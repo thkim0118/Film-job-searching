@@ -92,14 +92,10 @@ class StaffProfileRegisterViewModel @Inject constructor(
         updateRegisterButtonState()
     }
 
-    fun updateRecruitmentDomains(domain: Domain, enable: Boolean) {
+    fun updateRecruitmentDomains(domains: Set<Domain>) {
         viewModelState.update { state ->
             state.copy(
-                domains = if (enable) {
-                    state.domains + setOf(domain)
-                } else {
-                    state.domains.filterNot { it == domain }.toSet()
-                }
+                domains = domains
             )
         }
 

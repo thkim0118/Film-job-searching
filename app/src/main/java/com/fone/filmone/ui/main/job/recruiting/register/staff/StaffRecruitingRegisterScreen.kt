@@ -178,9 +178,13 @@ fun StaffRecruitingRegisterScreen(
             }
         }
 
-        DialogScreen(dialogState = dialogState, onDismiss = {
-            viewModel.updateDialogState(StaffRecruitingRegisterDialogState.Clear)
-        })
+        DialogScreen(
+            dialogState = dialogState,
+            onDismiss = { domains ->
+                viewModel.updateRecruitmentDomains(domains.toSet())
+                viewModel.updateDialogState(StaffRecruitingRegisterDialogState.Clear)
+            }
+        )
     }
 }
 
@@ -828,15 +832,15 @@ private fun AgeComponent(
 @Composable
 private fun DialogScreen(
     dialogState: StaffRecruitingRegisterDialogState,
-    onDismiss: () -> Unit
+    onDismiss: (List<Domain>) -> Unit
 ) {
     when (dialogState) {
         StaffRecruitingRegisterDialogState.Clear -> Unit
         is StaffRecruitingRegisterDialogState.DomainSelectDialog -> {
             DomainSelectDialog(
                 selectedDomains = dialogState.selectedDomains,
-                onDismissRequest = {
-                    onDismiss()
+                onDismissRequest = { domains ->
+                    onDismiss(domains)
                 }
             )
         }

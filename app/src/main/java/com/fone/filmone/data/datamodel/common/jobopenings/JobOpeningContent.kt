@@ -7,22 +7,22 @@ import com.fone.filmone.data.datamodel.common.user.Domain
 import com.fone.filmone.data.datamodel.common.user.Gender
 
 @Keep
-data class JobOpening(
+data class JobOpeningContent(
+    val id: Int,
+    val title: String,
+    val categories: List<Category>,
+    val deadline: String,
+    val casting: String,
+    val numberOfRecruits: Int,
+    val gender: Gender,
     val ageMax: Int,
     val ageMin: Int,
     val career: Career,
-    val casting: String,
-    val categories: List<Category>,
-    val dday: String,
-    val deadline: String,
-    val domains: List<Domain>,
-    val gender: Gender,
-    val id: Int,
-    val isScrap: Boolean,
-    val numberOfRecruits: Int,
-    val scrapCount: Int,
-    val title: String,
     val type: Type,
+    val domains: List<Domain>,
     val viewCount: Int,
-    val work: Work
+    val scrapCount: Int,
+    val work: Work,
+    val isScrap: Boolean,
+    val dday: String
 )

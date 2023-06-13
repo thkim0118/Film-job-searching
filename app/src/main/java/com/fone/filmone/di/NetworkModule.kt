@@ -20,10 +20,10 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     private const val connectionTime = 30_000L
-    private const val baseUrl = "http://3.38.94.181/api/"
+    private const val baseUrl = "http://3.39.0.194/api/"
     private const val smsBaseUrl = "https://54d38vfw3c.execute-api.ap-northeast-1.amazonaws.com/"
     private const val imageUploadBaseUrl =
-        "https://rho64ux05h.execute-api.ap-northeast-2.amazonaws.com/"
+        "https://du646e9qh1.execute-api.ap-northeast-2.amazonaws.com/"
 
     @Provides
     fun provideAuthInterceptor(authRepository: AuthRepository): AuthInterceptor =

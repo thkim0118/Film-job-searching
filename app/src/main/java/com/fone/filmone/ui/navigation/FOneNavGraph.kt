@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.onEach
 fun FOneNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = FOneDestinations.Main.route,
+    startDestination: String = FOneDestinations.Splash.route,
 ) {
     LaunchedEffect(key1 = "navigation") {
         FOneNavigator.routeFlow.onEach { navigationState ->

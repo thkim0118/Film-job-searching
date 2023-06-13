@@ -1,17 +1,32 @@
 package com.fone.filmone.ui.signup.screen
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -29,14 +44,24 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
-import com.fone.filmone.ui.common.*
+import com.fone.filmone.ui.common.FBorderButton
+import com.fone.filmone.ui.common.FButton
+import com.fone.filmone.ui.common.FRadioButton
+import com.fone.filmone.ui.common.FTextField
+import com.fone.filmone.ui.common.FTitleBar
+import com.fone.filmone.ui.common.FToast
+import com.fone.filmone.ui.common.TitleType
 import com.fone.filmone.ui.common.dialog.SingleButtonDialog
 import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
-import com.fone.filmone.ui.navigation.FOneDestinations
-import com.fone.filmone.ui.signup.*
+import com.fone.filmone.ui.common.fTextStyle
+import com.fone.filmone.ui.signup.AgreeState
+import com.fone.filmone.ui.signup.PhoneVerificationState
+import com.fone.filmone.ui.signup.SignUpThirdDialogState
+import com.fone.filmone.ui.signup.SignUpThirdUiState
+import com.fone.filmone.ui.signup.SignUpThirdViewModel
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
 import com.fone.filmone.ui.signup.model.SignUpVo
@@ -53,10 +78,6 @@ fun SignUpThirdScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val dialogState by viewModel.dialogState.collectAsState()
-
-    BackHandler(enabled = true) {
-        navigateLoginScreen(navController)
-    }
 
     Scaffold(
         modifier = modifier
@@ -117,7 +138,7 @@ private fun SignUpMainScreen(
             titleType = TitleType.Back,
             titleText = stringResource(id = R.string.sign_up_title_text),
             onBackClick = {
-                navigateLoginScreen(navController)
+                navController.popBackStack()
             }
         )
 
@@ -170,12 +191,6 @@ private fun SignUpMainScreen(
 
             Spacer(modifier = Modifier.height(38.dp))
         }
-    }
-}
-
-private fun navigateLoginScreen(navController: NavHostController) {
-    navController.navigate(FOneDestinations.Login.route) {
-        popUpTo(0)
     }
 }
 

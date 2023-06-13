@@ -1,7 +1,7 @@
 package com.fone.filmone.ui.scrap
 
 import androidx.lifecycle.viewModelScope
-import com.fone.filmone.data.datamodel.common.jobopenings.JobOpening
+import com.fone.filmone.data.datamodel.common.jobopenings.JobOpeningContent
 import com.fone.filmone.data.datamodel.common.jobopenings.JobOpenings
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.jobopenings.Work
@@ -68,7 +68,7 @@ class ScrapViewModel @Inject constructor(
         workTitle = "workTitle"
     )
 
-    fun fakeJobContent() = JobOpening(
+    fun fakeJobContent() = JobOpeningContent(
         ageMax = 20,
         ageMin = 0,
         career = Career.IRRELEVANT,
@@ -94,8 +94,17 @@ class ScrapViewModel @Inject constructor(
         unsorted = false
     )
 
+    val fakePageable = Pageable(
+        sort = fakeSort,
+        offset = 1,
+        paged = false,
+        pageNumber = 1,
+        pageSize = 1,
+        unpaged = false
+    )
+
     val fakeJobOpenings = JobOpenings(
-        jobOpening = listOf(
+        content = listOf(
             fakeJobContent(),
             fakeJobContent(),
             fakeJobContent(),
@@ -109,9 +118,11 @@ class ScrapViewModel @Inject constructor(
         last = false,
         number = 1,
         numberOfElements = 1,
-        pageable = Pageable(),
+        pageable = fakePageable,
         size = 1,
-        sort = fakeSort
+        sort = fakeSort,
+        totalElements = 1,
+        totalPages = 1
     )
 
     val fakeCompetitionPrizes = CompetitionPrize(
@@ -156,7 +167,7 @@ class ScrapViewModel @Inject constructor(
         last = false,
         number = 0,
         numberOfElements = 0,
-        pageable = Pageable(),
+        pageable = fakePageable,
         size = 0,
         sort = fakeSort
     )
@@ -204,8 +215,8 @@ private data class ScarpViewModelState(
     val competitionsResponse: CompetitionsResponse? = null,
 ) {
     fun toUiState(): ScrapUiState {
-        val actorContents = actorJobOpenings?.jobOpening ?: emptyList()
-        val staffContents = staffJobOpenings?.jobOpening ?: emptyList()
+        val actorContents = actorJobOpenings?.content ?: emptyList()
+        val staffContents = staffJobOpenings?.content ?: emptyList()
         val combinedContents = (actorContents + staffContents).sortedBy { it.id }
 
         return ScrapUiState(

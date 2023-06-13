@@ -69,17 +69,11 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
         }
     }
 
-    fun updateRecruitmentDomains(domain: Domain, enable: Boolean) {
+    fun updateRecruitmentDomains(domains: Set<Domain>) {
         viewModelState.update { state ->
             state.copy(
                 staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
-                    recruitmentDomains = if (enable) {
-                        state.staffRecruitingStep1UiModel.recruitmentDomains + setOf(domain)
-                    } else {
-                        state.staffRecruitingStep1UiModel.recruitmentDomains
-                            .filterNot { it == domain }
-                            .toSet()
-                    }
+                    recruitmentDomains = domains
                 )
             )
         }

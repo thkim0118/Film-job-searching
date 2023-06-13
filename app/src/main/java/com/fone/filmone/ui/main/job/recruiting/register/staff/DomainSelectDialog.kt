@@ -36,7 +36,7 @@ import com.fone.filmone.ui.theme.LocalTypography
 fun DomainSelectDialog(
     modifier: Modifier = Modifier,
     selectedDomains: List<Domain>,
-    onDismissRequest: () -> Unit = {},
+    onDismissRequest: (List<Domain>) -> Unit = {},
     properties: DialogProperties = DialogProperties(
         usePlatformDefaultWidth = false
     ),
@@ -53,10 +53,14 @@ fun DomainSelectDialog(
         modifier = Modifier
             .fillMaxSize()
             .background(FColor.DimColorThin)
-            .clickable(onClick = onDismissRequest)
+            .clickable(onClick = {
+                onDismissRequest(newSelectedDomains)
+            })
     ) {
         Dialog(
-            onDismissRequest = onDismissRequest,
+            onDismissRequest = {
+                onDismissRequest(newSelectedDomains)
+            },
             properties = properties,
         ) {
             Column(
@@ -86,7 +90,7 @@ fun DomainSelectDialog(
                                 top.linkTo(parent.top, margin = 13.dp)
                                 end.linkTo(parent.end, margin = 20.dp)
                             }
-                            .clickable { onDismissRequest() },
+                            .clickable { onDismissRequest(newSelectedDomains) },
                         imageVector = ImageVector.vectorResource(id = R.drawable.staff_recruiting_dialog_close),
                         contentDescription = null
                     )

@@ -13,7 +13,7 @@ data class JobTabFilterVo(
     val domains: List<Domain>?,
     val genders: List<Gender>,
     val page: Int = 20,
-    val size: Int = 1,
+    val size: Int,
     val sort: SortType = SortType.ASC,
     val type: Type,
 )

@@ -156,9 +156,13 @@ fun StaffProfileRegisterScreen(
             }
         }
 
-        DialogScreen(dialogState = dialogState, onDismiss = {
-            viewModel.updateDialogState(StaffProfileRegisterDialogState.Clear)
-        })
+        DialogScreen(
+            dialogState = dialogState,
+            onDismiss = { domains ->
+                viewModel.updateRecruitmentDomains(domains.toSet())
+                viewModel.updateDialogState(StaffProfileRegisterDialogState.Clear)
+            }
+        )
     }
 }
 
@@ -275,15 +279,15 @@ private fun UserInfoInputComponent(
 @Composable
 private fun DialogScreen(
     dialogState: StaffProfileRegisterDialogState,
-    onDismiss: () -> Unit
+    onDismiss: (List<Domain>) -> Unit
 ) {
     when (dialogState) {
         StaffProfileRegisterDialogState.Clear -> Unit
         is StaffProfileRegisterDialogState.DomainSelectDialog -> {
             DomainSelectDialog(
                 selectedDomains = dialogState.selectedDomains,
-                onDismissRequest = {
-                    onDismiss()
+                onDismissRequest = { domains ->
+                    onDismiss(domains)
                 }
             )
         }

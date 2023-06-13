@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class JobScreenSharedViewModel @Inject constructor(
@@ -52,13 +51,21 @@ class JobScreenSharedViewModel @Inject constructor(
                 categories = Category.values().toList(),
                 domains = Domain.values().toList(),
                 genders = Gender.values().toList(),
-                type = userType
+                type = userType,
+                size = 0
             )
 
-            fetchActorJobOpenings(initJobTabFilterVo)
-            fetchActorProfile(initJobTabFilterVo)
-            fetchStaffJobOpenings(initJobTabFilterVo)
-            fetchStaffProfile(initJobTabFilterVo)
+            when (userType) {
+                Type.ACTOR -> {
+                    fetchActorJobOpenings(initJobTabFilterVo)
+                    fetchActorProfile(initJobTabFilterVo)
+                }
+
+                Type.STAFF -> {
+                    fetchStaffJobOpenings(initJobTabFilterVo)
+                    fetchStaffProfile(initJobTabFilterVo)
+                }
+            }
         }
     }
 
@@ -67,7 +74,10 @@ class JobScreenSharedViewModel @Inject constructor(
             .onSuccess { response ->
                 if (response != null) {
                     viewModelState.update {
-                        it.copy(actorJobOpenings = response.jobOpenings)
+                        it.copy(
+                            actorJobOpenings = response.jobOpenings,
+                            staffJobOpenings = null
+                        )
                     }
                 }
             }
@@ -78,7 +88,10 @@ class JobScreenSharedViewModel @Inject constructor(
             .onSuccess { response ->
                 if (response != null) {
                     viewModelState.update {
-                        it.copy(actorProfiles = response.profiles)
+                        it.copy(
+                            actorProfiles = response.profiles,
+                            staffProfiles = null
+                        )
                     }
                 }
             }
@@ -89,7 +102,10 @@ class JobScreenSharedViewModel @Inject constructor(
             .onSuccess { response ->
                 if (response != null) {
                     viewModelState.update {
-                        it.copy(staffJobOpenings = response.jobOpenings)
+                        it.copy(
+                            staffJobOpenings = response.jobOpenings,
+                            actorJobOpenings = null
+                        )
                     }
                 }
             }
@@ -100,7 +116,10 @@ class JobScreenSharedViewModel @Inject constructor(
             .onSuccess { response ->
                 if (response != null) {
                     viewModelState.update {
-                        it.copy(staffProfiles = response.profiles)
+                        it.copy(
+                            staffProfiles = response.profiles,
+                            actorProfiles = null
+                        )
                     }
                 }
             }
@@ -125,7 +144,8 @@ private data class JobScreenViewModelState(
         categories = emptyList(),
         domains = null,
         genders = emptyList(),
-        type = Type.ACTOR
+        type = Type.ACTOR,
+        size = 0
     ),
     val actorProfilesFilter: JobTabFilterVo = JobTabFilterVo(
         ageMax = 70,
@@ -133,7 +153,8 @@ private data class JobScreenViewModelState(
         categories = emptyList(),
         domains = null,
         genders = emptyList(),
-        type = Type.ACTOR
+        type = Type.ACTOR,
+        size = 0
     ),
     val staffJobOpeningsFilter: JobTabFilterVo = JobTabFilterVo(
         ageMax = 70,
@@ -141,7 +162,8 @@ private data class JobScreenViewModelState(
         categories = emptyList(),
         domains = null,
         genders = emptyList(),
-        type = Type.ACTOR
+        type = Type.ACTOR,
+        size = 0
     ),
     val staffProfilesFilter: JobTabFilterVo = JobTabFilterVo(
         ageMax = 70,
@@ -149,12 +171,13 @@ private data class JobScreenViewModelState(
         categories = emptyList(),
         domains = null,
         genders = emptyList(),
-        type = Type.ACTOR
+        type = Type.ACTOR,
+        size = 0
     )
 ) {
     fun toUiState(): JobScreenUiState = JobScreenUiState(
         type = userType,
-        jobOpeningsUiModel = actorJobOpenings?.jobOpening?.map { content ->
+        jobOpeningsUiModel = actorJobOpenings?.content?.map { content ->
             JobTabJobOpeningUiModel(
                 categories = content.categories,
                 title = content.title,
@@ -162,12 +185,28 @@ private data class JobScreenViewModelState(
                 director = content.work.director,
                 gender = content.gender,
                 period = content.dday,
-//                    jobType = JobType.PART, // TODO 어떤 값을 써야하는지 찾아야함.
-                jobType = JobType.values()[Random.nextInt(JobType.values().lastIndex)],
+                jobType = JobType.PART,
+                casting = content.casting
+            )
+        } ?: staffJobOpenings?.content?.map { content ->
+            JobTabJobOpeningUiModel(
+                categories = content.categories,
+                title = content.title,
+                deadline = content.deadline,
+                director = content.work.director,
+                gender = content.gender,
+                period = content.dday,
+                jobType = JobType.Field,
                 casting = content.casting
             )
         } ?: emptyList(),
         profileUiModels = actorProfiles?.content?.map { content ->
+            ProfilesUiModel(
+                profileUrl = content.profileUrl,
+                name = content.name,
+                info = "${content.birthday.slice(0..3)}년생 (${content.age}살)"
+            )
+        } ?: staffProfiles?.content?.map { content ->
             ProfilesUiModel(
                 profileUrl = content.profileUrl,
                 name = content.name,
