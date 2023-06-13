@@ -21,7 +21,7 @@ import javax.inject.Singleton
 object NetworkModule {
     private const val connectionTime = 30_000L
     private const val baseUrl = "http://3.39.0.194/api/"
-    private const val smsBaseUrl = "https://54d38vfw3c.execute-api.ap-northeast-1.amazonaws.com/"
+    private const val smsBaseUrl = "https://du646e9qh1.execute-api.ap-northeast-2.amazonaws.com/"
     private const val imageUploadBaseUrl =
         "https://du646e9qh1.execute-api.ap-northeast-2.amazonaws.com/"
 

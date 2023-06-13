@@ -89,7 +89,15 @@ fun StaffProfileRegisterScreen(
                 )
 
                 Column(modifier = Modifier.verticalScroll(scrollState)) {
-                    PictureComponent(pictureUriList = uiState.pictureUriList)
+                    PictureComponent(
+                        pictureList = uiState.pictureList,
+                        onUpdateProfileImage = { encodedString ->
+                            viewModel.updateImage(encodedString = encodedString, false)
+                        },
+                        onRemoveImage = { encodedString ->
+                            viewModel.updateImage(encodedString = encodedString, remove = true)
+                        }
+                    )
 
                     Divider(thickness = 8.dp, color = FColor.Divider2)
 

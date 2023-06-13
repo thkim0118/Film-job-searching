@@ -168,6 +168,22 @@ class ActorProfileRegisterViewModel @Inject constructor(
         }
     }
 
+    fun updateImage(encodedString: String, remove: Boolean) {
+        viewModelState.update { state ->
+            state.copy(
+                pictureList = if (remove) {
+                    val copyList = state.pictureList.toMutableList().apply {
+                        remove(encodedString)
+                    }
+
+                    copyList
+                } else {
+                    state.pictureList + encodedString
+                }
+            )
+        }
+    }
+
     private fun updateRegisterButtonState() {
         val modelState = viewModelState.value
         val birthDayPattern = Pattern.compile("^(\\d{4})-(0[1-9]|1[0-2])-(0\\d|[1-2]\\d|3[0-1])+$")
@@ -182,9 +198,11 @@ class ActorProfileRegisterViewModel @Inject constructor(
         )
 
         val isEnable = modelState.name.isNotEmpty() && modelState.hookingComments.isNotEmpty() &&
-                modelState.birthday.isNotEmpty() && birthDayPattern.matcher(modelState.birthday).matches() &&
+                modelState.birthday.isNotEmpty() && birthDayPattern.matcher(modelState.birthday)
+            .matches() &&
                 modelState.height.isNotEmpty() && modelState.weight.isNotEmpty() && modelState.email.isNotEmpty() &&
-                emailPattern.matcher(modelState.email).matches() && modelState.detailInfo.isNotEmpty()
+                emailPattern.matcher(modelState.email)
+                    .matches() && modelState.detailInfo.isNotEmpty()
 
         viewModelState.update { state ->
             state.copy(registerButtonEnable = isEnable)
@@ -193,7 +211,7 @@ class ActorProfileRegisterViewModel @Inject constructor(
 }
 
 private data class ActorProfileRegisterViewModelState(
-    val pictureUriList: List<Uri> = emptyList(),
+    val pictureList: List<String> = emptyList(),
     val name: String = "",
     val hookingComments: String = "",
     val commentsTextLimit: Int = 50,
@@ -215,7 +233,7 @@ private data class ActorProfileRegisterViewModelState(
     val registerButtonEnable: Boolean = false,
 ) {
     fun toUiState(): ActorProfileRegisterUiModel = ActorProfileRegisterUiModel(
-        pictureUriList = pictureUriList,
+        pictureList = pictureList,
         name = name,
         hookingComments = hookingComments,
         commentsTextLimit = commentsTextLimit,
@@ -239,7 +257,7 @@ private data class ActorProfileRegisterViewModelState(
 }
 
 data class ActorProfileRegisterUiModel(
-    val pictureUriList: List<Uri>,
+    val pictureList: List<String>,
     val name: String,
     val hookingComments: String,
     val commentsTextLimit: Int,

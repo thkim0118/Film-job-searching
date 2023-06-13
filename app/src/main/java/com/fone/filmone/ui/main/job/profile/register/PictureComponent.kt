@@ -1,6 +1,9 @@
 package com.fone.filmone.ui.main.job.profile.register
 
+import android.graphics.Bitmap
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,17 +15,26 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
@@ -31,18 +43,39 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.R
+import com.fone.filmone.core.image.ImageBase64Util
+import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.Pretendard
 import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun PictureComponent(
     modifier: Modifier = Modifier,
-    pictureUriList: List<Uri>,
+    pictureList: List<String>,
+    limit: Int = 9,
+    onUpdateProfileImage: (String) -> Unit,
+    onRemoveImage: (String) -> Unit,
 ) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri: Uri? ->
+            coroutineScope.launch(Dispatchers.IO) {
+                uri?.let {
+                    val encodeString = ImageBase64Util.encodeToString(context, it)
+                    onUpdateProfileImage(encodeString)
+                }
+            }
+        }
+    )
+
     @Composable
     fun PictureRegisterItem(
         modifier: Modifier = Modifier
@@ -53,7 +86,7 @@ fun PictureComponent(
                 .clip(shape = RoundedCornerShape(5.dp))
                 .background(
                     shape = RoundedCornerShape(5.dp),
-                    color = if (pictureUriList.isEmpty()) {
+                    color = if (pictureList.isEmpty()) {
                         FColor.DisableBase
                     } else {
                         FColor.Secondary1
@@ -77,14 +110,14 @@ fun PictureComponent(
                                 color = FColor.BgGroupedBase
                             )
                         ) {
-                            append("${pictureUriList.size} /")
+                            append("${pictureList.size} /")
                         }
                         withStyle(
                             SpanStyle(
                                 color = FColor.White
                             )
                         ) {
-                            append(" 9")
+                            append(" $limit")
                         }
                     },
                     fontWeight = FontWeight.W400,
@@ -99,13 +132,18 @@ fun PictureComponent(
     @Composable
     fun RegisteredPicture(
         modifier: Modifier = Modifier,
-        imageUri: Uri,
+        encodedImageString: String,
         isRepresentativeItem: Boolean
     ) {
         val backgroundModifier = modifier
             .size(80.dp)
             .clip(shape = RoundedCornerShape(5.dp))
             .background(shape = RoundedCornerShape(5.dp), color = FColor.DisableBase)
+        var decodedBitmap: Bitmap? by remember { mutableStateOf(null) }
+
+        LaunchedEffect(key1 = encodedImageString) {
+            decodedBitmap = ImageBase64Util.decodeToBitmap(encodedImageString)
+        }
 
         Box(modifier = backgroundModifier) {
             GlideImage(
@@ -117,22 +155,16 @@ fun PictureComponent(
                     dropOff = 0.65f,
                     tilt = 20f
                 ),
-                imageModel = imageUri,
+                imageModel = decodedBitmap,
                 contentScale = ContentScale.Crop,
-                failure = {
-                    Image(
-                        modifier = Modifier
-                            .align(Alignment.Center),
-                        imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
-                        contentDescription = null
-                    )
-                }
             )
 
             Image(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .padding(top = 4.dp, end = 4.dp),
+                    .padding(top = 4.dp, end = 4.dp)
+                    .clip(shape = CircleShape)
+                    .clickableSingle { onRemoveImage(encodedImageString) },
                 imageVector = ImageVector.vectorResource(id = R.drawable.profile_register_close_button_16px),
                 contentDescription = null
             )
@@ -140,6 +172,7 @@ fun PictureComponent(
             if (isRepresentativeItem) {
                 Box(
                     modifier = Modifier
+                        .align(Alignment.BottomCenter)
                         .clip(shape = RoundedCornerShape(100.dp))
                         .background(
                             shape = RoundedCornerShape(100.dp),
@@ -148,7 +181,8 @@ fun PictureComponent(
                 ) {
                     Text(
                         modifier = Modifier
-                            .align(Alignment.Center),
+                            .align(Alignment.Center)
+                            .padding(vertical = 2.dp, horizontal = 9.5.dp),
                         text = stringResource(id = R.string.profile_register_gallery_representative),
                         style = fTextStyle(
                             fontWeight = FontWeight.W400,
@@ -166,14 +200,31 @@ fun PictureComponent(
         Spacer(modifier = Modifier.height(20.dp))
 
         Row(modifier = Modifier) {
-            PictureRegisterItem(modifier = Modifier.padding(start = 16.dp))
+            PictureRegisterItem(
+                modifier = Modifier
+                    .padding(start = 16.dp)
+                    .clickableSingle {
+                        if (pictureList.size >= limit) {
+                            return@clickableSingle
+                        }
+
+                        launcher.launch("image/*")
+                    }
+            )
 
             LazyRow(
                 modifier = Modifier,
                 contentPadding = PaddingValues(horizontal = 7.dp)
             ) {
-                itemsIndexed(pictureUriList) { index, uri ->
-                    RegisteredPicture(imageUri = uri, isRepresentativeItem = index == 0)
+                itemsIndexed(pictureList) { index, encodedString ->
+                    RegisteredPicture(
+                        encodedImageString = encodedString,
+                        isRepresentativeItem = index == 0
+                    )
+
+                    if (index != pictureList.lastIndex) {
+                        Spacer(modifier = Modifier.width(7.dp))
+                    }
                 }
             }
         }

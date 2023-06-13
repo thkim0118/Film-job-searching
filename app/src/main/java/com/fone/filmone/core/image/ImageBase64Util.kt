@@ -34,9 +34,9 @@ object ImageBase64Util {
             Base64.encodeToString(byteArray, Base64.DEFAULT)
         }
 
-    suspend fun decodeToBitmap(base64String: String) = flow {
+    suspend fun decodeToBitmap(base64String: String): Bitmap = withContext(Dispatchers.IO) {
         val encodeByte = Base64.decode(base64String, Base64.DEFAULT)
 
-        emit(BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size))
+        BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
     }
 }

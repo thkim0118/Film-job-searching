@@ -7,7 +7,6 @@ import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Domain
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.ui.common.base.BaseViewModel
-import com.fone.filmone.ui.main.job.recruiting.register.staff.StaffRecruitingRegisterDialogState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -173,6 +172,22 @@ class StaffProfileRegisterViewModel @Inject constructor(
         }
     }
 
+    fun updateImage(encodedString: String, remove: Boolean) {
+        viewModelState.update { state ->
+            state.copy(
+                pictureList = if (remove) {
+                    val copyList = state.pictureList.toMutableList().apply {
+                        remove(encodedString)
+                    }
+
+                    copyList
+                } else {
+                    state.pictureList + encodedString
+                }
+            )
+        }
+    }
+
     private fun updateRegisterButtonState() {
         val modelState = viewModelState.value
         val birthDayPattern = Pattern.compile("^(\\d{4})-(0[1-9]|1[0-2])-(0\\d|[1-2]\\d|3[0-1])+$")
@@ -199,7 +214,7 @@ class StaffProfileRegisterViewModel @Inject constructor(
 }
 
 private data class StaffProfileRegisterViewModelState(
-    val pictureUriList: List<Uri> = emptyList(),
+    val pictureList: List<String> = emptyList(),
     val name: String = "",
     val hookingComments: String = "",
     val commentsTextLimit: Int = 50,
@@ -220,7 +235,7 @@ private data class StaffProfileRegisterViewModelState(
     val registerButtonEnable: Boolean = false,
 ) {
     fun toUiState(): StaffProfileRegisterUiModel = StaffProfileRegisterUiModel(
-        pictureUriList = pictureUriList,
+        pictureList = pictureList,
         name = name,
         hookingComments = hookingComments,
         commentsTextLimit = commentsTextLimit,
@@ -243,7 +258,7 @@ private data class StaffProfileRegisterViewModelState(
 }
 
 data class StaffProfileRegisterUiModel(
-    val pictureUriList: List<Uri>,
+    val pictureList: List<String>,
     val name: String,
     val hookingComments: String,
     val commentsTextLimit: Int,
