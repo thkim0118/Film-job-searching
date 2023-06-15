@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
@@ -77,11 +76,33 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
     fun updateDeadlineDate(deadlineDate: String) {
         viewModelState.update { state ->
             state.copy(
-                staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(deadlineDate = deadlineDate)
+                staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
+                    deadlineDate = deadlineDate,
+                    deadlineTagEnable = if (deadlineDate.isNotEmpty()) {
+                        false
+                    } else {
+                        state.staffRecruitingStep1UiModel.deadlineTagEnable
+                    }
+                )
             )
         }
 
         updateRegisterButtonState()
+    }
+
+    fun updateDeadlineTag(enable: Boolean) {
+        viewModelState.update { state ->
+            state.copy(
+                staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
+                    deadlineTagEnable = enable,
+                    deadlineDate = if (enable) {
+                        ""
+                    } else {
+                        state.staffRecruitingStep1UiModel.deadlineDate
+                    }
+                )
+            )
+        }
     }
 
     fun updateRecruitmentDomains(domains: Set<Domain>) {
@@ -118,17 +139,23 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
                         state.staffRecruitingStep1UiModel.recruitmentGender
                             .filterNot { recruitmentGender -> recruitmentGender == gender }
                             .toSet()
-                    }
+                    },
+                    genderTagEnable = state.staffRecruitingStep1UiModel.recruitmentGender.isEmpty() && enable.not()
                 )
             )
         }
     }
 
-    fun updateAgeRangeReset() {
+    fun updateGenderTag(enable: Boolean) {
         viewModelState.update { state ->
             state.copy(
                 staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
-                    ageRange = 1f..70f
+                    genderTagEnable = enable,
+                    recruitmentGender = if (enable) {
+                        emptySet()
+                    } else {
+                        state.staffRecruitingStep1UiModel.recruitmentGender
+                    }
                 )
             )
         }
@@ -138,7 +165,23 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
         viewModelState.update { state ->
             state.copy(
                 staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
-                    ageRange = ageRange
+                    ageRange = ageRange,
+                    ageTagEnable = ageRange == state.staffRecruitingStep1UiModel.defaultAgeRange
+                )
+            )
+        }
+    }
+
+    fun updateAgeTag(enable: Boolean) {
+        viewModelState.update { state ->
+            state.copy(
+                staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
+                    ageTagEnable = enable,
+                    ageRange = if (enable) {
+                        state.staffRecruitingStep1UiModel.defaultAgeRange
+                    } else {
+                        state.staffRecruitingStep1UiModel.ageRange
+                    }
                 )
             )
         }
@@ -152,6 +195,22 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
                         career
                     } else {
                         null
+                    },
+                    careerTagEnable = enable.not()
+                )
+            )
+        }
+    }
+
+    fun updateCareerTag(enable: Boolean) {
+        viewModelState.update { state ->
+            state.copy(
+                staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
+                    careerTagEnable = enable,
+                    career = if (enable) {
+                        null
+                    } else {
+                        state.staffRecruitingStep1UiModel.career
                     }
                 )
             )
@@ -230,7 +289,27 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
         viewModelState.update { state ->
             state.copy(
                 staffRecruitingStep3UiModel = state.staffRecruitingStep3UiModel.copy(
-                    location = location
+                    location = location,
+                    locationTagEnable = if (location.isNotEmpty()) {
+                        false
+                    } else {
+                        state.staffRecruitingStep3UiModel.locationTagEnable
+                    }
+                )
+            )
+        }
+    }
+
+    fun updateLocationTag(enable: Boolean) {
+        viewModelState.update { state ->
+            state.copy(
+                staffRecruitingStep3UiModel = state.staffRecruitingStep3UiModel.copy(
+                    locationTagEnable = enable,
+                    location = if (enable) {
+                        ""
+                    } else {
+                        state.staffRecruitingStep3UiModel.location
+                    }
                 )
             )
         }
@@ -240,7 +319,27 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
         viewModelState.update { state ->
             state.copy(
                 staffRecruitingStep3UiModel = state.staffRecruitingStep3UiModel.copy(
-                    period = period
+                    period = period,
+                    periodTagEnable = if (period.isNotEmpty()) {
+                        false
+                    } else {
+                        state.staffRecruitingStep3UiModel.periodTagEnable
+                    }
+                )
+            )
+        }
+    }
+
+    fun updatePeriodTag(enable: Boolean) {
+        viewModelState.update { state ->
+            state.copy(
+                staffRecruitingStep3UiModel = state.staffRecruitingStep3UiModel.copy(
+                    periodTagEnable = enable,
+                    period = if (enable) {
+                        ""
+                    } else {
+                        state.staffRecruitingStep3UiModel.period
+                    }
                 )
             )
         }
@@ -250,37 +349,27 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
         viewModelState.update { state ->
             state.copy(
                 staffRecruitingStep3UiModel = state.staffRecruitingStep3UiModel.copy(
-                    pay = pay
+                    pay = pay,
+                    payTagEnable = if (pay.isNotEmpty()) {
+                        false
+                    } else {
+                        state.staffRecruitingStep3UiModel.payTagEnable
+                    }
                 )
             )
         }
     }
 
-    fun updateLocationTagEnable() {
+    fun updatePayTag(enable: Boolean) {
         viewModelState.update { state ->
             state.copy(
                 staffRecruitingStep3UiModel = state.staffRecruitingStep3UiModel.copy(
-                    locationTagEnable = state.staffRecruitingStep3UiModel.locationTagEnable.not()
-                )
-            )
-        }
-    }
-
-    fun updatePeriodTagEnable() {
-        viewModelState.update { state ->
-            state.copy(
-                staffRecruitingStep3UiModel = state.staffRecruitingStep3UiModel.copy(
-                    periodTagEnable = state.staffRecruitingStep3UiModel.periodTagEnable.not()
-                )
-            )
-        }
-    }
-
-    fun updatePayTagEnable() {
-        viewModelState.update { state ->
-            state.copy(
-                staffRecruitingStep3UiModel = state.staffRecruitingStep3UiModel.copy(
-                    payTagEnable = state.staffRecruitingStep3UiModel.payTagEnable.not()
+                    payTagEnable = enable,
+                    pay = if (enable) {
+                        ""
+                    } else {
+                        state.staffRecruitingStep3UiModel.pay
+                    }
                 )
             )
         }
@@ -374,12 +463,16 @@ data class StaffRecruitingStep1UiModel(
     val titleTextLimit: Int = 50,
     val categories: Set<Category> = emptySet(),
     val deadlineDate: String = "",
+    val deadlineTagEnable: Boolean = true,
     val recruitmentDomains: Set<Domain> = emptySet(),
     val recruitmentNumber: String = "",
     val recruitmentGender: Set<Gender> = emptySet(),
+    val genderTagEnable: Boolean = true,
     val ageRange: ClosedFloatingPointRange<Float> = 1f..70f,
+    val ageTagEnable: Boolean = true,
     val defaultAgeRange: ClosedFloatingPointRange<Float> = 1f..70f,
-    val career: Career? = null
+    val career: Career? = null,
+    val careerTagEnable: Boolean = true,
 )
 
 data class StaffRecruitingStep2UiModel(
@@ -396,9 +489,9 @@ data class StaffRecruitingStep3UiModel(
     val location: String = "",
     val period: String = "",
     val pay: String = "",
-    val locationTagEnable: Boolean = false,
-    val periodTagEnable: Boolean = false,
-    val payTagEnable: Boolean = false,
+    val locationTagEnable: Boolean = true,
+    val periodTagEnable: Boolean = true,
+    val payTagEnable: Boolean = true,
 )
 
 data class StaffRecruitingStep4UiModel(
