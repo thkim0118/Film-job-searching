@@ -203,7 +203,7 @@ private fun UserInfoInputComponent(
     sns: String,
     onNameChanged: (String) -> Unit,
     onUpdateBirthday: (String) -> Unit,
-    onUpdateGender: (Gender) -> Unit,
+    onUpdateGender: (Gender, Boolean) -> Unit,
     onUpdateGenderTag: (Boolean) -> Unit,
     onUpdateComments: (String) -> Unit,
     onUpdateHeight: (String) -> Unit,

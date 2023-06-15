@@ -28,7 +28,7 @@ fun BirthdayInputComponent(
     currentGender: Gender?,
     onUpdateBirthday: (String) -> Unit,
     onUpdateGenderTag: (Boolean) -> Unit,
-    onUpdateGender: (Gender) -> Unit,
+    onUpdateGender: (Gender, Boolean) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -79,7 +79,7 @@ fun BirthdayInputComponent(
                     text = stringResource(id = R.string.gender_man),
                     enable = currentGender == Gender.MAN,
                     onClick = {
-                        onUpdateGender(Gender.MAN)
+                        onUpdateGender(Gender.MAN, (currentGender == Gender.MAN).not())
                     }
                 )
 
@@ -89,7 +89,7 @@ fun BirthdayInputComponent(
                     text = stringResource(id = R.string.gender_woman),
                     enable = currentGender == Gender.WOMAN,
                     onClick = {
-                        onUpdateGender(Gender.WOMAN)
+                        onUpdateGender(Gender.WOMAN, (currentGender == Gender.WOMAN).not())
                     }
                 )
             },

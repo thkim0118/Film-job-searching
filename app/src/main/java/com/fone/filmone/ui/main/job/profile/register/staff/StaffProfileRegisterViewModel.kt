@@ -64,9 +64,16 @@ class StaffProfileRegisterViewModel @Inject constructor(
         updateRegisterButtonState()
     }
 
-    fun updateGender(gender: Gender) {
+    fun updateGender(gender: Gender, enable: Boolean) {
         viewModelState.update { state ->
-            state.copy(gender = gender)
+            state.copy(
+                gender = gender,
+                genderTagEnable = if (enable) {
+                    false
+                } else {
+                    state.genderTagEnable
+                }
+            )
         }
     }
 
@@ -77,7 +84,8 @@ class StaffProfileRegisterViewModel @Inject constructor(
                     Gender.IRRELEVANT
                 } else {
                     null
-                }
+                },
+                genderTagEnable = enable
             )
         }
     }
@@ -166,6 +174,13 @@ class StaffProfileRegisterViewModel @Inject constructor(
                     state.categories + setOf(category)
                 } else {
                     state.categories.filterNot { it == category }.toSet()
+                },
+                categoryTagEnable = if (enable.not()) {
+                    false
+                } else if (enable && state.categories.size + 1 == Category.values().size) {
+                    true
+                } else {
+                    state.categoryTagEnable
                 }
             )
         }
