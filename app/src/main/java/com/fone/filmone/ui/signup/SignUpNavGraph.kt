@@ -73,13 +73,16 @@ fun NavGraphBuilder.signUpNavGraph(
         val nickname =
             navBackStackEntry.arguments?.getString(FOneDestinations.SignUpComplete.argNickname)
                 ?: return@composable
+        val password =
+            navBackStackEntry.arguments?.getString(FOneDestinations.SignUpComplete.argPassword)
 
         SignUpCompleteScreen(
             modifier = modifier,
             accessToken = accessToken,
             email = email,
-            socialLoginType = socialLoginType,
-            nickname = nickname
+            loginType = socialLoginType,
+            nickname = nickname,
+            password = password
         )
     }
 }

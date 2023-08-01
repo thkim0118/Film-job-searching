@@ -7,22 +7,26 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.fone.filmone.ui.email.find.FindScreen
+import com.fone.filmone.ui.email.join.EmailJoinScreen
 import com.fone.filmone.ui.favorite.FavoriteScreen
 import com.fone.filmone.ui.inquiry.InquiryScreen
 import com.fone.filmone.ui.login.LoginScreen
+import com.fone.filmone.ui.email.login.EmailLoginScreen
 import com.fone.filmone.ui.main.MainScreen
 import com.fone.filmone.ui.main.job.filter.actor.ActorFilterScreen
 import com.fone.filmone.ui.main.job.filter.staff.StaffFilterScreen
-import com.fone.filmone.ui.main.job.profile.article.actor.ActorProfileArticleScreen
-import com.fone.filmone.ui.main.job.profile.article.staff.StaffProfileArticleScreen
-import com.fone.filmone.ui.main.job.profile.register.actor.ActorProfileRegisterScreen
-import com.fone.filmone.ui.main.job.profile.register.staff.StaffProfileRegisterScreen
-import com.fone.filmone.ui.main.job.recruiting.article.actor.ActorRecruitingArticleScreen
-import com.fone.filmone.ui.main.job.recruiting.article.staff.StaffRecruitingArticleScreen
-import com.fone.filmone.ui.main.job.recruiting.register.actor.ActorRecruitingRegisterScreen
-import com.fone.filmone.ui.main.job.recruiting.register.staff.StaffRecruitingRegisterScreen
 import com.fone.filmone.ui.myinfo.MyInfoScreen
 import com.fone.filmone.ui.myregister.MyRegisterScreen
+import com.fone.filmone.ui.profile.detail.actor.ActorProfileDetailScreen
+import com.fone.filmone.ui.profile.detail.staff.StaffProfileDetailScreen
+import com.fone.filmone.ui.profile.list.ProfileListScreen
+import com.fone.filmone.ui.profile.register.actor.ActorProfileRegisterScreen
+import com.fone.filmone.ui.profile.register.staff.StaffProfileRegisterScreen
+import com.fone.filmone.ui.recruiting.detail.actor.ActorRecruitingDetailScreen
+import com.fone.filmone.ui.recruiting.detail.staff.StaffRecruitingDetailScreen
+import com.fone.filmone.ui.recruiting.register.actor.ActorRecruitingRegisterScreen
+import com.fone.filmone.ui.recruiting.register.staff.StaffRecruitingRegisterScreen
 import com.fone.filmone.ui.scrap.ScrapScreen
 import com.fone.filmone.ui.signup.signUpNavGraph
 import com.fone.filmone.ui.splash.SplashScreen
@@ -87,11 +91,17 @@ fun FOneNavGraph(
         composable(FOneDestinations.StaffRecruitingRegister.route) {
             StaffRecruitingRegisterScreen(navController = navController)
         }
-        composable(FOneDestinations.ActorRecruitingArticle.route) {
-            ActorRecruitingArticleScreen()
+        composable(
+            route = FOneDestinations.ActorRecruitingDetail.routeWithArgs,
+            arguments = FOneDestinations.ActorRecruitingDetail.arguments
+        ) {
+            ActorRecruitingDetailScreen(navController = navController)
         }
-        composable(FOneDestinations.StaffRecruitingArticle.route) {
-            StaffRecruitingArticleScreen()
+        composable(
+            route = FOneDestinations.StaffRecruitingDetail.routeWithArgs,
+            arguments = FOneDestinations.StaffRecruitingDetail.arguments
+        ) {
+            StaffRecruitingDetailScreen(navController = navController)
         }
         composable(FOneDestinations.ActorProfileRegister.route) {
             ActorProfileRegisterScreen(navController = navController)
@@ -99,11 +109,35 @@ fun FOneNavGraph(
         composable(FOneDestinations.StaffProfileRegister.route) {
             StaffProfileRegisterScreen(navController = navController)
         }
-        composable(FOneDestinations.ActorProfileArticle.route) {
-            ActorProfileArticleScreen()
+        composable(
+            route = FOneDestinations.ActorProfileDetail.routeWithArgs,
+            arguments = FOneDestinations.ActorProfileDetail.arguments
+        ) {
+            ActorProfileDetailScreen(navController = navController)
         }
-        composable(FOneDestinations.StaffProfileArticle.route) {
-            StaffProfileArticleScreen()
+        composable(FOneDestinations.StaffProfileDetail.route) {
+            StaffProfileDetailScreen()
+        }
+        composable(
+            route = FOneDestinations.ProfileList.routeWithArgs,
+            arguments = FOneDestinations.ProfileList.arguments
+        ) {
+            ProfileListScreen(navController = navController)
+        }
+        composable(
+            route = FOneDestinations.EmailLogin.route
+        ) {
+            EmailLoginScreen(navController = navController)
+        }
+        composable(
+            route = FOneDestinations.FindIdPassword.route
+        ) {
+            FindScreen(navController = navController)
+        }
+        composable(
+            route = FOneDestinations.EmailJoin.route
+        ) {
+            EmailJoinScreen(navController = navController)
         }
     }
 }

@@ -3,6 +3,7 @@ package com.fone.filmone.ui.myinfo
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.user.Category
+import com.fone.filmone.data.datamodel.request.imageupload.UploadingImage
 import com.fone.filmone.data.datamodel.response.user.Job
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
@@ -155,9 +156,20 @@ class MyInfoViewModel @Inject constructor(
         val encodedProfile: String? = _uiState.value.encodedProfile
 
         if (encodedProfile != null) {
-            uploadImageUseCase(encodedProfile)
+            uploadImageUseCase(
+                listOf(
+                    UploadingImage(
+                        imageData = encodedProfile,
+                        resource = UploadImageUseCase.userProfileResource,
+                        stageVariables = UploadImageUseCase.stageVariables
+                    )
+                )
+            )
                 .onSuccess {
-                    updateUserInfoToRemote(it?.imageUrl ?: return@onSuccess, onSuccess = onSuccess)
+                    updateUserInfoToRemote(
+                        profileUrl = it?.firstOrNull()?.imageUrl ?: return@onSuccess,
+                        onSuccess = onSuccess
+                    )
                 }.onFail {
                     showToast(R.string.toast_profile_register_fail)
                 }

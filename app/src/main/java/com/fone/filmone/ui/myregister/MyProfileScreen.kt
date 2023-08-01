@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -13,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -23,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.ui.common.ext.clickableSingle
-import com.fone.filmone.ui.common.ext.fShadow
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 import com.skydoves.landscapist.ShimmerParams
@@ -34,7 +36,11 @@ fun MyProfileScreen(
     modifier: Modifier = Modifier,
     profilePosts: List<RegisterPostProfileUiModel>
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = FColor.Divider2)
+    ) {
         if (profilePosts.isNotEmpty()) {
             LazyColumn(
                 contentPadding = PaddingValues(vertical = 12.dp, horizontal = 16.dp)
@@ -68,15 +74,15 @@ private fun RegisterProfileItem(
 ) {
     val shape = RoundedCornerShape(10.dp)
 
-    Box(
-        modifier = modifier
-            .fShadow(shape = shape)
-            .padding(12.dp)
+    Card(
+        modifier = modifier,
+        shape = shape,
+        backgroundColor = FColor.White
     ) {
-        Row(modifier = Modifier) {
+        Row(modifier = Modifier.padding(12.dp)) {
             GlideImage(
                 modifier = modifier
-                    .fillMaxHeight()
+                    .weight(104f)
                     .aspectRatio(104 / 126f)
                     .clip(shape = shape),
                 shimmerParams = ShimmerParams(
@@ -98,9 +104,11 @@ private fun RegisterProfileItem(
                 }
             )
 
-            Spacer(modifier = Modifier.width(18.dp))
+            Spacer(modifier = Modifier.width(16.dp))
 
-            Column {
+            Column(
+                modifier = Modifier.weight(199f)
+            ) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Row(
@@ -132,6 +140,8 @@ private fun RegisterProfileItem(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Divider(color = FColor.BgGroupedBase)
+
+                Spacer(modifier = Modifier.height(12.dp))
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -172,6 +182,8 @@ private fun RegisterProfileItem(
                         )
                     }
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }

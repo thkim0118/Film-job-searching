@@ -19,5 +19,5 @@ data class User(
     val nickname: String,
     val phoneNumber: String,
     val profileUrl: String,
-    val socialLoginType: SocialLoginType
+    val loginType: LoginType
 )

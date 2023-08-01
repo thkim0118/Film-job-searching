@@ -1,10 +1,9 @@
 package com.fone.filmone.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.fone.filmone.data.datamodel.fakeImageUploadRequest
+import com.fone.filmone.data.datamodel.fakeUploadingImage
 import com.fone.filmone.data.datamodel.fakeImageUploadResponse
-import com.fone.filmone.data.datamodel.request.imageupload.ImageUploadRequest
-import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
+import com.fone.filmone.data.datamodel.request.imageupload.UploadingImage
 import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
@@ -28,18 +27,18 @@ internal class UploadImageUseCaseTest {
         UploadImageUseCase(imageUploadRepository)
     }
 
-    private lateinit var imageUploadRequest: ImageUploadRequest
+    private lateinit var uploadingImage: UploadingImage
     private lateinit var imageUploadResponse: ImageUploadResponse
 
     @Before
     fun setUp() {
-        imageUploadRequest = fakeImageUploadRequest
+        uploadingImage = fakeUploadingImage
         imageUploadResponse = fakeImageUploadResponse
     }
 
     @Test
     fun upload_image_success(): Unit = runBlocking {
-        whenever(imageUploadRepository.uploadImage(imageUploadRequest))
+        whenever(imageUploadRepository.uploadImage(uploadingImage))
             .thenReturn(
                 DataResult.Success(imageUploadResponse)
             )
@@ -54,7 +53,7 @@ internal class UploadImageUseCaseTest {
 
     @Test
     fun upload_image_fail(): Unit = runBlocking {
-        whenever(imageUploadRepository.uploadImage(imageUploadRequest))
+        whenever(imageUploadRepository.uploadImage(uploadingImage))
             .thenReturn(
                 DataResult.Fail(DataFail("", ""))
             )

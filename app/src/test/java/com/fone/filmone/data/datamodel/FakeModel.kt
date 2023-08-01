@@ -1,6 +1,6 @@
 package com.fone.filmone.data.datamodel
 
-import com.fone.filmone.data.datamodel.request.imageupload.ImageUploadRequest
+import com.fone.filmone.data.datamodel.request.imageupload.UploadingImage
 import com.fone.filmone.data.datamodel.request.imageupload.StageVariables
 import com.fone.filmone.data.datamodel.request.inquiry.InquiryRequest
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
@@ -19,7 +19,6 @@ import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.data.datamodel.response.competition.CompetitionPrize
 import com.fone.filmone.data.datamodel.response.competition.Competitions
 import com.fone.filmone.data.datamodel.response.competition.CompetitionsResponse
-import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse
 import com.fone.filmone.data.datamodel.response.inquiry.Question
 import com.fone.filmone.data.datamodel.common.profile.Profiles
@@ -43,7 +42,7 @@ val fakeUser = User(
     nickname = "",
     phoneNumber = "",
     profileUrl = "",
-    socialLoginType = SocialLoginType.APPLE
+    loginType = LoginType.APPLE
 )
 
 val fakeSigninRequest = SigninRequest(
@@ -77,7 +76,7 @@ val fakeSignUpVo = SignUpVo(
     nickname = "nickname",
     phoneNumber = "phoneNumber",
     profileUrl = "profileUrl",
-    socialLoginType = "socialLoginType",
+    loginType = "socialLoginType",
     agreeToTermsOfServiceTermsOfUse = true
 )
 
@@ -95,7 +94,7 @@ val fakeSignUpRequest = SignUpRequest(
     nickname = "nickname",
     phoneNumber = "phoneNumber",
     profileUrl = "profileUrl",
-    socialLoginType = "socialLoginType",
+    loginType = "socialLoginType",
     agreeToTermsOfServiceTermsOfUse = true
 )
 
@@ -126,7 +125,7 @@ val fakeInquiryRequest = InquiryRequest(
 
 val fakeInquiryResponse = InquiryResponse(fakeQuestion)
 
-val fakeImageUploadRequest = ImageUploadRequest(
+val fakeUploadingImage = UploadingImage(
     imageData = "",
     resource = "/image-upload/user-profile",
     stageVariables = StageVariables(
@@ -208,7 +207,7 @@ val fakeCompetitionPrizes = CompetitionPrize(
     ranking = "ranking"
 )
 
-val fakeCompetitionContent = com.fone.filmone.data.datamodel.response.competition.Content(
+val fakeCompetitionCompetitionContent = com.fone.filmone.data.datamodel.response.competition.CompetitionContent(
     agency = "agency",
     competitionPrizes = listOf(fakeCompetitionPrizes),
     dday = "dday",
@@ -227,7 +226,7 @@ val fakeCompetitionContent = com.fone.filmone.data.datamodel.response.competitio
 )
 
 val fakeCompetition = Competitions(
-    content = listOf(fakeCompetitionContent),
+    competitionContent = listOf(fakeCompetitionCompetitionContent),
     empty = false,
     first = false,
     last = false,
@@ -243,7 +242,7 @@ val fakeCompetitionsResponse = CompetitionsResponse(
     totalCount = 1
 )
 
-val fakeProfilesContent = com.fone.filmone.data.datamodel.common.profile.Content(
+val fakeProfilesContent = com.fone.filmone.data.datamodel.common.profile.ProfileContent(
     age = 0,
     birthday = "1234-01-01",
     career = Career.LESS_THAN_10YEARS,

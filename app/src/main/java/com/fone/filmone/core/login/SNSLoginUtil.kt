@@ -3,7 +3,7 @@ package com.fone.filmone.core.login
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import com.fone.filmone.data.datamodel.response.user.SocialLoginType
+import com.fone.filmone.data.datamodel.response.user.LoginType
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 
@@ -13,32 +13,34 @@ class SNSLoginUtil(
 
     fun login(
         context: Context,
-        socialLoginType: SocialLoginType,
+        loginType: LoginType,
         launcher: ActivityResultLauncher<Intent>? = null,
     ) {
-        when (socialLoginType) {
-            SocialLoginType.APPLE -> {
+        when (loginType) {
+            LoginType.APPLE -> {
                 // TODO Firebase Project 에 연결 필요.
                 AppleLoginImpl(loginCallback).login(context)
             }
-            SocialLoginType.GOOGLE -> {
+            LoginType.GOOGLE -> {
                 launcher?.let {
                     GoogleLoginImpl(loginCallback, launcher).login(context)
                 } ?: return
             }
-            SocialLoginType.KAKAO -> {
+            LoginType.KAKAO -> {
                 KakaoLoginImpl(loginCallback).login(context)
             }
-            SocialLoginType.NAVER -> {
+            LoginType.NAVER -> {
                 NaverLoginImpl(loginCallback).login(context)
             }
+
+            else -> {}
         }
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> handleResult(data: T, socialLoginType: SocialLoginType) {
-        when (socialLoginType) {
-            SocialLoginType.GOOGLE -> {
+    fun <T> handleResult(data: T, loginType: LoginType) {
+        when (loginType) {
+            LoginType.GOOGLE -> {
                 val loginInfo =
                     GoogleLoginImpl.getLoginInfo(data as? Task<GoogleSignInAccount> ?: return)
 
@@ -49,7 +51,7 @@ class SNSLoginUtil(
                     loginCallback.onSuccess(
                         token,
                         email,
-                        socialLoginType
+                        loginType
                     )
                 } else {
                     loginCallback.onFail("No AccessToken")
@@ -63,7 +65,7 @@ class SNSLoginUtil(
         fun onSuccess(
             token: String,
             email: String,
-            socialLoginType: SocialLoginType
+            loginType: LoginType
         )
 
         fun onFail(message: String)

@@ -31,6 +31,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
+import com.fone.filmone.ui.common.empty.EmptyScreen
 import com.fone.filmone.ui.common.ext.*
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.shadow.BottomShadow
@@ -53,6 +54,7 @@ fun JobScreen(
     onJobOpeningsFilterClick: () -> Unit,
     onProfileFilterClick: () -> Unit,
     onJobPageChanged: (JobTab) -> Unit,
+    onUpdateUserType: (Type) -> Unit,
     viewModel: JobScreenSharedViewModel = hiltViewModel()
 ) {
     val pagerState = rememberPagerState()
@@ -71,7 +73,10 @@ fun JobScreen(
             pagerState = pagerState,
             coroutineScope = coroutineScope,
             type = uiState.type ?: userType,
-            onTypeClick = viewModel::updateType,
+            onTypeClick = {
+                viewModel.updateType(it)
+                onUpdateUserType(it)
+            },
             currentJobSorting = currentJobSorting,
             onJobSortingClick = {
                 when (currentJobSorting) {
@@ -94,19 +99,50 @@ fun JobScreen(
             when (page) {
                 JobTab.JOB_OPENING.index -> {
                     onJobPageChanged(JobTab.JOB_OPENING)
-                    JobTabJobOpeningsComponent(
-                        jobTabJobOpeningUiModels = uiState.jobOpeningsUiModel,
-                        onLastItemVisible = {
 
+                    if (uiState.jobOpeningsUiModel.isEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(color = FColor.BgGroupedBase)
+                        ) {
+                            EmptyScreen(
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .background(color = FColor.BgGroupedBase),
+                                title = stringResource(id = R.string.job_tab_job_opening_empty_title)
+                            )
                         }
-                    )
+                    } else {
+                        JobTabJobOpeningsComponent(
+                            jobTabJobOpeningUiModels = uiState.jobOpeningsUiModel,
+                            onLastItemVisible = {
+
+                            }
+                        )
+                    }
                 }
 
                 JobTab.PROFILE.index -> {
                     onJobPageChanged(JobTab.PROFILE)
-                    JobTabProfileComponent(
-                        jobTabProfilesUiModels = uiState.profileUiModels
-                    )
+
+                    if (uiState.profileUiModels.isEmpty()) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(color = FColor.BgGroupedBase)
+                        ) {
+                            EmptyScreen(
+                                modifier = Modifier
+                                    .align(Alignment.Center),
+                                title = stringResource(id = R.string.job_tab_profile_empty_title)
+                            )
+                        }
+                    } else {
+                        JobTabProfileComponent(
+                            jobTabProfilesUiModels = uiState.profileUiModels
+                        )
+                    }
                 }
             }
         }

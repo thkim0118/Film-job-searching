@@ -1,10 +1,17 @@
 package com.fone.filmone.data.datasource.remote
 
+import com.fone.filmone.data.datamodel.common.network.NetworkResponse
+import com.fone.filmone.data.datamodel.common.network.Server
+import com.fone.filmone.data.datamodel.request.user.ChangePasswordRequest
+import com.fone.filmone.data.datamodel.request.user.EmailSignInRequest
+import com.fone.filmone.data.datamodel.request.user.EmailSignUpRequest
+import com.fone.filmone.data.datamodel.request.user.EmailValidationRequest
+import com.fone.filmone.data.datamodel.request.user.FindIdRequest
+import com.fone.filmone.data.datamodel.request.user.FindPasswordRequest
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
-import com.fone.filmone.data.datamodel.common.network.NetworkResponse
-import com.fone.filmone.data.datamodel.common.network.Server
+import com.fone.filmone.data.datamodel.request.user.ValidatePasswordRequest
 import com.fone.filmone.data.datamodel.response.user.*
 import retrofit2.Response
 import retrofit2.http.*
@@ -15,12 +22,12 @@ interface UserApi {
         @Query("nickname") nickname: String
     ): Response<NetworkResponse<CheckNicknameDuplicationResponse>>
 
-    @POST("${Server.ApiVersion}/users/sign-up")
+    @POST("${Server.ApiVersion}/users/social/sign-up")
     suspend fun signUp(
         @Body signupRequest: SignUpRequest
     ): Response<NetworkResponse<SignUpResponse>>
 
-    @POST("${Server.ApiVersion}/users/sign-in")
+    @POST("${Server.ApiVersion}/users/social/sign-in")
     suspend fun signIn(
         @Body signInRequest: SigninRequest
     ): Response<NetworkResponse<SigninResponse>>
@@ -37,5 +44,26 @@ interface UserApi {
     ): Response<NetworkResponse<UserResponse>>
 
     @POST("${Server.ApiVersion}/users/log-out")
-    suspend fun logout() :Response<NetworkResponse<Unit>>
+    suspend fun logout(): Response<NetworkResponse<Unit>>
+
+    @POST("${Server.ApiVersion}/users/email/sign-in")
+    suspend fun emailSignIn(@Body emailSignInRequest: EmailSignInRequest): Response<NetworkResponse<EmailSignInResponse>>
+
+    @POST("${Server.ApiVersion}/users/email/sign-up")
+    suspend fun emailSignUp(@Body emailSignUpRequest: EmailSignUpRequest): Response<NetworkResponse<EmailSignUpResponse>>
+
+    @PATCH("${Server.ApiVersion}/users/password")
+    suspend fun changePassword(@Body changePasswordRequest: ChangePasswordRequest): Response<NetworkResponse<Unit>>
+
+    @POST("${Server.ApiVersion}/users/password/validate")
+    suspend fun validatePassword(@Body validatePasswordRequest: ValidatePasswordRequest): Response<NetworkResponse<Unit>>
+
+    @POST("${Server.ApiVersion}/users/sms/find-id")
+    suspend fun findId(@Body findIdRequest: FindIdRequest): Response<NetworkResponse<FindIdResponse>>
+
+    @POST("${Server.ApiVersion}/users/sms/find-password")
+    suspend fun findPassword(@Body findPasswordRequest: FindPasswordRequest): Response<NetworkResponse<FindPasswordResponse>>
+
+    @POST("${Server.ApiVersion}/users/email/validate")
+    suspend fun validateEmail(@Body emailValidationRequest: EmailValidationRequest): Response<NetworkResponse<EmailValidationResponse>>
 }

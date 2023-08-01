@@ -182,6 +182,9 @@ fun MainScreen(
                         },
                         onJobPageChanged = { jobTab ->
                             jobTabScreen = jobTab
+                        },
+                        onUpdateUserType = { type ->
+                            mainViewModel.updateJobTabUserType(type)
                         }
                     )
 

@@ -8,8 +8,19 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,13 +37,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
-import com.fone.filmone.data.datamodel.response.user.SocialLoginType
+import com.fone.filmone.data.datamodel.response.user.LoginType
+import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.fShadow
 import com.fone.filmone.ui.common.ext.textDp
+import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -43,6 +58,7 @@ fun LoginScreen(
     navController: NavController = rememberNavController(),
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+    val scrollState = rememberScrollState()
     val context = LocalContext.current
     val snsLoginUtil = viewModel.localSnsLoginUtil
     val launcher = rememberLauncherForActivityResult(
@@ -51,114 +67,130 @@ fun LoginScreen(
             if (result.resultCode == ComponentActivity.RESULT_OK) {
                 snsLoginUtil.handleResult(
                     GoogleSignIn.getSignedInAccountFromIntent(result.data),
-                    SocialLoginType.GOOGLE
+                    LoginType.GOOGLE
                 )
             }
         }
     )
 
-    Column(
+    Scaffold(
         modifier = modifier
-            .defaultSystemBarPadding()
             .fillMaxSize()
-            .padding(horizontal = 45.dp)
-    ) {
-        Spacer(modifier = Modifier.weight(110f))
-
-        Image(
-            imageVector = ImageVector.vectorResource(id = R.drawable.login_fone_logo),
-            contentDescription = null
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Text(
-            text = stringResource(id = R.string.login_title),
-            style = LocalTypography.current.h1(),
-            color = FColor.TextPrimary
-        )
-
-        Spacer(modifier = Modifier.height(100.dp))
-
-        KakaoLoginButton(
-            onClick = {
-                snsLoginUtil.login(
-                    context,
-                    SocialLoginType.KAKAO
-                )
-            }
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        NaverLoginButton(
-            onClick = {
-                snsLoginUtil.login(
-                    context,
-                    SocialLoginType.NAVER
-                )
-            }
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        GoogleLoginButton(
-            onClick = {
-                snsLoginUtil.login(
-                    context,
-                    SocialLoginType.GOOGLE,
-                    launcher
-                )
-            }
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        AppleLoginButton(
-            onClick = {
-                snsLoginUtil.login(
-                    context,
-                    SocialLoginType.APPLE,
-                    launcher
-                )
-            }
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Row {
-            Spacer(modifier = Modifier.weight(1f))
-
-            Text(
-                text = stringResource(id = R.string.login_inquiry_title),
-                style = fTextStyle(
-                    fontWeight = FontWeight.W400,
-                    fontSize = 12.textDp,
-                    lineHeight = 14.32.textDp,
-                    color = FColor.Color9E9E9E
-                )
-            )
-
-            Spacer(modifier = Modifier.width(7.dp))
-
-            Text(
-                modifier = Modifier
-                    .clickableSingleWithNoRipple {
-                        navController.navigate(FOneDestinations.Inquiry.route)
-                    },
-                text = stringResource(id = R.string.login_inquiry_text),
-                style = fTextStyle(
-                    fontWeight = FontWeight.W500,
-                    fontSize = 12.textDp,
-                    lineHeight = 14.4.textDp,
-                    color = FColor.Color666666
-                )
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
+            .defaultSystemBarPadding()
+            .toastPadding(),
+        snackbarHost = {
+            FToast(baseViewModel = viewModel, hostState = it)
         }
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+                .padding(horizontal = 45.dp)
+                .verticalScroll(scrollState)
+        ) {
+            Spacer(modifier = Modifier.weight(110f))
 
-        Spacer(modifier = Modifier.weight(183f))
+            Image(
+                imageVector = ImageVector.vectorResource(id = R.drawable.login_fone_logo),
+                contentDescription = null
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Text(
+                text = stringResource(id = R.string.login_title),
+                style = LocalTypography.current.h1(),
+                color = FColor.TextPrimary
+            )
+
+            Spacer(modifier = Modifier.height(100.dp))
+
+            KakaoLoginButton(
+                onClick = {
+                    snsLoginUtil.login(
+                        context,
+                        LoginType.KAKAO
+                    )
+                }
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            NaverLoginButton(
+                onClick = {
+                    snsLoginUtil.login(
+                        context,
+                        LoginType.NAVER
+                    )
+                }
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            GoogleLoginButton(
+                onClick = {
+                    snsLoginUtil.login(
+                        context,
+                        LoginType.GOOGLE,
+                        launcher
+                    )
+                }
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            AppleLoginButton(
+                onClick = {
+                    viewModel.showToast("애플 로그인은 추후 제공 예정입니다.")
+                    //                snsLoginUtil.login(
+                    //                    context,
+                    //                    LoginType.APPLE,
+                    //                    launcher
+                    //                )
+                }
+            )
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            EmailComponent()
+
+            Spacer(modifier = Modifier.height(36.dp))
+
+            Row {
+                Spacer(modifier = Modifier.weight(1f))
+
+                Text(
+                    text = stringResource(id = R.string.login_inquiry_title),
+                    style = fTextStyle(
+                        fontWeight = FontWeight.W400,
+                        fontSize = 12.textDp,
+                        lineHeight = 14.32.textDp,
+                        color = FColor.Color9E9E9E
+                    )
+                )
+
+                Spacer(modifier = Modifier.width(7.dp))
+
+                Text(
+                    modifier = Modifier
+                        .clickableSingleWithNoRipple {
+                            navController.navigate(FOneDestinations.Inquiry.route)
+                        },
+                    text = stringResource(id = R.string.login_inquiry_text),
+                    style = fTextStyle(
+                        fontWeight = FontWeight.W500,
+                        fontSize = 12.textDp,
+                        lineHeight = 14.4.textDp,
+                        color = FColor.Color666666
+                    )
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+            }
+
+            Spacer(modifier = Modifier.weight(183f))
+        }
     }
 }
 
@@ -278,5 +310,63 @@ private fun LoginButtonContainer(
         )
 
         Spacer(modifier = Modifier.weight(68f))
+    }
+}
+
+@Composable
+private fun EmailComponent(
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            modifier = Modifier
+                .clickableSingleWithNoRipple {
+                    FOneNavigator.navigateTo(
+                        navDestinationState = NavDestinationState(
+                            route = FOneDestinations.EmailLogin.route
+                        )
+                    )
+                },
+            text = stringResource(id = R.string.login_email_title),
+            style = fTextStyle(
+                fontWeight = FontWeight.W500,
+                fontSize = 13.textDp,
+                lineHeight = 15.6.textDp,
+                color = FColor.TextSecondary
+            )
+        )
+
+        Text(
+            modifier = Modifier
+                .padding(horizontal = 10.dp),
+            text = "|",
+            style = fTextStyle(
+                fontWeight = FontWeight.W500,
+                fontSize = 13.textDp,
+                lineHeight = 15.6.textDp,
+                color = FColor.TextSecondary
+            )
+        )
+
+        Text(
+            modifier = Modifier
+                .clickableSingleWithNoRipple {
+                    FOneNavigator.navigateTo(
+                        navDestinationState = NavDestinationState(
+                            route = FOneDestinations.EmailJoin.route
+                        )
+                    )
+                }, text = stringResource(id = R.string.login_email_signup),
+            style = fTextStyle(
+                fontWeight = FontWeight.W500,
+                fontSize = 13.textDp,
+                lineHeight = 15.6.textDp,
+                color = FColor.TextSecondary
+            )
+        )
     }
 }

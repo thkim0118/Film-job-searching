@@ -24,6 +24,11 @@
     <string name="confirm">확인</string>
     <string name="yes">네</string>
     <string name="no">아니오</string>
+    <string name="next">다음</string>
+    <string name="google">구글</string>
+    <string name="kakao">카카오</string>
+    <string name="naver">네이버</string>
+    <string name="apple">애플</string>
 
     <!--    dialog-->
     <string name="dialog_profile_setting_title">프로필 사진 설정</string>
@@ -48,6 +53,42 @@
     <string name="login_apple_title">Apple로 로그인</string>
     <string name="login_inquiry_title">다른 질문이 있으신가요?</string>
     <string name="login_inquiry_text">문의하기</string>
+    <string name="login_email_title">이메일 로그인</string>
+    <string name="login_email_signup">이메일 회원가입</string>
+
+    <!--    email login-->
+    <string name="email_login_title">이메일 로그인</string>
+    <string name="email_login_email_title">이메일</string>
+    <string name="email_login_email_placeholder">이메일 주소를 입력해 주세요</string>
+    <string name="email_login_password_title">비밀번호</string>
+    <string name="email_login_password_placeholder">비밀번호를 입력해 주세요</string>
+    <string name="email_login_button_title">로그인 하기</string>
+    <string name="email_login_find_title">아이디 · 비밀번호 찾기</string>
+
+    <!--    find id password-->
+    <string name="find_title">아이디·비밀번호 찾기</string>
+    <string name="find_id_tab_title">아이디</string>
+    <string name="find_password_tab_title">비밀번호</string>
+    <string name="find_guide_title">[안내] 회원가입 시 등록하신 휴대전화 번호를 입력해 주세요.</string>
+    <string name="find_id_login_button">로그인 하러가기</string>
+    <string name="find_password_reset_title">비밀번호 재설정</string>
+    <string name="find_password_input_1">비밀번호를 입력해 주세요</string>
+    <string name="find_password_input_2">비밀번호를 한번 더 입력해 주세요</string>
+    <string name="find_password_complete_dialog_message">비밀번호 변경이 완료되었습니다.</string>
+    <string name="find_id_social_result">이미 %s 계정으로 가입한 회원입니다.</string>
+    <string name="find_id_email_result">이메일은 %s 입니다.</string>
+
+    <!--    email join-->
+    <string name="email_join_title_text">이메일 회원가입</string>
+    <string name="email_join_name_top_text">이름</string>
+    <string name="email_join_name_placeholder">실명을 입력해 주세요</string>
+    <string name="email_join_email_top_text">이메일</string>
+    <string name="email_join_email_placeholder">이메일 주소를 입력해 주세요</string>
+    <string name="email_join_email_duplicate_check_text">중복확인</string>
+    <string name="email_join_password_top_text">비밀번호</string>
+    <string name="email_join_password_placeholder_1">비밀번호를 입력해 주세요</string>
+    <string name="email_join_password_placeholder_2">비밀번호를 한번 더 입력해 주세요</string>
+    <string name="email_join_email_check_error_type_1">이메일 형식이 유효하지 않습니다.</string>
 
     <!--    sign_up-->
     <string name="sign_up_title_text">회원가입</string>
@@ -94,7 +135,7 @@
     <string name="sign_up_third_phone_number_verification">인증완료</string>
     <string name="sign_up_third_phone_number_check_code">인증번호 확인</string>
     <string name="sign_up_third_phone_number_verification_code_placeholder">인증번호 6자리</string>
-    <string name="sign_up_third_phone_number_check_code_guide">인증번호를 발송했습니다. (유효시간 00분)\n인증번호가 오지 않는다면, 통신사 스팸 차단 서비스 혹은 휴대폰 번호 차단 여부를 확인해주세요.</string>
+    <string name="sign_up_third_phone_number_check_code_guide">인증번호를 발송했습니다. (유효시간 3분)\n인증번호가 오지 않는다면, 통신사 스팸 차단 서비스 혹은 휴대폰 번호 차단 여부를 확인해주세요.</string>
     <string name="sign_up_third_agree_all">모두 동의합니다.</string>
     <string name="sign_up_third_agree_term">이용약관 동의(필수)</string>
     <string name="sign_up_third_agree_privacy">개인정보 취급방침 동의(필수)</string>
@@ -130,6 +171,17 @@
     <string name="main_bottom_nav_chat_title">채팅</string>
     <string name="main_bottom_nav_my_title">마이페이지</string>
     <string name="main_withdrawal_dialog_title">회원탈퇴가 완료되었습니다.</string>
+
+    <!--    home-->
+    <string name="home_title_text">F-ONE</string>
+    <string name="home_recommended_title">나와 비슷한 사람들이 보고있는 공고</string>
+    <string name="home_popularity_competition_title">인기 공모전</string>
+    <string name="home_actor_profile_title">배우 프로필 보기</string>
+    <string name="home_service_guide_title">서비스 준비중 입니다</string>
+    <string name="home_service_guide_subtitle">보다 나은 서비스 제공을 위하여 페이지 준비중에 있습니다\n빠른 시일내에 준비하여 찾아뵙겠습니다</string>
+
+    <!--    chat-->
+    <string name="chat_title_text">채팅</string>
 
     <!--    my-->
     <string name="my_title">나의 F-ONE</string>
@@ -220,6 +272,8 @@
     <string name="job_tab_filter_recent">최신순</string>
     <string name="job_tab_filter_view">조회순</string>
     <string name="job_tab_filter_deadline">마감임박순</string>
+    <string name="job_tab_job_opening_empty_title">구인구직글을 지금 작성해보세요!</string>
+    <string name="job_tab_profile_empty_title">프로필을 등록해보세요!</string>
 
     <!--    actor/staff filter-->
     <string name="job_filter_title">맞춤 정보</string>
@@ -365,32 +419,95 @@
     <string name="profile_register_category_all">전체선택</string>
     <string name="profile_register_register_button">등록하기</string>
 
+    <!--    actor detail-->
+    <string name="actor_detail_title_text">배우 모집</string>
+    <string name="actor_detail_recruitment_condition_title">모집조건</string>
+    <string name="actor_detail_recruitment_deadline_title">모집마감일</string>
+    <string name="actor_detail_recruitment_role_title">모집배역</string>
+    <string name="actor_detail_recruitment_number_of_recruits_title">모집인원</string>
+    <string name="actor_detail_recruitment_age_title">나이</string>
+    <string name="actor_detail_recruitment_career_title">경력</string>
+    <string name="actor_detail_work_info_title">작품정보</string>
+    <string name="actor_detail_work_production_title">제작</string>
+    <string name="actor_detail_work_title">제목</string>
+    <string name="actor_detail_work_director_title">연출</string>
+    <string name="actor_detail_work_genre_title">장르</string>
+    <string name="actor_detail_work_log_line_title">로그라인</string>
+    <string name="actor_detail_working_conditions_title">근무조건</string>
+    <string name="actor_detail_location_title">촬영위치</string>
+    <string name="actor_detail_period_title">촬영기간</string>
+    <string name="actor_detail_pay_title">급여</string>
+    <string name="actor_detail_detail_info_title">상세요강</string>
+    <string name="actor_detail_manager_info">담당자정보</string>
+    <string name="actor_detail_manager_name_title">담당자</string>
+    <string name="actor_detail_email_title">이메일</string>
+    <string name="actor_detail_guide_contents_1">본 정보는 게시된 담당자측에서 제공한 자료이며, 에프원은 기재된 내용에 대한 오류와 사용자가 이를 신뢰하여 취한 조취에 대해 책임을 지지 않습니다. 또한 누구든 본 정보를 통한 에프원 동의 없이 재 배포할 수 없습니다. 부적합한 공고는 신고하기를 통해 알려주세요.</string>
+    <string name="actor_detail_guide_contents_2">구인구직이 아닌 광고 등의 목적으로 개인정보를 이용할 경우 법적 처벌을 받을 수 있습니다.</string>
+    <string name="actor_detail_scrap_button_title">스크랩</string>
+    <string name="actor_detail_contact_button_title">연락하기</string>
 
-    <!--    actor article-->
-    <string name="article_actor_title_text">배우 모집</string>
-    <string name="article_actor_recruitment_condition_title">모집조건</string>
-    <string name="article_actor_recruitment_deadline_title">모집마감일</string>
-    <string name="article_actor_recruitment_role_title">모집배역</string>
-    <string name="article_actor_recruitment_number_of_recruits_title">모집인원</string>
-    <string name="article_actor_recruitment_age_title">나이</string>
-    <string name="article_actor_recruitment_career_title">경력</string>
-    <string name="article_actor_work_info_title">작품정보</string>
-    <string name="article_actor_work_production_title">제작</string>
-    <string name="article_actor_work_title">제목</string>
-    <string name="article_actor_work_director_title">연출</string>
-    <string name="article_actor_work_genre_title">장르</string>
-    <string name="article_actor_work_log_line_title">로그라인</string>
-    <string name="article_actor_working_conditions_title">근무조건</string>
-    <string name="article_actor_location_title">촬영위치</string>
-    <string name="article_actor_period_title">촬영기간</string>
-    <string name="article_actor_pay_title">급여</string>
-    <string name="article_actor_detail_info_title">상세요강</string>
-    <string name="article_actor_manager_info">담당자정보</string>
-    <string name="article_actor_manager_name_title">담당자</string>
-    <string name="article_actor_email_title">이메일</string>
-    <string name="article_actor_guide_contents_1">본 정보는 게시된 담당자측에서 제공한 자료이며, 에프원은 기재된 내용에 대한 오류와 사용자가 이를 신뢰하여 취한 조취에 대해 책임을 지지 않습니다. 또한 누구든 본 정보를 통한 에프원 동의 없이 재 배포할 수 없습니다. 부적합한 공고는 신고하기를 통해 알려주세요.</string>
-    <string name="article_actor_guide_contents_2">구인구직이 아닌 광고 등의 목적으로 개인정보를 이용할 경우 법적 처벌을 받을 수 있습니다.</string>
-    <string name="article_actor_scrap_button_title">스크랩</string>
-    <string name="article_actor_contact_button_title">연락하기</string>
-    
+    <!--    staff detail-->
+    <string name="staff_detail_title_text">스태프 모집</string>
+    <string name="staff_detail_recruitment_condition_title">모집조건</string>
+    <string name="staff_detail_recruitment_deadline_title">모집마감일</string>
+    <string name="staff_detail_recruitment_role_title">모집분야</string>
+    <string name="staff_detail_recruitment_number_of_recruits_title">모집인원</string>
+    <string name="staff_detail_recruitment_gender_title">성별</string>
+    <string name="staff_detail_recruitment_age_title">나이</string>
+    <string name="staff_detail_recruitment_career_title">경력</string>
+    <string name="staff_detail_work_info_title">작품정보</string>
+    <string name="staff_detail_work_production_title">제작</string>
+    <string name="staff_detail_work_director_title">연출</string>
+    <string name="staff_detail_work_title">제목</string>
+    <string name="staff_detail_work_genre_title">장르</string>
+    <string name="staff_detail_work_log_line_title">로그라인</string>
+    <string name="staff_detail_working_conditions_title">근무조건</string>
+    <string name="staff_detail_location_title">촬영위치</string>
+    <string name="staff_detail_period_title">촬영기간</string>
+    <string name="staff_detail_pay_title">급여</string>
+    <string name="staff_detail_info_title">상세요강</string>
+    <string name="staff_detail_manager_info">담당자정보</string>
+    <string name="staff_detail_manager_name_title">담당자</string>
+    <string name="staff_detail_email_title">이메일</string>
+    <string name="staff_detail_guide_contents_1">본 정보는 게시된 담당자측에서 제공한 자료이며, 에프원은 기재된 내용에 대한 오류와 사용자가 이를 신뢰하여 취한 조취에 대해 책임을 지지 않습니다. 또한 누구든 본 정보를 통한 에프원 동의 없이 재 배포할 수 없습니다. 부적합한 공고는 신고하기를 통해 알려주세요.</string>
+    <string name="staff_detail_guide_contents_2">구인구직이 아닌 광고 등의 목적으로 개인정보를 이용할 경우 법적 처벌을 받을 수 있습니다.</string>
+    <string name="staff_detail_scrap_button_title">스크랩</string>
+    <string name="staff_detail_contact_button_title">연락하기</string>
+
+    <!--  actor profile detail  -->
+    <string name="profile_detail_actor_title_text">배우 프로필</string>
+    <string name="profile_detail_actor_picture_more_text">더보기</string>
+    <string name="profile_detail_actor_info_title">배우 정보</string>
+    <string name="profile_detail_actor_info_name">이름</string>
+    <string name="profile_detail_actor_info_gender">성별</string>
+    <string name="profile_detail_actor_info_birthday">출생연도</string>
+    <string name="profile_detail_actor_info_height_weight">신장 | 체중</string>
+    <string name="profile_detail_actor_info_email">이메일</string>
+    <string name="profile_detail_actor_info_ability">특기</string>
+    <string name="profile_detail_actor_info_sns">SNS</string>
+    <string name="profile_detail_actor_detail_title">상세요강</string>
+    <string name="profile_detail_actor_main_career_title">주요경력</string>
+    <string name="profile_detail_actor_guide_1">본 정보는 게시된 담당자측에서 제공한 자료이며, 에프원은 기재된 내용에 대한 오류와 사용자가 이를 신뢰하여 취한 조취에 대해 책임을 지지 않습니다. 또한 누구든 본 정보를 통한 에프원 동의 없이 재 배포할 수 없습니다. 부적합한 공고는 신고하기를 통해 알려주세요.</string>
+    <string name="profile_detail_actor_guide_2">구인구직이 아닌 광고 등의 목적으로 개인정보를 이용할 경우 법적 처벌을 받을 수 있습니다.</string>
+    <string name="profile_detail_actor_favorite_button_title">찜하기</string>
+    <string name="profile_detail_actor_contact_button_title">연락하기</string>
+
+    <!--    staff profile detail-->
+    <string name="profile_detail_staff_title_text">스태프 프로필</string>
+    <string name="profile_detail_staff_picture_more_text">더보기</string>
+    <string name="profile_detail_staff_info_title">스태프 정보</string>
+    <string name="profile_detail_staff_info_name">이름</string>
+    <string name="profile_detail_staff_info_gender">성별</string>
+    <string name="profile_detail_staff_info_birthday">출생연도</string>
+    <string name="profile_detail_staff_info_height_weight">신장 | 체중</string>
+    <string name="profile_detail_staff_info_email">이메일</string>
+    <string name="profile_detail_staff_info_ability">특기</string>
+    <string name="profile_detail_staff_info_sns">SNS</string>
+    <string name="profile_detail_staff_detail_title">상세요강</string>
+    <string name="profile_detail_staff_main_career_title">주요경력</string>
+    <string name="profile_detail_staff_guide_1">본 정보는 게시된 담당자측에서 제공한 자료이며, 에프원은 기재된 내용에 대한 오류와 사용자가 이를 신뢰하여 취한 조취에 대해 책임을 지지 않습니다. 또한 누구든 본 정보를 통한 에프원 동의 없이 재 배포할 수 없습니다. 부적합한 공고는 신고하기를 통해 알려주세요.</string>
+    <string name="profile_detail_staff_guide_2">구인구직이 아닌 광고 등의 목적으로 개인정보를 이용할 경우 법적 처벌을 받을 수 있습니다.</string>
+    <string name="profile_detail_staff_favorite_button_title">찜하기</string>
+    <string name="profile_detail_staff_contact_button_title">연락하기</string>
+
 </resources>

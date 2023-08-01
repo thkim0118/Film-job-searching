@@ -32,7 +32,7 @@ internal class GetCompetitionsScrapsUseCaseTest {
 
         getCompetitionsScrapsUseCase(page = 1)
             .onSuccess {
-                assert(it?.competitions?.content?.firstOrNull()?.id == fakeCompetitionsResponse.competitions.content.first().id)
+                assert(it?.competitions?.competitionContent?.firstOrNull()?.id == fakeCompetitionsResponse.competitions.competitionContent.first().id)
             }
             .onFail {
                 assert(false)

@@ -1,13 +1,14 @@
 package com.fone.filmone.ui.login
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.core.login.SNSLoginUtil
 import com.fone.filmone.core.util.LogUtil
+import com.fone.filmone.data.datamodel.common.network.ErrorCode
+import com.fone.filmone.data.datamodel.response.user.LoginType
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.data.datamodel.response.user.SocialLoginType
-import com.fone.filmone.domain.usecase.SignInUseCase
+import com.fone.filmone.domain.usecase.SocialSignInUseCase
+import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
@@ -18,17 +19,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val signInUseCase: SignInUseCase
-) : ViewModel() {
+    private val socialSignInUseCase: SocialSignInUseCase
+) : BaseViewModel() {
 
     val localSnsLoginUtil: SNSLoginUtil = SNSLoginUtil(object : SNSLoginUtil.LoginCallback {
         override fun onSuccess(
             token: String,
             email: String,
-            socialLoginType: SocialLoginType
+            loginType: LoginType
         ) {
-            LogUtil.d("$socialLoginType, $token")
-            signIn(token, email, socialLoginType.name)
+            signIn(token, email, loginType)
         }
 
         override fun onFail(message: String) {
@@ -43,28 +43,34 @@ class LoginViewModel @Inject constructor(
     fun signIn(
         accessToken: String,
         email: String,
-        socialLoginType: String
+        loginType: LoginType
     ) = viewModelScope.launch {
-        signInUseCase(accessToken, email, socialLoginType)
-            .onSuccess {
-                FOneNavigator.navigateTo(
-                    NavDestinationState(
-                        route = FOneDestinations.Main.route,
-                        isPopAll = true
+        socialSignInUseCase(accessToken, email, loginType)
+            .onSuccess { response ->
+                if (response != null) {
+                    FOneNavigator.navigateTo(
+                        NavDestinationState(
+                            route = FOneDestinations.Main.route,
+                            isPopAll = true
+                        )
                     )
-                )
+                }
             }.onFail {
-                FOneNavigator.navigateTo(
-                    NavDestinationState(
-                        route = FOneDestinations.SignUpFirst.getRouteWithArg(
-                            SignUpVo(
-                                accessToken = accessToken,
-                                email = email,
-                                socialLoginType = socialLoginType
+                if (it.errorCode == ErrorCode.NotFoundUserException.name) {
+                    FOneNavigator.navigateTo(
+                        NavDestinationState(
+                            route = FOneDestinations.SignUpFirst.getRouteWithArg(
+                                SignUpVo(
+                                    accessToken = accessToken,
+                                    email = email,
+                                    loginType = loginType
+                                )
                             )
                         )
                     )
-                )
+                } else {
+                    showToast(it.message)
+                }
             }
     }
 }

@@ -1,7 +1,9 @@
 package com.fone.filmone.domain.repository
 
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
-import com.fone.filmone.data.datamodel.response.profiles.ProfilesResponse
+import com.fone.filmone.data.datamodel.request.profile.ProfileRegisterRequest
+import com.fone.filmone.data.datamodel.response.profiles.ProfilesPagingResponse
+import com.fone.filmone.data.datamodel.response.profiles.detail.ProfileDetailResponse
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.jobopenings.JobTabFilterVo
 
@@ -10,12 +12,21 @@ interface ProfilesRepository {
         page: Int,
         size: Int = 20,
         type: Type
-    ): DataResult<ProfilesResponse>
+    ): DataResult<ProfilesPagingResponse>
 
     suspend fun getMyRegistrations(
         page: Int,
         size: Int = 20,
-    ): DataResult<ProfilesResponse>
+    ): DataResult<ProfilesPagingResponse>
 
-    suspend fun getProfileList(jobTabFilterVo: JobTabFilterVo): DataResult<ProfilesResponse>
+    suspend fun getProfileList(jobTabFilterVo: JobTabFilterVo): DataResult<ProfilesPagingResponse>
+
+    suspend fun registerProfile(
+        profileRegisterRequest: ProfileRegisterRequest
+    ): DataResult<ProfileDetailResponse>
+
+    suspend fun getProfileDetail(
+        profileId: Int,
+        type: Type
+    ): DataResult<ProfileDetailResponse>
 }

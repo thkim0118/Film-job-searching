@@ -58,4 +58,10 @@ abstract class RepositoryModule {
     abstract fun bindsProfileRepository(
         repository: ProfilesRepositoryImpl
     ): ProfilesRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindsHomeRepository(
+        repository: HomeRepositoryImpl
+    ): HomeRepository
 }

@@ -30,7 +30,8 @@ fun SignUpCompleteScreen(
     modifier: Modifier = Modifier,
     accessToken: String,
     email: String,
-    socialLoginType: String,
+    loginType: String,
+    password: String?,
     nickname: String,
     viewModel: SignUpCompleteViewModel = hiltViewModel()
 ) {
@@ -106,7 +107,8 @@ fun SignUpCompleteScreen(
                 viewModel.signIn(
                     accessToken = accessToken,
                     email = email,
-                    socialLoginType = socialLoginType
+                    loginType = loginType,
+                    password = password
                 )
             }
         }

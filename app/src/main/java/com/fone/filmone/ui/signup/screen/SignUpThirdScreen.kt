@@ -15,39 +15,31 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
-import com.fone.filmone.ui.common.FBorderButton
 import com.fone.filmone.ui.common.FButton
 import com.fone.filmone.ui.common.FRadioButton
-import com.fone.filmone.ui.common.FTextField
 import com.fone.filmone.ui.common.FTitleBar
 import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.TitleType
@@ -57,8 +49,8 @@ import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
+import com.fone.filmone.ui.common.phone.PhoneVerificationComponent
 import com.fone.filmone.ui.signup.AgreeState
-import com.fone.filmone.ui.signup.PhoneVerificationState
 import com.fone.filmone.ui.signup.SignUpThirdDialogState
 import com.fone.filmone.ui.signup.SignUpThirdUiState
 import com.fone.filmone.ui.signup.SignUpThirdViewModel
@@ -166,7 +158,9 @@ private fun SignUpMainScreen(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 PhoneVerificationComponent(
-                    uiState = uiState,
+                    phoneNumber = uiState.phoneNumber,
+                    phoneVerificationState = uiState.phoneVerificationState,
+                    verificationTime = uiState.verificationTime,
                     onValueChanged = onPhoneNumberChanged,
                     onVerifyClick = onVerifyClick,
                     onVerificationCheckClick = onVerificationCheckClick
@@ -191,125 +185,6 @@ private fun SignUpMainScreen(
 
             Spacer(modifier = Modifier.height(38.dp))
         }
-    }
-}
-
-@Composable
-private fun PhoneVerificationComponent(
-    uiState: SignUpThirdUiState,
-    onValueChanged: (String) -> Unit,
-    onVerifyClick: () -> Unit,
-    onVerificationCheckClick: (String) -> Unit
-) {
-    FTextField(
-        text = uiState.phoneNumber,
-        onValueChange = onValueChanged,
-        textLimit = 11,
-        placeholder = stringResource(id = R.string.sign_up_third_phone_number_placeholder),
-        topComponent = {
-            Text(
-                text = stringResource(id = R.string.sign_up_third_phone_number_title),
-                style = LocalTypography.current.subtitle1()
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-        },
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Phone
-        ),
-        rightComponents = {
-            Spacer(modifier = Modifier.width(4.dp))
-
-            FBorderButton(
-                text = stringResource(
-                    id = when (uiState.phoneVerificationState) {
-                        PhoneVerificationState.Complete -> R.string.sign_up_third_phone_number_verification
-                        PhoneVerificationState.Retransmit -> R.string.sign_up_third_phone_number_retransmit
-                        PhoneVerificationState.ShouldVerify -> R.string.sign_up_third_phone_number_transmit
-                    }
-                ),
-                enable = uiState.phoneNumber.length >= 10 && uiState.phoneVerificationState != PhoneVerificationState.Complete,
-                onClick = onVerifyClick
-            )
-        }
-    )
-
-    RetransmitComponent(
-        uiState = uiState,
-        onVerificationCheckClick = onVerificationCheckClick
-    )
-}
-
-@Composable
-fun RetransmitComponent(
-    modifier: Modifier = Modifier,
-    uiState: SignUpThirdUiState,
-    onVerificationCheckClick: (String) -> Unit
-) {
-    val isVisible = uiState.phoneVerificationState == PhoneVerificationState.Retransmit
-    var verificationCode by remember { mutableStateOf("") }
-    val enable = verificationCode.length == 6
-    val focusManager = LocalFocusManager.current
-
-    LaunchedEffect(key1 = isVisible) {
-        focusManager.moveFocus(FocusDirection.Down)
-    }
-
-    Column(
-        modifier = modifier
-            .alpha(
-                if (isVisible) {
-                    1f
-                } else {
-                    0f
-                }
-            )
-    ) {
-        Spacer(modifier = Modifier.height(40.dp))
-
-        FTextField(
-            text = verificationCode,
-            onValueChange = { value ->
-                verificationCode = value
-            },
-            textLimit = 6,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.NumberPassword
-            ),
-            placeholder = stringResource(id = R.string.sign_up_third_phone_number_verification_code_placeholder),
-            rightComponents = {
-                Spacer(modifier = Modifier.width(4.dp))
-
-                FBorderButton(
-                    text = stringResource(id = R.string.sign_up_third_phone_number_check_code),
-                    enable = enable,
-                    onClick = {
-                        if (enable) {
-                            onVerificationCheckClick(verificationCode)
-                        }
-                    }
-                )
-            },
-            tailComponent = {
-                Text(
-                    text = uiState.verificationTime,
-                    style = fTextStyle(
-                        fontWeight = FontWeight.W400,
-                        fontSize = 12.textDp,
-                        lineHeight = 14.textDp,
-                        color = FColor.ColorFF5841
-                    )
-                )
-            },
-            enabled = isVisible
-        )
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        Text(
-            text = stringResource(id = R.string.sign_up_third_phone_number_check_code_guide),
-            style = LocalTypography.current.label()
-        )
     }
 }
 
@@ -574,6 +449,7 @@ private fun DialogScreen(
         SignUpThirdDialogState.SignUpFail -> {
             SignUpFailDialog(onClick = onDismiss)
         }
+
         SignUpThirdDialogState.VerificationComplete -> {
             VerificationCompleteDialog(onClick = onDismiss)
         }

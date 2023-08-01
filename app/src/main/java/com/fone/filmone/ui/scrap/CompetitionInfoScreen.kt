@@ -2,7 +2,18 @@ package com.fone.filmone.ui.scrap
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -21,6 +32,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.R
+import com.fone.filmone.ui.common.empty.EmptyScreen
 import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
@@ -57,7 +69,10 @@ fun CompetitionsScreen(
                 }
             }
         } else {
-            EmptyScreen(modifier = Modifier.align(Alignment.Center))
+            EmptyScreen(
+                modifier = Modifier.align(Alignment.Center),
+                title = stringResource(id = R.string.scrap_empty_title)
+            )
         }
     }
 }
@@ -195,29 +210,6 @@ private fun CompetitionScrapImage(onScrapClick: () -> Unit) {
                 .align(Alignment.Center),
             imageVector = ImageVector.vectorResource(id = R.drawable.job_opening_scrap),
             contentDescription = null
-        )
-    }
-}
-
-@Composable
-private fun EmptyScreen(
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            imageVector = ImageVector.vectorResource(id = R.drawable.scrap_empty_image),
-            contentDescription = null
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Text(
-            text = stringResource(id = R.string.scrap_empty_title),
-            style = LocalTypography.current.subtitle2(),
-            color = FColor.TextPrimary
         )
     }
 }

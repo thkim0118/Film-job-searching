@@ -8,10 +8,10 @@ data class ProfileRegisterRequest(
     val career: String,
     val categories: List<String>,
     val details: String,
-    val domains: List<String>,
+    val domains: List<String>?,
     val email: String,
     val gender: String,
-    val height: Int,
+    val height: Int?,
     val hookingComment: String,
     val name: String,
     val profileUrl: String,
@@ -19,5 +19,5 @@ data class ProfileRegisterRequest(
     val sns: String,
     val specialty: String,
     val type: String,
-    val weight: Int
+    val weight: Int?
 )

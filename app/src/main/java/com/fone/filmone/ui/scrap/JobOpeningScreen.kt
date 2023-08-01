@@ -23,6 +23,7 @@ import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.domain.model.jobopenings.JobType
+import com.fone.filmone.ui.common.empty.EmptyScreen
 import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
@@ -59,7 +60,10 @@ fun JobOpeningScreen(
                 }
             }
         } else {
-            EmptyScreen(modifier = Modifier.align(Alignment.Center))
+            EmptyScreen(
+                modifier = Modifier.align(Alignment.Center),
+                title = stringResource(id = R.string.scrap_empty_title)
+            )
         }
     }
 }
@@ -279,29 +283,6 @@ private fun JobOpeningContent(
             text = content,
             style = LocalTypography.current.b4(),
             color = FColor.TextSecondary
-        )
-    }
-}
-
-@Composable
-private fun EmptyScreen(
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            imageVector = ImageVector.vectorResource(id = R.drawable.scrap_empty_image),
-            contentDescription = null
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Text(
-            text = stringResource(id = R.string.scrap_empty_title),
-            style = LocalTypography.current.subtitle2(),
-            color = FColor.TextPrimary
         )
     }
 }

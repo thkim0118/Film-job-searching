@@ -2,7 +2,7 @@ package com.fone.filmone.core.login
 
 import android.content.Context
 import com.fone.filmone.BuildConfig
-import com.fone.filmone.data.datamodel.response.user.SocialLoginType
+import com.fone.filmone.data.datamodel.response.user.LoginType
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.AuthErrorCause
@@ -71,7 +71,7 @@ class KakaoLoginImpl(
                     loginCallback.onSuccess(
                         oAuthToken.accessToken,
                         email,
-                        SocialLoginType.KAKAO
+                        LoginType.KAKAO
                     )
                 }
             }

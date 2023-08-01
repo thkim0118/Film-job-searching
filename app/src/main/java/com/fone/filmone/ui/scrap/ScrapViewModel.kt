@@ -132,7 +132,7 @@ class ScrapViewModel @Inject constructor(
         ranking = "ranking"
     )
 
-    fun fakeCompetitionContent() = com.fone.filmone.data.datamodel.response.competition.Content(
+    fun fakeCompetitionContent() = com.fone.filmone.data.datamodel.response.competition.CompetitionContent(
         agency = "agency",
         competitionPrizes = listOf(fakeCompetitionPrizes),
         dday = "D-13",
@@ -147,7 +147,8 @@ class ScrapViewModel @Inject constructor(
         submitEndDate = "submitEndDate",
         submitStartDate = "submitStartDate",
         title = "title",
-        viewCount = 0
+        viewCount = 0,
+        type = Type.ACTOR
     )
 
     val fakeCompetition = Competitions(

@@ -19,7 +19,7 @@ suspend fun <T> handleNetwork(block: suspend () -> Response<NetworkResponse<T>>)
         LogUtil.e("Handle Error($block) :: $e")
         DataResult.Fail(
             dataFail = DataFail(
-                errorCode = ErrorCode.ERROR_UNKNOWN,
+                errorCode = ErrorCode.Unknown.name,
                 message = e.message ?: e.stackTraceToString()
             )
         )
@@ -33,7 +33,7 @@ private fun <T> Response<NetworkResponse<T>>.parseNetworkResponse(): DataResult<
         val networkResponse: NetworkResponse<T> =
             response.body() ?: throw EmptyNetworkBodyException(
                 dataFail = DataFail(
-                    errorCode = ErrorCode.ERROR_UNKNOWN,
+                    errorCode = ErrorCode.Unknown.name,
                     message = "요청 데이터가 없습니다."
                 )
             )
@@ -48,7 +48,7 @@ private fun <T> Response<NetworkResponse<T>>.parseNetworkResponse(): DataResult<
             Result.FAIL -> {
                 DataResult.Fail(
                     dataFail = DataFail(
-                        errorCode = networkResponse.errorCode ?: ErrorCode.ERROR_UNKNOWN,
+                        errorCode = networkResponse.errorCode ?: ErrorCode.Unknown.name,
                         message = networkResponse.message
                     )
                 )
@@ -60,7 +60,7 @@ private fun <T> Response<NetworkResponse<T>>.parseNetworkResponse(): DataResult<
 
         return DataResult.Fail(
             dataFail = DataFail(
-                errorCode = networkFailResponse.errorCode ?: ErrorCode.ERROR_UNKNOWN,
+                errorCode = networkFailResponse.errorCode ?: ErrorCode.Unknown.name,
                 message = networkFailResponse.message
             )
         )

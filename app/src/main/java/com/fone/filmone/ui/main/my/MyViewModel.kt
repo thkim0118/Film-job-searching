@@ -7,7 +7,11 @@ import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.GetUserInfoUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,15 +29,13 @@ class MyViewModel @Inject constructor(
             viewModelState.value.toUiState()
         )
 
-    init {
-        viewModelScope.launch {
-            getUserInfoUseCase()
-                .onSuccess { response ->
-                    viewModelState.update {
-                        it.copy(userResponse = response)
-                    }
+    fun fetchUserInfo() = viewModelScope.launch {
+        getUserInfoUseCase()
+            .onSuccess { response ->
+                viewModelState.update {
+                    it.copy(userResponse = response)
                 }
-        }
+            }
     }
 }
 

@@ -10,7 +10,7 @@ import org.junit.runners.Suite
     GetJobOpeningsActorScrapsUseCaseTest::class,
     GetUserInfoUseCaseTest::class,
     RequestPhoneVerificationUseCaseTest::class,
-    SignInUseCaseTest::class,
+    SocialSignInUseCaseTest::class,
     SignUpUseCaseTest::class,
     SubmitInquiryUseCaseTest::class,
     UpdateUserInfoUseCaseTest::class,

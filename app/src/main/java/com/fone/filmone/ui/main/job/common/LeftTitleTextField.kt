@@ -1,10 +1,12 @@
 package com.fone.filmone.ui.main.job.common
 
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.ui.common.FTextField
 
@@ -15,6 +17,10 @@ fun LeftTitleTextField(
     placeholder: String = "",
     titleSpace: Int,
     text: String,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(
+        imeAction = ImeAction.Done,
+        keyboardType = KeyboardType.Text
+    ),
     isRequired: Boolean = true,
     tailComponent: @Composable () -> Unit = {},
     onValueChanged: (String) -> Unit
@@ -32,6 +38,7 @@ fun LeftTitleTextField(
             Spacer(modifier = Modifier.width(titleSpace.dp))
         },
         tailComponent = tailComponent,
-        placeholder = placeholder
+        placeholder = placeholder,
+        keyboardOptions = keyboardOptions
     )
 }

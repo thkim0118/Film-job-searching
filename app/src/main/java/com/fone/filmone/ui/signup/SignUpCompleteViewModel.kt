@@ -1,9 +1,11 @@
 package com.fone.filmone.ui.signup
 
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.data.datamodel.response.user.LoginType
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.usecase.SignInUseCase
+import com.fone.filmone.domain.usecase.EmailSignInUseCase
+import com.fone.filmone.domain.usecase.SocialSignInUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
@@ -14,22 +16,31 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpCompleteViewModel @Inject constructor(
-    private val signInUseCase: SignInUseCase
+    private val socialSignInUseCase: SocialSignInUseCase,
+    private val emailSignInUseCase: EmailSignInUseCase
 ) : BaseViewModel() {
 
     fun signIn(
         accessToken: String,
         email: String,
-        socialLoginType: String
+        password: String?,
+        loginType: String
     ) = viewModelScope.launch {
-        signInUseCase(
-            accessToken,
-            email,
-            socialLoginType
-        ).onSuccess {
-            FOneNavigator.navigateTo(NavDestinationState(route = FOneDestinations.Main.route))
-        }.onFail {
-            showToast(it.message)
+        val dataResult = if (loginType == LoginType.PASSWORD.name && password != null) {
+            emailSignInUseCase(email, password)
+        } else {
+            socialSignInUseCase(
+                accessToken = accessToken,
+                email = email,
+                socialLoginType = LoginType.values().find { it.name == loginType } ?: return@launch
+            )
         }
+
+        dataResult
+            .onSuccess {
+                FOneNavigator.navigateTo(NavDestinationState(route = FOneDestinations.Main.route))
+            }.onFail {
+                showToast(it.message)
+            }
     }
 }

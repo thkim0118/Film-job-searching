@@ -7,6 +7,7 @@ import com.fone.filmone.domain.model.common.getOrNull
 import com.fone.filmone.domain.model.common.isFail
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.data.datamodel.common.user.Gender
+import com.fone.filmone.data.datamodel.request.imageupload.UploadingImage
 import com.fone.filmone.domain.usecase.CheckNicknameDuplicationUseCase
 import com.fone.filmone.domain.usecase.UploadImageUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
@@ -49,7 +50,15 @@ class SignUpSecondViewModel @Inject constructor(
 
     fun updateProfileImage(profileEncodedString: String) = viewModelScope.launch {
         if (profileEncodedString.isNotEmpty()) {
-            val result = uploadImageUseCase(profileEncodedString)
+            val result = uploadImageUseCase(
+                listOf(
+                    UploadingImage(
+                        imageData = profileEncodedString,
+                        resource = UploadImageUseCase.userProfileResource,
+                        stageVariables = UploadImageUseCase.stageVariables
+                    )
+                )
+            )
             if (result.isFail()) {
                 showToast(R.string.toast_profile_register_fail)
                 return@launch
@@ -61,7 +70,7 @@ class SignUpSecondViewModel @Inject constructor(
 
             _uiState.update {
                 it.copy(
-                    profileUrl = response.imageUrl,
+                    profileUrl = response.firstOrNull()?.imageUrl ?: "",
                     isProfileUploading = false
                 )
             }

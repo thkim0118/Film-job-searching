@@ -2,7 +2,7 @@ package com.fone.filmone.core.login
 
 import android.app.Activity
 import android.content.Context
-import com.fone.filmone.data.datamodel.response.user.SocialLoginType
+import com.fone.filmone.data.datamodel.response.user.LoginType
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.OAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -34,7 +34,7 @@ class AppleLoginImpl(
                 loginCallback.onSuccess(
                     accessToken,
                     email,
-                    SocialLoginType.APPLE
+                    LoginType.APPLE
                 )
             }.addOnFailureListener {
                 loginCallback.onFail(it.message ?: it.localizedMessage)
@@ -56,7 +56,7 @@ class AppleLoginImpl(
                     loginCallback.onSuccess(
                         accessToken,
                         email,
-                        SocialLoginType.APPLE
+                        LoginType.APPLE
                     )
                 }
                 .addOnCanceledListener {

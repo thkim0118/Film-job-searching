@@ -67,15 +67,13 @@ private fun RegisterItem(
     jobType: JobType,
     casting: String,
 ) {
-    Row(
+    Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 10.dp)
     ) {
         Column(
             modifier = Modifier
-                .weight(1f)
-                .padding(end = 20.dp)
+                .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 10.dp)
         ) {
             Tags(type = type, categories = categories)
 
@@ -98,13 +96,13 @@ private fun RegisterItem(
                 casting = casting
             )
 
-            Spacer(modifier = Modifier.height(21.dp))
-
-            RegisterButtons(
-                onEditClick = {},
-                onDeleteClick = {}
-            )
+            Spacer(modifier = Modifier.height(16.dp))
         }
+
+        RegisterButtons(
+            onEditClick = {},
+            onDeleteClick = {}
+        )
     }
 }
 

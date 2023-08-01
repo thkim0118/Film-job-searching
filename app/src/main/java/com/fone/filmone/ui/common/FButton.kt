@@ -29,7 +29,8 @@ fun FButton(
             .fillMaxWidth()
             .heightIn(min = 48.dp)
             .fShadow(
-                shape = RoundedCornerShape(5.dp), spotColor = if (enable) {
+                shape = RoundedCornerShape(5.dp),
+                spotColor = if (enable) {
                     FColor.Primary
                 } else {
                     FColor.DisableBase

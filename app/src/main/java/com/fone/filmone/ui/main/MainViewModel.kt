@@ -16,7 +16,11 @@ import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -49,7 +53,12 @@ class MainViewModel @Inject constructor(
                 }
 
                 viewModelState.update {
-                    it.copy(userJob = userResponse.user.job)
+                    it.copy(
+                        type = when (userResponse.user.job) {
+                            Job.STAFF -> Type.STAFF
+                            else -> Type.ACTOR
+                        }
+                    )
                 }
             }
     }
@@ -103,8 +112,8 @@ class MainViewModel @Inject constructor(
         viewModelState.update {
             when (it.currentJobSortingTab) {
                 is JobSorting.JobOpenings -> {
-                    when (it.userJob) {
-                        Job.STAFF -> {
+                    when (it.type) {
+                        Type.STAFF -> {
                             it.copy(
                                 staffJobOpeningsSorting = JobSorting.JobOpenings(jobFilterType),
                                 currentJobSortingTab = JobSorting.JobOpenings(jobFilterType)
@@ -121,8 +130,8 @@ class MainViewModel @Inject constructor(
                 }
 
                 is JobSorting.Profile -> {
-                    when (it.userJob) {
-                        Job.STAFF -> {
+                    when (it.type) {
+                        Type.STAFF -> {
                             it.copy(
                                 staffJobOpeningsSorting = JobSorting.JobOpenings(jobFilterType),
                                 currentJobSortingTab = JobSorting.JobOpenings(jobFilterType)
@@ -158,12 +167,18 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    fun updateJobTabUserType(type: Type) {
+        viewModelState.update {
+            it.copy(type = type)
+        }
+    }
 }
 
 private data class MainViewModelState(
     val mainDialogState: MainDialogState = MainDialogState.Clear,
     val isFloatingClick: Boolean = false,
-    val userJob: Job = Job.ACTOR,
+    val type: Type = Type.ACTOR,
     val currentJobSortingTab: JobSorting = JobSorting.JobOpenings(JobFilterType.Recent),
     val actorJobOpeningsSorting: JobSorting = JobSorting.JobOpenings(JobFilterType.Recent),
     val actorProfileSorting: JobSorting = JobSorting.Profile(JobFilterType.Recent),
@@ -171,18 +186,13 @@ private data class MainViewModelState(
     val staffProfileSorting: JobSorting = JobSorting.Profile(JobFilterType.Recent),
 ) {
     fun toUiState() = MainUiState(
-        type = convertJobToType(),
+        type = type,
         mainDialogState = mainDialogState,
         isFloatingClick = isFloatingClick,
         currentJobSorting = currentJobSortingTab,
         actorJobOpeningsSorting = actorJobOpeningsSorting,
         actorProfileSorting = actorProfileSorting,
     )
-
-    fun convertJobToType(): Type = when (userJob) {
-        Job.STAFF -> Type.STAFF
-        else -> Type.ACTOR
-    }
 }
 
 data class MainUiState(

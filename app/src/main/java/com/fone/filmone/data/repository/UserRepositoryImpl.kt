@@ -1,10 +1,22 @@
 package com.fone.filmone.data.repository
 
+import com.fone.filmone.data.datamodel.common.network.handleNetwork
+import com.fone.filmone.data.datamodel.request.user.ChangePasswordRequest
+import com.fone.filmone.data.datamodel.request.user.EmailSignInRequest
+import com.fone.filmone.data.datamodel.request.user.EmailSignUpRequest
+import com.fone.filmone.data.datamodel.request.user.EmailValidationRequest
+import com.fone.filmone.data.datamodel.request.user.FindIdRequest
+import com.fone.filmone.data.datamodel.request.user.FindPasswordRequest
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
-import com.fone.filmone.data.datamodel.common.network.handleNetwork
+import com.fone.filmone.data.datamodel.request.user.ValidatePasswordRequest
 import com.fone.filmone.data.datamodel.response.user.CheckNicknameDuplicationResponse
+import com.fone.filmone.data.datamodel.response.user.EmailSignInResponse
+import com.fone.filmone.data.datamodel.response.user.EmailSignUpResponse
+import com.fone.filmone.data.datamodel.response.user.EmailValidationResponse
+import com.fone.filmone.data.datamodel.response.user.FindIdResponse
+import com.fone.filmone.data.datamodel.response.user.FindPasswordResponse
 import com.fone.filmone.data.datamodel.response.user.SignUpResponse
 import com.fone.filmone.data.datamodel.response.user.SigninResponse
 import com.fone.filmone.data.datamodel.response.user.UserResponse
@@ -34,8 +46,10 @@ class UserRepositoryImpl @Inject constructor(
         return handleNetwork { userApi.signIn(signinRequest) }
             .onSuccess(dispatcher) { signInResponse ->
                 if (signInResponse != null) {
-                    tokenDataStore.saveAccessToken(signInResponse.token.accessToken)
-                    tokenDataStore.saveRefreshToken(signInResponse.token.refreshToken)
+                    saveUserToken(
+                        accessToken = signInResponse.token.accessToken,
+                        refreshToken = signInResponse.token.refreshToken
+                    )
                 }
             }
     }
@@ -60,5 +74,49 @@ class UserRepositoryImpl @Inject constructor(
             .onSuccess(dispatcher) {
                 tokenDataStore.clearToken()
             }
+    }
+
+    override suspend fun emailSignIn(emailSignInRequest: EmailSignInRequest): DataResult<EmailSignInResponse> {
+        return handleNetwork { userApi.emailSignIn(emailSignInRequest) }
+            .onSuccess(dispatcher) { response ->
+                if (response != null) {
+                    saveUserToken(
+                        accessToken = response.token.accessToken,
+                        refreshToken = response.token.refreshToken
+                    )
+                }
+            }
+    }
+
+    override suspend fun emailSignUp(emailSignUpRequest: EmailSignUpRequest): DataResult<EmailSignUpResponse> {
+        return handleNetwork { userApi.emailSignUp(emailSignUpRequest) }
+    }
+
+    override suspend fun changePassword(changePasswordRequest: ChangePasswordRequest): DataResult<Unit> {
+        return handleNetwork { userApi.changePassword(changePasswordRequest) }
+    }
+
+    override suspend fun validatePassword(validatePasswordRequest: ValidatePasswordRequest): DataResult<Unit> {
+        return handleNetwork { userApi.validatePassword(validatePasswordRequest = validatePasswordRequest) }
+    }
+
+    override suspend fun findId(findIdRequest: FindIdRequest): DataResult<FindIdResponse> {
+        return handleNetwork { userApi.findId(findIdRequest) }
+    }
+
+    override suspend fun findPassword(findPasswordRequest: FindPasswordRequest): DataResult<FindPasswordResponse> {
+        return handleNetwork { userApi.findPassword(findPasswordRequest) }
+    }
+
+    override suspend fun validateEmail(emailValidationRequest: EmailValidationRequest): DataResult<EmailValidationResponse> {
+        return handleNetwork { userApi.validateEmail(emailValidationRequest) }
+    }
+
+    private suspend fun saveUserToken(
+        accessToken: String,
+        refreshToken: String
+    ) {
+        tokenDataStore.saveAccessToken(accessToken)
+        tokenDataStore.saveRefreshToken(refreshToken)
     }
 }

@@ -4,6 +4,7 @@ import com.fone.filmone.BuildConfig
 import com.fone.filmone.data.datasource.remote.*
 import com.fone.filmone.domain.repository.AuthRepository
 import com.fone.filmone.framework.drivers.AuthInterceptor
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,11 +20,13 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val connectionTime = 30_000L
+    private const val connectionTime = 10_000L
     private const val baseUrl = "http://3.39.0.194/api/"
     private const val smsBaseUrl = "https://du646e9qh1.execute-api.ap-northeast-2.amazonaws.com/"
     private const val imageUploadBaseUrl =
         "https://du646e9qh1.execute-api.ap-northeast-2.amazonaws.com/"
+
+    val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS").setLenient().create()
 
     @Provides
     fun provideAuthInterceptor(authRepository: AuthRepository): AuthInterceptor =
@@ -34,11 +37,9 @@ object NetworkModule {
         OkHttpClient.Builder().apply {
             connectTimeout(connectionTime, TimeUnit.MILLISECONDS)
             if (BuildConfig.DEBUG) {
-                addInterceptor(
-                    HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    }
-                )
+                addInterceptor(HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                })
             }
 
             addInterceptor(authInterceptor)
@@ -46,49 +47,37 @@ object NetworkModule {
 
     @AuthOkHttpClient
     @Provides
-    fun provideAuthOkHttpClient(): OkHttpClient =
-        OkHttpClient.Builder().apply {
-            connectTimeout(connectionTime, TimeUnit.MILLISECONDS)
-            if (BuildConfig.DEBUG) {
-                addInterceptor(
-                    HttpLoggingInterceptor().apply {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    }
-                )
-            }
-        }.build()
+    fun provideAuthOkHttpClient(): OkHttpClient = OkHttpClient.Builder().apply {
+        connectTimeout(connectionTime, TimeUnit.MILLISECONDS)
+        if (BuildConfig.DEBUG) {
+            addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
+        }
+    }.build()
 
     @AuthRetrofit
     @Provides
     fun provideAuthRetrofit(@AuthOkHttpClient okHttpClient: OkHttpClient): Retrofit =
-        Retrofit.Builder()
-            .baseUrl(baseUrl)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        Retrofit.Builder().baseUrl(baseUrl).client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create(gson)).build()
 
     @SmsRetrofit
     @Provides
-    fun provideSmsRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl(smsBaseUrl)
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    fun provideSmsRetrofit(okHttpClient: OkHttpClient): Retrofit =
+        Retrofit.Builder().baseUrl(smsBaseUrl).client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create(gson)).build()
 
     @ImageUploadRetrofit
     @Provides
-    fun provideImageUploadRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl(imageUploadBaseUrl)
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    fun provideImageUploadRetrofit(okHttpClient: OkHttpClient): Retrofit =
+        Retrofit.Builder().baseUrl(imageUploadBaseUrl).client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create(gson)).build()
 
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl)
-        .client(okHttpClient)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
+        Retrofit.Builder().baseUrl(baseUrl).client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create(gson)).build()
 
     @Singleton
     @Provides
@@ -97,8 +86,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideSmsApi(@SmsRetrofit retrofit: Retrofit): SmsApi =
-        retrofit.create(SmsApi::class.java)
+    fun provideSmsApi(@SmsRetrofit retrofit: Retrofit): SmsApi = retrofit.create(SmsApi::class.java)
 
     @Singleton
     @Provides
@@ -107,13 +95,11 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideUserApi(retrofit: Retrofit): UserApi =
-        retrofit.create(UserApi::class.java)
+    fun provideUserApi(retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)
 
     @Singleton
     @Provides
-    fun provideInquiryApi(retrofit: Retrofit): InquiryApi =
-        retrofit.create(InquiryApi::class.java)
+    fun provideInquiryApi(retrofit: Retrofit): InquiryApi = retrofit.create(InquiryApi::class.java)
 
     @Singleton
     @Provides
@@ -129,6 +115,10 @@ object NetworkModule {
     @Provides
     fun provideProfilesApi(retrofit: Retrofit): ProfilesApi =
         retrofit.create(ProfilesApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideHomeApi(retrofit: Retrofit): HomeApi = retrofit.create(HomeApi::class.java)
 }
 
 @Qualifier

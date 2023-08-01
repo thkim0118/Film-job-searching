@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
+    id 'kotlinx-serialization'
 }
 
 android {
@@ -14,8 +15,8 @@ android {
         applicationId "com.fone.filmone"
         minSdk 26
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "0.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -29,7 +30,7 @@ android {
             def kakaoAppKey = "ee40509f29760cb723e4aa58c379f1da"
             manifestPlaceholders = [kakaoAuthScheme: "kakao" + kakaoAppKey]
 
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
@@ -52,7 +53,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.4.4'
+        kotlinCompilerExtensionVersion '1.4.7'
     }
     packagingOptions {
         resources {
@@ -70,6 +71,7 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
     implementation 'androidx.compose.material:material:1.4.0'
     implementation "androidx.core:core-splashscreen:1.0.0"
+    implementation "androidx.lifecycle:lifecycle-process:2.6.1"
 
     implementation "androidx.datastore:datastore-preferences:$data_store_version"
 
@@ -92,6 +94,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation "com.firebaseui:firebase-ui-auth:$firebase_auth_version"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

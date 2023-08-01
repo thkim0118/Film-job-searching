@@ -1,7 +1,7 @@
 package com.fone.filmone.core.login
 
 import android.content.Context
-import com.fone.filmone.data.datamodel.response.user.SocialLoginType
+import com.fone.filmone.data.datamodel.response.user.LoginType
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.oauth.NidOAuthErrorCode
 import com.navercorp.nid.oauth.NidOAuthLogin
@@ -50,7 +50,7 @@ class NaverLoginImpl(
                         loginCallback.onSuccess(
                             accessToken,
                             email,
-                            SocialLoginType.NAVER
+                            LoginType.NAVER
                         )
                     }
                 }

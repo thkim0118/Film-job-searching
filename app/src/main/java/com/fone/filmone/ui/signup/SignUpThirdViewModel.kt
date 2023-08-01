@@ -4,13 +4,16 @@ import android.os.CountDownTimer
 import android.telephony.PhoneNumberUtils
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
-import com.fone.filmone.core.util.VerificationTimer
+import com.fone.filmone.core.util.timer.VerificationTimer
+import com.fone.filmone.data.datamodel.response.user.LoginType
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
+import com.fone.filmone.domain.usecase.EmailSignUpUseCase
 import com.fone.filmone.domain.usecase.RequestPhoneVerificationUseCase
 import com.fone.filmone.domain.usecase.SignUpUseCase
 import com.fone.filmone.domain.usecase.VerifySmsCodeUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
+import com.fone.filmone.ui.common.phone.PhoneVerificationState
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
@@ -27,7 +30,8 @@ import javax.inject.Inject
 class SignUpThirdViewModel @Inject constructor(
     private val requestPhoneVerificationUseCase: RequestPhoneVerificationUseCase,
     private val verifySmsCodeUseCase: VerifySmsCodeUseCase,
-    private val signUpUseCase: SignUpUseCase
+    private val signUpUseCase: SignUpUseCase,
+    private val emailSignUpUseCase: EmailSignUpUseCase
 ) : BaseViewModel() {
     private val _uiState = MutableStateFlow(SignUpThirdUiState())
     val uiState: StateFlow<SignUpThirdUiState> = _uiState.asStateFlow()
@@ -56,25 +60,32 @@ class SignUpThirdViewModel @Inject constructor(
     fun signUp(signUpVo: SignUpVo) = viewModelScope.launch {
         val agreeStates = uiState.value.agreeState
 
-        signUpUseCase(
-            signUpVo = signUpVo.copy(
-                phoneNumber = PhoneNumberUtils.formatNumber(
-                    uiState.value.phoneNumber,
-                    "KR"
-                ),
-                agreeToTermsOfServiceTermsOfUse = agreeStates.contains(AgreeState.Term),
-                agreeToPersonalInformation = agreeStates.contains(AgreeState.Privacy),
-                isReceiveMarketing = agreeStates.contains(AgreeState.Marketing),
-                profileUrl = profileUrl
-            )
-        ).onSuccess {
+        val signUpVoRequest = signUpVo.copy(
+            phoneNumber = PhoneNumberUtils.formatNumber(
+                uiState.value.phoneNumber,
+                "KR"
+            ),
+            agreeToTermsOfServiceTermsOfUse = agreeStates.contains(AgreeState.Term),
+            agreeToPersonalInformation = agreeStates.contains(AgreeState.Privacy),
+            isReceiveMarketing = agreeStates.contains(AgreeState.Marketing),
+            profileUrl = profileUrl
+        )
+
+        val signUpResult = if (signUpVo.loginType == LoginType.PASSWORD) {
+            emailSignUpUseCase(signUpVoRequest)
+        } else {
+            signUpUseCase(signUpVoRequest)
+        }
+
+        signUpResult.onSuccess {
             FOneNavigator.navigateTo(
                 NavDestinationState(
                     route = FOneDestinations.SignUpComplete.getRouteWithArg(
-                        accessToken = signUpVo.accessToken,
+                        accessToken = signUpVo.accessToken.ifEmpty { null },
                         email = signUpVo.email,
-                        socialLoginType = signUpVo.socialLoginType,
-                        nickname = signUpVo.nickname
+                        socialLoginType = signUpVo.loginType?.name ?: "",
+                        nickname = signUpVo.nickname,
+                        password = signUpVo.password.ifEmpty { null }
                     )
                 )
             )
@@ -150,9 +161,7 @@ class SignUpThirdViewModel @Inject constructor(
             return@launch
         }
 
-        requestPhoneVerificationUseCase(
-            "+82${uiState.value.phoneNumber.drop(1)}"
-        ).onSuccess {
+        requestPhoneVerificationUseCase(uiState.value.phoneNumber).onSuccess {
             _uiState.update {
                 it.copy(phoneVerificationState = PhoneVerificationState.Retransmit)
             }
@@ -237,12 +246,6 @@ data class SignUpThirdUiState(
     val isTermAllAgree: Boolean = false,
     val isRequiredTemAllAgree: Boolean = false,
 )
-
-sealed interface PhoneVerificationState {
-    object Complete : PhoneVerificationState
-    object ShouldVerify : PhoneVerificationState
-    object Retransmit : PhoneVerificationState
-}
 
 enum class AgreeState(val isRequired: Boolean) {
     Term(true),

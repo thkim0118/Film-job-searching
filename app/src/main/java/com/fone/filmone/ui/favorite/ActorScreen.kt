@@ -15,6 +15,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.component.ProfileItem
+import com.fone.filmone.ui.common.empty.EmptyScreen
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 
@@ -45,32 +46,13 @@ fun ActorScreen(
                     }
                 }
             }
+
             ProfileUiState.NoData -> {
-                EmptyScreen(modifier = Modifier.align(Alignment.Center))
+                EmptyScreen(
+                    modifier = Modifier.align(Alignment.Center),
+                    title = stringResource(id = R.string.favorite_empty_title)
+                )
             }
         }
-    }
-}
-
-@Composable
-private fun EmptyScreen(
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Image(
-            imageVector = ImageVector.vectorResource(id = R.drawable.scrap_empty_image),
-            contentDescription = null
-        )
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Text(
-            text = stringResource(id = R.string.favorite_empty_title),
-            style = LocalTypography.current.subtitle2(),
-            color = FColor.TextPrimary
-        )
     }
 }

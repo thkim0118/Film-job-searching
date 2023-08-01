@@ -6,7 +6,7 @@ import com.fone.filmone.data.datamodel.common.paging.Sort
 
 @Keep
 data class Profiles(
-    val content: List<Content>,
+    val content: List<ProfileContent>,
     val empty: Boolean,
     val first: Boolean,
     val last: Boolean,

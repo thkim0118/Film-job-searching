@@ -2,6 +2,7 @@ package com.fone.filmone.ui.navigation
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.fone.filmone.ui.profile.list.model.ProfileListArguments
 import com.fone.filmone.ui.signup.model.SignUpVo
 
 sealed class FOneDestinations(val route: String) {
@@ -48,22 +49,25 @@ sealed class FOneDestinations(val route: String) {
         const val argEmail = "arg_email"
         const val argSocialLoginType = "arg_social_login_type"
         const val argNickname = "arg_nickname"
+        const val argPassword = "arg_password"
         val routeWithArgs =
-            "$route/{$argAccessToken}/{$argEmail}/{$argSocialLoginType}/{$argNickname}"
+            "$route/{$argAccessToken}/{$argEmail}/{$argSocialLoginType}/{$argNickname}/{$argPassword}"
         val arguments = listOf(
             navArgument(argAccessToken) { type = NavType.StringType },
             navArgument(argEmail) { type = NavType.StringType },
             navArgument(argSocialLoginType) { type = NavType.StringType },
-            navArgument(argNickname) { type = NavType.StringType }
+            navArgument(argNickname) { type = NavType.StringType },
+            navArgument(argPassword) { type = NavType.StringType }
         )
 
         fun getRouteWithArg(
-            accessToken: String,
+            accessToken: String?,
             email: String,
             socialLoginType: String,
-            nickname: String
+            nickname: String,
+            password: String?
         ): String {
-            return "$route/${accessToken}/${email}/${socialLoginType}/${nickname}"
+            return "$route/${accessToken}/${email}/${socialLoginType}/${nickname}/${password}"
         }
     }
 
@@ -77,10 +81,58 @@ sealed class FOneDestinations(val route: String) {
     object StaffFilter : FOneDestinations("staff_filter")
     object ActorRecruitingRegister : FOneDestinations("actor_recruiting_register")
     object StaffRecruitingRegister : FOneDestinations("staff_recruiting_register")
-    object ActorRecruitingArticle : FOneDestinations("actor_recruiting_article")
-    object StaffRecruitingArticle : FOneDestinations("staff_recruiting_article")
+    object ActorRecruitingDetail : FOneDestinations("actor_recruiting_detail") {
+        const val argActorRecruitingDetail = "arg_actor_recruiting_detail"
+        val routeWithArgs = "$route/{$argActorRecruitingDetail}"
+        val arguments = listOf(
+            navArgument(argActorRecruitingDetail) { type = NavType.IntType }
+        )
+
+        fun getRouteWithArg(competitionId: Int): String {
+            return "$route/${competitionId}"
+        }
+    }
+
+    object StaffRecruitingDetail : FOneDestinations("staff_recruiting_detail") {
+        const val argStaffRecruitingDetail = "arg_actor_recruiting_detail"
+        val routeWithArgs = "$route/{$argStaffRecruitingDetail}"
+        val arguments = listOf(
+            navArgument(argStaffRecruitingDetail) { type = NavType.IntType }
+        )
+
+        fun getRouteWithArg(competitionId: Int): String {
+            return "$route/${competitionId}"
+        }
+    }
+
     object ActorProfileRegister : FOneDestinations("actor_profile_register")
     object StaffProfileRegister : FOneDestinations("staff_profile_register")
-    object ActorProfileArticle : FOneDestinations("actor_profile_article")
-    object StaffProfileArticle : FOneDestinations("staff_profile_article")
+    object ActorProfileDetail : FOneDestinations("actor_profile_detail") {
+        const val argActorProfileDetail = "arg_actor_profile_detail"
+        val routeWithArgs = "$route/{$argActorProfileDetail}"
+        val arguments = listOf(
+            navArgument(argActorProfileDetail) { type = NavType.IntType }
+        )
+
+        fun getRouteWithArg(profileId: Int): String {
+            return "$route/${profileId}"
+        }
+    }
+
+    object StaffProfileDetail : FOneDestinations("staff_profile_detail")
+    object ProfileList : FOneDestinations("profile_list") {
+        const val argProfileList = "arg_profile_list"
+        val routeWithArgs = "$route/{$argProfileList}"
+        val arguments = listOf(
+            navArgument(argProfileList) { type = NavType.StringType },
+        )
+
+        fun getRouteWithArg(profileListArgument: ProfileListArguments): String {
+            return "$route/${ProfileListArguments.toJson(profileListArgument)}"
+        }
+    }
+
+    object EmailLogin : FOneDestinations("email_login")
+    object FindIdPassword : FOneDestinations("find_id_password")
+    object EmailJoin : FOneDestinations("email_join")
 }

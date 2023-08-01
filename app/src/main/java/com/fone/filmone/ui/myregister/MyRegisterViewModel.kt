@@ -1,6 +1,7 @@
 package com.fone.filmone.ui.myregister
 
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.data.datamodel.common.jobopenings.JobOpenings
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.profile.Profiles
@@ -12,7 +13,15 @@ import com.fone.filmone.domain.usecase.GetMyRegistrationJobOpeningsUseCase
 import com.fone.filmone.domain.usecase.GetMyRegistrationProfileUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -36,18 +45,22 @@ class MyRegisterViewModel @Inject constructor(
     val dialogState: StateFlow<MyRegisterDialogState> = _dialogState.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            val jobOpeningsResponse =
-                flowOf(getMyRegistrationJobOpeningsUseCase(page = 1).getOrNull())
-            val profilesResponse = flowOf(getMyRegistrationProfileUseCase(page = 1).getOrNull())
+        fetchMyRegisterContents()
+    }
 
-            combine(jobOpeningsResponse, profilesResponse) { jobOpeningsResult, profilesResult ->
-                MyRegisterViewModelState(
+    private fun fetchMyRegisterContents() = viewModelScope.launch {
+        val jobOpeningsResponse =
+            flowOf(getMyRegistrationJobOpeningsUseCase(page = 0).getOrNull())
+        val profilesResponse = flowOf(getMyRegistrationProfileUseCase(page = 0).getOrNull())
+
+        combine(jobOpeningsResponse, profilesResponse) { jobOpeningsResult, profilesResult ->
+            myRegisterViewModelState.update {
+                it.copy(
                     jobOpenings = jobOpeningsResult?.jobOpenings,
                     profiles = profilesResult?.profiles
                 )
             }
-        }
+        }.stateIn(viewModelScope)
     }
 }
 
@@ -61,11 +74,14 @@ private data class MyRegisterViewModelState(
                 type = content.type,
                 categories = content.categories,
                 title = content.title,
-                deadline = content.deadline,
-                director = content.work.director,
+                deadline = content.deadline.replace("-", ". "),
+                director = content.work.produce,
                 gender = content.gender,
                 period = content.dday,
-                jobType = JobType.Field, // TODO 변경
+                jobType = when (content.type) {
+                    Type.ACTOR -> JobType.PART
+                    Type.STAFF -> JobType.Field
+                },
                 casting = content.casting
             )
         } ?: emptyList(),
@@ -73,11 +89,14 @@ private data class MyRegisterViewModelState(
             RegisterPostProfileUiModel(
                 profileUrl = content.profileUrl,
                 name = content.name,
-                type = Type.ACTOR, // TODO type 값을 받아와야함.
-                info = content.birthday + content.age
+                type = content.type,
+                info = makeUserAgeInfo(content.birthday, content.age)
             )
         } ?: emptyList()
     )
+
+    private fun makeUserAgeInfo(birthday: String, age: Int): String =
+        "${birthday.split("-").firstOrNull() ?: ""}년생 (${age}살)"
 }
 
 data class MyRegisterUiState(
