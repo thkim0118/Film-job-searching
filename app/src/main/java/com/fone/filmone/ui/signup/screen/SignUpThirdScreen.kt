@@ -174,7 +174,7 @@ private fun SignUpMainScreen(
                     onUpdateAgreeState = onUpdateAgreeState
                 )
 
-                Spacer(modifier = Modifier.height(110.dp))
+                Spacer(modifier = Modifier.height(24.dp))
             }
 
             NextButton(
@@ -277,7 +277,7 @@ private fun TermComponent(
     if (isTermArrowExpanded) {
         Spacer(modifier = Modifier.height(7.dp))
 
-        TermContent(termText = "이용약관 이용약관 이용약관 이용약관 이용약관 이용약관")
+        TermContent(termText = stringResource(id = R.string.sign_up_term_common))
     }
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -335,7 +335,7 @@ private fun TermComponent(
     if (isPrivacyArrowExpanded) {
         Spacer(modifier = Modifier.height(7.dp))
 
-        TermContent(termText = "이용약관 이용약관 이용약관 이용약관 이용약관 이용약관")
+        TermContent(termText = stringResource(id = R.string.sign_up_term_privacy))
     }
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -393,7 +393,7 @@ private fun TermComponent(
     if (isMarketingArrowExpanded) {
         Spacer(modifier = Modifier.height(7.dp))
 
-        TermContent(termText = "이용약관 이용약관 이용약관 이용약관 이용약관 이용약관")
+        TermContent(termText = stringResource(id = R.string.sign_up_term_marketing))
     }
 }
 
@@ -402,6 +402,8 @@ fun TermContent(
     modifier: Modifier = Modifier,
     termText: String,
 ) {
+    val scrollState = rememberScrollState()
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -410,7 +412,11 @@ fun TermContent(
             .padding(horizontal = 20.dp, vertical = 10.dp)
     ) {
         Text(
-            text = termText, style = fTextStyle(
+            modifier = Modifier
+                .height(83.dp)
+                .verticalScroll(scrollState),
+            text = termText,
+            style = fTextStyle(
                 fontWeight = FontWeight.W400,
                 fontSize = 12.textDp,
                 lineHeight = 16.textDp,

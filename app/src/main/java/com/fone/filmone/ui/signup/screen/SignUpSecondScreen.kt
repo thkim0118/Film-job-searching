@@ -1,11 +1,20 @@
 package com.fone.filmone.ui.signup.screen
 
 import android.net.Uri
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -13,7 +22,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -36,11 +52,17 @@ import com.fone.filmone.R
 import com.fone.filmone.core.image.ImageBase64Util
 import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.data.datamodel.common.user.Gender
-import com.fone.filmone.ui.common.*
+import com.fone.filmone.ui.common.FBorderButton
+import com.fone.filmone.ui.common.FButton
+import com.fone.filmone.ui.common.FTextField
+import com.fone.filmone.ui.common.FTitleBar
+import com.fone.filmone.ui.common.FToast
+import com.fone.filmone.ui.common.TitleType
 import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.fShadow
 import com.fone.filmone.ui.common.ext.textDp
+import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
@@ -68,10 +90,6 @@ fun SignUpSecondScreen(
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
 
-    BackHandler(enabled = true) {
-        navigateLoginScreen(navController)
-    }
-
     Scaffold(
         modifier = Modifier,
         snackbarHost = {
@@ -92,7 +110,7 @@ fun SignUpSecondScreen(
                     titleType = TitleType.Back,
                     titleText = stringResource(id = R.string.sign_up_title_text),
                     onBackClick = {
-                        navigateLoginScreen(navController)
+                        navController.popBackStack()
                     }
                 )
 
@@ -153,12 +171,6 @@ fun SignUpSecondScreen(
                 }
             }
         }
-    }
-}
-
-private fun navigateLoginScreen(navController: NavHostController) {
-    navController.navigate(FOneDestinations.Login.route) {
-        popUpTo(0)
     }
 }
 
@@ -270,6 +282,7 @@ private fun BirthdayGenderComponent(
                         text = "${before.text}-${after.text.last()}",
                         selection = TextRange(after.text.length + 1)
                     )
+
                     else -> after
                 }
             } else {
@@ -277,6 +290,7 @@ private fun BirthdayGenderComponent(
                     5, 8 -> after.copy(
                         text = after.text.dropLast(1),
                     )
+
                     else -> after
                 }
             }

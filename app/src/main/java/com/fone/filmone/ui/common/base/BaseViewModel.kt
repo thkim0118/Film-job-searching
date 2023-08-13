@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
+import com.fone.filmone.ui.common.ToastDuration
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,15 +16,21 @@ abstract class BaseViewModel : ViewModel() {
     val toastEvent: StateFlow<ToastEvent> = _toastEvent.asStateFlow()
 
 
-    fun showToast(@StringRes message: Int) {
+    fun showToast(@StringRes message: Int, toastDuration: ToastDuration = ToastDuration.SEC_2_5) {
         _toastEvent.update {
-            it.copy(messageRes = message)
+            it.copy(
+                messageRes = message,
+                toastDuration = toastDuration
+            )
         }
     }
 
-    fun showToast(message: String) {
+    fun showToast(message: String, toastDuration: ToastDuration = ToastDuration.SEC_2_5) {
         _toastEvent.update {
-            it.copy(message = message)
+            it.copy(
+                message = message,
+                toastDuration = toastDuration
+            )
         }
     }
 
@@ -41,6 +48,7 @@ abstract class BaseViewModel : ViewModel() {
 data class ToastEvent(
     @StringRes val messageRes: Int = Int.MIN_VALUE,
     val message: String = "",
+    val toastDuration: ToastDuration = ToastDuration.SEC_2_5,
     val bottomPadding: Int = 0
 ) {
     fun isEmptyMessage(): Boolean {

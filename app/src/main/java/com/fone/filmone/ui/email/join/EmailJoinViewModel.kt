@@ -83,30 +83,16 @@ class EmailJoinViewModel @Inject constructor(
         return PatternUtil.isValidEmail(email)
     }
 
-    fun isValidatePassword(): Boolean {
-        val password = uiState.value.password
-        val confirmedPassword = uiState.value.confirmedPassword
-
-        if (password != confirmedPassword) {
-            showToast("입력하신 비밀번호와 동일하지 않습니다.")
-            return false
-        }
-
-        val regex =
-            Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")
-        val isValid = regex.matches(password)
-
-        return if (isValid) {
-            true
-        } else {
-            showToast("8자 이상, 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
-            false
-        }
-    }
-
     fun updatePassword(password: String) {
         viewModelState.update {
-            it.copy(password = password)
+            it.copy(
+                password = password,
+                passwordErrorType = if (PatternUtil.isValidPassword(password = password)) {
+                    null
+                } else {
+                    PasswordErrorType.INVALID_TYPE
+                }
+            )
         }
 
         updateNextButtonEnable()
@@ -114,7 +100,14 @@ class EmailJoinViewModel @Inject constructor(
 
     fun updateConfirmedPassword(confirmedPassword: String) {
         viewModelState.update {
-            it.copy(confirmedPassword = confirmedPassword)
+            it.copy(
+                confirmedPassword = confirmedPassword,
+                confirmedPasswordErrorType = if (uiState.value.password != confirmedPassword) {
+                    PasswordErrorType.NOT_MATCH
+                } else {
+                    null
+                }
+            )
         }
 
         updateNextButtonEnable()
@@ -136,7 +129,8 @@ class EmailJoinViewModel @Inject constructor(
         val state = viewModelState.value
         val enable = state.name.isNotEmpty() && state.isEmailChecked &&
                 state.password.isNotEmpty() && state.confirmedPassword.isNotEmpty() &&
-                state.password == state.confirmedPassword
+                state.password == state.confirmedPassword &&
+                PatternUtil.isValidPassword(state.password)
 
         viewModelState.update {
             it.copy(isNextButtonEnable = enable)
@@ -152,6 +146,8 @@ private data class EmailJoinViewModelState(
     val emailErrorType: EmailErrorType? = null,
     val password: String = "",
     val confirmedPassword: String = "",
+    val passwordErrorType: PasswordErrorType? = null,
+    val confirmedPasswordErrorType: PasswordErrorType? = null,
     val token: String = "",
     val isPasswordVisible: Boolean = false,
     val isConfirmedPasswordVisible: Boolean = false,
@@ -166,6 +162,8 @@ private data class EmailJoinViewModelState(
             emailErrorType = emailErrorType,
             password = password,
             confirmedPassword = confirmedPassword,
+            passwordErrorType = passwordErrorType,
+            confirmedPasswordErrorType = confirmedPasswordErrorType,
             token = token,
             isPasswordVisible = isPasswordVisible,
             isConfirmedPasswordVisible = isConfirmedPasswordVisible,
@@ -182,6 +180,8 @@ data class EmailJoinUiState(
     val emailErrorType: EmailErrorType?,
     val password: String,
     val confirmedPassword: String,
+    val passwordErrorType: PasswordErrorType?,
+    val confirmedPasswordErrorType: PasswordErrorType?,
     val token: String,
     val isPasswordVisible: Boolean,
     val isConfirmedPasswordVisible: Boolean,

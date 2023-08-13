@@ -3,6 +3,7 @@ package com.fone.filmone.ui.email.find
 import android.os.CountDownTimer
 import android.telephony.PhoneNumberUtils
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.BuildConfig
 import com.fone.filmone.R
 import com.fone.filmone.core.util.timer.VerificationTimer
 import com.fone.filmone.data.datamodel.response.user.LoginType
@@ -13,6 +14,7 @@ import com.fone.filmone.domain.usecase.FindIdUseCase
 import com.fone.filmone.domain.usecase.FindPasswordUseCase
 import com.fone.filmone.domain.usecase.RequestPhoneVerificationUseCase
 import com.fone.filmone.domain.usecase.VerifySmsCodeUseCase
+import com.fone.filmone.ui.common.ToastDuration
 import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.common.phone.PhoneVerificationState
 import com.fone.filmone.ui.email.find.model.FindScreenType
@@ -106,6 +108,10 @@ class FindViewModel @Inject constructor(
             verificationTimer.finishVerificationTimer()
             verificationTimer.startVerificationTimer()
             showToast(R.string.toast_request_verification_code)
+
+            if (BuildConfig.DEBUG) {
+                showToast(it?.debugCode ?: "ERROR", ToastDuration.SEC_5)
+            }
         }
     }
 

@@ -82,6 +82,7 @@ fun NavGraphBuilder.signUpNavGraph(
             email = email,
             loginType = socialLoginType,
             nickname = nickname,
+            navController = navController,
             password = password
         )
     }

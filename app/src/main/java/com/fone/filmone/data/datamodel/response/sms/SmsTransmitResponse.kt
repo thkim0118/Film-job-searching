@@ -4,5 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 data class SmsTransmitResponse(
     @SerializedName("messageId")
-    val messageId: String
+    val messageId: String,
+    val debugCode: String?
 )

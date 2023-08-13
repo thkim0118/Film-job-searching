@@ -83,7 +83,7 @@ class InquiryViewModel @Inject constructor(
 
     private fun showToastAndPopScreen(@StringRes messageRes: Int) = viewModelScope.launch {
         showToast(messageRes)
-        delay(ToastDuration)
+        delay(ToastDuration.SEC_2_5.milliseconds)
         _uiState.update {
             it.copy(popScreen = true)
         }

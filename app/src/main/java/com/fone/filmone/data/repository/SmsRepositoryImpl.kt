@@ -1,5 +1,6 @@
 package com.fone.filmone.data.repository
 
+import com.fone.filmone.BuildConfig
 import com.fone.filmone.data.datamodel.request.sms.SmsRequest
 import com.fone.filmone.data.datamodel.common.network.handleNetwork
 import com.fone.filmone.data.datamodel.response.sms.SmsTransmitResponse
@@ -16,7 +17,12 @@ class SmsRepositoryImpl @Inject constructor(
 
     override suspend fun requestSmsCode(smsRequest: SmsRequest): DataResult<SmsTransmitResponse> {
         verificationCode = smsRequest.code
-        return handleNetwork { smsApi.requestSmsVerifyCode(smsRequest) }
+
+        return if (BuildConfig.DEBUG) {
+            DataResult.Success(SmsTransmitResponse("TEST", verificationCode))
+        } else {
+            handleNetwork { smsApi.requestSmsVerifyCode(smsRequest) }
+        }
     }
 
     override fun verifySmsVerificationCode(code: String): DataResult<Boolean> {

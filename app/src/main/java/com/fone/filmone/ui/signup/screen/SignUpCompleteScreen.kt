@@ -1,5 +1,6 @@
 package com.fone.filmone.ui.signup.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
@@ -17,11 +18,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.FButton
 import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
+import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.signup.SignUpCompleteViewModel
 import com.fone.filmone.ui.theme.FColor
 
@@ -33,8 +36,13 @@ fun SignUpCompleteScreen(
     loginType: String,
     password: String?,
     nickname: String,
+    navController: NavHostController,
     viewModel: SignUpCompleteViewModel = hiltViewModel()
 ) {
+    BackHandler(true) {
+        navigateLoginScreen(navController)
+    }
+
     Scaffold(
         modifier = Modifier,
         snackbarHost = {
@@ -114,3 +122,10 @@ fun SignUpCompleteScreen(
         }
     }
 }
+
+private fun navigateLoginScreen(navController: NavHostController) {
+    navController.navigate(FOneDestinations.Login.route) {
+        popUpTo(0)
+    }
+}
+

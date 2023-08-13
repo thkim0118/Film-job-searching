@@ -5,6 +5,8 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
     id 'kotlinx-serialization'
+    id 'com.google.firebase.crashlytics'
+    id 'com.google.firebase.appdistribution'
 }
 
 android {
@@ -15,7 +17,7 @@ android {
         applicationId "com.fone.filmone"
         minSdk 26
         targetSdk 33
-        versionCode 2
+        versionCode 3
         versionName "0.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -26,12 +28,16 @@ android {
 
     buildTypes {
         release {
-            //TODO Release 용으로 변경해야함.
             def kakaoAppKey = "ee40509f29760cb723e4aa58c379f1da"
             manifestPlaceholders = [kakaoAuthScheme: "kakao" + kakaoAppKey]
 
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            firebaseAppDistribution {
+                artifactType="AAB"
+                groups="FOne"
+            }
         }
 
         debug {
@@ -40,6 +46,11 @@ android {
 
             minifyEnabled false
             debuggable true
+
+            firebaseAppDistribution {
+                artifactType="APK"
+                groups="FOne"
+            }
         }
     }
     compileOptions {
@@ -94,6 +105,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation "com.firebaseui:firebase-ui-auth:$firebase_auth_version"
+    implementation "com.google.firebase:firebase-crashlytics-ktx"
 
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
 

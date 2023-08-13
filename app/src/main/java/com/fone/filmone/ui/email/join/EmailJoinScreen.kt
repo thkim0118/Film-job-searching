@@ -113,6 +113,8 @@ fun EmailJoinScreen(
                         confirmedPassword = uiState.confirmedPassword,
                         isPasswordVisible = uiState.isPasswordVisible,
                         isConfirmedPasswordVisible = uiState.isConfirmedPasswordVisible,
+                        passwordErrorType = uiState.passwordErrorType,
+                        confirmedPasswordErrorType = uiState.confirmedPasswordErrorType,
                         onUpdatePassword = viewModel::updatePassword,
                         onUpdateConfirmedPassword = viewModel::updateConfirmedPassword,
                         onUpdatePasswordVisible = viewModel::updatePasswordVisible,
@@ -125,20 +127,18 @@ fun EmailJoinScreen(
                 NextButton(
                     enable = uiState.isNextButtonEnable,
                     onClick = {
-                        if (viewModel.isValidatePassword()) {
-                            FOneNavigator.navigateTo(
-                                NavDestinationState(
-                                    route = FOneDestinations.SignUpFirst.getRouteWithArg(
-                                        SignUpVo(
-                                            email = uiState.email,
-                                            loginType = LoginType.PASSWORD,
-                                            password = uiState.confirmedPassword,
-                                            token = uiState.token
-                                        )
+                        FOneNavigator.navigateTo(
+                            NavDestinationState(
+                                route = FOneDestinations.SignUpFirst.getRouteWithArg(
+                                    SignUpVo(
+                                        email = uiState.email,
+                                        loginType = LoginType.PASSWORD,
+                                        password = uiState.confirmedPassword,
+                                        token = uiState.token
                                     )
                                 )
                             )
-                        }
+                        )
                     }
                 )
             }
@@ -249,6 +249,8 @@ private fun PasswordComponent(
     confirmedPassword: String,
     isPasswordVisible: Boolean,
     isConfirmedPasswordVisible: Boolean,
+    passwordErrorType: PasswordErrorType?,
+    confirmedPasswordErrorType: PasswordErrorType?,
     onUpdatePassword: (String) -> Unit,
     onUpdateConfirmedPassword: (String) -> Unit,
     onUpdatePasswordVisible: () -> Unit,
@@ -288,10 +290,30 @@ private fun PasswordComponent(
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password
-            )
+            ),
+            isError = passwordErrorType != null,
+            bottomComponent = {
+                Text(
+                    modifier = Modifier
+                        .alpha(
+                            if (passwordErrorType != null) {
+                                1f
+                            } else {
+                                0f
+                            }
+                        ),
+                    text = passwordErrorType?.let { stringResource(it.titleRes) } ?: "",
+                    style = fTextStyle(
+                        fontWeight = FontWeight.W400,
+                        fontSize = 12.textDp,
+                        lineHeight = 14.32.textDp,
+                        color = FColor.Error
+                    )
+                )
+            }
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(17.dp))
 
         FTextField(
             text = confirmedPassword,
@@ -318,7 +340,28 @@ private fun PasswordComponent(
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password
-            )
+            ),
+            isError = confirmedPasswordErrorType != null,
+            bottomComponent = {
+                Text(
+                    modifier = Modifier
+                        .alpha(
+                            if (confirmedPasswordErrorType != null) {
+                                1f
+                            } else {
+                                0f
+                            }
+                        ),
+                    text = confirmedPasswordErrorType?.let { stringResource(id = it.titleRes) }
+                        ?: "",
+                    style = fTextStyle(
+                        fontWeight = FontWeight.W400,
+                        fontSize = 12.textDp,
+                        lineHeight = 14.32.textDp,
+                        color = FColor.Error
+                    )
+                )
+            }
         )
     }
 }
