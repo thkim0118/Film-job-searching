@@ -17,7 +17,7 @@ android {
         applicationId "com.fone.filmone"
         minSdk 26
         targetSdk 33
-        versionCode 3
+        versionCode 4
         versionName "0.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
