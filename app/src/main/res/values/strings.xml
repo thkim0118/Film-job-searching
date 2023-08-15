@@ -462,6 +462,7 @@
     <string name="job_filter_all_select">전체선택</string>
     <string name="job_filter_age">나이</string>
     <string name="job_filter_age_range">%d살 ~ %d살 이상</string>
+    <string name="job_filter_age_range_no_limit">%d살 ~ %d살</string>
     <string name="job_filter_age_irrelevant">연령무관</string>
     <string name="job_filter_interests_title">관심사 선택</string>
     <string name="job_filter_button_title">보러가기</string>

@@ -251,7 +251,11 @@ private fun AgeComponent(
 
         Text(
             text = stringResource(
-                id = R.string.job_filter_age_range,
+                if (ageRange.endInclusive >= 70f) {
+                    R.string.job_filter_age_range
+                } else {
+                    R.string.job_filter_age_range_no_limit
+                },
                 ageRange.start.toInt(),
                 ageRange.endInclusive.toInt()
             ),
