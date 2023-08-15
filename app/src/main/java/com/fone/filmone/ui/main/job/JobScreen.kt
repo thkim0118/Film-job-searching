@@ -51,6 +51,7 @@ fun JobScreen(
     modifier: Modifier = Modifier,
     currentJobSorting: JobSorting,
     userType: Type,
+    initialJobTab: JobTab = JobTab.JOB_OPENING,
     onUpdateCurrentJobSorting: (JobTab) -> Unit,
     onJobOpeningsFilterClick: () -> Unit,
     onProfileFilterClick: () -> Unit,
@@ -58,7 +59,7 @@ fun JobScreen(
     onUpdateUserType: (Type) -> Unit,
     viewModel: JobScreenSharedViewModel = hiltViewModel()
 ) {
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(initialPage = initialJobTab.index)
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsState()
 
@@ -519,5 +520,9 @@ enum class JobTab(
     PROFILE(
         titleRes = R.string.job_tab_profile_title,
         index = 1
-    )
+    );
+
+    companion object {
+        fun parsePage(page: String)= JobTab.values().find { it.name == page } ?: JOB_OPENING
+    }
 }

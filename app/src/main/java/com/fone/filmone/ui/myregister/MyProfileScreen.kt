@@ -26,6 +26,11 @@ import androidx.compose.ui.unit.dp
 import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.ui.common.ext.clickableSingle
+import com.fone.filmone.ui.main.job.JobTab
+import com.fone.filmone.ui.main.model.MainBottomNavItem
+import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 import com.skydoves.landscapist.ShimmerParams
@@ -205,7 +210,18 @@ private fun EmptyScreen(
         Spacer(modifier = Modifier.height(18.dp))
 
         Text(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickableSingle {
+                    FOneNavigator.navigateTo(
+                        navDestinationState = NavDestinationState(
+                            route = FOneDestinations.Main.getRouteWithJobInitialPageArg(
+                                JobTab.PROFILE.name
+                            ),
+                            isPopAll = true
+                        )
+                    )
+                },
             text = stringResource(id = R.string.my_register_profile_empty_subtitle),
             style = LocalTypography.current.subtitle2(),
             color = FColor.Primary,

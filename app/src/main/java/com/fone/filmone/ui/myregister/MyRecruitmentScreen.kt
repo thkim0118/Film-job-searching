@@ -21,6 +21,11 @@ import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.domain.model.jobopenings.JobType
 import com.fone.filmone.ui.common.ext.clickableSingle
+import com.fone.filmone.ui.main.job.JobTab
+import com.fone.filmone.ui.main.model.MainBottomNavItem
+import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 
@@ -319,6 +324,17 @@ private fun EmptyScreen(
         ) {
             Spacer(modifier = Modifier.weight(1f))
             Text(
+                modifier = Modifier
+                    .clickableSingle {
+                        FOneNavigator.navigateTo(
+                            navDestinationState = NavDestinationState(
+                                route = FOneDestinations.Main.getRouteWithJobInitialPageArg(
+                                    JobTab.JOB_OPENING.name
+                                ),
+                                isPopAll = true
+                            )
+                        )
+                    },
                 text = stringResource(id = R.string.my_register_recruitment_empty_subtitle_actor),
                 style = LocalTypography.current.subtitle2(),
                 color = FColor.Primary,
@@ -332,6 +348,17 @@ private fun EmptyScreen(
             )
 
             Text(
+                modifier = Modifier
+                    .clickableSingle {
+                        FOneNavigator.navigateTo(
+                            navDestinationState = NavDestinationState(
+                                route = FOneDestinations.Main.getRouteWithJobInitialPageArg(
+                                    JobTab.JOB_OPENING.name
+                                ),
+                                isPopAll = true
+                            )
+                        )
+                    },
                 text = stringResource(id = R.string.my_register_recruitment_empty_subtitle_staff),
                 style = LocalTypography.current.subtitle2(),
                 color = FColor.Primary,

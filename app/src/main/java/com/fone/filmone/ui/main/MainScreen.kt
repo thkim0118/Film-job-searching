@@ -31,7 +31,7 @@ import com.fone.filmone.ui.main.home.HomeScreen
 import com.fone.filmone.ui.main.job.JobFilterType
 import com.fone.filmone.ui.main.job.JobScreen
 import com.fone.filmone.ui.main.job.JobTab
-import com.fone.filmone.ui.main.model.BottomNavItem
+import com.fone.filmone.ui.main.model.MainBottomNavItem
 import com.fone.filmone.ui.main.my.MyScreen
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
@@ -45,14 +45,16 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    initialJobTab: JobTab = JobTab.JOB_OPENING,
+    initialScreen: MainBottomNavItem = MainBottomNavItem.Home,
     mainViewModel: MainViewModel = hiltViewModel(),
 ) {
     var bottomSheetType: MainBottomSheetType by remember { mutableStateOf(MainBottomSheetType.Logout) }
     val bottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
-    var selectedScreen by rememberSaveable { mutableStateOf(BottomNavItem.Home) }
-    var jobTabScreen by remember { mutableStateOf(JobTab.JOB_OPENING) }
+    var selectedScreen by rememberSaveable { mutableStateOf(initialScreen) }
+    var jobTabScreen by remember { mutableStateOf(initialJobTab) }
     val uiState by mainViewModel.uiState.collectAsState()
 
     BackHandler(true) {
@@ -115,8 +117,8 @@ fun MainScreen(
                 .toastPadding(),
             floatingActionButton = {
                 when (selectedScreen) {
-                    BottomNavItem.Home -> Unit
-                    BottomNavItem.Job -> {
+                    MainBottomNavItem.Home -> Unit
+                    MainBottomNavItem.Job -> {
                         JobFloatingButton(
                             currentJobTab = jobTabScreen,
                             isFloatingClick = uiState.isFloatingClick,
@@ -130,17 +132,17 @@ fun MainScreen(
                         )
                     }
 
-                    BottomNavItem.Chat -> Unit
-                    BottomNavItem.My -> Unit
+                    MainBottomNavItem.Chat -> Unit
+                    MainBottomNavItem.My -> Unit
                 }
             },
             bottomBar = {
                 Box {
                     MainBottomNavigation(
-                        bottomNavItems = BottomNavItem.values(),
+                        mainBottomNavItems = MainBottomNavItem.values(),
                         selectedScreen = selectedScreen,
                         onItemSelected = {
-                            if (selectedScreen != BottomNavItem.Job) {
+                            if (selectedScreen != MainBottomNavItem.Job) {
                                 mainViewModel.hideFloatingDimBackground()
                             }
 
@@ -167,10 +169,11 @@ fun MainScreen(
         ) {
             Box(modifier = modifier.padding(it)) {
                 when (selectedScreen) {
-                    BottomNavItem.Home -> HomeScreen()
-                    BottomNavItem.Job -> JobScreen(
+                    MainBottomNavItem.Home -> HomeScreen()
+                    MainBottomNavItem.Job -> JobScreen(
                         currentJobSorting = uiState.currentJobSorting,
                         userType = uiState.type,
+                        initialJobTab = jobTabScreen,
                         onUpdateCurrentJobSorting = mainViewModel::updateCurrentJobFilterTab,
                         onJobOpeningsFilterClick = {
                             bottomSheetType = MainBottomSheetType.JobTabJopOpeningsFilter
@@ -188,8 +191,8 @@ fun MainScreen(
                         }
                     )
 
-                    BottomNavItem.Chat -> ChatScreen()
-                    BottomNavItem.My -> MyScreen(
+                    MainBottomNavItem.Chat -> ChatScreen()
+                    MainBottomNavItem.My -> MyScreen(
                         onLogoutClick = {
                             bottomSheetType = MainBottomSheetType.Logout
                             coroutineScope.launch { bottomSheetState.show() }
@@ -237,17 +240,17 @@ private fun FloatingDimBackground(viewModel: MainViewModel) {
 
 @Composable
 private fun MainBottomNavigation(
-    bottomNavItems: Array<BottomNavItem>,
-    selectedScreen: BottomNavItem,
-    onItemSelected: (BottomNavItem) -> Unit
+    mainBottomNavItems: Array<MainBottomNavItem>,
+    selectedScreen: MainBottomNavItem,
+    onItemSelected: (MainBottomNavItem) -> Unit
 ) {
     BottomNavigation(
         backgroundColor = FColor.White,
     ) {
-        bottomNavItems.forEach { bottomNavItem ->
+        mainBottomNavItems.forEach { bottomNavItem ->
             MainBottomNavigationItem(
-                bottomNavItems = bottomNavItem,
-                selectedBottomNavItem = selectedScreen,
+                mainBottomNavItems = bottomNavItem,
+                selectedMainBottomNavItem = selectedScreen,
                 onItemClick = onItemSelected
             )
         }
@@ -256,18 +259,18 @@ private fun MainBottomNavigation(
 
 @Composable
 fun RowScope.MainBottomNavigationItem(
-    bottomNavItems: BottomNavItem,
-    selectedBottomNavItem: BottomNavItem,
-    onItemClick: (BottomNavItem) -> Unit
+    mainBottomNavItems: MainBottomNavItem,
+    selectedMainBottomNavItem: MainBottomNavItem,
+    onItemClick: (MainBottomNavItem) -> Unit
 ) {
     BottomNavigationItem(
         icon = {
             Icon(
                 imageVector = ImageVector.vectorResource(
-                    id = if (selectedBottomNavItem == bottomNavItems) {
-                        bottomNavItems.selectedIconRes
+                    id = if (selectedMainBottomNavItem == mainBottomNavItems) {
+                        mainBottomNavItems.selectedIconRes
                     } else {
-                        bottomNavItems.unselectedIconRes
+                        mainBottomNavItems.unselectedIconRes
                     }
                 ),
                 contentDescription = null,
@@ -275,12 +278,12 @@ fun RowScope.MainBottomNavigationItem(
         },
         label = {
             Text(
-                text = stringResource(id = bottomNavItems.title),
+                text = stringResource(id = mainBottomNavItems.title),
                 style = fTextStyle(
                     fontWeight = FontWeight.W400,
                     fontSize = 12.textDp,
                     lineHeight = 12.textDp,
-                    color = if (selectedBottomNavItem == bottomNavItems) {
+                    color = if (selectedMainBottomNavItem == mainBottomNavItems) {
                         FColor.Primary
                     } else {
                         FColor.DisablePlaceholder
@@ -291,8 +294,8 @@ fun RowScope.MainBottomNavigationItem(
         alwaysShowLabel = true,
         selectedContentColor = FColor.Primary,
         unselectedContentColor = FColor.DisablePlaceholder,
-        selected = selectedBottomNavItem == bottomNavItems,
-        onClick = { onItemClick(bottomNavItems) }
+        selected = selectedMainBottomNavItem == mainBottomNavItems,
+        onClick = { onItemClick(mainBottomNavItems) }
     )
 }
 

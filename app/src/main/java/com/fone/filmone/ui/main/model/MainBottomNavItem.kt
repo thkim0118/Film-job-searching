@@ -4,7 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.fone.filmone.R
 
-enum class BottomNavItem(
+enum class MainBottomNavItem(
     @DrawableRes val selectedIconRes: Int,
     @DrawableRes val unselectedIconRes: Int,
     @StringRes val title: Int,
@@ -28,5 +28,11 @@ enum class BottomNavItem(
         selectedIconRes = R.drawable.main_my_selected,
         unselectedIconRes = R.drawable.main_my_unselected,
         title = R.string.main_bottom_nav_my_title,
-    )
+    );
+
+    companion object {
+        fun parsePage(page: String): MainBottomNavItem {
+            return MainBottomNavItem.values().find { it.name == page } ?: Home
+        }
+    }
 }

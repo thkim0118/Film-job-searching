@@ -2,6 +2,7 @@ package com.fone.filmone.ui.navigation
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.fone.filmone.ui.main.model.MainBottomNavItem
 import com.fone.filmone.ui.profile.list.model.ProfileListArguments
 import com.fone.filmone.ui.signup.model.SignUpVo
 
@@ -72,7 +73,18 @@ sealed class FOneDestinations(val route: String) {
     }
 
     object Inquiry : FOneDestinations("inquiry")
-    object Main : FOneDestinations("main")
+    object Main : FOneDestinations("main") {
+        const val argInitialPage = "arg_initial_page"
+        const val argJobInitialPage = "arg_job_initial_page"
+        val routeWithJobInitialArgs = "$route/{$argInitialPage}/{$argJobInitialPage}"
+        val jobInitialPageArguments = listOf(
+            navArgument(argInitialPage) { type = NavType.StringType },
+            navArgument(argJobInitialPage) { type = NavType.StringType },
+        )
+        fun getRouteWithJobInitialPageArg(jobInitialPage: String = MainBottomNavItem.Home.name): String {
+            return "$route/${MainBottomNavItem.Job.name}/${jobInitialPage}"
+        }
+    }
     object MyInfo : FOneDestinations("my-info")
     object Scrap : FOneDestinations("scrap")
     object Favorite : FOneDestinations("favorite")

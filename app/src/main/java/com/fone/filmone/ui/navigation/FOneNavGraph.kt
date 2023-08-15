@@ -3,6 +3,7 @@ package com.fone.filmone.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,8 +15,10 @@ import com.fone.filmone.ui.inquiry.InquiryScreen
 import com.fone.filmone.ui.login.LoginScreen
 import com.fone.filmone.ui.email.login.EmailLoginScreen
 import com.fone.filmone.ui.main.MainScreen
+import com.fone.filmone.ui.main.job.JobTab
 import com.fone.filmone.ui.main.job.filter.actor.ActorFilterScreen
 import com.fone.filmone.ui.main.job.filter.staff.StaffFilterScreen
+import com.fone.filmone.ui.main.model.MainBottomNavItem
 import com.fone.filmone.ui.myinfo.MyInfoScreen
 import com.fone.filmone.ui.myregister.MyRegisterScreen
 import com.fone.filmone.ui.profile.detail.actor.ActorProfileDetailScreen
@@ -64,9 +67,7 @@ fun FOneNavGraph(
             InquiryScreen(navController = navController)
         }
         signUpNavGraph(navController = navController)
-        composable(FOneDestinations.Main.route) {
-            MainScreen(navController = navController)
-        }
+        mainNavGraph(navController)
         composable(FOneDestinations.MyInfo.route) {
             MyInfoScreen(navController = navController)
         }
@@ -139,5 +140,26 @@ fun FOneNavGraph(
         ) {
             EmailJoinScreen(navController = navController)
         }
+    }
+}
+
+private fun NavGraphBuilder.mainNavGraph(
+    navController: NavHostController
+) {
+    composable(FOneDestinations.Main.route) {
+        MainScreen(navController = navController)
+    }
+    composable(
+        route = FOneDestinations.Main.routeWithJobInitialArgs,
+        arguments = FOneDestinations.Main.jobInitialPageArguments
+    ) {
+        val initialPage = it.arguments?.getString(FOneDestinations.Main.argInitialPage)
+        val jobInitialPage = it.arguments?.getString(FOneDestinations.Main.argJobInitialPage)
+
+        MainScreen(
+            navController = navController,
+            initialScreen = MainBottomNavItem.parsePage(initialPage ?: ""),
+            initialJobTab = JobTab.parsePage(jobInitialPage ?: "")
+        )
     }
 }
