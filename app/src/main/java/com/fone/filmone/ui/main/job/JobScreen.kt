@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -190,7 +191,7 @@ private fun JobHeader(
             onClick = {
                 isTitleFilterClick = isTitleFilterClick.not()
             },
-            type = type
+            type = type,
         )
 
         JobTitleAlarmImage(
@@ -248,11 +249,16 @@ private fun JobHeader(
 private fun JobTitleContents(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    type: Type
+    type: Type,
 ) {
+    var isArrowExpanded by rememberSaveable { mutableStateOf(false) }
+
     Row(
         modifier = modifier
-            .clickableWithNoRipple { onClick() },
+            .clickableWithNoRipple {
+                onClick()
+                isArrowExpanded = !isArrowExpanded
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -265,7 +271,10 @@ private fun JobTitleContents(
 
         Image(
             imageVector =
-            ImageVector.vectorResource(id = R.drawable.job_tab_arrow_down),
+            if (isArrowExpanded)
+                ImageVector.vectorResource(id = R.drawable.job_tab_arrow_up)
+            else
+                ImageVector.vectorResource(id = R.drawable.job_tab_arrow_down),
             contentDescription = null
         )
     }
