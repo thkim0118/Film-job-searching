@@ -13,8 +13,7 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class ActorFilterViewModel @Inject constructor(
-) : BaseViewModel() {
+class ActorFilterViewModel @Inject constructor() : BaseViewModel() {
     private val viewModelState = MutableStateFlow(ActorFilterViewModelState())
 
     val uiState = viewModelState

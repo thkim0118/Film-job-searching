@@ -12,9 +12,21 @@ import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
 import com.fone.filmone.data.datamodel.request.user.ValidatePasswordRequest
-import com.fone.filmone.data.datamodel.response.user.*
+import com.fone.filmone.data.datamodel.response.user.CheckNicknameDuplicationResponse
+import com.fone.filmone.data.datamodel.response.user.EmailSignInResponse
+import com.fone.filmone.data.datamodel.response.user.EmailSignUpResponse
+import com.fone.filmone.data.datamodel.response.user.EmailValidationResponse
+import com.fone.filmone.data.datamodel.response.user.FindIdResponse
+import com.fone.filmone.data.datamodel.response.user.FindPasswordResponse
+import com.fone.filmone.data.datamodel.response.user.SignUpResponse
+import com.fone.filmone.data.datamodel.response.user.SigninResponse
+import com.fone.filmone.data.datamodel.response.user.UserResponse
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.PATCH
+import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface UserApi {
     @GET("${Server.ApiVersion}/users/check-nickname-duplication")

@@ -170,4 +170,3 @@ private enum class FindTab(
     FIND_ID(R.string.find_id_tab_title, 0),
     FIND_PASSWORD(R.string.find_password_tab_title, 1)
 }
-

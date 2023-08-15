@@ -10,10 +10,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.ui.email.find.FindScreen
 import com.fone.filmone.ui.email.join.EmailJoinScreen
+import com.fone.filmone.ui.email.login.EmailLoginScreen
 import com.fone.filmone.ui.favorite.FavoriteScreen
 import com.fone.filmone.ui.inquiry.InquiryScreen
 import com.fone.filmone.ui.login.LoginScreen
-import com.fone.filmone.ui.email.login.EmailLoginScreen
 import com.fone.filmone.ui.main.MainScreen
 import com.fone.filmone.ui.main.job.JobTab
 import com.fone.filmone.ui.main.job.filter.actor.ActorFilterScreen

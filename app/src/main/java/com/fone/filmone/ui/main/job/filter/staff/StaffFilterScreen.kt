@@ -50,8 +50,8 @@ import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.tag.ToggleSelectTag
-import com.fone.filmone.ui.common.tag.domain.DomainTags
 import com.fone.filmone.ui.common.tag.categories.CategoryTags
+import com.fone.filmone.ui.common.tag.domain.DomainTags
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 
@@ -170,7 +170,6 @@ private fun ActorFilterTitle(
             ),
             textAlign = TextAlign.Center
         )
-
 
         Spacer(modifier = Modifier.width(11.dp))
 

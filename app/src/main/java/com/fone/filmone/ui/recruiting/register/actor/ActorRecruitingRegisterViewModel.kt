@@ -2,7 +2,6 @@ package com.fone.filmone.ui.recruiting.register.actor
 
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
-import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.jobopenings.Work
@@ -14,7 +13,6 @@ import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.RegisterJobOpeningUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
-import com.fone.filmone.ui.recruiting.register.staff.StaffRecruitingRegisterUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -125,7 +123,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
         }
 
         if (step1UiModel.deadlineDateTagEnable && PatternUtil.isValidDate(step1UiModel.deadlineDate)
-                .not()
+            .not()
         ) {
             showToast(R.string.toast_recruiting_register_fail)
             return true

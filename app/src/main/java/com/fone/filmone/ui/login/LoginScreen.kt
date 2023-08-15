@@ -360,7 +360,8 @@ private fun EmailComponent(
                             route = FOneDestinations.EmailJoin.route
                         )
                     )
-                }, text = stringResource(id = R.string.login_email_signup),
+                },
+            text = stringResource(id = R.string.login_email_signup),
             style = fTextStyle(
                 fontWeight = FontWeight.W500,
                 fontSize = 13.textDp,

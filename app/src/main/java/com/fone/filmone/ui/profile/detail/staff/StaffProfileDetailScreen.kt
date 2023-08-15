@@ -130,7 +130,6 @@ fun StaffProfileDetailScreen(
     }
 }
 
-
 @Composable
 private fun TitleComponent(
     modifier: Modifier = Modifier,
@@ -353,7 +352,6 @@ private fun ProfileListComponent(
         Spacer(modifier = Modifier.height(6.dp))
 
         Row(modifier = Modifier) {
-
         }
     }
 }
@@ -574,4 +572,3 @@ private fun ButtonComponent(
         }
     }
 }
-

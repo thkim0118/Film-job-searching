@@ -309,7 +309,6 @@ private fun Step1Component(
 
     Divider(thickness = 8.dp, color = FColor.Divider2)
 
-
     Spacer(modifier = Modifier.height(20.dp))
 
     RecruitmentInputComponent(
@@ -336,7 +335,6 @@ private fun Step1Component(
         onUpdateAgeRange = onUpdateAgeRange,
         onUpdateAgeTag = onUpdateAgeTag
     )
-
 
     Divider(thickness = 8.dp, color = FColor.Divider2)
 

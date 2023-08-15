@@ -2,7 +2,8 @@ package com.fone.filmone.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.fone.filmone.data.datamodel.fakeUser
-import com.fone.filmone.data.datamodel.response.user.*
+import com.fone.filmone.data.datamodel.response.user.User
+import com.fone.filmone.data.datamodel.response.user.UserResponse
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
@@ -65,5 +66,4 @@ internal class GetUserInfoUseCaseTest {
                 assert(false)
             }
     }
-
 }

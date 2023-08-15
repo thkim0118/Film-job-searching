@@ -1,7 +1,23 @@
 package com.fone.filmone.di
 
-import com.fone.filmone.data.repository.*
-import com.fone.filmone.domain.repository.*
+import com.fone.filmone.data.repository.AuthRepositoryImpl
+import com.fone.filmone.data.repository.CompetitionsRepositoryImpl
+import com.fone.filmone.data.repository.HomeRepositoryImpl
+import com.fone.filmone.data.repository.ImageUploadRepositoryImpl
+import com.fone.filmone.data.repository.InquiryRepositoryImpl
+import com.fone.filmone.data.repository.JobOpeningsRepositoryImpl
+import com.fone.filmone.data.repository.ProfilesRepositoryImpl
+import com.fone.filmone.data.repository.SmsRepositoryImpl
+import com.fone.filmone.data.repository.UserRepositoryImpl
+import com.fone.filmone.domain.repository.AuthRepository
+import com.fone.filmone.domain.repository.CompetitionsRepository
+import com.fone.filmone.domain.repository.HomeRepository
+import com.fone.filmone.domain.repository.ImageUploadRepository
+import com.fone.filmone.domain.repository.InquiryRepository
+import com.fone.filmone.domain.repository.JobOpeningsRepository
+import com.fone.filmone.domain.repository.ProfilesRepository
+import com.fone.filmone.domain.repository.SmsRepository
+import com.fone.filmone.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

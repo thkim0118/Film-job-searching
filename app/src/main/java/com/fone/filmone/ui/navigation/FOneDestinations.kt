@@ -68,7 +68,7 @@ sealed class FOneDestinations(val route: String) {
             nickname: String,
             password: String?
         ): String {
-            return "$route/${accessToken}/${email}/${socialLoginType}/${nickname}/${password}"
+            return "$route/$accessToken/$email/$socialLoginType/$nickname/$password"
         }
     }
 
@@ -82,7 +82,7 @@ sealed class FOneDestinations(val route: String) {
             navArgument(argJobInitialPage) { type = NavType.StringType },
         )
         fun getRouteWithJobInitialPageArg(jobInitialPage: String = MainBottomNavItem.Home.name): String {
-            return "$route/${MainBottomNavItem.Job.name}/${jobInitialPage}"
+            return "$route/${MainBottomNavItem.Job.name}/$jobInitialPage"
         }
     }
     object MyInfo : FOneDestinations("my-info")
@@ -101,7 +101,7 @@ sealed class FOneDestinations(val route: String) {
         )
 
         fun getRouteWithArg(competitionId: Int): String {
-            return "$route/${competitionId}"
+            return "$route/$competitionId"
         }
     }
 
@@ -113,7 +113,7 @@ sealed class FOneDestinations(val route: String) {
         )
 
         fun getRouteWithArg(competitionId: Int): String {
-            return "$route/${competitionId}"
+            return "$route/$competitionId"
         }
     }
 
@@ -127,7 +127,7 @@ sealed class FOneDestinations(val route: String) {
         )
 
         fun getRouteWithArg(profileId: Int): String {
-            return "$route/${profileId}"
+            return "$route/$profileId"
         }
     }
 

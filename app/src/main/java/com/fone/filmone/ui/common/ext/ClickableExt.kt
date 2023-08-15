@@ -33,7 +33,6 @@ fun Modifier.clickableWithNoRipple(
     )
 }
 
-
 fun Modifier.clickableSingleWithNoRipple(
     enabled: Boolean = true,
     onClickLabel: String? = null,

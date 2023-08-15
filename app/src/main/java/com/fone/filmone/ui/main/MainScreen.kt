@@ -3,12 +3,38 @@ package com.fone.filmone.ui.main
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Divider
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,7 +50,12 @@ import com.fone.filmone.R
 import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.bottomsheet.PairButtonBottomSheet
 import com.fone.filmone.ui.common.dialog.SingleButtonDialog
-import com.fone.filmone.ui.common.ext.*
+import com.fone.filmone.ui.common.ext.clickableSingle
+import com.fone.filmone.ui.common.ext.clickableWithNoRipple
+import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
+import com.fone.filmone.ui.common.ext.dimBackground
+import com.fone.filmone.ui.common.ext.textDp
+import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.main.chat.ChatScreen
 import com.fone.filmone.ui.main.home.HomeScreen
@@ -162,10 +193,9 @@ fun MainScreen(
                         )
                     }
                 }
-            },
-            snackbarHost = {
-                FToast(baseViewModel = mainViewModel, hostState = it)
-            }
+            }, snackbarHost = {
+            FToast(baseViewModel = mainViewModel, hostState = it)
+        }
         ) {
             Box(modifier = modifier.padding(it)) {
                 when (selectedScreen) {
@@ -208,19 +238,15 @@ fun MainScreen(
                     FloatingDimBackground(mainViewModel)
                 }
 
-                MainDialog(
-                    dialogState = uiState.mainDialogState,
-                    onDismiss = {
-                        hideBottomSheet(coroutineScope, bottomSheetState)
-                        mainViewModel.clearDialog()
-                        FOneNavigator.navigateTo(
-                            navDestinationState = NavDestinationState(
-                                route = FOneDestinations.Login.route,
-                                isPopAll = true
-                            )
+                MainDialog(dialogState = uiState.mainDialogState, onDismiss = {
+                    hideBottomSheet(coroutineScope, bottomSheetState)
+                    mainViewModel.clearDialog()
+                    FOneNavigator.navigateTo(
+                        navDestinationState = NavDestinationState(
+                            route = FOneDestinations.Login.route, isPopAll = true
                         )
-                    }
-                )
+                    )
+                })
             }
         }
     }
@@ -308,8 +334,7 @@ private fun LogoutBottomSheet(
     onLogoutClick: () -> Unit
 ) {
     PairButtonBottomSheet(
-        modifier = modifier,
-        content = {
+        modifier = modifier, content = {
             Spacer(modifier = Modifier.height(50.dp))
 
             Text(
@@ -331,11 +356,9 @@ private fun LogoutBottomSheet(
             )
 
             Spacer(modifier = Modifier.height(40.dp))
-        },
-        onLeftButtonClick = {
-            hideBottomSheet(coroutineScope, bottomSheetState)
-        },
-        onRightButtonClick = onLogoutClick
+        }, onLeftButtonClick = {
+        hideBottomSheet(coroutineScope, bottomSheetState)
+    }, onRightButtonClick = onLogoutClick
 
     )
 }
@@ -349,8 +372,7 @@ private fun WithdrawalBottomSheet(
     onSignOutClick: () -> Unit
 ) {
     PairButtonBottomSheet(
-        modifier = modifier,
-        content = {
+        modifier = modifier, content = {
             Spacer(modifier = Modifier.height(50.dp))
 
             Text(
@@ -372,11 +394,9 @@ private fun WithdrawalBottomSheet(
             )
 
             Spacer(modifier = Modifier.height(40.dp))
-        },
-        onLeftButtonClick = {
-            hideBottomSheet(coroutineScope, bottomSheetState)
-        },
-        onRightButtonClick = onSignOutClick
+        }, onLeftButtonClick = {
+        hideBottomSheet(coroutineScope, bottomSheetState)
+    }, onRightButtonClick = onSignOutClick
     )
 }
 
@@ -585,18 +605,14 @@ private fun JobFloatingButton(
     onFloatingClick: (Boolean) -> Unit
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.BottomEnd
+        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd
     ) {
         Column(
             horizontalAlignment = Alignment.End
         ) {
             if (isFloatingClick) {
                 Column(
-                    modifier = Modifier
-                        .width(106.dp),
-                    horizontalAlignment = Alignment.End
+                    modifier = Modifier.width(106.dp), horizontalAlignment = Alignment.End
                 ) {
                     Box(
                         modifier = Modifier
@@ -621,8 +637,7 @@ private fun JobFloatingButton(
                             .padding(horizontal = 17.dp, vertical = 11.dp),
                     ) {
                         Text(
-                            modifier = Modifier
-                                .fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth(),
                             text = stringResource(
                                 id = if (currentJobTab == JobTab.JOB_OPENING) {
                                     R.string.job_tab_fab_actor
@@ -647,14 +662,12 @@ private fun JobFloatingButton(
                             .fillMaxWidth()
                             .clip(
                                 shape = RoundedCornerShape(
-                                    bottomStart = 6.dp,
-                                    bottomEnd = 6.dp
+                                    bottomStart = 6.dp, bottomEnd = 6.dp
                                 )
                             )
                             .background(
                                 shape = RoundedCornerShape(
-                                    bottomStart = 6.dp,
-                                    bottomEnd = 6.dp
+                                    bottomStart = 6.dp, bottomEnd = 6.dp
                                 ),
                                 color = FColor.Primary
                             )
@@ -673,8 +686,7 @@ private fun JobFloatingButton(
                             .padding(horizontal = 17.dp, vertical = 11.dp),
                     ) {
                         Text(
-                            modifier = Modifier
-                                .fillMaxWidth(),
+                            modifier = Modifier.fillMaxWidth(),
                             text = stringResource(
                                 id = if (currentJobTab == JobTab.JOB_OPENING) {
                                     R.string.job_tab_fab_staff
@@ -706,8 +718,7 @@ private fun JobFloatingButton(
             ) {
                 Image(
                     imageVector = ImageVector.vectorResource(
-                        id =
-                        if (currentJobTab == JobTab.JOB_OPENING) {
+                        id = if (currentJobTab == JobTab.JOB_OPENING) {
                             R.drawable.job_tab_floating_image
                         } else {
                             R.drawable.job_tab_profile_floating_image

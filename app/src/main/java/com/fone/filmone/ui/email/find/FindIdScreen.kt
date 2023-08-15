@@ -42,7 +42,6 @@ fun FindIdScreen(
     val scrollState = rememberScrollState()
     val uiState by viewModel.uiState.collectAsState()
 
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -128,4 +127,3 @@ private fun ColumnScope.GoLoginButton(
 
     Spacer(modifier = Modifier.height(38.dp))
 }
-

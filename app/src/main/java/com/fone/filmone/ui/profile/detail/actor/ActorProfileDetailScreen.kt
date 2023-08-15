@@ -143,7 +143,6 @@ fun ActorProfileDetailScreen(
     }
 }
 
-
 @Composable
 private fun TitleComponent(
     modifier: Modifier = Modifier,

@@ -41,5 +41,4 @@ class FOneApplication : Application() {
             FirebaseCrashlytics.getInstance().recordException(Exception(":> " + e.message))
         }
     }
-
 }

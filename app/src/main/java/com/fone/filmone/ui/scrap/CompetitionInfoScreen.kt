@@ -238,7 +238,6 @@ private fun CompetitionContentPreview() {
             Spacer(modifier = Modifier.width(18.dp))
 
             CompetitionScrapImage {
-
             }
         }
     }

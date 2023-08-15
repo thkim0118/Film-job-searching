@@ -104,8 +104,8 @@ class InquiryViewModel @Inject constructor(
         val state = _uiState.value
 
         val enable = state.email.isNotEmpty() && PatternUtil.isValidEmail(state.email) &&
-                state.inquiryType != null && state.title.isNotEmpty() &&
-                state.description.isNotEmpty() && state.isAgreePersonalInformation
+            state.inquiryType != null && state.title.isNotEmpty() &&
+            state.description.isNotEmpty() && state.isAgreePersonalInformation
 
         _uiState.update {
             it.copy(buttonEnable = enable)

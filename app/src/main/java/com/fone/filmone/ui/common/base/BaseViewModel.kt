@@ -15,7 +15,6 @@ abstract class BaseViewModel : ViewModel() {
     private val _toastEvent = MutableStateFlow(ToastEvent())
     val toastEvent: StateFlow<ToastEvent> = _toastEvent.asStateFlow()
 
-
     fun showToast(@StringRes message: Int, toastDuration: ToastDuration = ToastDuration.SEC_2_5) {
         _toastEvent.update {
             it.copy(

@@ -57,7 +57,6 @@ import com.fone.filmone.ui.main.job.common.LeftTitleTextField
 import com.fone.filmone.ui.main.job.common.TextLimitComponent
 import com.fone.filmone.ui.main.job.common.TextWithRequired
 import com.fone.filmone.ui.main.job.common.TextWithRequiredTag
-import com.fone.filmone.ui.recruiting.register.staff.StaffRecruitingRegisterUiEvent
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 import java.util.regex.Pattern

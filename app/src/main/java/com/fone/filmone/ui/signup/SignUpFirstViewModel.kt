@@ -11,8 +11,7 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpFirstViewModel @Inject constructor(
-) : ViewModel() {
+class SignUpFirstViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(SignUpFirstUiState(null, emptyList()))
     val uiState: StateFlow<SignUpFirstUiState> = _uiState.asStateFlow()
 

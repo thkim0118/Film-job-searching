@@ -1,29 +1,30 @@
 package com.fone.filmone.data.datamodel
 
-import com.fone.filmone.data.datamodel.request.imageupload.UploadingImage
-import com.fone.filmone.data.datamodel.request.imageupload.StageVariables
-import com.fone.filmone.data.datamodel.request.inquiry.InquiryRequest
-import com.fone.filmone.data.datamodel.request.user.SignUpRequest
-import com.fone.filmone.data.datamodel.request.user.SigninRequest
-import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
 import com.fone.filmone.data.datamodel.common.jobopenings.JobOpeningContent
-import com.fone.filmone.data.datamodel.common.jobopenings.JobOpenings
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.jobopenings.Work
-import com.fone.filmone.data.datamodel.common.paging.Pageable
 import com.fone.filmone.data.datamodel.common.paging.Sort
 import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Domain
 import com.fone.filmone.data.datamodel.common.user.Gender
+import com.fone.filmone.data.datamodel.request.imageupload.StageVariables
+import com.fone.filmone.data.datamodel.request.imageupload.UploadingImage
+import com.fone.filmone.data.datamodel.request.inquiry.InquiryRequest
+import com.fone.filmone.data.datamodel.request.user.SignUpRequest
+import com.fone.filmone.data.datamodel.request.user.SigninRequest
+import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
 import com.fone.filmone.data.datamodel.response.competition.CompetitionPrize
-import com.fone.filmone.data.datamodel.response.competition.Competitions
-import com.fone.filmone.data.datamodel.response.competition.CompetitionsResponse
+import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
 import com.fone.filmone.data.datamodel.response.inquiry.InquiryResponse
 import com.fone.filmone.data.datamodel.response.inquiry.Question
-import com.fone.filmone.data.datamodel.common.profile.Profiles
-import com.fone.filmone.data.datamodel.response.jobopenings.JobOpeningsPagingResponse
-import com.fone.filmone.data.datamodel.response.user.*
+import com.fone.filmone.data.datamodel.response.user.Job
+import com.fone.filmone.data.datamodel.response.user.LoginType
+import com.fone.filmone.data.datamodel.response.user.SignUpResponse
+import com.fone.filmone.data.datamodel.response.user.SigninResponse
+import com.fone.filmone.data.datamodel.response.user.Token
+import com.fone.filmone.data.datamodel.response.user.User
+import com.fone.filmone.data.datamodel.response.user.UserResponse
 import com.fone.filmone.domain.model.inquiry.InquiryType
 import com.fone.filmone.domain.model.inquiry.InquiryVo
 import com.fone.filmone.ui.signup.model.SignUpVo
@@ -48,7 +49,7 @@ val fakeUser = User(
 val fakeSigninRequest = SigninRequest(
     "accessToken",
     "test@test.com",
-    "GOOGLE"
+    LoginType.GOOGLE
 )
 
 val fakeToken = Token(
@@ -76,7 +77,7 @@ val fakeSignUpVo = SignUpVo(
     nickname = "nickname",
     phoneNumber = "phoneNumber",
     profileUrl = "profileUrl",
-    loginType = "socialLoginType",
+    loginType = LoginType.GOOGLE,
     agreeToTermsOfServiceTermsOfUse = true
 )
 
@@ -94,7 +95,7 @@ val fakeSignUpRequest = SignUpRequest(
     nickname = "nickname",
     phoneNumber = "phoneNumber",
     profileUrl = "profileUrl",
-    loginType = "socialLoginType",
+    loginType = LoginType.GOOGLE,
     agreeToTermsOfServiceTermsOfUse = true
 )
 
@@ -184,21 +185,21 @@ val fakeSort = Sort(
     unsorted = false
 )
 
-val fakeJobOpenings = JobOpenings(
-    content = listOf(fakeJobJobOpening),
-    empty = false,
-    first = false,
-    last = false,
-    number = 1,
-    numberOfElements = 1,
-    pageable = Pageable(),
-    size = 1,
-    sort = fakeSort
-)
+// val fakeJobOpenings = JobOpenings(
+//    content = listOf(fakeJobJobOpening),
+//    empty = false,
+//    first = false,
+//    last = false,
+//    number = 1,
+//    numberOfElements = 1,
+//    pageable = Pageable(),
+//    size = 1,
+//    sort = fakeSort
+// )
 
-val fakeJobOpeningsPagingResponse = JobOpeningsPagingResponse(
-    jobOpenings = fakeJobOpenings
-)
+// val fakeJobOpeningsPagingResponse = JobOpeningsPagingResponse(
+//    jobOpenings = fakeJobOpenings
+// )
 
 val fakeCompetitionPrizes = CompetitionPrize(
     competitionId = 0,
@@ -207,75 +208,77 @@ val fakeCompetitionPrizes = CompetitionPrize(
     ranking = "ranking"
 )
 
-val fakeCompetitionCompetitionContent = com.fone.filmone.data.datamodel.response.competition.CompetitionContent(
-    agency = "agency",
-    competitionPrizes = listOf(fakeCompetitionPrizes),
-    dday = "dday",
-    details = "details",
-    endDate = "endDate",
-    id = 0,
-    imageUrl = "https://picsum.photos/200",
-    isScrap = false,
-    scrapCount = 0,
-    showStartDate = "showStartDate",
-    startDate = "startDate",
-    submitEndDate = "submitEndDate",
-    submitStartDate = "submitStartDate",
-    title = "title",
-    viewCount = 0
-)
-
-val fakeCompetition = Competitions(
-    competitionContent = listOf(fakeCompetitionCompetitionContent),
-    empty = false,
-    first = false,
-    last = false,
-    number = 0,
-    numberOfElements = 0,
-    pageable = Pageable(),
-    size = 0,
-    sort = fakeSort
-)
-
-val fakeCompetitionsResponse = CompetitionsResponse(
-    competitions = fakeCompetition,
-    totalCount = 1
-)
-
-val fakeProfilesContent = com.fone.filmone.data.datamodel.common.profile.ProfileContent(
-    age = 0,
-    birthday = "1234-01-01",
-    career = Career.LESS_THAN_10YEARS,
-    categories = listOf(Category.INDEPENDENT_FILM),
-    details = "detail",
-    domains = listOf(Domain.ART),
-    email = "email@test.com",
-    gender = Gender.IRRELEVANT,
-    height = 160,
-    hookingComment = "hookingComment",
-    id = 0,
-    isWant = true,
-    name = "name",
-    profileUrl = "profile.url",
-    profileUrls = listOf("profile.url"),
-    sns = "sns",
-    specialty = "specialty",
-    viewCount = 100,
-    weight = 50
-)
-
-val fakeProfiles = Profiles(
-    content = listOf(element = fakeProfilesContent),
-    empty = true,
-    first = true,
-    last = true,
-    number = 0,
-    numberOfElements = 0,
-    pageable = Pageable(),
-    size = 0,
-    sort = fakeSort
-)
-
-val fakeProfilesResponse = ProfilesResponse(
-    profiles = fakeProfiles
-)
+val fakeCompetitionCompetitionContent =
+    com.fone.filmone.data.datamodel.response.competition.CompetitionContent(
+        agency = "agency",
+        competitionPrizes = listOf(fakeCompetitionPrizes),
+        dday = "dday",
+        details = "details",
+        endDate = "endDate",
+        id = 0,
+        imageUrl = "https://picsum.photos/200",
+        isScrap = false,
+        scrapCount = 0,
+        showStartDate = "showStartDate",
+        startDate = "startDate",
+        submitEndDate = "submitEndDate",
+        submitStartDate = "submitStartDate",
+        title = "title",
+        viewCount = 0,
+        type = Type.ACTOR,
+    )
+//
+// val fakeCompetition = Competitions(
+//    competitionContent = listOf(fakeCompetitionCompetitionContent),
+//    empty = false,
+//    first = false,
+//    last = false,
+//    number = 0,
+//    numberOfElements = 0,
+//    pageable = Pageable(),
+//    size = 0,
+//    sort = fakeSort
+// )
+//
+// val fakeCompetitionsResponse = CompetitionsResponse(
+//    competitions = fakeCompetition,
+//    totalCount = 1
+// )
+//
+// val fakeProfilesContent = com.fone.filmone.data.datamodel.common.profile.ProfileContent(
+//    age = 0,
+//    birthday = "1234-01-01",
+//    career = Career.LESS_THAN_10YEARS,
+//    categories = listOf(Category.INDEPENDENT_FILM),
+//    details = "detail",
+//    domains = listOf(Domain.ART),
+//    email = "email@test.com",
+//    gender = Gender.IRRELEVANT,
+//    height = 160,
+//    hookingComment = "hookingComment",
+//    id = 0,
+//    isWant = true,
+//    name = "name",
+//    profileUrl = "profile.url",
+//    profileUrls = listOf("profile.url"),
+//    sns = "sns",
+//    specialty = "specialty",
+//    viewCount = 100,
+//    weight = 50
+// )
+//
+// val fakeProfiles = Profiles(
+//    content = listOf(element = fakeProfilesContent),
+//    empty = true,
+//    first = true,
+//    last = true,
+//    number = 0,
+//    numberOfElements = 0,
+//    pageable = Pageable(),
+//    size = 0,
+//    sort = fakeSort
+// )
+//
+// val fakeProfilesResponse = ProfilesResponse(
+//    profiles = fakeProfiles
+// )

@@ -1,7 +1,6 @@
 package com.fone.filmone.ui.myregister
 
 import androidx.lifecycle.viewModelScope
-import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.data.datamodel.common.jobopenings.JobOpenings
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.profile.Profiles

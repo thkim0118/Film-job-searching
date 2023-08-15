@@ -274,7 +274,6 @@ private fun UserInfoInputComponent(
         )
 
         Spacer(modifier = Modifier.height(20.dp))
-
     }
 
     DomainInputComponent(

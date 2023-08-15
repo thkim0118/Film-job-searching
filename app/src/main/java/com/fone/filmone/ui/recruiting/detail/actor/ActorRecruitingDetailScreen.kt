@@ -530,7 +530,6 @@ private fun ManagerInfoComponent(
     }
 }
 
-
 @Composable
 private fun GuideComponent(
     modifier: Modifier = Modifier

@@ -212,9 +212,9 @@ class MyInfoViewModel @Inject constructor(
 
         val enable =
             (isProfileModified() || isUserInfoModified()) &&
-                    currentState.nickname.isNotEmpty() &&
-                    currentState.interests.isNotEmpty() &&
-                    currentState.job != null
+                currentState.nickname.isNotEmpty() &&
+                currentState.interests.isNotEmpty() &&
+                currentState.job != null
 
         _uiState.update {
             it.copy(
@@ -226,7 +226,7 @@ class MyInfoViewModel @Inject constructor(
     private fun updateDuplicateState() {
         val currentState = _uiState.value
         val enable = currentState.nickname != savedUserState.nickname &&
-                currentState.nickname.length >= 3
+            currentState.nickname.length >= 3
 
         _uiState.update {
             it.copy(

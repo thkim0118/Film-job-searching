@@ -128,9 +128,9 @@ class EmailJoinViewModel @Inject constructor(
     private fun updateNextButtonEnable() {
         val state = viewModelState.value
         val enable = state.name.isNotEmpty() && state.isEmailChecked &&
-                state.password.isNotEmpty() && state.confirmedPassword.isNotEmpty() &&
-                state.password == state.confirmedPassword &&
-                PatternUtil.isValidPassword(state.password)
+            state.password.isNotEmpty() && state.confirmedPassword.isNotEmpty() &&
+            state.password == state.confirmedPassword &&
+            PatternUtil.isValidPassword(state.password)
 
         viewModelState.update {
             it.copy(isNextButtonEnable = enable)

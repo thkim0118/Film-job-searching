@@ -1,7 +1,15 @@
 package com.fone.filmone.di
 
 import com.fone.filmone.BuildConfig
-import com.fone.filmone.data.datasource.remote.*
+import com.fone.filmone.data.datasource.remote.CompetitionsApi
+import com.fone.filmone.data.datasource.remote.HomeApi
+import com.fone.filmone.data.datasource.remote.ImageUploadApi
+import com.fone.filmone.data.datasource.remote.InquiryApi
+import com.fone.filmone.data.datasource.remote.JobOpeningsApi
+import com.fone.filmone.data.datasource.remote.ProfilesApi
+import com.fone.filmone.data.datasource.remote.SmsApi
+import com.fone.filmone.data.datasource.remote.TokenApi
+import com.fone.filmone.data.datasource.remote.UserApi
 import com.fone.filmone.domain.repository.AuthRepository
 import com.fone.filmone.framework.drivers.AuthInterceptor
 import com.google.gson.GsonBuilder
@@ -37,9 +45,11 @@ object NetworkModule {
         OkHttpClient.Builder().apply {
             connectTimeout(connectionTime, TimeUnit.MILLISECONDS)
             if (BuildConfig.DEBUG) {
-                addInterceptor(HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                })
+                addInterceptor(
+                    HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    }
+                )
             }
 
             addInterceptor(authInterceptor)
@@ -50,9 +60,11 @@ object NetworkModule {
     fun provideAuthOkHttpClient(): OkHttpClient = OkHttpClient.Builder().apply {
         connectTimeout(connectionTime, TimeUnit.MILLISECONDS)
         if (BuildConfig.DEBUG) {
-            addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
+            addInterceptor(
+                HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+            )
         }
     }.build()
 

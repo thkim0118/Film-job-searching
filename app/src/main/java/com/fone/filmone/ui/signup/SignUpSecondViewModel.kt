@@ -3,11 +3,11 @@ package com.fone.filmone.ui.signup
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
 import com.fone.filmone.core.util.PatternUtil
+import com.fone.filmone.data.datamodel.common.user.Gender
+import com.fone.filmone.data.datamodel.request.imageupload.UploadingImage
 import com.fone.filmone.domain.model.common.getOrNull
 import com.fone.filmone.domain.model.common.isFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.data.datamodel.common.user.Gender
-import com.fone.filmone.data.datamodel.request.imageupload.UploadingImage
 import com.fone.filmone.domain.usecase.CheckNicknameDuplicationUseCase
 import com.fone.filmone.domain.usecase.UploadImageUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
@@ -31,7 +31,6 @@ class SignUpSecondViewModel @Inject constructor(
         _uiState.update {
             it.copy(nickname = nickname, isNicknameDuplicated = false)
         }
-
     }
 
     fun updateBirthDay(birthday: String) {

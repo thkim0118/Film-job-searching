@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.fone.filmone.data.datamodel.fakeSigninRequest
 import com.fone.filmone.data.datamodel.fakeSigninResponse
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
-import com.fone.filmone.data.datamodel.response.user.*
+import com.fone.filmone.data.datamodel.response.user.SigninResponse
 import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail

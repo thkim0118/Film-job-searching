@@ -280,7 +280,8 @@ private fun PasswordComponent(
                         } else {
                             R.drawable.password_hide
                         }
-                    ), contentDescription = null
+                    ),
+                    contentDescription = null
                 )
             },
             visualTransformation = if (isPasswordVisible) {
@@ -330,7 +331,8 @@ private fun PasswordComponent(
                         } else {
                             R.drawable.password_hide
                         }
-                    ), contentDescription = null
+                    ),
+                    contentDescription = null
                 )
             },
             visualTransformation = if (isConfirmedPasswordVisible) {
@@ -386,4 +388,3 @@ private fun ColumnScope.NextButton(
 
     Spacer(modifier = Modifier.height(38.dp))
 }
-

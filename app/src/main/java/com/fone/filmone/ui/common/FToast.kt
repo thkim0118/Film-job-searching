@@ -27,7 +27,6 @@ enum class ToastDuration(val milliseconds: Long) {
     SEC_10(10_000L)
 }
 
-
 @Composable
 fun FToast(
     modifier: Modifier = Modifier,

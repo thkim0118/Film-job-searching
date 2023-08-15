@@ -1,7 +1,7 @@
 package com.fone.filmone.domain.usecase
 
-import com.fone.filmone.data.datamodel.request.imageupload.UploadingImage
 import com.fone.filmone.data.datamodel.request.imageupload.StageVariables
+import com.fone.filmone.data.datamodel.request.imageupload.UploadingImage
 import com.fone.filmone.data.datamodel.response.imageupload.ImageUploadResponse
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.repository.ImageUploadRepository

@@ -310,8 +310,8 @@ class StaffProfileRegisterViewModel @Inject constructor(
         val modelState = viewModelState.value
 
         val isEnable = modelState.name.isNotEmpty() && modelState.hookingComments.isNotEmpty() &&
-                modelState.birthday.isNotEmpty() && PatternUtil.isValidDate(modelState.birthday) && modelState.domains.isNotEmpty() &&
-                modelState.email.isNotEmpty() && PatternUtil.isValidEmail(modelState.email) && modelState.detailInfo.isNotEmpty()
+            modelState.birthday.isNotEmpty() && PatternUtil.isValidDate(modelState.birthday) && modelState.domains.isNotEmpty() &&
+            modelState.email.isNotEmpty() && PatternUtil.isValidEmail(modelState.email) && modelState.detailInfo.isNotEmpty()
 
         viewModelState.update { state ->
             state.copy(registerButtonEnable = isEnable)

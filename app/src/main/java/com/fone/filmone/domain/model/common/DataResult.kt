@@ -90,10 +90,8 @@ fun <T> DataResult<T>.getOrNull(): T? {
     }
 }
 
-
 fun <T, R> DataResult<T>.toMappedDataResult(transform: (T) -> R) = when (this) {
     is DataResult.EmptyData -> DataResult.EmptyData
     is DataResult.Fail -> DataResult.Fail(DataFail(dataFail.errorCode, dataFail.message))
     is DataResult.Success -> DataResult.Success(transform(data))
-
 }

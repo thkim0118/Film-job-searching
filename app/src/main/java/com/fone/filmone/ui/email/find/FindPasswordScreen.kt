@@ -213,5 +213,3 @@ private fun ColumnScope.ChangePasswordButton(
 
     Spacer(modifier = Modifier.height(38.dp))
 }
-
-

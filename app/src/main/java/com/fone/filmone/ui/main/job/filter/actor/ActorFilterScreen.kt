@@ -68,9 +68,10 @@ fun ActorFilterScreen(
             .toastPadding()
             .padding(horizontal = 16.dp)
     ) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(it)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
         ) {
             ActorFilterTitle(
                 onRefreshClick = {
@@ -249,7 +250,6 @@ private fun AgeComponent(
             style = LocalTypography.current.b2(),
             color = FColor.TextSecondary
         )
-
 
         Spacer(modifier = Modifier.height(6.dp))
 

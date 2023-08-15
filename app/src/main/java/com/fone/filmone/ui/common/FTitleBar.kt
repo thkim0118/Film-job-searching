@@ -1,7 +1,11 @@
 package com.fone.filmone.ui.common
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -63,7 +67,6 @@ fun FTitleBar(
             textAlign = TextAlign.Center
         )
 
-
         Spacer(modifier = Modifier.width(11.dp))
 
         Image(
@@ -79,7 +82,6 @@ fun FTitleBar(
             imageVector = ImageVector.vectorResource(id = R.drawable.title_bar_close),
             contentDescription = null
         )
-
 
         Spacer(modifier = Modifier.width(16.dp))
     }
@@ -116,7 +118,6 @@ fun FTitleBar(
             textAlign = TextAlign.Center
         )
 
-
         Spacer(modifier = Modifier.width(11.dp))
 
         action()
@@ -124,7 +125,6 @@ fun FTitleBar(
         Spacer(modifier = Modifier.width(16.dp))
     }
 }
-
 
 sealed interface TitleType {
     object Back : TitleType

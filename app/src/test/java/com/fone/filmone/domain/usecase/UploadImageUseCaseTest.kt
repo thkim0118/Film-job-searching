@@ -1,8 +1,8 @@
 package com.fone.filmone.domain.usecase
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.fone.filmone.data.datamodel.fakeUploadingImage
 import com.fone.filmone.data.datamodel.fakeImageUploadResponse
+import com.fone.filmone.data.datamodel.fakeUploadingImage
 import com.fone.filmone.data.datamodel.request.imageupload.UploadingImage
 import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult

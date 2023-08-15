@@ -5,7 +5,7 @@ import com.fone.filmone.data.datamodel.fakeSignUpRequest
 import com.fone.filmone.data.datamodel.fakeSignUpResponse
 import com.fone.filmone.data.datamodel.fakeSignUpVo
 import com.fone.filmone.data.datamodel.request.user.SignUpRequest
-import com.fone.filmone.data.datamodel.response.user.*
+import com.fone.filmone.data.datamodel.response.user.SignUpResponse
 import com.fone.filmone.domain.model.common.DataFail
 import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.common.onFail

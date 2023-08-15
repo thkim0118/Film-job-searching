@@ -2,7 +2,6 @@ package com.fone.filmone.ui.recruiting.register.staff
 
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
-import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.jobopenings.Work
@@ -140,7 +139,7 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
         }
 
         if (step1UiModel.deadlineTagEnable && PatternUtil.isValidDate(step1UiModel.deadlineDate)
-                .not()
+            .not()
         ) {
             return true
         }
@@ -578,12 +577,12 @@ class StaffRecruitingRegisterViewModel @Inject constructor(
 
         val enable =
             modelState.staffRecruitingStep1UiModel.titleText.isNotEmpty() && modelState.staffRecruitingStep1UiModel.categories.isNotEmpty() &&
-                    PatternUtil.isValidDate(modelState.staffRecruitingStep1UiModel.deadlineDate) &&
-                    modelState.staffRecruitingStep1UiModel.recruitmentDomains.isNotEmpty() && modelState.staffRecruitingStep1UiModel.recruitmentNumber.isNotEmpty() &&
-                    modelState.staffRecruitingStep2UiModel.production.isNotEmpty() && modelState.staffRecruitingStep2UiModel.workTitle.isNotEmpty() &&
-                    modelState.staffRecruitingStep2UiModel.directorName.isNotEmpty() && modelState.staffRecruitingStep2UiModel.genre.isNotEmpty() &&
-                    modelState.staffRecruitingStep4UiModel.detailInfo.isNotEmpty() && modelState.staffRecruitingStep5UiModel.manager.isNotEmpty() &&
-                    PatternUtil.isValidEmail(modelState.staffRecruitingStep5UiModel.email)
+                PatternUtil.isValidDate(modelState.staffRecruitingStep1UiModel.deadlineDate) &&
+                modelState.staffRecruitingStep1UiModel.recruitmentDomains.isNotEmpty() && modelState.staffRecruitingStep1UiModel.recruitmentNumber.isNotEmpty() &&
+                modelState.staffRecruitingStep2UiModel.production.isNotEmpty() && modelState.staffRecruitingStep2UiModel.workTitle.isNotEmpty() &&
+                modelState.staffRecruitingStep2UiModel.directorName.isNotEmpty() && modelState.staffRecruitingStep2UiModel.genre.isNotEmpty() &&
+                modelState.staffRecruitingStep4UiModel.detailInfo.isNotEmpty() && modelState.staffRecruitingStep5UiModel.manager.isNotEmpty() &&
+                PatternUtil.isValidEmail(modelState.staffRecruitingStep5UiModel.email)
 
         viewModelState.update { state ->
             state.copy(registerButtonEnable = enable)

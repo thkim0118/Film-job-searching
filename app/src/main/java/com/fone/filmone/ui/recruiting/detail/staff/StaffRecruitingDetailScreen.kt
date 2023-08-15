@@ -149,7 +149,6 @@ fun StaffRecruitingDetailScreen(
     }
 }
 
-
 @Composable
 private fun TitleComponent(
     modifier: Modifier = Modifier,
@@ -540,7 +539,6 @@ private fun ManagerInfoComponent(
         )
     }
 }
-
 
 @Composable
 private fun GuideComponent(
