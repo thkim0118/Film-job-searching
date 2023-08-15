@@ -476,7 +476,7 @@ private fun JobTabJobOpeningsFilterBottomSheet(
             )
         )
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(50.dp))
     }
 }
 
