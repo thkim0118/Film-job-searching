@@ -485,6 +485,7 @@
     <string name="recruiting_register_actor_age_title">나이</string>
     <string name="recruiting_register_actor_age_irrelevant">연령무관</string>
     <string name="recruiting_register_actor_age_range">%d살~%d살 이상</string>
+    <string name="recruiting_register_actor_age_range_no_limit">%d살~%d살</string>
     <string name="recruiting_register_actor_career_title">모집자의 경력 설정</string>
     <string name="recruiting_register_actor_career_irrelevant">경력무관</string>
     <string name="recruiting_register_actor_step_2_title">STEP 2. 작품정보</string>
@@ -536,6 +537,7 @@
     <string name="recruiting_register_staff_age_title">나이</string>
     <string name="recruiting_register_staff_age_irrelevant">연령무관</string>
     <string name="recruiting_register_staff_age_range">%d살~%d살 이상</string>
+    <string name="recruiting_register_staff_age_range_no_limit">%d살~%d살</string>
     <string name="recruiting_register_staff_career_title">모집자의 경력 설정</string>
     <string name="recruiting_register_staff_career_irrelevant">경력무관</string>
     <string name="recruiting_register_staff_step_2_title">STEP 2. 작품정보</string>

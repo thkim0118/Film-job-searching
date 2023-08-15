@@ -875,7 +875,11 @@ private fun AgeComponent(
 
         Text(
             text = stringResource(
-                id = R.string.job_filter_age_range,
+                if (currentAgeRange.endInclusive >= 70f) {
+                    R.string.recruiting_register_actor_age_range
+                } else {
+                    R.string.recruiting_register_actor_age_range_no_limit
+                },
                 currentAgeRange.start.toInt(),
                 currentAgeRange.endInclusive.toInt()
             ),
