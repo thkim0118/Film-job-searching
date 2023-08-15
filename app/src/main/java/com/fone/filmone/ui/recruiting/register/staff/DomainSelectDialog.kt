@@ -104,7 +104,7 @@ fun DomainSelectDialog(
                         newSelectedDomains = if (enable) {
                             newSelectedDomains + domain
                         } else {
-                            newSelectedDomains.filter { it == domain }
+                            newSelectedDomains.filter { it != domain }
                         }
                     },
                 )
