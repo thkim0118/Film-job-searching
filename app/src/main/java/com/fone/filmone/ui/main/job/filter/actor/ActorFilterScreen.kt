@@ -74,7 +74,9 @@ fun ActorFilterScreen(
         ) {
             ActorFilterTitle(
                 onRefreshClick = {
-
+                    viewModel.unSelectAllGenders()
+                    viewModel.updateAgeRangeReset()
+                    viewModel.unSelectAllInterests()
                 },
                 onCloseClick = {
                     navController.popBackStack()
@@ -156,7 +158,6 @@ private fun ActorFilterTitle(
             ),
             textAlign = TextAlign.Center
         )
-
 
         Spacer(modifier = Modifier.width(11.dp))
 

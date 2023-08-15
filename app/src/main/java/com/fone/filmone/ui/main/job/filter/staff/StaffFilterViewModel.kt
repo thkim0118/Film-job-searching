@@ -109,6 +109,24 @@ class StaffFilterViewModel @Inject constructor(
             )
         }
     }
+
+    fun unSelectAllGenders() {
+        viewModelState.update { state ->
+            state.copy(genders = emptySet())
+        }
+    }
+
+    fun unSelectAllInterests() {
+        viewModelState.update { state ->
+            state.copy(interests = emptySet())
+        }
+    }
+
+    fun unSelectAllDomains() {
+        viewModelState.update { state ->
+            state.copy(domains = emptySet())
+        }
+    }
 }
 
 private data class StaffFilterViewModelState(

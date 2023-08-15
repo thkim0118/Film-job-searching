@@ -84,6 +84,18 @@ class ActorFilterViewModel @Inject constructor(
             state.copy(ageRange = ageRange)
         }
     }
+
+    fun unSelectAllGenders() {
+        viewModelState.update { state ->
+            state.copy(genders = emptySet())
+        }
+    }
+
+    fun unSelectAllInterests() {
+        viewModelState.update { state ->
+            state.copy(interests = emptySet())
+        }
+    }
 }
 
 private data class ActorFilterViewModelState(

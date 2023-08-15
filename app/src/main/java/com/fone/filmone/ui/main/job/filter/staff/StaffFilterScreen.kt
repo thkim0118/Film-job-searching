@@ -77,7 +77,10 @@ fun StaffFilterScreen(
         ) {
             ActorFilterTitle(
                 onRefreshClick = {
-
+                    viewModel.unSelectAllGenders()
+                    viewModel.unSelectAllInterests()
+                    viewModel.unSelectAllDomains()
+                    viewModel.updateAgeRangeReset()
                 },
                 onCloseClick = {
                     navController.popBackStack()
