@@ -842,10 +842,15 @@ private fun ContentTitleInputComponent(
         textLimit = titleTextLimit,
         onValueChange = onUpdateTitleText,
         tailComponent = {
-            TextLimitComponent(
-                currentTextSize = titleText.length,
-                maxTextSize = titleTextLimit
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(start = 8.dp)
+            ) {
+                TextLimitComponent(
+                    currentTextSize = titleText.length,
+                    maxTextSize = titleTextLimit
+                )
+            }
         }
     )
 }
