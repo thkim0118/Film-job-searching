@@ -388,6 +388,7 @@ private fun JobTabJobOpeningsFilterBottomSheet(
 ) {
     Column(
         modifier = modifier
+            .navigationBarsPadding()
             .clip(shape = RoundedCornerShape(10.dp))
             .background(shape = RoundedCornerShape(10.dp), color = FColor.White),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -491,6 +492,7 @@ private fun JobTabProfileFilterBottomSheet(
 ) {
     Column(
         modifier = modifier
+            .navigationBarsPadding()
             .clip(shape = RoundedCornerShape(10.dp))
             .background(shape = RoundedCornerShape(10.dp), color = FColor.White),
         horizontalAlignment = Alignment.CenterHorizontally

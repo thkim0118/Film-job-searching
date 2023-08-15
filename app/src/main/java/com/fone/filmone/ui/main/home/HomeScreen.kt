@@ -538,19 +538,21 @@ private fun ActorProfileComponent(
 
         Column(
             modifier = modifier
-                .widthIn(min = 241.dp)
+                .width(241.dp)
                 .clip(shape = shape)
                 .background(shape = shape, color = FColor.White)
                 .border(width = 1.dp, color = FColor.BgGroupedBase)
-                .padding(horizontal = 20.dp)
                 .clickableSingle { onItemClick(homeActorProfileContent.id) }
+                .padding(horizontal = 20.dp)
         ) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
                 text = homeActorProfileContent.title,
                 style = LocalTypography.current.subtitle1(),
-                color = FColor.TextPrimary
+                color = FColor.TextPrimary,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
 
             Spacer(modifier = Modifier.height(20.dp))

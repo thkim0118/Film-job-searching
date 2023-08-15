@@ -1,7 +1,15 @@
 package com.fone.filmone.ui.common.bottomsheet
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +32,7 @@ fun PairButtonBottomSheet(
 ) {
     Column(
         modifier = modifier
+            .navigationBarsPadding()
             .clip(shape = RoundedCornerShape(5.dp))
             .background(shape = RoundedCornerShape(5.dp), color = FColor.White)
             .padding(horizontal = 16.dp)

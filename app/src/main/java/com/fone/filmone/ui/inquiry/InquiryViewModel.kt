@@ -3,6 +3,7 @@ package com.fone.filmone.ui.inquiry
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
+import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.model.inquiry.InquiryType
@@ -30,30 +31,40 @@ class InquiryViewModel @Inject constructor(
         _uiState.update {
             it.copy(email = email)
         }
+
+        updateButtonState()
     }
 
     fun updateInquiryType(inquiryType: InquiryType) {
         _uiState.update {
             it.copy(inquiryType = inquiryType)
         }
+
+        updateButtonState()
     }
 
     fun updateTitle(title: String) {
         _uiState.update {
             it.copy(title = title)
         }
+
+        updateButtonState()
     }
 
     fun updateDescription(description: String) {
         _uiState.update {
             it.copy(description = description)
         }
+
+        updateButtonState()
     }
 
     fun updatePrivacyInformation() {
         _uiState.update {
             it.copy(isAgreePersonalInformation = it.isAgreePersonalInformation.not())
         }
+
+        updateButtonState()
     }
 
     fun submitInquiry() = viewModelScope.launch {
@@ -88,6 +99,18 @@ class InquiryViewModel @Inject constructor(
             it.copy(popScreen = true)
         }
     }
+
+    private fun updateButtonState() {
+        val state = _uiState.value
+
+        val enable = state.email.isNotEmpty() && PatternUtil.isValidEmail(state.email) &&
+                state.inquiryType != null && state.title.isNotEmpty() &&
+                state.description.isNotEmpty() && state.isAgreePersonalInformation
+
+        _uiState.update {
+            it.copy(buttonEnable = enable)
+        }
+    }
 }
 
 data class InquiryUiState(
@@ -97,5 +120,6 @@ data class InquiryUiState(
     val description: String = "",
     val isAgreePersonalInformation: Boolean = false,
     val isInquirySuccess: Boolean = false,
-    val popScreen: Boolean = false
+    val popScreen: Boolean = false,
+    val buttonEnable: Boolean = false,
 )

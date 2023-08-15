@@ -204,16 +204,21 @@ class MyInfoViewModel @Inject constructor(
     private fun updateEditButtonState() {
         val currentState = _uiState.value
 
-        val disable =
-            (currentState.profileUrl == savedUserState.profileUrl || currentState.encodedProfile == null) &&
-                    currentState.job == savedUserState.job &&
-                    currentState.interests.sorted() == savedUserState.interests.sorted() &&
-                    currentState.nickname == savedUserState.nickname &&
-                    currentState.interests.isNotEmpty()
+        fun isProfileModified() =
+            currentState.profileUrl != savedUserState.profileUrl || currentState.encodedProfile != null
+
+        fun isUserInfoModified() =
+            currentState.job != savedUserState.job || currentState.interests.sorted() != savedUserState.interests.sorted() || currentState.nickname != savedUserState.nickname
+
+        val enable =
+            (isProfileModified() || isUserInfoModified()) &&
+                    currentState.nickname.isNotEmpty() &&
+                    currentState.interests.isNotEmpty() &&
+                    currentState.job != null
 
         _uiState.update {
             it.copy(
-                isEnableEditButton = disable.not()
+                isEnableEditButton = enable
             )
         }
     }
