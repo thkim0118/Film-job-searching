@@ -14,6 +14,7 @@ import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.ui.common.FTextField
 import com.fone.filmone.ui.common.tag.career.CareerTags
 import com.fone.filmone.ui.main.job.common.TextLimitComponent
+import com.fone.filmone.ui.main.job.common.TextWithRequired
 
 @Composable
 fun CareerInputComponent(
@@ -26,6 +27,13 @@ fun CareerInputComponent(
 ) {
     Column(modifier = modifier.padding(horizontal = 16.dp)) {
         Spacer(modifier = Modifier.height(20.dp))
+
+        TextWithRequired(
+            title = stringResource(id = R.string.profile_register_career_title),
+            isRequired = true
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
 
         CareerTags(currentCareers = currentCareer, onUpdateCareer = onUpdateCareer)
 
