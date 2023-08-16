@@ -9,8 +9,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.fone.filmone.R
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.theme.FColor
@@ -45,7 +47,18 @@ fun TagComponent(
         Text(
             modifier = Modifier
                 .padding(vertical = 6.dp, horizontal = 15.dp),
-            text = title,
+            text = when (title) {
+                "FEATURE_FILM" -> stringResource(id = R.string.category_feature_film)
+                "SHORT_FILM" -> stringResource(id = R.string.category_short_film)
+                "INDEPENDENT_FILM" -> stringResource(id = R.string.category_independent_film)
+                "WEB_DRAMA" -> stringResource(id = R.string.category_web_drama)
+                "MOVIE" -> stringResource(id = R.string.category_movie)
+                "OTT_DRAMA" -> stringResource(id = R.string.category_ott_drama)
+                "YOUTUBE" -> stringResource(id = R.string.category_youtube)
+                "VIRAL" -> stringResource(id = R.string.category_viral)
+                "ETC" -> stringResource(id = R.string.category_etc)
+                else -> title
+            },
             style = fTextStyle(
                 fontWeight = FontWeight.W400,
                 fontSize = 12.textDp,
