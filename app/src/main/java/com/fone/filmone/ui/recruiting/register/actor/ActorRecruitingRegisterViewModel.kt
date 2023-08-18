@@ -204,21 +204,34 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
     }
 
     fun updateCategory(category: Category, enable: Boolean) {
-        if (viewModelState.value.actorRecruitingStep1UiModel.categories.size >= 2) {
-            return
-        }
-
         viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep1UiModel = state.actorRecruitingStep1UiModel.copy(
-                    categories = if (enable) {
-                        state.actorRecruitingStep1UiModel.categories + setOf(category)
-                    } else {
-                        state.actorRecruitingStep1UiModel.categories.filterNot { it == category }
-                            .toSet()
-                    }
+            val currentCategories = state.actorRecruitingStep1UiModel.categories
+
+            if (enable) {
+                val newCategories = if (currentCategories.size < 2) {
+                    currentCategories + setOf(category)
+                } else {
+                    listOf(currentCategories[1], category)
+                }
+
+                state.copy(
+                    actorRecruitingStep1UiModel = state.actorRecruitingStep1UiModel.copy(
+                        categories = newCategories
+                    )
                 )
-            )
+            } else {
+                val updatedCategories = currentCategories.filterNot { it == category }
+                if (currentCategories.size == 2 && updatedCategories.size == 1) {
+                    val firstCategory = currentCategories.first()
+                    updatedCategories + firstCategory
+                }
+
+                state.copy(
+                    actorRecruitingStep1UiModel = state.actorRecruitingStep1UiModel.copy(
+                        categories = updatedCategories
+                    )
+                )
+            }
         }
     }
 
@@ -553,7 +566,7 @@ data class ActorRecruitingRegisterUiModel(
 data class ActorRecruitingStep1UiModel(
     val titleText: String = "",
     val titleTextLimit: Int = 50,
-    val categories: Set<Category> = emptySet(),
+    val categories: List<Category> = emptyList(),
     val deadlineDate: String = "",
     val deadlineDateTagEnable: Boolean = true,
     val recruitmentActor: String = "",

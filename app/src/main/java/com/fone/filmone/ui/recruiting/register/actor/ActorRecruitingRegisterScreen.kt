@@ -101,7 +101,7 @@ fun ActorRecruitingRegisterScreen(
                 Step1Component(
                     titleText = uiState.actorRecruitingStep1UiModel.titleText,
                     titleTextLimit = uiState.actorRecruitingStep1UiModel.titleTextLimit,
-                    currentCategories = uiState.actorRecruitingStep1UiModel.categories.toList(),
+                    currentCategories = uiState.actorRecruitingStep1UiModel.categories,
                     deadlineDate = uiState.actorRecruitingStep1UiModel.deadlineDate,
                     deadlineDateTagEnable = uiState.actorRecruitingStep1UiModel.deadlineDateTagEnable,
                     recruitmentActor = uiState.actorRecruitingStep1UiModel.recruitmentActor,
