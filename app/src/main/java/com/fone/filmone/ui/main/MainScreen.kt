@@ -68,6 +68,7 @@ import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.theme.FColor
+import com.fone.filmone.ui.theme.LocalTypography
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -335,7 +336,7 @@ private fun LogoutBottomSheet(
 ) {
     PairButtonBottomSheet(
         modifier = modifier, content = {
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(40.dp))
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
@@ -350,12 +351,12 @@ private fun LogoutBottomSheet(
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.my_logout_sheet_subtitle),
-                style = com.fone.filmone.ui.theme.LocalTypography.current.h5(),
+                style = LocalTypography.current.subtitle2(),
                 color = FColor.TextSecondary,
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(44.dp))
         }, onLeftButtonClick = {
         hideBottomSheet(coroutineScope, bottomSheetState)
     }, onRightButtonClick = onLogoutClick
