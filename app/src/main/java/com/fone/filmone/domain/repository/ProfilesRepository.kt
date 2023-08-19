@@ -8,6 +8,10 @@ import com.fone.filmone.domain.model.common.DataResult
 import com.fone.filmone.domain.model.jobopenings.JobTabFilterVo
 
 interface ProfilesRepository {
+    suspend fun wantProfile(
+        profileId: Long
+    ): DataResult<Unit>
+
     suspend fun getFavoriteProfiles(
         page: Int,
         size: Int = 20,

@@ -14,6 +14,10 @@ import javax.inject.Inject
 class ProfilesRepositoryImpl @Inject constructor(
     private val profilesApi: ProfilesApi
 ) : ProfilesRepository {
+    override suspend fun wantProfile(profileId: Long): DataResult<Unit> {
+        return handleNetwork { profilesApi.wantProfile(profileId) }
+    }
+
     override suspend fun getFavoriteProfiles(
         page: Int,
         size: Int,
@@ -48,7 +52,10 @@ class ProfilesRepositoryImpl @Inject constructor(
         return handleNetwork { profilesApi.registerProfile(profileRegisterRequest = profileRegisterRequest) }
     }
 
-    override suspend fun getProfileDetail(profileId: Int, type: Type): DataResult<ProfileDetailResponse> {
+    override suspend fun getProfileDetail(
+        profileId: Int,
+        type: Type
+    ): DataResult<ProfileDetailResponse> {
         return handleNetwork { profilesApi.getProfileDetail(profileId = profileId, type = type) }
     }
 }

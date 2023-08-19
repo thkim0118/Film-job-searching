@@ -27,6 +27,11 @@ interface ProfilesApi {
         @Query("type") type: Type,
     ): Response<NetworkResponse<ProfilesPagingResponse>>
 
+    @POST("${Server.ApiVersion}/profiles/{profileId}/want")
+    suspend fun wantProfile(
+        @Path("profileId") profileId: Long,
+    ): Response<NetworkResponse<Unit>>
+
     @GET("${Server.ApiVersion}/profiles/wants")
     suspend fun getFavoriteProfile(
         @Query("page") page: Int,

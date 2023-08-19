@@ -10,6 +10,7 @@ import com.fone.filmone.data.datamodel.response.profiles.detail.ProfileDetailRes
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.GetProfileDetailUseCase
+import com.fone.filmone.domain.usecase.WantProfileUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.navigation.FOneDestinations
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,6 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ActorProfileDetailViewModel @Inject constructor(
     private val getProfileDetailUseCase: GetProfileDetailUseCase,
+    private val wantProfileUseCase: WantProfileUseCase,
     stateHandle: SavedStateHandle
 ) : BaseViewModel() {
     private val viewModelState = MutableStateFlow(ActorProfileDetailViewModelState())
@@ -37,6 +39,23 @@ class ActorProfileDetailViewModel @Inject constructor(
             SharingStarted.Eagerly,
             viewModelState.value.toUiState()
         )
+
+    fun wantProfile() = viewModelScope.launch {
+        val profileId: Long = uiState.value.profileId
+        wantProfileUseCase(profileId)
+            .onSuccess {
+                viewModelState.update {
+                    it.copy(
+                        it.profileDetailResponse?.copy(
+                            profile = it.profileDetailResponse.profile.copy(
+                                isWant = it.profileDetailResponse.profile.isWant.not()
+                            )
+                        )
+                    )
+                }
+            }.onFail {
+            }
+    }
 
     init {
         viewModelScope.launch {
@@ -71,6 +90,7 @@ private data class ActorProfileDetailViewModelState(
     fun toUiState(): ActorProfileDetailUiState = if (profileDetailResponse != null) {
         val content = profileDetailResponse.profile
         ActorProfileDetailUiState(
+            profileId = content.id.toLong(),
             date = dateFormat.format(content.createdAt),
             viewCount = String.format("%,d", content.viewCount),
             profileImageUrl = content.profileUrl,
@@ -88,9 +108,11 @@ private data class ActorProfileDetailViewModelState(
             detail = content.details,
             mainCareer = content.hookingComment,
             categories = content.categories,
+            isWant = content.isWant,
         )
     } else {
         ActorProfileDetailUiState(
+            profileId = 0L,
             date = "",
             viewCount = "",
             profileImageUrl = "",
@@ -108,11 +130,13 @@ private data class ActorProfileDetailViewModelState(
             detail = "",
             mainCareer = "",
             categories = emptyList(),
+            isWant = false
         )
     }
 }
 
 data class ActorProfileDetailUiState(
+    val profileId: Long,
     val date: String,
     val viewCount: String,
     val profileImageUrl: String,
@@ -130,4 +154,5 @@ data class ActorProfileDetailUiState(
     val detail: String,
     val mainCareer: String,
     val categories: List<Category>,
+    val isWant: Boolean,
 )

@@ -123,8 +123,11 @@ fun StaffProfileDetailScreen(
             }
 
             ButtonComponent(
-                onScrapClick = {},
-                onContactClick = {}
+                onScrapClick = {
+                    viewModel.wantProfile()
+                },
+                onContactClick = {},
+                uiState = uiState,
             )
         }
     }
@@ -514,7 +517,8 @@ private fun GuideComponent(
 private fun ButtonComponent(
     modifier: Modifier = Modifier,
     onScrapClick: () -> Unit,
-    onContactClick: () -> Unit
+    onContactClick: () -> Unit,
+    uiState: StaffProfileDetailUiState,
 ) {
     Row(
         modifier = modifier
@@ -532,15 +536,22 @@ private fun ButtonComponent(
                 modifier = Modifier
                     .align(Alignment.Center)
             ) {
-                Image(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.actor_detaile_scrap_disable),
-                    contentDescription = null
-                )
+                if (uiState.isWant) {
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.favorite_selected),
+                        contentDescription = null
+                    )
+                } else {
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.favorite_unselected),
+                        contentDescription = null
+                    )
+                }
 
                 Spacer(modifier = Modifier.width(5.dp))
 
                 Text(
-                    text = stringResource(id = R.string.profile_detail_actor_favorite_button_title),
+                    text = stringResource(id = R.string.profile_detail_staff_favorite_button_title),
                     style = fTextStyle(
                         fontWeight = FontWeight.W500,
                         fontSize = 16.textDp,

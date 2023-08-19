@@ -33,7 +33,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -55,7 +54,6 @@ import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.profile.list.model.ProfileListArguments
 import com.fone.filmone.ui.recruiting.detail.InfoComponent
 import com.fone.filmone.ui.theme.FColor
-import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
 import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.glide.GlideImage
@@ -85,8 +83,11 @@ fun ActorProfileDetailScreen(
         bottomBar = {
             ButtonComponent(
                 modifier = Modifier,
-                onScrapClick = {},
-                onContactClick = {}
+                onScrapClick = {
+                    viewModel.wantProfile()
+                },
+                onContactClick = {},
+                uiState = uiState,
             )
         }
     ) {
@@ -564,7 +565,8 @@ private fun GuideComponent(
 private fun ButtonComponent(
     modifier: Modifier = Modifier,
     onScrapClick: () -> Unit,
-    onContactClick: () -> Unit
+    onContactClick: () -> Unit,
+    uiState: ActorProfileDetailUiState
 ) {
     Row(
         modifier = modifier
@@ -583,10 +585,17 @@ private fun ButtonComponent(
                 modifier = Modifier
                     .align(Alignment.Center)
             ) {
-                Image(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.favorite_unselected),
-                    contentDescription = null
-                )
+                if (uiState.isWant) {
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.favorite_selected),
+                        contentDescription = null
+                    )
+                } else {
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.favorite_unselected),
+                        contentDescription = null
+                    )
+                }
 
                 Spacer(modifier = Modifier.width(5.dp))
 
@@ -624,16 +633,5 @@ private fun ButtonComponent(
                 )
             )
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun ButtonComponentPreview() {
-    FilmOneTheme {
-        ButtonComponent(
-            onScrapClick = {},
-            onContactClick = {}
-        )
     }
 }
