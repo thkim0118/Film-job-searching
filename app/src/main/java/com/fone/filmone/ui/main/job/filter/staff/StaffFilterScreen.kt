@@ -197,7 +197,8 @@ private fun GenderTagsComponent(
         FilterComponentTitle(
             title = stringResource(id = R.string.job_filter_gender_title),
             tagTitle = stringResource(id = R.string.job_filter_all_select),
-            onTagClick = onUpdateGenderAll
+            onTagClick = onUpdateGenderAll,
+            currentGender = currentGender,
         )
 
         Spacer(modifier = Modifier.height(6.dp))
@@ -243,7 +244,8 @@ private fun AgeComponent(
         FilterComponentTitle(
             title = stringResource(id = R.string.job_filter_age),
             tagTitle = stringResource(id = R.string.job_filter_age_irrelevant),
-            onTagClick = onUpdateAgeReset
+            onTagClick = onUpdateAgeReset,
+            ageRange = ageRange,
         )
 
         Spacer(modifier = Modifier.height(6.dp))
@@ -292,7 +294,8 @@ private fun InterestsComponent(
         FilterComponentTitle(
             title = stringResource(id = R.string.job_filter_interests_title),
             tagTitle = stringResource(id = R.string.job_filter_all_select),
-            onTagClick = onUpdateInterestsAll
+            onTagClick = onUpdateInterestsAll,
+            currentInterests = currentInterests,
         )
 
         Spacer(modifier = Modifier.height(6.dp))
@@ -315,7 +318,8 @@ private fun DomainComponent(
         FilterComponentTitle(
             title = stringResource(id = R.string.job_filter_domain_title),
             tagTitle = stringResource(id = R.string.job_filter_all_select),
-            onTagClick = onUpdateDomainAll
+            onTagClick = onUpdateDomainAll,
+            currentDomains = currentDomains,
         )
 
         Spacer(modifier = Modifier.height(6.dp))
@@ -332,7 +336,11 @@ private fun FilterComponentTitle(
     modifier: Modifier = Modifier,
     title: String,
     tagTitle: String,
-    onTagClick: () -> Unit
+    onTagClick: () -> Unit,
+    currentGender: Set<Gender>? = null,
+    ageRange: ClosedFloatingPointRange<Float>? = null,
+    currentInterests: List<Category>? = null,
+    currentDomains: List<Domain>? = null,
 ) {
     Row(
         modifier = modifier,
@@ -345,23 +353,100 @@ private fun FilterComponentTitle(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Box(
-            modifier = Modifier
-                .clip(shape = RoundedCornerShape(100.dp))
-                .background(shape = RoundedCornerShape(100.dp), color = FColor.Secondary1)
-                .clickable { onTagClick() }
-        ) {
-            Text(
+        if (currentGender != null) {
+            Box(
                 modifier = Modifier
-                    .padding(vertical = 6.dp, horizontal = 15.dp),
-                text = tagTitle,
-                style = fTextStyle(
-                    fontWeight = FontWeight.W400,
-                    fontSize = 12.textDp,
-                    lineHeight = 12.textDp,
-                    color = FColor.BgBase
+                    .clip(shape = RoundedCornerShape(100.dp))
+                    .background(
+                        shape = RoundedCornerShape(100.dp),
+                        color = if (currentGender.isEmpty()) FColor.Secondary1 else FColor.Gray300
+                    )
+                    .clickable { onTagClick() }
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(vertical = 6.dp, horizontal = 15.dp),
+                    text = tagTitle,
+                    style = fTextStyle(
+                        fontWeight = FontWeight.W400,
+                        fontSize = 12.textDp,
+                        lineHeight = 12.textDp,
+                        color = FColor.BgBase
+                    )
                 )
-            )
+            }
+        }
+
+        if (ageRange != null) {
+            Box(
+                modifier = Modifier
+                    .clip(shape = RoundedCornerShape(100.dp))
+                    .background(
+                        shape = RoundedCornerShape(100.dp),
+                        color = if (ageRange.start.toInt() == 1 && ageRange.endInclusive.toInt() == 70) FColor.Secondary1 else FColor.Gray300
+                    )
+                    .clickable { onTagClick() }
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(vertical = 6.dp, horizontal = 15.dp),
+                    text = tagTitle,
+                    style = fTextStyle(
+                        fontWeight = FontWeight.W400,
+                        fontSize = 12.textDp,
+                        lineHeight = 12.textDp,
+                        color = FColor.BgBase
+                    )
+                )
+            }
+        }
+
+        if (currentInterests != null) {
+            Box(
+                modifier = Modifier
+                    .clip(shape = RoundedCornerShape(100.dp))
+                    .background(
+                        shape = RoundedCornerShape(100.dp),
+                        color = if (currentInterests.isEmpty()) FColor.Secondary1 else FColor.Gray300
+                    )
+                    .clickable { onTagClick() }
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(vertical = 6.dp, horizontal = 15.dp),
+                    text = tagTitle,
+                    style = fTextStyle(
+                        fontWeight = FontWeight.W400,
+                        fontSize = 12.textDp,
+                        lineHeight = 12.textDp,
+                        color = FColor.BgBase
+                    )
+                )
+            }
+        }
+
+        if (currentDomains != null) {
+            Box(
+                modifier = Modifier
+                    .clip(shape = RoundedCornerShape(100.dp))
+                    .background(
+                        shape = RoundedCornerShape(100.dp),
+                        color = if (currentDomains.isEmpty()) FColor.Secondary1 else FColor.Gray300
+                    )
+                    .clickable { onTagClick() }
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(vertical = 6.dp, horizontal = 15.dp),
+                    text = tagTitle,
+                    style = fTextStyle(
+                        fontWeight = FontWeight.W400,
+                        fontSize = 12.textDp,
+                        lineHeight = 12.textDp,
+                        color = FColor.BgBase
+                    )
+                )
+            }
         }
     }
 }
