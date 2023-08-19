@@ -70,7 +70,8 @@ private fun SelectedDomainComponent(
                 TagComponent(
                     title = stringResource(id = R.string.recruiting_register_staff_domain_select_all),
                     enable = true,
-                    clickable = false
+                    clickable = false,
+                    isDomain = true
                 )
             }
 
@@ -81,7 +82,8 @@ private fun SelectedDomainComponent(
                         selectedDomains.size
                     ),
                     enable = true,
-                    clickable = false
+                    clickable = false,
+                    isDomain = true
                 )
             }
 
@@ -90,7 +92,8 @@ private fun SelectedDomainComponent(
                     TagComponent(
                         title = stringResource(id = it.stringRes),
                         enable = true,
-                        clickable = false
+                        clickable = false,
+                        isDomain = true
                     )
 
                     Spacer(modifier = Modifier.width(6.dp))

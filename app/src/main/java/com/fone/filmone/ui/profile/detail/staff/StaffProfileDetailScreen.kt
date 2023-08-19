@@ -396,7 +396,7 @@ private fun ActorInfoComponent(
         Spacer(modifier = Modifier.height(8.dp))
 
         InfoComponent(
-            title = stringResource(id = R.string.profile_detail_actor_info_birthday),
+            title = stringResource(id = R.string.profile_detail_staff_info_birthday),
             content = birthday,
         )
 

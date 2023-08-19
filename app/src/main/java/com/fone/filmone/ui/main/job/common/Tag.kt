@@ -23,13 +23,16 @@ fun TagComponent(
     title: String,
     enable: Boolean,
     onClick: () -> Unit = {},
-    clickable: Boolean = true
+    clickable: Boolean = true,
+    isDomain: Boolean = false,
 ) {
     val tagModifier = modifier
         .clip(shape = RoundedCornerShape(100.dp))
         .background(
             shape = RoundedCornerShape(100.dp),
-            color = if (enable) {
+            color = if (isDomain) {
+                FColor.Red50
+            } else if (enable) {
                 FColor.Secondary1
             } else {
                 FColor.DisableBase
@@ -63,7 +66,7 @@ fun TagComponent(
                 fontWeight = FontWeight.W400,
                 fontSize = 12.textDp,
                 lineHeight = 12.textDp,
-                color = FColor.BgBase
+                color = if (isDomain) FColor.Primary else FColor.BgBase
             )
         )
     }
