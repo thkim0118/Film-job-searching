@@ -52,7 +52,6 @@ class JobScreenSharedViewModel @Inject constructor(
                 domains = Domain.values().toList(),
                 genders = Gender.values().toList(),
                 type = userType,
-                size = 0,
             )
 
             when (userType) {
@@ -69,7 +68,7 @@ class JobScreenSharedViewModel @Inject constructor(
         }
     }
 
-    fun fetchActorJobOpenings(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
+    private fun fetchActorJobOpenings(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
         getJobOpeningsListUseCase(jobTabFilterVo)
             .onSuccess { response ->
                 if (response != null) {
@@ -83,7 +82,7 @@ class JobScreenSharedViewModel @Inject constructor(
             }
     }
 
-    fun fetchActorProfile(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
+    private fun fetchActorProfile(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
         getProfileListUseCase(jobTabFilterVo)
             .onSuccess { response ->
                 if (response != null) {
@@ -97,7 +96,7 @@ class JobScreenSharedViewModel @Inject constructor(
             }
     }
 
-    fun fetchStaffJobOpenings(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
+    private fun fetchStaffJobOpenings(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
         getJobOpeningsListUseCase(jobTabFilterVo)
             .onSuccess { response ->
                 if (response != null) {
@@ -111,7 +110,7 @@ class JobScreenSharedViewModel @Inject constructor(
             }
     }
 
-    fun fetchStaffProfile(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
+    private fun fetchStaffProfile(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
         getProfileListUseCase(jobTabFilterVo)
             .onSuccess { response ->
                 if (response != null) {
@@ -145,7 +144,6 @@ private data class JobScreenViewModelState(
         domains = null,
         genders = emptyList(),
         type = Type.ACTOR,
-        size = 0,
     ),
     val actorProfilesFilter: JobTabFilterVo = JobTabFilterVo(
         ageMax = 70,
@@ -154,7 +152,6 @@ private data class JobScreenViewModelState(
         domains = null,
         genders = emptyList(),
         type = Type.ACTOR,
-        size = 0,
     ),
     val staffJobOpeningsFilter: JobTabFilterVo = JobTabFilterVo(
         ageMax = 70,
@@ -163,7 +160,6 @@ private data class JobScreenViewModelState(
         domains = null,
         genders = emptyList(),
         type = Type.ACTOR,
-        size = 0,
     ),
     val staffProfilesFilter: JobTabFilterVo = JobTabFilterVo(
         ageMax = 70,
@@ -172,7 +168,6 @@ private data class JobScreenViewModelState(
         domains = null,
         genders = emptyList(),
         type = Type.ACTOR,
-        size = 0,
     ),
 ) {
     fun toUiState(): JobScreenUiState = JobScreenUiState(
