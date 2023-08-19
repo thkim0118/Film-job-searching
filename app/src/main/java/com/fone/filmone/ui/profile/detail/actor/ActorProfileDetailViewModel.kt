@@ -40,6 +40,10 @@ class ActorProfileDetailViewModel @Inject constructor(
             viewModelState.value.toUiState()
         )
 
+    fun contact() {
+        showToast(R.string.service)
+    }
+
     fun wantProfile() = viewModelScope.launch {
         val profileId: Long = uiState.value.profileId
         wantProfileUseCase(profileId)

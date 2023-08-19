@@ -143,7 +143,7 @@ fun StaffRecruitingDetailScreen(
 
             ButtonComponent(
                 onScrapClick = {},
-                onContactClick = {}
+                onContactClick = viewModel::contact
             )
         }
     }
@@ -622,7 +622,7 @@ private fun ButtonComponent(
                 .clickableSingle { onContactClick() }
         ) {
             Text(
-                text = stringResource(id = R.string.actor_detail_contact_button_title),
+                text = stringResource(id = R.string.staff_detail_contact_button_title),
                 style = fTextStyle(
                     fontWeight = FontWeight.W500,
                     fontSize = 16.textDp,

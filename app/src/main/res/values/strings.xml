@@ -205,6 +205,7 @@
     <string name="kakao">카카오</string>
     <string name="naver">네이버</string>
     <string name="apple">애플</string>
+    <string name="service">서비스 준비 중입니다. 곧 찾아뵙겠습니다 !</string>
 
     <!--    dialog-->
     <string name="dialog_profile_setting_title">프로필 사진 설정</string>

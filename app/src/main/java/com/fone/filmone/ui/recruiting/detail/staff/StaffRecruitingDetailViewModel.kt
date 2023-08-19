@@ -36,6 +36,10 @@ class StaffRecruitingDetailViewModel @Inject constructor(
             viewModelState.value.toUiState()
         )
 
+    fun contact() {
+        showToast(R.string.service)
+    }
+
     init {
         viewModelScope.launch {
             val competitionId =

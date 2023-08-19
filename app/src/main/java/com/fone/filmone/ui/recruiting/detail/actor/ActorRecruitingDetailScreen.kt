@@ -141,7 +141,7 @@ fun ActorRecruitingDetailScreen(
 
             ButtonComponent(
                 onScrapClick = {},
-                onContactClick = {}
+                onContactClick = viewModel::contact
             )
         }
     }

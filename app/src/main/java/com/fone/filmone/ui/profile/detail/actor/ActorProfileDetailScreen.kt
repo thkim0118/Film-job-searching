@@ -86,7 +86,7 @@ fun ActorProfileDetailScreen(
                 onScrapClick = {
                     viewModel.wantProfile()
                 },
-                onContactClick = {},
+                onContactClick = viewModel::contact,
                 uiState = uiState,
             )
         }

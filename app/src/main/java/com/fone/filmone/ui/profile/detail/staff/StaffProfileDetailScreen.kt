@@ -126,7 +126,7 @@ fun StaffProfileDetailScreen(
                 onScrapClick = {
                     viewModel.wantProfile()
                 },
-                onContactClick = {},
+                onContactClick = viewModel::contact,
                 uiState = uiState,
             )
         }
@@ -572,7 +572,7 @@ private fun ButtonComponent(
                 .clickableSingle { onContactClick() }
         ) {
             Text(
-                text = stringResource(id = R.string.profile_detail_actor_contact_button_title),
+                text = stringResource(id = R.string.profile_detail_staff_contact_button_title),
                 style = fTextStyle(
                     fontWeight = FontWeight.W500,
                     fontSize = 16.textDp,

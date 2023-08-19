@@ -1,6 +1,7 @@
 package com.fone.filmone.ui.profile.detail.staff
 
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.response.profiles.detail.ProfileDetailResponse
 import com.fone.filmone.domain.model.common.onFail
@@ -31,6 +32,10 @@ class StaffProfileDetailViewModel @Inject constructor(
             SharingStarted.Eagerly,
             viewModelState.value.toUiState()
         )
+
+    fun contact() {
+        showToast(R.string.service)
+    }
 
     fun wantProfile() = viewModelScope.launch {
         val profileId: Long = uiState.value.profileId
