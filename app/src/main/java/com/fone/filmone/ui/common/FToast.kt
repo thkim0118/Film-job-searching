@@ -24,7 +24,8 @@ import kotlinx.coroutines.delay
 enum class ToastDuration(val milliseconds: Long) {
     SEC_2_5(2_500L),
     SEC_5(5_000L),
-    SEC_10(10_000L)
+    SEC_10(10_000L),
+    SEC_0_5(500L),
 }
 
 @Composable

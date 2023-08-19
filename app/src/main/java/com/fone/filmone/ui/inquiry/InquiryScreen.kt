@@ -17,8 +17,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -57,8 +61,15 @@ fun InquiryScreen(
     val scrollState = rememberScrollState()
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    if (uiState.popScreen) {
-        navController.popBackStack()
+    var hasHandledPopScreen by remember { mutableStateOf(false) }
+
+    LaunchedEffect(viewModel.popScreenEvent) {
+        viewModel.popScreenEvent.collect {
+            if (it && !hasHandledPopScreen) {
+                navController.popBackStack()
+                hasHandledPopScreen = true
+            }
+        }
     }
 
     Scaffold(

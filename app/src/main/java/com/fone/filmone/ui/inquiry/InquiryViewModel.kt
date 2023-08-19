@@ -27,6 +27,9 @@ class InquiryViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(InquiryUiState())
     val uiState: StateFlow<InquiryUiState> = _uiState.asStateFlow()
 
+    private val _popScreenEvent = MutableStateFlow<Boolean>(false)
+    val popScreenEvent: StateFlow<Boolean> = _popScreenEvent
+
     fun updateEmail(email: String) {
         _uiState.update {
             it.copy(email = email)
@@ -81,7 +84,9 @@ class InquiryViewModel @Inject constructor(
             }
         ).onSuccess {
             _uiState.update {
-                it.copy(isInquirySuccess = true)
+                it.copy(
+                    isInquirySuccess = true
+                )
             }
             showToastAndPopScreen(R.string.toast_inquiry_complete)
         }.onFail {
@@ -94,10 +99,8 @@ class InquiryViewModel @Inject constructor(
 
     private fun showToastAndPopScreen(@StringRes messageRes: Int) = viewModelScope.launch {
         showToast(messageRes)
-        delay(ToastDuration.SEC_2_5.milliseconds)
-        _uiState.update {
-            it.copy(popScreen = true)
-        }
+        delay(ToastDuration.SEC_0_5.milliseconds)
+        _popScreenEvent.update { true }
     }
 
     private fun updateButtonState() {
@@ -120,6 +123,5 @@ data class InquiryUiState(
     val description: String = "",
     val isAgreePersonalInformation: Boolean = false,
     val isInquirySuccess: Boolean = false,
-    val popScreen: Boolean = false,
     val buttonEnable: Boolean = false,
 )
