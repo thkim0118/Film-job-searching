@@ -3,6 +3,7 @@ package com.fone.filmone.ui.profile.register
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -65,10 +66,10 @@ fun PictureComponent(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { uri: Uri? ->
+        contract = ActivityResultContracts.PickMultipleVisualMedia(),
+        onResult = { uris: List<Uri> ->
             coroutineScope.launch(Dispatchers.IO) {
-                uri?.let {
+                uris.forEach {
                     val encodeString = ImageBase64Util.encodeToString(context, it)
                     onUpdateProfileImage(encodeString)
                 }
@@ -208,7 +209,11 @@ fun PictureComponent(
                             return@clickableSingle
                         }
 
-                        launcher.launch("image/*")
+                        launcher.launch(
+                            PickVisualMediaRequest(
+                                ActivityResultContracts.PickVisualMedia.ImageOnly
+                            )
+                        )
                     }
             )
 
