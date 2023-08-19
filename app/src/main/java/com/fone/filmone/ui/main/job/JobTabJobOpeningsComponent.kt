@@ -42,7 +42,7 @@ import com.fone.filmone.ui.theme.LocalTypography
 fun JobTabJobOpeningsComponent(
     modifier: Modifier = Modifier,
     jobTabJobOpeningUiModels: List<JobTabJobOpeningUiModel>,
-    onLastItemVisible: () -> Unit
+    onLastItemVisible: () -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         LazyColumnLastItemCallback(
@@ -50,7 +50,7 @@ fun JobTabJobOpeningsComponent(
             onLastItemCallback = { index ->
                 LogUtil.w("index :: $index")
                 onLastItemVisible()
-            }
+            },
         ) {
             items(jobTabJobOpeningUiModels) {
                 JobOpeningComponent(
@@ -62,12 +62,12 @@ fun JobTabJobOpeningsComponent(
                     period = it.period,
                     jobType = it.jobType,
                     casting = it.casting,
-                    onScrapClick = {}
+                    onScrapClick = {},
                 )
 
                 Divider(
                     thickness = 6.dp,
-                    color = FColor.Divider2
+                    color = FColor.Divider2,
                 )
             }
         }
@@ -84,18 +84,18 @@ private fun JobOpeningComponent(
     gender: Gender,
     period: String,
     jobType: JobType,
-    casting: String,
-    onScrapClick: () -> Unit = {}
+    casting: String?,
+    onScrapClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 10.dp)
+            .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 10.dp),
     ) {
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(end = 20.dp)
+                .padding(end = 20.dp),
         ) {
             Tags(categories = categories)
 
@@ -104,7 +104,7 @@ private fun JobOpeningComponent(
             Text(
                 text = title,
                 style = LocalTypography.current.b2(),
-                color = FColor.TextPrimary
+                color = FColor.TextPrimary,
             )
 
             Spacer(modifier = Modifier.height(6.dp))
@@ -115,7 +115,7 @@ private fun JobOpeningComponent(
                 gender = gender,
                 period = period,
                 jobType = jobType,
-                casting = casting
+                casting = casting,
             )
         }
 
@@ -125,17 +125,17 @@ private fun JobOpeningComponent(
                 .clip(shape = CircleShape)
                 .background(
                     shape = CircleShape,
-                    color = FColor.BgGroupedBase
+                    color = FColor.BgGroupedBase,
                 )
                 .clickableSingle {
                     onScrapClick()
-                }
+                },
         ) {
             Image(
                 modifier = Modifier
                     .align(Alignment.Center),
                 imageVector = ImageVector.vectorResource(id = R.drawable.job_opening_scrap),
-                contentDescription = null
+                contentDescription = null,
             )
         }
     }
@@ -144,7 +144,7 @@ private fun JobOpeningComponent(
 @Composable
 private fun Tags(
     modifier: Modifier = Modifier,
-    categories: List<Category>
+    categories: List<Category>,
 ) {
     Row(modifier = modifier) {
         categories.forEachIndexed { index, category ->
@@ -160,21 +160,21 @@ private fun Tags(
 @Composable
 private fun CategoryTag(
     modifier: Modifier = Modifier,
-    category: Category
+    category: Category,
 ) {
     Box(
         modifier = modifier
             .clip(shape = RoundedCornerShape(100.dp))
             .background(
                 shape = RoundedCornerShape(100.dp),
-                color = FColor.BgGroupedBase
+                color = FColor.BgGroupedBase,
             )
-            .padding(horizontal = 10.dp, vertical = 2.dp)
+            .padding(horizontal = 10.dp, vertical = 2.dp),
     ) {
         Text(
             text = stringResource(id = category.stringRes),
             style = LocalTypography.current.b4(),
-            color = FColor.Secondary1Light
+            color = FColor.Secondary1Light,
         )
     }
 }
@@ -186,15 +186,15 @@ private fun JobOpeningInfo(
     gender: Gender,
     period: String,
     jobType: JobType,
-    casting: String,
+    casting: String?,
 ) {
     Row(
         modifier = Modifier
-            .height(IntrinsicSize.Min)
+            .height(IntrinsicSize.Min),
     ) {
         JobOpeningContent(
             title = stringResource(id = R.string.job_opening_deadline_title),
-            content = deadline
+            content = deadline,
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -204,24 +204,24 @@ private fun JobOpeningInfo(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(vertical = 3.dp)
-                .width(1.dp)
+                .width(1.dp),
         )
 
         Spacer(modifier = Modifier.width(8.dp))
 
         JobOpeningContent(
             title = stringResource(id = R.string.job_opening_director_title),
-            content = director
+            content = director,
         )
     }
 
     Row(
         modifier = Modifier
-            .height(IntrinsicSize.Min)
+            .height(IntrinsicSize.Min),
     ) {
         JobOpeningContent(
             title = stringResource(id = R.string.job_opening_gender_title),
-            content = stringResource(id = gender.stringRes)
+            content = stringResource(id = gender.stringRes),
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -231,33 +231,35 @@ private fun JobOpeningInfo(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(vertical = 3.dp)
-                .width(1.dp)
+                .width(1.dp),
         )
 
         Spacer(modifier = Modifier.width(8.dp))
 
         JobOpeningContent(
             title = stringResource(id = R.string.job_opening_period_title),
-            content = period
+            content = period,
         )
     }
 
-    JobOpeningContent(
-        title = stringResource(id = jobType.stringRes),
-        content = casting
-    )
+    if (casting != null) {
+        JobOpeningContent(
+            title = stringResource(id = jobType.stringRes),
+            content = casting,
+        )
+    }
 }
 
 @Composable
 private fun JobOpeningContent(
     title: String,
-    content: String
+    content: String,
 ) {
     Row {
         Text(
             text = title,
             style = LocalTypography.current.b4(),
-            color = FColor.DisablePlaceholder
+            color = FColor.DisablePlaceholder,
         )
 
         Spacer(modifier = Modifier.width(4.dp))
@@ -265,7 +267,7 @@ private fun JobOpeningContent(
         Text(
             text = content,
             style = LocalTypography.current.b4(),
-            color = FColor.TextSecondary
+            color = FColor.TextSecondary,
         )
     }
 }

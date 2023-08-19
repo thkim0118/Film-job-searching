@@ -19,7 +19,7 @@ abstract class BaseViewModel : ViewModel() {
         _toastEvent.update {
             it.copy(
                 messageRes = message,
-                toastDuration = toastDuration
+                toastDuration = toastDuration,
             )
         }
     }
@@ -28,7 +28,7 @@ abstract class BaseViewModel : ViewModel() {
         _toastEvent.update {
             it.copy(
                 message = message,
-                toastDuration = toastDuration
+                toastDuration = toastDuration,
             )
         }
     }
@@ -38,7 +38,7 @@ abstract class BaseViewModel : ViewModel() {
             ToastEvent(
                 bottomPadding = it.bottomPadding,
                 message = "",
-                messageRes = Int.MIN_VALUE
+                messageRes = Int.MIN_VALUE,
             )
         }
     }
@@ -48,7 +48,7 @@ data class ToastEvent(
     @StringRes val messageRes: Int = Int.MIN_VALUE,
     val message: String = "",
     val toastDuration: ToastDuration = ToastDuration.SEC_2_5,
-    val bottomPadding: Int = 0
+    val bottomPadding: Int = 0,
 ) {
     fun isEmptyMessage(): Boolean {
         return message.isEmpty() && messageRes == Int.MIN_VALUE

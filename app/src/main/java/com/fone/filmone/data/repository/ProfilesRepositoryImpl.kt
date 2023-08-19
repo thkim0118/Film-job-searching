@@ -12,7 +12,7 @@ import com.fone.filmone.domain.repository.ProfilesRepository
 import javax.inject.Inject
 
 class ProfilesRepositoryImpl @Inject constructor(
-    private val profilesApi: ProfilesApi
+    private val profilesApi: ProfilesApi,
 ) : ProfilesRepository {
     override suspend fun wantProfile(profileId: Long): DataResult<Unit> {
         return handleNetwork { profilesApi.wantProfile(profileId) }
@@ -21,7 +21,7 @@ class ProfilesRepositoryImpl @Inject constructor(
     override suspend fun getFavoriteProfiles(
         page: Int,
         size: Int,
-        type: Type
+        type: Type,
     ): DataResult<ProfilesPagingResponse> {
         return handleNetwork { profilesApi.getFavoriteProfile(page, size, type) }
     }
@@ -43,7 +43,7 @@ class ProfilesRepositoryImpl @Inject constructor(
                 jobTabFilterVo.page,
                 jobTabFilterVo.size,
                 jobTabFilterVo.sort,
-                jobTabFilterVo.type
+                jobTabFilterVo.type,
             )
         }
     }
@@ -54,8 +54,12 @@ class ProfilesRepositoryImpl @Inject constructor(
 
     override suspend fun getProfileDetail(
         profileId: Int,
-        type: Type
+        type: Type,
     ): DataResult<ProfileDetailResponse> {
         return handleNetwork { profilesApi.getProfileDetail(profileId = profileId, type = type) }
+    }
+
+    override suspend fun removeContent(profileId: Int): DataResult<Unit> {
+        return handleNetwork { profilesApi.removeContent(profileId = profileId) }
     }
 }

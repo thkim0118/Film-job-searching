@@ -13,6 +13,7 @@ import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -38,12 +39,16 @@ import kotlinx.coroutines.launch
 fun MyRegisterScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: MyRegisterViewModel = hiltViewModel()
+    viewModel: MyRegisterViewModel = hiltViewModel(),
 ) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsState()
     val dialogState by viewModel.dialogState.collectAsState()
+
+    LaunchedEffect(key1 = true) {
+        viewModel.fetchMyRegisterContents()
+    }
 
     Column(modifier = modifier.defaultSystemBarPadding()) {
         FTitleBar(
@@ -51,7 +56,7 @@ fun MyRegisterScreen(
             titleText = stringResource(id = R.string.my_register_title_text),
             onBackClick = {
                 navController.popBackStack()
-            }
+            },
         )
 
         TabRow(
@@ -60,9 +65,9 @@ fun MyRegisterScreen(
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
                     modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
-                    color = FColor.Primary
+                    color = FColor.Primary,
                 )
-            }
+            },
         ) {
             repeat(MyRegisterTab.values().size) { index ->
                 val myRegisterTab =
@@ -85,7 +90,7 @@ fun MyRegisterScreen(
                                     FColor.DisablePlaceholder
                                 },
                             ),
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
                         )
                     },
                     selected = selected,
@@ -93,7 +98,7 @@ fun MyRegisterScreen(
                         coroutineScope.launch {
                             pagerState.scrollToPage(index)
                         }
-                    }
+                    },
                 )
             }
         }
@@ -111,17 +116,22 @@ fun MyRegisterScreen(
 
 @Composable
 private fun MyRegisterDialog(
-    dialogState: MyRegisterDialogState
+    dialogState: MyRegisterDialogState,
+    viewModel: MyRegisterViewModel = hiltViewModel(),
 ) {
     when (dialogState) {
         MyRegisterDialogState.Clear -> Unit
-        MyRegisterDialogState.RegisterPostDelete -> {
+        is MyRegisterDialogState.RegisterPostDelete -> {
             PairButtonDialog(
                 titleText = stringResource(id = R.string.my_register_dialog_delete_title),
                 leftButtonText = stringResource(id = R.string.no),
                 rightButtonText = stringResource(id = R.string.yes),
-                onLeftButtonClick = {},
-                onRightButtonClick = {}
+                onLeftButtonClick = {
+                    viewModel.updateDialogState(MyRegisterDialogState.Clear)
+                },
+                onRightButtonClick = {
+                    viewModel.removeRegisterContent(dialogState.profileId)
+                },
             )
         }
     }
@@ -129,8 +139,8 @@ private fun MyRegisterDialog(
 
 private enum class MyRegisterTab(
     @StringRes val titleRes: Int,
-    val index: Int
+    val index: Int,
 ) {
     RECRUITMENT(R.string.my_register_tab_recruitment_title, 0),
-    PROFILE(R.string.my_register_tab_profile_title, 1)
+    PROFILE(R.string.my_register_tab_profile_title, 1),
 }

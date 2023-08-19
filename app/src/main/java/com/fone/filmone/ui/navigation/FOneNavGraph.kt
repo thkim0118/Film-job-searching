@@ -28,6 +28,8 @@ import com.fone.filmone.ui.profile.register.actor.ActorProfileRegisterScreen
 import com.fone.filmone.ui.profile.register.staff.StaffProfileRegisterScreen
 import com.fone.filmone.ui.recruiting.detail.actor.ActorRecruitingDetailScreen
 import com.fone.filmone.ui.recruiting.detail.staff.StaffRecruitingDetailScreen
+import com.fone.filmone.ui.recruiting.edit.actor.ActorRecruitingEditScreen
+import com.fone.filmone.ui.recruiting.edit.staff.StaffRecruitingEditScreen
 import com.fone.filmone.ui.recruiting.register.actor.ActorRecruitingRegisterScreen
 import com.fone.filmone.ui.recruiting.register.staff.StaffRecruitingRegisterScreen
 import com.fone.filmone.ui.scrap.ScrapScreen
@@ -55,7 +57,7 @@ fun FOneNavGraph(
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        modifier = modifier
+        modifier = modifier,
     ) {
         composable(FOneDestinations.Splash.route) {
             SplashScreen()
@@ -89,18 +91,30 @@ fun FOneNavGraph(
         composable(FOneDestinations.ActorRecruitingRegister.route) {
             ActorRecruitingRegisterScreen(navController = navController)
         }
+        composable(
+            route = FOneDestinations.ActorRecruitingEdit.routeWithContentId,
+            arguments = FOneDestinations.ActorRecruitingEdit.contentIdArguments,
+        ) {
+            ActorRecruitingEditScreen(navController)
+        }
         composable(FOneDestinations.StaffRecruitingRegister.route) {
             StaffRecruitingRegisterScreen(navController = navController)
         }
         composable(
+            route = FOneDestinations.StaffRecruitingEdit.routeWithContentId,
+            arguments = FOneDestinations.StaffRecruitingEdit.contentIdArguments,
+        ) {
+            StaffRecruitingEditScreen(navController = navController)
+        }
+        composable(
             route = FOneDestinations.ActorRecruitingDetail.routeWithArgs,
-            arguments = FOneDestinations.ActorRecruitingDetail.arguments
+            arguments = FOneDestinations.ActorRecruitingDetail.arguments,
         ) {
             ActorRecruitingDetailScreen(navController = navController)
         }
         composable(
             route = FOneDestinations.StaffRecruitingDetail.routeWithArgs,
-            arguments = FOneDestinations.StaffRecruitingDetail.arguments
+            arguments = FOneDestinations.StaffRecruitingDetail.arguments,
         ) {
             StaffRecruitingDetailScreen(navController = navController)
         }
@@ -112,7 +126,7 @@ fun FOneNavGraph(
         }
         composable(
             route = FOneDestinations.ActorProfileDetail.routeWithArgs,
-            arguments = FOneDestinations.ActorProfileDetail.arguments
+            arguments = FOneDestinations.ActorProfileDetail.arguments,
         ) {
             ActorProfileDetailScreen(navController = navController)
         }
@@ -121,22 +135,22 @@ fun FOneNavGraph(
         }
         composable(
             route = FOneDestinations.ProfileList.routeWithArgs,
-            arguments = FOneDestinations.ProfileList.arguments
+            arguments = FOneDestinations.ProfileList.arguments,
         ) {
             ProfileListScreen(navController = navController)
         }
         composable(
-            route = FOneDestinations.EmailLogin.route
+            route = FOneDestinations.EmailLogin.route,
         ) {
             EmailLoginScreen(navController = navController)
         }
         composable(
-            route = FOneDestinations.FindIdPassword.route
+            route = FOneDestinations.FindIdPassword.route,
         ) {
             FindScreen(navController = navController)
         }
         composable(
-            route = FOneDestinations.EmailJoin.route
+            route = FOneDestinations.EmailJoin.route,
         ) {
             EmailJoinScreen(navController = navController)
         }
@@ -144,14 +158,14 @@ fun FOneNavGraph(
 }
 
 private fun NavGraphBuilder.mainNavGraph(
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     composable(FOneDestinations.Main.route) {
         MainScreen(navController = navController)
     }
     composable(
         route = FOneDestinations.Main.routeWithJobInitialArgs,
-        arguments = FOneDestinations.Main.jobInitialPageArguments
+        arguments = FOneDestinations.Main.jobInitialPageArguments,
     ) {
         val initialPage = it.arguments?.getString(FOneDestinations.Main.argInitialPage)
         val jobInitialPage = it.arguments?.getString(FOneDestinations.Main.argJobInitialPage)
@@ -159,7 +173,7 @@ private fun NavGraphBuilder.mainNavGraph(
         MainScreen(
             navController = navController,
             initialScreen = MainBottomNavItem.parsePage(initialPage ?: ""),
-            initialJobTab = JobTab.parsePage(jobInitialPage ?: "")
+            initialJobTab = JobTab.parsePage(jobInitialPage ?: ""),
         )
     }
 }

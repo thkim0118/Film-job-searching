@@ -1,4 +1,4 @@
-package com.fone.filmone.ui.recruiting.register.actor
+package com.fone.filmone.ui.recruiting.edit.actor
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -8,9 +8,9 @@ import androidx.navigation.NavHostController
 import com.fone.filmone.ui.recruiting.common.actor.ActorRecruitingScreen
 
 @Composable
-fun ActorRecruitingRegisterScreen(
+fun ActorRecruitingEditScreen(
     navController: NavHostController,
-    viewModel: ActorRecruitingRegisterViewModel = hiltViewModel(),
+    viewModel: ActorRecruitingEditViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
 

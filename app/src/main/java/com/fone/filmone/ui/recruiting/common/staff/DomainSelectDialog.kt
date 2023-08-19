@@ -1,4 +1,4 @@
-package com.fone.filmone.ui.recruiting.register.staff
+package com.fone.filmone.ui.recruiting.common.staff
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,7 +38,7 @@ fun DomainSelectDialog(
     selectedDomains: List<Domain>,
     onDismissRequest: (List<Domain>) -> Unit = {},
     properties: DialogProperties = DialogProperties(
-        usePlatformDefaultWidth = false
+        usePlatformDefaultWidth = false,
     ),
 ) {
     var newSelectedDomains by remember { mutableStateOf(selectedDomains) }
@@ -55,7 +55,7 @@ fun DomainSelectDialog(
             .background(FColor.DimColorThin)
             .clickable(onClick = {
                 onDismissRequest(newSelectedDomains)
-            })
+            }),
     ) {
         Dialog(
             onDismissRequest = {
@@ -65,11 +65,11 @@ fun DomainSelectDialog(
         ) {
             Column(
                 modifier = dialogModifier
-                    .padding(horizontal = 20.dp)
+                    .padding(horizontal = 20.dp),
             ) {
                 ConstraintLayout(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 ) {
                     val (titleRef, imageRefs) = createRefs()
 
@@ -81,7 +81,7 @@ fun DomainSelectDialog(
                                 top.linkTo(parent.top, margin = 12.dp)
                             },
                         text = stringResource(id = R.string.recruiting_register_staff_domain_popup_title),
-                        style = LocalTypography.current.h2()
+                        style = LocalTypography.current.h2(),
                     )
 
                     Image(
@@ -92,7 +92,7 @@ fun DomainSelectDialog(
                             }
                             .clickable { onDismissRequest(newSelectedDomains) },
                         imageVector = ImageVector.vectorResource(id = R.drawable.staff_recruiting_dialog_close),
-                        contentDescription = null
+                        contentDescription = null,
                     )
                 }
 

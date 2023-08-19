@@ -13,7 +13,7 @@ sealed class FOneDestinations(val route: String) {
         const val argSignUpVo = "arg_sign_up_vo"
         val routeWithArgs = "$route/{$argSignUpVo}"
         val arguments = listOf(
-            navArgument(argSignUpVo) { type = NavType.StringType }
+            navArgument(argSignUpVo) { type = NavType.StringType },
         )
 
         fun getRouteWithArg(signUpFirstVo: SignUpVo): String {
@@ -25,7 +25,7 @@ sealed class FOneDestinations(val route: String) {
         const val argSignUpVo = "arg_sign_up_vo"
         val routeWithArgs = "$route/{$argSignUpVo}"
         val arguments = listOf(
-            navArgument(argSignUpVo) { type = NavType.StringType }
+            navArgument(argSignUpVo) { type = NavType.StringType },
         )
 
         fun getRouteWithArg(signUpFirstVo: SignUpVo): String {
@@ -37,7 +37,7 @@ sealed class FOneDestinations(val route: String) {
         const val argSignUpVo = "arg_sign_up_vo"
         val routeWithArgs = "$route/{$argSignUpVo}"
         val arguments = listOf(
-            navArgument(argSignUpVo) { type = NavType.StringType }
+            navArgument(argSignUpVo) { type = NavType.StringType },
         )
 
         fun getRouteWithArg(signUpVo: SignUpVo): String {
@@ -58,7 +58,7 @@ sealed class FOneDestinations(val route: String) {
             navArgument(argEmail) { type = NavType.StringType },
             navArgument(argSocialLoginType) { type = NavType.StringType },
             navArgument(argNickname) { type = NavType.StringType },
-            navArgument(argPassword) { type = NavType.StringType }
+            navArgument(argPassword) { type = NavType.StringType },
         )
 
         fun getRouteWithArg(
@@ -66,7 +66,7 @@ sealed class FOneDestinations(val route: String) {
             email: String,
             socialLoginType: String,
             nickname: String,
-            password: String?
+            password: String?,
         ): String {
             return "$route/$accessToken/$email/$socialLoginType/$nickname/$password"
         }
@@ -81,10 +81,12 @@ sealed class FOneDestinations(val route: String) {
             navArgument(argInitialPage) { type = NavType.StringType },
             navArgument(argJobInitialPage) { type = NavType.StringType },
         )
+
         fun getRouteWithJobInitialPageArg(jobInitialPage: String = MainBottomNavItem.Home.name): String {
             return "$route/${MainBottomNavItem.Job.name}/$jobInitialPage"
         }
     }
+
     object MyInfo : FOneDestinations("my-info")
     object Scrap : FOneDestinations("scrap")
     object Favorite : FOneDestinations("favorite")
@@ -92,12 +94,36 @@ sealed class FOneDestinations(val route: String) {
     object ActorFilter : FOneDestinations("actor-filter")
     object StaffFilter : FOneDestinations("staff_filter")
     object ActorRecruitingRegister : FOneDestinations("actor_recruiting_register")
+    object ActorRecruitingEdit : FOneDestinations("actor_recruiting_edit") {
+        const val argContentId = "arg_content_id"
+        val routeWithContentId = "$route/{$argContentId}"
+        val contentIdArguments = listOf(
+            navArgument(argContentId) { type = NavType.IntType },
+        )
+
+        fun getRouteWithContentId(contentId: Int?): String {
+            return "$route/$contentId"
+        }
+    }
+
     object StaffRecruitingRegister : FOneDestinations("staff_recruiting_register")
+    object StaffRecruitingEdit : FOneDestinations("staff_recruiting_edit") {
+        const val argContentId = "arg_content_id"
+        val routeWithContentId = "$route/{$argContentId}"
+        val contentIdArguments = listOf(
+            navArgument(argContentId) { type = NavType.IntType },
+        )
+
+        fun getRouteWithContentId(contentId: Int?): String {
+            return "$route/$contentId"
+        }
+    }
+
     object ActorRecruitingDetail : FOneDestinations("actor_recruiting_detail") {
         const val argActorRecruitingDetail = "arg_actor_recruiting_detail"
         val routeWithArgs = "$route/{$argActorRecruitingDetail}"
         val arguments = listOf(
-            navArgument(argActorRecruitingDetail) { type = NavType.IntType }
+            navArgument(argActorRecruitingDetail) { type = NavType.IntType },
         )
 
         fun getRouteWithArg(competitionId: Int): String {
@@ -109,7 +135,7 @@ sealed class FOneDestinations(val route: String) {
         const val argStaffRecruitingDetail = "arg_actor_recruiting_detail"
         val routeWithArgs = "$route/{$argStaffRecruitingDetail}"
         val arguments = listOf(
-            navArgument(argStaffRecruitingDetail) { type = NavType.IntType }
+            navArgument(argStaffRecruitingDetail) { type = NavType.IntType },
         )
 
         fun getRouteWithArg(competitionId: Int): String {
@@ -123,7 +149,7 @@ sealed class FOneDestinations(val route: String) {
         const val argActorProfileDetail = "arg_actor_profile_detail"
         val routeWithArgs = "$route/{$argActorProfileDetail}"
         val arguments = listOf(
-            navArgument(argActorProfileDetail) { type = NavType.IntType }
+            navArgument(argActorProfileDetail) { type = NavType.IntType },
         )
 
         fun getRouteWithArg(profileId: Int): String {

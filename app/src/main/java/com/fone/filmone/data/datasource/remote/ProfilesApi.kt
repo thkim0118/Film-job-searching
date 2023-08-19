@@ -9,6 +9,7 @@ import com.fone.filmone.data.datamodel.response.profiles.ProfilesPagingResponse
 import com.fone.filmone.data.datamodel.response.profiles.detail.ProfileDetailResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -36,7 +37,7 @@ interface ProfilesApi {
     suspend fun getFavoriteProfile(
         @Query("page") page: Int,
         @Query("size") size: Int,
-        @Query("type") type: Type
+        @Query("type") type: Type,
     ): Response<NetworkResponse<ProfilesPagingResponse>>
 
     @GET("${Server.ApiVersion}/profiles/my-registrations")
@@ -47,12 +48,17 @@ interface ProfilesApi {
 
     @POST("${Server.ApiVersion}/profiles")
     suspend fun registerProfile(
-        @Body profileRegisterRequest: ProfileRegisterRequest
+        @Body profileRegisterRequest: ProfileRegisterRequest,
     ): Response<NetworkResponse<ProfileDetailResponse>>
 
     @GET("${Server.ApiVersion}/profiles/{profileId}")
     suspend fun getProfileDetail(
         @Path("profileId") profileId: Int,
-        @Query("type") type: Type
+        @Query("type") type: Type,
     ): Response<NetworkResponse<ProfileDetailResponse>>
+
+    @DELETE("${Server.ApiVersion}/profiles/{profileId}")
+    suspend fun removeContent(
+        @Path("profileId") profileId: Int,
+    ): Response<NetworkResponse<Unit>>
 }

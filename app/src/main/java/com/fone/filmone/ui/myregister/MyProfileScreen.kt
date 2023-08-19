@@ -46,16 +46,16 @@ import com.skydoves.landscapist.glide.GlideImage
 @Composable
 fun MyProfileScreen(
     modifier: Modifier = Modifier,
-    profilePosts: List<RegisterPostProfileUiModel>
+    profilePosts: List<RegisterPostProfileUiModel>,
 ) {
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(color = FColor.Divider2)
+            .background(color = FColor.Divider2),
     ) {
         if (profilePosts.isNotEmpty()) {
             LazyColumn(
-                contentPadding = PaddingValues(vertical = 12.dp, horizontal = 16.dp)
+                contentPadding = PaddingValues(vertical = 12.dp, horizontal = 16.dp),
             ) {
                 items(profilePosts) {
                     Spacer(modifier = Modifier.height(18.dp))
@@ -64,7 +64,7 @@ fun MyProfileScreen(
                         profileUrl = it.profileUrl,
                         name = it.name,
                         type = it.type,
-                        info = it.info
+                        info = it.info,
                     )
 
                     Spacer(modifier = Modifier.height(18.dp))
@@ -82,14 +82,14 @@ private fun RegisterProfileItem(
     profileUrl: String,
     name: String,
     type: Type,
-    info: String
+    info: String,
 ) {
     val shape = RoundedCornerShape(10.dp)
 
     Card(
         modifier = modifier,
         shape = shape,
-        backgroundColor = FColor.White
+        backgroundColor = FColor.White,
     ) {
         Row(modifier = Modifier.padding(12.dp)) {
             GlideImage(
@@ -102,7 +102,7 @@ private fun RegisterProfileItem(
                     highlightColor = FColor.Gray700,
                     durationMillis = 350,
                     dropOff = 0.65f,
-                    tilt = 20f
+                    tilt = 20f,
                 ),
                 imageModel = profileUrl,
                 contentScale = ContentScale.Crop,
@@ -111,25 +111,25 @@ private fun RegisterProfileItem(
                         modifier = Modifier
                             .align(Alignment.Center),
                         imageVector = ImageVector.vectorResource(id = R.drawable.splash_fone_logo),
-                        contentDescription = null
+                        contentDescription = null,
                     )
-                }
+                },
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
             Column(
-                modifier = Modifier.weight(199f)
+                modifier = Modifier.weight(199f),
             ) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = name,
                         style = LocalTypography.current.h5(),
-                        color = FColor.TextPrimary
+                        color = FColor.TextPrimary,
                     )
 
                     Spacer(modifier = Modifier.width(4.dp))
@@ -137,7 +137,7 @@ private fun RegisterProfileItem(
                     Text(
                         text = type.name,
                         style = LocalTypography.current.subtitle2(),
-                        color = FColor.Primary
+                        color = FColor.Primary,
                     )
                 }
 
@@ -146,7 +146,7 @@ private fun RegisterProfileItem(
                 Text(
                     text = info,
                     style = LocalTypography.current.b2(),
-                    color = FColor.TextSecondary
+                    color = FColor.TextSecondary,
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
@@ -156,22 +156,22 @@ private fun RegisterProfileItem(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Box(
                         modifier = Modifier
                             .clip(shape = RoundedCornerShape(5.dp))
                             .background(
                                 shape = RoundedCornerShape(5.dp),
-                                color = FColor.BgGroupedBase
+                                color = FColor.BgGroupedBase,
                             )
                             .clickableSingle { }
-                            .padding(vertical = 10.dp, horizontal = 14.dp)
+                            .padding(vertical = 10.dp, horizontal = 14.dp),
                     ) {
                         Text(
                             text = stringResource(id = R.string.my_register_edit_button_title),
                             style = LocalTypography.current.button2(),
-                            color = FColor.TextSecondary
+                            color = FColor.TextSecondary,
                         )
                     }
 
@@ -182,15 +182,15 @@ private fun RegisterProfileItem(
                             .clip(shape = RoundedCornerShape(5.dp))
                             .background(
                                 shape = RoundedCornerShape(5.dp),
-                                color = FColor.BgGroupedBase
+                                color = FColor.BgGroupedBase,
                             )
                             .clickableSingle { }
-                            .padding(vertical = 10.dp, horizontal = 14.dp)
+                            .padding(vertical = 10.dp, horizontal = 14.dp),
                     ) {
                         Text(
                             text = stringResource(id = R.string.my_register_delete_button_title),
                             style = LocalTypography.current.button2(),
-                            color = FColor.TextSecondary
+                            color = FColor.TextSecondary,
                         )
                     }
                 }
@@ -203,7 +203,7 @@ private fun RegisterProfileItem(
 
 @Composable
 private fun EmptyScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         Text(
@@ -211,7 +211,7 @@ private fun EmptyScreen(
             text = stringResource(id = R.string.my_register_profile_empty_title),
             style = LocalTypography.current.subtitle2(),
             color = FColor.TextPrimary,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         Spacer(modifier = Modifier.height(18.dp))
@@ -223,17 +223,17 @@ private fun EmptyScreen(
                     FOneNavigator.navigateTo(
                         navDestinationState = NavDestinationState(
                             route = FOneDestinations.Main.getRouteWithJobInitialPageArg(
-                                JobTab.PROFILE.name
+                                JobTab.PROFILE.name,
                             ),
-                            isPopAll = true
-                        )
+                            isPopAll = true,
+                        ),
                     )
                 },
             text = stringResource(id = R.string.my_register_profile_empty_subtitle),
             style = LocalTypography.current.subtitle2(),
             color = FColor.Primary,
             textAlign = TextAlign.Center,
-            textDecoration = TextDecoration.Underline
+            textDecoration = TextDecoration.Underline,
         )
     }
 }

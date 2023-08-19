@@ -109,7 +109,7 @@ fun MainScreen(
                         coroutineScope.launch {
                             mainViewModel.logout()
                         }
-                    }
+                    },
                 )
 
                 MainBottomSheetType.Withdrawal -> WithdrawalBottomSheet(
@@ -119,7 +119,7 @@ fun MainScreen(
                         coroutineScope.launch {
                             mainViewModel.signOut()
                         }
-                    }
+                    },
                 )
 
                 MainBottomSheetType.JobTabJopOpeningsFilter -> JobTabJobOpeningsFilterBottomSheet(
@@ -128,7 +128,7 @@ fun MainScreen(
                     currentJobFilterType = uiState.currentJobSorting.currentJobFilterType,
                     onJobFilterTypeClick = {
                         mainViewModel.updateJobFilter(it)
-                    }
+                    },
                 )
 
                 MainBottomSheetType.JobTabProfileFilter -> JobTabProfileFilterBottomSheet(
@@ -137,10 +137,10 @@ fun MainScreen(
                     currentJobFilterType = uiState.currentJobSorting.currentJobFilterType,
                     onJobFilterTypeClick = {
                         mainViewModel.updateJobFilter(it)
-                    }
+                    },
                 )
             }
-        }
+        },
     ) {
         Scaffold(
             modifier = modifier
@@ -160,7 +160,7 @@ fun MainScreen(
                                 } else {
                                     mainViewModel.hideFloatingDimBackground()
                                 }
-                            }
+                            },
                         )
                     }
 
@@ -179,7 +179,7 @@ fun MainScreen(
                             }
 
                             selectedScreen = it
-                        }
+                        },
                     )
 
                     if (uiState.isFloatingClick) {
@@ -190,13 +190,14 @@ fun MainScreen(
                                 .background(color = FColor.DimColorThin)
                                 .clickableWithNoRipple {
                                     mainViewModel.hideFloatingDimBackground()
-                                }
+                                },
                         )
                     }
                 }
-            }, snackbarHost = {
-            FToast(baseViewModel = mainViewModel, hostState = it)
-        }
+            },
+            snackbarHost = {
+                FToast(baseViewModel = mainViewModel, hostState = it)
+            },
         ) {
             Box(modifier = modifier.padding(it)) {
                 when (selectedScreen) {
@@ -219,7 +220,7 @@ fun MainScreen(
                         },
                         onUpdateUserType = { type ->
                             mainViewModel.updateJobTabUserType(type)
-                        }
+                        },
                     )
 
                     MainBottomNavItem.Chat -> ChatScreen()
@@ -231,7 +232,7 @@ fun MainScreen(
                         onWithdrawalClick = {
                             bottomSheetType = MainBottomSheetType.Withdrawal
                             coroutineScope.launch { bottomSheetState.show() }
-                        }
+                        },
                     )
                 }
 
@@ -244,8 +245,9 @@ fun MainScreen(
                     mainViewModel.clearDialog()
                     FOneNavigator.navigateTo(
                         navDestinationState = NavDestinationState(
-                            route = FOneDestinations.Login.route, isPopAll = true
-                        )
+                            route = FOneDestinations.Login.route,
+                            isPopAll = true,
+                        ),
                     )
                 })
             }
@@ -261,7 +263,7 @@ private fun FloatingDimBackground(viewModel: MainViewModel) {
             .background(color = FColor.DimColorThin)
             .clickableWithNoRipple {
                 viewModel.hideFloatingDimBackground()
-            }
+            },
     )
 }
 
@@ -269,7 +271,7 @@ private fun FloatingDimBackground(viewModel: MainViewModel) {
 private fun MainBottomNavigation(
     mainBottomNavItems: Array<MainBottomNavItem>,
     selectedScreen: MainBottomNavItem,
-    onItemSelected: (MainBottomNavItem) -> Unit
+    onItemSelected: (MainBottomNavItem) -> Unit,
 ) {
     BottomNavigation(
         backgroundColor = FColor.White,
@@ -278,7 +280,7 @@ private fun MainBottomNavigation(
             MainBottomNavigationItem(
                 mainBottomNavItems = bottomNavItem,
                 selectedMainBottomNavItem = selectedScreen,
-                onItemClick = onItemSelected
+                onItemClick = onItemSelected,
             )
         }
     }
@@ -288,7 +290,7 @@ private fun MainBottomNavigation(
 fun RowScope.MainBottomNavigationItem(
     mainBottomNavItems: MainBottomNavItem,
     selectedMainBottomNavItem: MainBottomNavItem,
-    onItemClick: (MainBottomNavItem) -> Unit
+    onItemClick: (MainBottomNavItem) -> Unit,
 ) {
     BottomNavigationItem(
         icon = {
@@ -298,7 +300,7 @@ fun RowScope.MainBottomNavigationItem(
                         mainBottomNavItems.selectedIconRes
                     } else {
                         mainBottomNavItems.unselectedIconRes
-                    }
+                    },
                 ),
                 contentDescription = null,
             )
@@ -315,14 +317,14 @@ fun RowScope.MainBottomNavigationItem(
                     } else {
                         FColor.DisablePlaceholder
                     },
-                )
+                ),
             )
         },
         alwaysShowLabel = true,
         selectedContentColor = FColor.Primary,
         unselectedContentColor = FColor.DisablePlaceholder,
         selected = selectedMainBottomNavItem == mainBottomNavItems,
-        onClick = { onItemClick(mainBottomNavItems) }
+        onClick = { onItemClick(mainBottomNavItems) },
     )
 }
 
@@ -332,18 +334,19 @@ private fun LogoutBottomSheet(
     modifier: Modifier = Modifier,
     coroutineScope: CoroutineScope,
     bottomSheetState: ModalBottomSheetState,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
 ) {
     PairButtonBottomSheet(
-        modifier = modifier, content = {
+        modifier = modifier,
+        content = {
             Spacer(modifier = Modifier.height(40.dp))
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.my_logout_sheet_title),
-                style = com.fone.filmone.ui.theme.LocalTypography.current.h2(),
+                style = LocalTypography.current.h2(),
                 color = FColor.TextPrimary,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -353,13 +356,15 @@ private fun LogoutBottomSheet(
                 text = stringResource(id = R.string.my_logout_sheet_subtitle),
                 style = LocalTypography.current.subtitle2(),
                 color = FColor.TextSecondary,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(44.dp))
-        }, onLeftButtonClick = {
-        hideBottomSheet(coroutineScope, bottomSheetState)
-    }, onRightButtonClick = onLogoutClick
+        },
+        onLeftButtonClick = {
+            hideBottomSheet(coroutineScope, bottomSheetState)
+        },
+        onRightButtonClick = onLogoutClick,
 
     )
 }
@@ -370,18 +375,19 @@ private fun WithdrawalBottomSheet(
     modifier: Modifier = Modifier,
     coroutineScope: CoroutineScope,
     bottomSheetState: ModalBottomSheetState,
-    onSignOutClick: () -> Unit
+    onSignOutClick: () -> Unit,
 ) {
     PairButtonBottomSheet(
-        modifier = modifier, content = {
+        modifier = modifier,
+        content = {
             Spacer(modifier = Modifier.height(50.dp))
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.my_withdrawal_sheet_title),
-                style = com.fone.filmone.ui.theme.LocalTypography.current.h2(),
+                style = LocalTypography.current.h2(),
                 color = FColor.TextPrimary,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -389,15 +395,17 @@ private fun WithdrawalBottomSheet(
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.my_withdrawal_sheet_subtitle),
-                style = com.fone.filmone.ui.theme.LocalTypography.current.h5(),
+                style = LocalTypography.current.h5(),
                 color = FColor.TextSecondary,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Spacer(modifier = Modifier.height(40.dp))
-        }, onLeftButtonClick = {
-        hideBottomSheet(coroutineScope, bottomSheetState)
-    }, onRightButtonClick = onSignOutClick
+        },
+        onLeftButtonClick = {
+            hideBottomSheet(coroutineScope, bottomSheetState)
+        },
+        onRightButtonClick = onSignOutClick,
     )
 }
 
@@ -408,14 +416,14 @@ private fun JobTabJobOpeningsFilterBottomSheet(
     coroutineScope: CoroutineScope,
     bottomSheetState: ModalBottomSheetState,
     currentJobFilterType: JobFilterType,
-    onJobFilterTypeClick: (JobFilterType) -> Unit
+    onJobFilterTypeClick: (JobFilterType) -> Unit,
 ) {
     Column(
         modifier = modifier
             .navigationBarsPadding()
             .clip(shape = RoundedCornerShape(10.dp))
             .background(shape = RoundedCornerShape(10.dp), color = FColor.White),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -424,7 +432,7 @@ private fun JobTabJobOpeningsFilterBottomSheet(
                 .width(45.dp)
                 .height(4.dp)
                 .clip(shape = RoundedCornerShape(2.dp))
-                .background(shape = RoundedCornerShape(2.dp), color = FColor.Divider1)
+                .background(shape = RoundedCornerShape(2.dp), color = FColor.Divider1),
         )
 
         Spacer(modifier = Modifier.height(14.dp))
@@ -434,8 +442,8 @@ private fun JobTabJobOpeningsFilterBottomSheet(
                 .fillMaxWidth()
                 .padding(vertical = 6.dp, horizontal = 22.dp),
             text = stringResource(id = R.string.job_tab_filter_title),
-            style = com.fone.filmone.ui.theme.LocalTypography.current.b4(),
-            color = FColor.DisablePlaceholder
+            style = LocalTypography.current.b4(),
+            color = FColor.DisablePlaceholder,
         )
 
         Text(
@@ -455,8 +463,8 @@ private fun JobTabJobOpeningsFilterBottomSheet(
                     FColor.Primary
                 } else {
                     FColor.TextSecondary
-                }
-            )
+                },
+            ),
         )
 
         Text(
@@ -476,8 +484,8 @@ private fun JobTabJobOpeningsFilterBottomSheet(
                     FColor.Primary
                 } else {
                     FColor.TextSecondary
-                }
-            )
+                },
+            ),
         )
 
         Text(
@@ -497,8 +505,8 @@ private fun JobTabJobOpeningsFilterBottomSheet(
                     FColor.Primary
                 } else {
                     FColor.TextSecondary
-                }
-            )
+                },
+            ),
         )
 
         Spacer(modifier = Modifier.height(50.dp))
@@ -512,14 +520,14 @@ private fun JobTabProfileFilterBottomSheet(
     coroutineScope: CoroutineScope,
     bottomSheetState: ModalBottomSheetState,
     currentJobFilterType: JobFilterType,
-    onJobFilterTypeClick: (JobFilterType) -> Unit
+    onJobFilterTypeClick: (JobFilterType) -> Unit,
 ) {
     Column(
         modifier = modifier
             .navigationBarsPadding()
             .clip(shape = RoundedCornerShape(10.dp))
             .background(shape = RoundedCornerShape(10.dp), color = FColor.White),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -528,7 +536,7 @@ private fun JobTabProfileFilterBottomSheet(
                 .width(45.dp)
                 .height(4.dp)
                 .clip(shape = RoundedCornerShape(2.dp))
-                .background(shape = RoundedCornerShape(2.dp), color = FColor.Divider1)
+                .background(shape = RoundedCornerShape(2.dp), color = FColor.Divider1),
         )
 
         Spacer(modifier = Modifier.height(14.dp))
@@ -538,8 +546,8 @@ private fun JobTabProfileFilterBottomSheet(
                 .fillMaxWidth()
                 .padding(vertical = 6.dp, horizontal = 22.dp),
             text = stringResource(id = R.string.job_tab_filter_title),
-            style = com.fone.filmone.ui.theme.LocalTypography.current.b4(),
-            color = FColor.DisablePlaceholder
+            style = LocalTypography.current.b4(),
+            color = FColor.DisablePlaceholder,
         )
 
         Text(
@@ -559,8 +567,8 @@ private fun JobTabProfileFilterBottomSheet(
                     FColor.Primary
                 } else {
                     FColor.TextSecondary
-                }
-            )
+                },
+            ),
         )
 
         Text(
@@ -580,8 +588,8 @@ private fun JobTabProfileFilterBottomSheet(
                     FColor.Primary
                 } else {
                     FColor.TextSecondary
-                }
-            )
+                },
+            ),
         )
 
         Spacer(modifier = Modifier.height(30.dp))
@@ -603,17 +611,19 @@ private fun JobFloatingButton(
     modifier: Modifier = Modifier,
     currentJobTab: JobTab,
     isFloatingClick: Boolean,
-    onFloatingClick: (Boolean) -> Unit
+    onFloatingClick: (Boolean) -> Unit,
 ) {
     Box(
-        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomEnd
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomEnd,
     ) {
         Column(
-            horizontalAlignment = Alignment.End
+            horizontalAlignment = Alignment.End,
         ) {
             if (isFloatingClick) {
                 Column(
-                    modifier = Modifier.width(106.dp), horizontalAlignment = Alignment.End
+                    modifier = Modifier.width(106.dp),
+                    horizontalAlignment = Alignment.End,
                 ) {
                     Box(
                         modifier = Modifier
@@ -621,7 +631,7 @@ private fun JobFloatingButton(
                             .clip(shape = RoundedCornerShape(topStart = 6.dp, topEnd = 6.dp))
                             .background(
                                 shape = RoundedCornerShape(topStart = 6.dp, topEnd = 6.dp),
-                                color = FColor.Primary
+                                color = FColor.Primary,
                             )
                             .clickableSingle {
                                 FOneNavigator.navigateTo(
@@ -630,8 +640,8 @@ private fun JobFloatingButton(
                                             FOneDestinations.ActorRecruitingRegister.route
                                         } else {
                                             FOneDestinations.ActorProfileRegister.route
-                                        }
-                                    )
+                                        },
+                                    ),
                                 )
                                 onFloatingClick(isFloatingClick.not())
                             }
@@ -644,15 +654,15 @@ private fun JobFloatingButton(
                                     R.string.job_tab_fab_actor
                                 } else {
                                     R.string.job_tab_profile_fab_actor
-                                }
+                                },
                             ),
                             style = fTextStyle(
                                 fontWeight = FontWeight.W500,
                                 fontSize = 14.textDp,
                                 lineHeight = 18.textDp,
-                                color = FColor.BgBase
+                                color = FColor.BgBase,
                             ),
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
                         )
                     }
 
@@ -663,14 +673,16 @@ private fun JobFloatingButton(
                             .fillMaxWidth()
                             .clip(
                                 shape = RoundedCornerShape(
-                                    bottomStart = 6.dp, bottomEnd = 6.dp
-                                )
+                                    bottomStart = 6.dp,
+                                    bottomEnd = 6.dp,
+                                ),
                             )
                             .background(
                                 shape = RoundedCornerShape(
-                                    bottomStart = 6.dp, bottomEnd = 6.dp
+                                    bottomStart = 6.dp,
+                                    bottomEnd = 6.dp,
                                 ),
-                                color = FColor.Primary
+                                color = FColor.Primary,
                             )
                             .clickableSingle {
                                 FOneNavigator.navigateTo(
@@ -679,8 +691,8 @@ private fun JobFloatingButton(
                                             FOneDestinations.StaffRecruitingRegister.route
                                         } else {
                                             FOneDestinations.StaffProfileRegister.route
-                                        }
-                                    )
+                                        },
+                                    ),
                                 )
                                 onFloatingClick(isFloatingClick.not())
                             }
@@ -693,15 +705,15 @@ private fun JobFloatingButton(
                                     R.string.job_tab_fab_staff
                                 } else {
                                     R.string.job_tab_profile_fab_staff
-                                }
+                                },
                             ),
                             style = fTextStyle(
                                 fontWeight = FontWeight.W500,
                                 fontSize = 14.textDp,
                                 lineHeight = 18.textDp,
-                                color = FColor.BgBase
+                                color = FColor.BgBase,
                             ),
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
                         )
                     }
 
@@ -715,7 +727,7 @@ private fun JobFloatingButton(
                     .background(shape = CircleShape, color = FColor.Primary),
                 onClick = {
                     onFloatingClick(isFloatingClick.not())
-                }
+                },
             ) {
                 Image(
                     imageVector = ImageVector.vectorResource(
@@ -723,9 +735,9 @@ private fun JobFloatingButton(
                             R.drawable.job_tab_floating_image
                         } else {
                             R.drawable.job_tab_profile_floating_image
-                        }
+                        },
                     ),
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
         }
@@ -735,7 +747,7 @@ private fun JobFloatingButton(
 @Composable
 private fun MainDialog(
     dialogState: MainDialogState,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     when (dialogState) {
         MainDialogState.Clear -> Unit
@@ -745,11 +757,11 @@ private fun MainDialog(
 
 @Composable
 private fun WithdrawalCompleteDialog(
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     SingleButtonDialog(
         titleText = stringResource(id = R.string.main_withdrawal_dialog_title),
-        buttonText = stringResource(id = R.string.confirm)
+        buttonText = stringResource(id = R.string.confirm),
     ) {
         onDismiss()
     }

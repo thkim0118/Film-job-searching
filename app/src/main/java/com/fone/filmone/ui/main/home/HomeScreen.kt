@@ -6,6 +6,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -74,7 +75,7 @@ import com.skydoves.landscapist.glide.GlideImage
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val scrollState = rememberScrollState()
     val uiState by viewModel.uiState.collectAsState()
@@ -91,7 +92,7 @@ fun HomeScreen(
                     Lifecycle.Event.ON_PAUSE -> viewModel.stopTimer()
                     else -> Unit
                 }
-            }
+            },
         )
         lifecycle.addObserver(observer)
 
@@ -107,13 +108,13 @@ fun HomeScreen(
     Column(
         modifier = modifier
             .defaultSystemBarPadding()
-            .toastPadding()
+            .toastPadding(),
     ) {
         HomeTitleComponent()
 
         Column(
             modifier = Modifier
-                .verticalScroll(scrollState)
+                .verticalScroll(scrollState),
         ) {
             BannerPagerComponent(
                 pagerState = pagerState,
@@ -128,7 +129,7 @@ fun HomeScreen(
                 },
                 onBannerComposableDispose = {
                     viewModel.stopTimer()
-                }
+                },
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -141,19 +142,19 @@ fun HomeScreen(
                             route = when (type) {
                                 Type.ACTOR -> {
                                     FOneDestinations.ActorRecruitingDetail.getRouteWithArg(
-                                        competitionId = competitionId
+                                        competitionId = competitionId,
                                     )
                                 }
 
                                 Type.STAFF -> {
                                     FOneDestinations.StaffRecruitingDetail.getRouteWithArg(
-                                        competitionId = competitionId
+                                        competitionId = competitionId,
                                     )
                                 }
-                            }
-                        )
+                            },
+                        ),
                     )
-                }
+                },
             )
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -166,19 +167,19 @@ fun HomeScreen(
                             route = when (type) {
                                 Type.ACTOR -> {
                                     FOneDestinations.ActorRecruitingDetail.getRouteWithArg(
-                                        competitionId = competitionId
+                                        competitionId = competitionId,
                                     )
                                 }
 
                                 Type.STAFF -> {
                                     FOneDestinations.StaffRecruitingDetail.getRouteWithArg(
-                                        competitionId = competitionId
+                                        competitionId = competitionId,
                                     )
                                 }
-                            }
-                        )
+                            },
+                        ),
                     )
-                }
+                },
             )
 
             ActorProfileComponent(
@@ -186,10 +187,10 @@ fun HomeScreen(
                 onItemClick = { profileId ->
                     FOneNavigator.navigateTo(
                         NavDestinationState(
-                            route = FOneDestinations.ActorProfileDetail.getRouteWithArg(profileId = profileId)
-                        )
+                            route = FOneDestinations.ActorProfileDetail.getRouteWithArg(profileId = profileId),
+                        ),
                     )
-                }
+                },
             )
         }
     }
@@ -197,19 +198,19 @@ fun HomeScreen(
 
 @Composable
 private fun HomeTitleComponent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .heightIn(min = 50.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             stringResource(id = R.string.home_title_text),
             style = LocalTypography.current.h2(),
-            color = FColor.TextPrimary
+            color = FColor.TextPrimary,
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -218,7 +219,7 @@ private fun HomeTitleComponent(
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.main_notification),
                 contentDescription = null,
-                tint = FColor.DisablePlaceholder
+                tint = FColor.DisablePlaceholder,
             )
         }
     }
@@ -234,7 +235,7 @@ private fun BannerPagerComponent(
     isBannerTouched: Boolean,
     onBannerTouched: () -> Unit,
     onUpdatePage: (pageCount: Int) -> Unit,
-    onBannerComposableDispose: () -> Unit
+    onBannerComposableDispose: () -> Unit,
 ) {
     LaunchedEffect(currentPage) {
         pagerState.animateScrollToPage(currentPage)
@@ -277,7 +278,7 @@ private fun BannerPagerComponent(
                 .clip(shape = RoundedCornerShape(15.5.dp))
                 .background(shape = RoundedCornerShape(15.5.dp), color = FColor.DimColorBasic)
                 .padding(horizontal = 14.dp, vertical = 3.dp)
-                .align(Alignment.BottomEnd)
+                .align(Alignment.BottomEnd),
         ) {
             Text(
                 modifier = Modifier,
@@ -286,8 +287,8 @@ private fun BannerPagerComponent(
                     fontWeight = FontWeight.W500,
                     fontSize = 14.textDp,
                     lineHeight = 16.8.textDp,
-                    color = FColor.BgBase
-                )
+                    color = FColor.BgBase,
+                ),
             )
         }
     }
@@ -312,17 +313,17 @@ private fun RecommendedCompetitionComponent(
     @Composable
     fun Tag(
         modifier: Modifier = Modifier,
-        title: String
+        title: String,
     ) {
         Box(
             modifier = modifier
                 .background(
                     shape = RoundedCornerShape(3.dp),
-                    color = Color(alpha = 0f, red = 1f, green = 1f, blue = 1f)
+                    color = Color(alpha = 0f, red = 1f, green = 1f, blue = 1f),
                 )
                 .clip(shape = RoundedCornerShape(3.dp))
                 .border(width = 1.dp, color = Color(alpha = 0.1f, red = 1f, green = 1f, blue = 1f))
-                .padding(horizontal = 8.dp, vertical = 2.dp)
+                .padding(horizontal = 8.dp, vertical = 2.dp),
         ) {
             Text(
                 text = title,
@@ -330,8 +331,8 @@ private fun RecommendedCompetitionComponent(
                     fontWeight = FontWeight.W500,
                     fontSize = 12.textDp,
                     lineHeight = 18.textDp,
-                    color = FColor.Divider2
-                )
+                    color = FColor.Divider2,
+                ),
             )
         }
     }
@@ -341,12 +342,12 @@ private fun RecommendedCompetitionComponent(
             Text(
                 modifier = Modifier.weight(1f),
                 text = stringResource(id = R.string.home_recommended_title),
-                style = LocalTypography.current.h4()
+                style = LocalTypography.current.h4(),
             )
 
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.home_recommended_right_arrow),
-                contentDescription = null
+                contentDescription = null,
             )
         }
 
@@ -356,16 +357,17 @@ private fun RecommendedCompetitionComponent(
             ServicePreparingGuideComponent()
         } else {
             LazyRow(
-                contentPadding = PaddingValues(16.dp)
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 itemsIndexed(recommendedContents) { index, content ->
                     Box(
                         modifier = Modifier
-                            .clickableSingle { onItemClick(content.id, content.type) }
+                            .clickableSingle { onItemClick(content.id, content.type) },
                     ) {
                         Image(
                             imageVector = ImageVector.vectorResource(backgroundContents[index % recommendedContents.size].first),
-                            contentDescription = null
+                            contentDescription = null,
                         )
 
                         Column(modifier = Modifier.padding(vertical = 16.dp, horizontal = 14.dp)) {
@@ -375,10 +377,10 @@ private fun RecommendedCompetitionComponent(
                                     fontWeight = FontWeight.W500,
                                     fontSize = 14.textDp,
                                     lineHeight = 18.textDp,
-                                    color = FColor.White
+                                    color = FColor.White,
                                 ),
                                 maxLines = 3,
-                                overflow = TextOverflow.Ellipsis
+                                overflow = TextOverflow.Ellipsis,
                             )
 
                             Spacer(modifier = Modifier.height(8.dp))
@@ -389,8 +391,8 @@ private fun RecommendedCompetitionComponent(
                                     fontWeight = FontWeight.W400,
                                     fontSize = 12.textDp,
                                     lineHeight = 17.textDp,
-                                    color = backgroundContents[index % recommendedContents.size].second
-                                )
+                                    color = backgroundContents[index % recommendedContents.size].second,
+                                ),
                             )
 
                             Text(
@@ -399,8 +401,8 @@ private fun RecommendedCompetitionComponent(
                                     fontWeight = FontWeight.W500,
                                     fontSize = 13.textDp,
                                     lineHeight = 16.textDp,
-                                    color = backgroundContents[index % recommendedContents.size].second
-                                )
+                                    color = backgroundContents[index % recommendedContents.size].second,
+                                ),
                             )
 
                             Spacer(modifier = Modifier.height(8.dp))
@@ -409,7 +411,7 @@ private fun RecommendedCompetitionComponent(
                                 content.tagStringResources.forEach { tagItem ->
                                     Tag(
                                         modifier = Modifier.padding(end = 6.dp, bottom = 6.dp),
-                                        title = stringResource(id = tagItem)
+                                        title = stringResource(id = tagItem),
                                     )
                                 }
                             }
@@ -427,7 +429,7 @@ private fun RecommendedCompetitionComponent(
 private fun PopularityCompetitionComponent(
     modifier: Modifier = Modifier,
     popularityContents: List<PopularityContent>,
-    onItemClick: (competitionId: Int, type: Type) -> Unit
+    onItemClick: (competitionId: Int, type: Type) -> Unit,
 ) {
     @Composable
     fun Competition(
@@ -443,7 +445,7 @@ private fun PopularityCompetitionComponent(
 
         Box(
             modifier = cornerModifier
-                .clickableSingle { onItemClick(competitionId, type) }
+                .clickableSingle { onItemClick(competitionId, type) },
         ) {
             GlideImage(
                 modifier = modifier
@@ -454,7 +456,7 @@ private fun PopularityCompetitionComponent(
                     highlightColor = FColor.Gray700,
                     durationMillis = 350,
                     dropOff = 0.65f,
-                    tilt = 20f
+                    tilt = 20f,
                 ),
                 imageModel = imageUrl,
                 contentScale = ContentScale.Crop,
@@ -463,9 +465,9 @@ private fun PopularityCompetitionComponent(
                         modifier = Modifier
                             .align(Alignment.Center),
                         imageVector = ImageVector.vectorResource(id = R.drawable.splash_fone_logo),
-                        contentDescription = null
+                        contentDescription = null,
                     )
-                }
+                },
             )
 
             Box(
@@ -473,10 +475,10 @@ private fun PopularityCompetitionComponent(
                     .clip(shape = RoundedCornerShape(topStart = 10.dp))
                     .background(
                         shape = RoundedCornerShape(topStart = 10.dp),
-                        color = FColor.Primary
+                        color = FColor.Primary,
                     )
                     .padding(9.dp)
-                    .align(Alignment.TopStart)
+                    .align(Alignment.TopStart),
             ) {
                 Text(text = "$index")
             }
@@ -488,12 +490,12 @@ private fun PopularityCompetitionComponent(
             Text(
                 modifier = Modifier.weight(1f),
                 text = stringResource(id = R.string.home_popularity_competition_title),
-                style = LocalTypography.current.h4()
+                style = LocalTypography.current.h4(),
             )
 
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.home_recommended_right_arrow),
-                contentDescription = null
+                contentDescription = null,
             )
         }
 
@@ -508,7 +510,7 @@ private fun PopularityCompetitionComponent(
                         competitionId = item.id,
                         type = item.type,
                         imageUrl = item.imageUrl,
-                        index = index
+                        index = index,
                     )
                 }
             }
@@ -522,13 +524,13 @@ private fun PopularityCompetitionComponent(
 private fun ActorProfileComponent(
     modifier: Modifier = Modifier,
     homeActorProfileContents: List<HomeActorProfileContent>,
-    onItemClick: (profileId: Int) -> Unit
+    onItemClick: (profileId: Int) -> Unit,
 ) {
     @Composable
     fun ActorProfile(
         modifier: Modifier = Modifier,
         homeActorProfileContent: HomeActorProfileContent,
-        onItemClick: (profileId: Int) -> Unit
+        onItemClick: (profileId: Int) -> Unit,
     ) {
         val shape = RoundedCornerShape(10.dp)
         val imageModifier = modifier
@@ -542,7 +544,7 @@ private fun ActorProfileComponent(
                 .background(shape = shape, color = FColor.White)
                 .border(width = 1.dp, color = FColor.BgGroupedBase)
                 .clickableSingle { onItemClick(homeActorProfileContent.id) }
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = 20.dp),
         ) {
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -551,13 +553,13 @@ private fun ActorProfileComponent(
                 style = LocalTypography.current.subtitle1(),
                 color = FColor.TextPrimary,
                 maxLines = 2,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Row(
-                modifier = Modifier
+                modifier = Modifier,
             ) {
                 Box(modifier = imageModifier) {
                     GlideImage(
@@ -569,7 +571,7 @@ private fun ActorProfileComponent(
                             highlightColor = FColor.Gray700,
                             durationMillis = 350,
                             dropOff = 0.65f,
-                            tilt = 20f
+                            tilt = 20f,
                         ),
 
                         imageModel = homeActorProfileContent.imageUrl,
@@ -579,9 +581,9 @@ private fun ActorProfileComponent(
                                 modifier = Modifier
                                     .align(Alignment.Center),
                                 imageVector = ImageVector.vectorResource(id = R.drawable.splash_fone_logo),
-                                contentDescription = null
+                                contentDescription = null,
                             )
-                        }
+                        },
                     )
                 }
 
@@ -591,7 +593,7 @@ private fun ActorProfileComponent(
                     Text(
                         text = homeActorProfileContent.name,
                         style = LocalTypography.current.h5(),
-                        color = FColor.TextPrimary
+                        color = FColor.TextPrimary,
                     )
 
                     Spacer(modifier = Modifier.height(3.dp))
@@ -599,13 +601,13 @@ private fun ActorProfileComponent(
                     Text(
                         text = homeActorProfileContent.ageContent,
                         style = LocalTypography.current.b2(),
-                        color = FColor.TextSecondary
+                        color = FColor.TextSecondary,
                     )
 
                     Text(
                         text = stringResource(homeActorProfileContent.gender.stringRes),
                         style = LocalTypography.current.b2(),
-                        color = FColor.TextSecondary
+                        color = FColor.TextSecondary,
                     )
                 }
             }
@@ -621,12 +623,12 @@ private fun ActorProfileComponent(
             Text(
                 modifier = Modifier.weight(1f),
                 text = stringResource(id = R.string.home_actor_profile_title),
-                style = LocalTypography.current.h4()
+                style = LocalTypography.current.h4(),
             )
 
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.home_recommended_right_arrow),
-                contentDescription = null
+                contentDescription = null,
             )
         }
 
@@ -636,12 +638,12 @@ private fun ActorProfileComponent(
             ServicePreparingGuideComponent()
         } else {
             LazyRow(
-                contentPadding = PaddingValues(16.dp)
+                contentPadding = PaddingValues(16.dp),
             ) {
                 itemsIndexed(homeActorProfileContents) { index, homeActorProfile ->
                     ActorProfile(
                         homeActorProfileContent = homeActorProfile,
-                        onItemClick = onItemClick
+                        onItemClick = onItemClick,
                     )
 
                     if (homeActorProfileContents.lastIndex != index) {
@@ -657,7 +659,7 @@ private fun ActorProfileComponent(
 
 @Composable
 private fun ServicePreparingGuideComponent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val shape = RoundedCornerShape(10.dp)
 
@@ -668,13 +670,13 @@ private fun ServicePreparingGuideComponent(
             .clip(shape = shape)
             .background(shape = shape, color = FColor.White)
             .border(width = 1.dp, color = FColor.BgGroupedBase, shape = shape),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(35.dp))
 
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.service_image),
-            contentDescription = null
+            contentDescription = null,
         )
 
         Spacer(modifier = Modifier.height(6.dp))
@@ -682,7 +684,7 @@ private fun ServicePreparingGuideComponent(
         Text(
             text = stringResource(id = R.string.home_service_guide_title),
             style = LocalTypography.current.h4(),
-            color = FColor.Secondary1
+            color = FColor.Secondary1,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -691,7 +693,7 @@ private fun ServicePreparingGuideComponent(
             text = stringResource(id = R.string.home_service_guide_subtitle),
             style = LocalTypography.current.label(),
             color = FColor.TextSecondary,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         Spacer(modifier = Modifier.height(37.dp))

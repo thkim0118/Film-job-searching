@@ -33,7 +33,7 @@ class StaffRecruitingDetailViewModel @Inject constructor(
         .stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
-            viewModelState.value.toUiState()
+            viewModelState.value.toUiState(),
         )
 
     fun contact() {
@@ -48,7 +48,7 @@ class StaffRecruitingDetailViewModel @Inject constructor(
 
             getJobOpeningDetailUseCase(
                 jobOpeningId = competitionId,
-                type = Type.ACTOR
+                type = Type.ACTOR,
             ).onSuccess { response ->
                 if (response == null) {
                     showToast(R.string.toast_empty_data)
@@ -66,7 +66,7 @@ class StaffRecruitingDetailViewModel @Inject constructor(
 }
 
 private data class StaffRecruitingDetailState(
-    val jobOpeningResponse: JobOpeningResponse? = null
+    val jobOpeningResponse: JobOpeningResponse? = null,
 ) {
     fun toUiState(): StaffRecruitingDetailUiState = if (jobOpeningResponse != null) {
         StaffRecruitingDetailUiState(
@@ -79,7 +79,7 @@ private data class StaffRecruitingDetailState(
             articleTitle = jobOpeningResponse.jobOpening.title,
             deadline = jobOpeningResponse.jobOpening.deadline,
             dday = jobOpeningResponse.jobOpening.dday,
-            role = jobOpeningResponse.jobOpening.casting,
+            casting = jobOpeningResponse.jobOpening.casting,
             numberOfRecruits = jobOpeningResponse.jobOpening.numberOfRecruits.toString(),
             gender = jobOpeningResponse.jobOpening.gender,
             ageRange = jobOpeningResponse.jobOpening.ageMin.toString() + jobOpeningResponse.jobOpening.ageMax.toString(),
@@ -94,7 +94,7 @@ private data class StaffRecruitingDetailState(
             pay = jobOpeningResponse.jobOpening.work.pay ?: "",
             detailInfo = jobOpeningResponse.jobOpening.work.details,
             manager = jobOpeningResponse.jobOpening.work.manager,
-            email = jobOpeningResponse.jobOpening.work.email
+            email = jobOpeningResponse.jobOpening.work.email,
         )
     } else {
         StaffRecruitingDetailUiState(
@@ -107,7 +107,7 @@ private data class StaffRecruitingDetailState(
             articleTitle = "",
             deadline = "",
             dday = "",
-            role = "",
+            casting = "",
             numberOfRecruits = "",
             gender = Gender.IRRELEVANT,
             ageRange = "",
@@ -137,7 +137,7 @@ data class StaffRecruitingDetailUiState(
     val articleTitle: String,
     val deadline: String,
     val dday: String,
-    val role: String,
+    val casting: String?,
     val numberOfRecruits: String,
     val gender: Gender,
     val ageRange: String,
@@ -152,5 +152,5 @@ data class StaffRecruitingDetailUiState(
     val pay: String,
     val detailInfo: String,
     val manager: String,
-    val email: String
+    val email: String,
 )

@@ -11,7 +11,7 @@ interface JobOpeningsRepository {
     suspend fun getJobOpeningsScraps(
         page: Int,
         size: Int = 20,
-        type: Type
+        type: Type,
     ): DataResult<JobOpeningsPagingResponse>
 
     suspend fun getMyRegistrations(
@@ -20,15 +20,24 @@ interface JobOpeningsRepository {
     ): DataResult<JobOpeningsPagingResponse>
 
     suspend fun getJobOpeningsList(
-        jobTabFilterVo: JobTabFilterVo
+        jobTabFilterVo: JobTabFilterVo,
     ): DataResult<JobOpeningsPagingResponse>
 
     suspend fun getJobOpeningDetail(
         jobOpeningId: Int,
-        type: Type
+        type: Type,
     ): DataResult<JobOpeningResponse>
 
     suspend fun registerJobOpening(
-        jobOpeningsRegisterRequest: JobOpeningsRegisterRequest
+        jobOpeningsRegisterRequest: JobOpeningsRegisterRequest,
+    ): DataResult<JobOpeningResponse>
+
+    suspend fun removeContent(
+        jobOpeningId: Int,
+    ): DataResult<Unit>
+
+    suspend fun modifyContent(
+        jobOpeningId: Int,
+        jobOpeningsRegisterRequest: JobOpeningsRegisterRequest,
     ): DataResult<JobOpeningResponse>
 }

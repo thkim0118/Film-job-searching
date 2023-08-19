@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.user.Category
@@ -41,7 +42,8 @@ import com.fone.filmone.ui.theme.LocalTypography
 @Composable
 fun MyRecruitmentScreen(
     modifier: Modifier = Modifier,
-    registerPosts: List<RegisterPostUiModel>
+    registerPosts: List<RegisterPostUiModel>,
+    viewModel: MyRegisterViewModel = hiltViewModel(),
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         if (registerPosts.isNotEmpty()) {
@@ -56,7 +58,28 @@ fun MyRecruitmentScreen(
                         gender = it.gender,
                         period = it.period,
                         jobType = it.jobType,
-                        casting = it.casting
+                        casting = it.casting,
+                        onEditClick = {
+                            when (it.type) {
+                                Type.ACTOR -> {
+                                    FOneNavigator.navigateTo(
+                                        navDestinationState = NavDestinationState(
+                                            route = FOneDestinations.ActorRecruitingEdit.getRouteWithContentId(it.id),
+                                        ),
+                                    )
+                                }
+                                Type.STAFF -> {
+                                    FOneNavigator.navigateTo(
+                                        navDestinationState = NavDestinationState(
+                                            route = FOneDestinations.StaffRecruitingEdit.getRouteWithContentId(it.id),
+                                        ),
+                                    )
+                                }
+                            }
+                        },
+                        onDeleteClick = {
+                            viewModel.updateDialogState(MyRegisterDialogState.RegisterPostDelete(it.id))
+                        },
                     )
 
                     Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -79,15 +102,17 @@ private fun RegisterItem(
     gender: Gender,
     period: String,
     jobType: JobType,
-    casting: String,
+    casting: String?,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit,
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Column(
             modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 10.dp)
+                .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 10.dp),
         ) {
             Tags(type = type, categories = categories)
 
@@ -96,7 +121,7 @@ private fun RegisterItem(
             Text(
                 text = title,
                 style = LocalTypography.current.b2(),
-                color = FColor.TextPrimary
+                color = FColor.TextPrimary,
             )
 
             Spacer(modifier = Modifier.height(6.dp))
@@ -107,15 +132,15 @@ private fun RegisterItem(
                 gender = gender,
                 period = period,
                 jobType = jobType,
-                casting = casting
+                casting = casting,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
         }
 
         RegisterButtons(
-            onEditClick = {},
-            onDeleteClick = {}
+            onEditClick = onEditClick,
+            onDeleteClick = onDeleteClick,
         )
     }
 }
@@ -124,7 +149,7 @@ private fun RegisterItem(
 private fun Tags(
     modifier: Modifier = Modifier,
     type: Type,
-    categories: List<Category>
+    categories: List<Category>,
 ) {
     Row(modifier = modifier) {
         Box(
@@ -135,14 +160,14 @@ private fun Tags(
                     color = when (type) {
                         Type.ACTOR -> FColor.Red200
                         Type.STAFF -> FColor.Secondary1Light
-                    }
+                    },
                 )
-                .padding(horizontal = 10.dp, vertical = 2.dp)
+                .padding(horizontal = 10.dp, vertical = 2.dp),
         ) {
             Text(
                 text = type.name,
                 style = LocalTypography.current.b4(),
-                color = FColor.White
+                color = FColor.White,
             )
         }
 
@@ -161,21 +186,21 @@ private fun Tags(
 @Composable
 private fun CategoryTag(
     modifier: Modifier = Modifier,
-    category: Category
+    category: Category,
 ) {
     Box(
         modifier = modifier
             .clip(shape = RoundedCornerShape(100.dp))
             .background(
                 shape = RoundedCornerShape(100.dp),
-                color = FColor.BgGroupedBase
+                color = FColor.BgGroupedBase,
             )
-            .padding(horizontal = 10.dp, vertical = 2.dp)
+            .padding(horizontal = 10.dp, vertical = 2.dp),
     ) {
         Text(
             text = stringResource(id = category.stringRes),
             style = LocalTypography.current.b4(),
-            color = FColor.Secondary1Light
+            color = FColor.Secondary1Light,
         )
     }
 }
@@ -187,15 +212,15 @@ private fun RegisterInfo(
     gender: Gender,
     period: String,
     jobType: JobType,
-    casting: String,
+    casting: String?,
 ) {
     Row(
         modifier = Modifier
-            .height(IntrinsicSize.Min)
+            .height(IntrinsicSize.Min),
     ) {
         RegisterContent(
             title = stringResource(id = R.string.job_opening_deadline_title),
-            content = deadline
+            content = deadline,
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -205,24 +230,24 @@ private fun RegisterInfo(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(vertical = 3.dp)
-                .width(1.dp)
+                .width(1.dp),
         )
 
         Spacer(modifier = Modifier.width(8.dp))
 
         RegisterContent(
             title = stringResource(id = R.string.job_opening_director_title),
-            content = director
+            content = director,
         )
     }
 
     Row(
         modifier = Modifier
-            .height(IntrinsicSize.Min)
+            .height(IntrinsicSize.Min),
     ) {
         RegisterContent(
             title = stringResource(id = R.string.job_opening_gender_title),
-            content = stringResource(id = gender.stringRes)
+            content = stringResource(id = gender.stringRes),
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -232,35 +257,37 @@ private fun RegisterInfo(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(vertical = 3.dp)
-                .width(1.dp)
+                .width(1.dp),
         )
 
         Spacer(modifier = Modifier.width(8.dp))
 
         RegisterContent(
             title = stringResource(id = R.string.job_opening_period_title),
-            content = period
+            content = period,
         )
     }
 
-    RegisterContent(
-        title = stringResource(id = jobType.stringRes),
-        content = casting
-    )
+    if (casting != null) {
+        RegisterContent(
+            title = stringResource(id = jobType.stringRes),
+            content = casting,
+        )
+    }
 }
 
 @Composable
 private fun RegisterButtons(
     modifier: Modifier = Modifier,
     onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
 ) {
     Divider(color = FColor.Divider1)
 
     Row(
         modifier = modifier
             .height(IntrinsicSize.Min)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Text(
             modifier = Modifier
@@ -269,14 +296,14 @@ private fun RegisterButtons(
                 .weight(1f),
             text = stringResource(id = R.string.my_register_edit_button_title),
             style = LocalTypography.current.button2(),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         Divider(
             color = FColor.Divider1,
             modifier = Modifier
                 .fillMaxHeight()
-                .width(1.dp)
+                .width(1.dp),
         )
 
         Text(
@@ -286,7 +313,7 @@ private fun RegisterButtons(
                 .weight(1f),
             text = stringResource(id = R.string.my_register_delete_button_title),
             style = LocalTypography.current.button2(),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -294,13 +321,13 @@ private fun RegisterButtons(
 @Composable
 private fun RegisterContent(
     title: String,
-    content: String
+    content: String,
 ) {
     Row {
         Text(
             text = title,
             style = LocalTypography.current.b4(),
-            color = FColor.DisablePlaceholder
+            color = FColor.DisablePlaceholder,
         )
 
         Spacer(modifier = Modifier.width(4.dp))
@@ -308,14 +335,14 @@ private fun RegisterContent(
         Text(
             text = content,
             style = LocalTypography.current.b4(),
-            color = FColor.TextSecondary
+            color = FColor.TextSecondary,
         )
     }
 }
 
 @Composable
 private fun EmptyScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         Text(
@@ -323,7 +350,7 @@ private fun EmptyScreen(
             text = stringResource(id = R.string.my_register_recruitment_empty_title),
             style = LocalTypography.current.subtitle2(),
             color = FColor.TextPrimary,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         Spacer(modifier = Modifier.height(18.dp))
@@ -338,22 +365,22 @@ private fun EmptyScreen(
                         FOneNavigator.navigateTo(
                             navDestinationState = NavDestinationState(
                                 route = FOneDestinations.Main.getRouteWithJobInitialPageArg(
-                                    JobTab.JOB_OPENING.name
+                                    JobTab.JOB_OPENING.name,
                                 ),
-                                isPopAll = true
-                            )
+                                isPopAll = true,
+                            ),
                         )
                     },
                 text = stringResource(id = R.string.my_register_recruitment_empty_subtitle_actor),
                 style = LocalTypography.current.subtitle2(),
                 color = FColor.Primary,
-                textDecoration = TextDecoration.Underline
+                textDecoration = TextDecoration.Underline,
             )
 
             Text(
                 text = " | ",
                 style = LocalTypography.current.subtitle2(),
-                color = FColor.Primary
+                color = FColor.Primary,
             )
 
             Text(
@@ -362,16 +389,16 @@ private fun EmptyScreen(
                         FOneNavigator.navigateTo(
                             navDestinationState = NavDestinationState(
                                 route = FOneDestinations.Main.getRouteWithJobInitialPageArg(
-                                    JobTab.JOB_OPENING.name
+                                    JobTab.JOB_OPENING.name,
                                 ),
-                                isPopAll = true
-                            )
+                                isPopAll = true,
+                            ),
                         )
                     },
                 text = stringResource(id = R.string.my_register_recruitment_empty_subtitle_staff),
                 style = LocalTypography.current.subtitle2(),
                 color = FColor.Primary,
-                textDecoration = TextDecoration.Underline
+                textDecoration = TextDecoration.Underline,
             )
             Spacer(modifier = Modifier.weight(1f))
         }

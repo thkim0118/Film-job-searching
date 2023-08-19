@@ -36,7 +36,7 @@ class JobScreenSharedViewModel @Inject constructor(
         .stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
-            viewModelState.value.toUiState()
+            viewModelState.value.toUiState(),
         )
 
     fun initUserType(userType: Type) {
@@ -52,7 +52,7 @@ class JobScreenSharedViewModel @Inject constructor(
                 domains = Domain.values().toList(),
                 genders = Gender.values().toList(),
                 type = userType,
-                size = 0
+                size = 0,
             )
 
             when (userType) {
@@ -76,7 +76,7 @@ class JobScreenSharedViewModel @Inject constructor(
                     viewModelState.update {
                         it.copy(
                             actorJobOpenings = response.jobOpenings,
-                            staffJobOpenings = null
+                            staffJobOpenings = null,
                         )
                     }
                 }
@@ -90,7 +90,7 @@ class JobScreenSharedViewModel @Inject constructor(
                     viewModelState.update {
                         it.copy(
                             actorProfiles = response.profiles,
-                            staffProfiles = null
+                            staffProfiles = null,
                         )
                     }
                 }
@@ -104,7 +104,7 @@ class JobScreenSharedViewModel @Inject constructor(
                     viewModelState.update {
                         it.copy(
                             staffJobOpenings = response.jobOpenings,
-                            actorJobOpenings = null
+                            actorJobOpenings = null,
                         )
                     }
                 }
@@ -118,7 +118,7 @@ class JobScreenSharedViewModel @Inject constructor(
                     viewModelState.update {
                         it.copy(
                             staffProfiles = response.profiles,
-                            actorProfiles = null
+                            actorProfiles = null,
                         )
                     }
                 }
@@ -145,7 +145,7 @@ private data class JobScreenViewModelState(
         domains = null,
         genders = emptyList(),
         type = Type.ACTOR,
-        size = 0
+        size = 0,
     ),
     val actorProfilesFilter: JobTabFilterVo = JobTabFilterVo(
         ageMax = 70,
@@ -154,7 +154,7 @@ private data class JobScreenViewModelState(
         domains = null,
         genders = emptyList(),
         type = Type.ACTOR,
-        size = 0
+        size = 0,
     ),
     val staffJobOpeningsFilter: JobTabFilterVo = JobTabFilterVo(
         ageMax = 70,
@@ -163,7 +163,7 @@ private data class JobScreenViewModelState(
         domains = null,
         genders = emptyList(),
         type = Type.ACTOR,
-        size = 0
+        size = 0,
     ),
     val staffProfilesFilter: JobTabFilterVo = JobTabFilterVo(
         ageMax = 70,
@@ -172,8 +172,8 @@ private data class JobScreenViewModelState(
         domains = null,
         genders = emptyList(),
         type = Type.ACTOR,
-        size = 0
-    )
+        size = 0,
+    ),
 ) {
     fun toUiState(): JobScreenUiState = JobScreenUiState(
         type = userType,
@@ -186,7 +186,7 @@ private data class JobScreenViewModelState(
                 gender = content.gender,
                 period = content.dday,
                 jobType = JobType.PART,
-                casting = content.casting
+                casting = content.casting,
             )
         } ?: staffJobOpenings?.content?.map { content ->
             JobTabJobOpeningUiModel(
@@ -197,22 +197,22 @@ private data class JobScreenViewModelState(
                 gender = content.gender,
                 period = content.dday,
                 jobType = JobType.Field,
-                casting = content.casting
+                casting = content.casting,
             )
         } ?: emptyList(),
         profileUiModels = actorProfiles?.content?.map { content ->
             ProfilesUiModel(
                 profileUrl = content.profileUrl,
                 name = content.name,
-                info = "${content.birthday.slice(0..3)}년생 (${content.age}살)"
+                info = "${content.birthday.slice(0..3)}년생 (${content.age}살)",
             )
         } ?: staffProfiles?.content?.map { content ->
             ProfilesUiModel(
                 profileUrl = content.profileUrl,
                 name = content.name,
-                info = "${content.birthday.slice(0..3)}년생 (${content.age}살)"
+                info = "${content.birthday.slice(0..3)}년생 (${content.age}살)",
             )
-        } ?: emptyList()
+        } ?: emptyList(),
     )
 }
 
@@ -225,7 +225,7 @@ data class JobScreenUiState(
 enum class JobFilterType(@StringRes val titleRes: Int) {
     Recent(R.string.job_tab_main_filter_recent),
     View(R.string.job_tab_main_filter_lookups),
-    Deadline(R.string.job_tab_main_filter_due)
+    Deadline(R.string.job_tab_main_filter_due),
 }
 
 data class JobTabJobOpeningUiModel(
@@ -236,11 +236,11 @@ data class JobTabJobOpeningUiModel(
     val gender: Gender,
     val period: String,
     val jobType: JobType,
-    val casting: String
+    val casting: String?,
 )
 
 data class ProfilesUiModel(
     val profileUrl: String,
     val name: String,
-    val info: String
+    val info: String,
 )

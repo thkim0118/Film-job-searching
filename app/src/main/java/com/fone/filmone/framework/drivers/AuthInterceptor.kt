@@ -8,10 +8,11 @@ import com.fone.filmone.ui.navigation.NavDestinationState
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
+import java.net.HttpURLConnection
 import javax.inject.Inject
 
 class AuthInterceptor @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
 ) : Interceptor {
 
     @Synchronized
@@ -31,7 +32,7 @@ class AuthInterceptor @Inject constructor(
 
         val response = chain.proceed(authenticatedRequest)
 
-        if (response.code == 401 || response.code == 403) {
+        if (response.code == HttpURLConnection.HTTP_UNAUTHORIZED) {
             synchronized(this) {
                 val newAccessToken = runBlocking { authRepository.refreshToken() }
 
@@ -45,8 +46,8 @@ class AuthInterceptor @Inject constructor(
                     FOneNavigator.navigateTo(
                         navDestinationState = NavDestinationState(
                             route = FOneDestinations.Login.route,
-                            isPopAll = true
-                        )
+                            isPopAll = true,
+                        ),
                     )
                 }
             }

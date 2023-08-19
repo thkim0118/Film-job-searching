@@ -47,7 +47,7 @@ class ScrapViewModel @Inject constructor(
         .stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
-            viewModelState.value.toUiState()
+            viewModelState.value.toUiState(),
         )
 
     private fun getRandomInt(count: Int) = Random.nextInt(count)
@@ -65,7 +65,7 @@ class ScrapViewModel @Inject constructor(
         pay = "pay",
         period = "period",
         produce = "produce",
-        workTitle = "workTitle"
+        workTitle = "workTitle",
     )
 
     fun fakeJobContent() = JobOpeningContent(
@@ -85,13 +85,13 @@ class ScrapViewModel @Inject constructor(
         title = "title",
         type = getRandomType(),
         viewCount = 1,
-        work = fakeWork
+        work = fakeWork,
     )
 
     val fakeSort = Sort(
         empty = false,
         sorted = false,
-        unsorted = false
+        unsorted = false,
     )
 
     val fakePageable = Pageable(
@@ -100,7 +100,7 @@ class ScrapViewModel @Inject constructor(
         paged = false,
         pageNumber = 1,
         pageSize = 1,
-        unpaged = false
+        unpaged = false,
     )
 
     val fakeJobOpenings = JobOpenings(
@@ -111,7 +111,7 @@ class ScrapViewModel @Inject constructor(
             fakeJobContent(),
             fakeJobContent(),
             fakeJobContent(),
-            fakeJobContent()
+            fakeJobContent(),
         ),
         empty = false,
         first = false,
@@ -122,34 +122,35 @@ class ScrapViewModel @Inject constructor(
         size = 1,
         sort = fakeSort,
         totalElements = 1,
-        totalPages = 1
+        totalPages = 1,
     )
 
     val fakeCompetitionPrizes = CompetitionPrize(
         competitionId = 0,
         id = 0,
         prizeMoney = "prizeMoney",
-        ranking = "ranking"
+        ranking = "ranking",
     )
 
-    fun fakeCompetitionContent() = com.fone.filmone.data.datamodel.response.competition.CompetitionContent(
-        agency = "agency",
-        competitionPrizes = listOf(fakeCompetitionPrizes),
-        dday = "D-13",
-        details = "details",
-        endDate = "endDate",
-        id = 0,
-        imageUrl = "https://picsum.photos/200",
-        isScrap = false,
-        scrapCount = 0,
-        showStartDate = "showStartDate",
-        startDate = "startDate",
-        submitEndDate = "submitEndDate",
-        submitStartDate = "submitStartDate",
-        title = "title",
-        viewCount = 0,
-        type = Type.ACTOR
-    )
+    fun fakeCompetitionContent() =
+        com.fone.filmone.data.datamodel.response.competition.CompetitionContent(
+            agency = "agency",
+            competitionPrizes = listOf(fakeCompetitionPrizes),
+            dday = "D-13",
+            details = "details",
+            endDate = "endDate",
+            id = 0,
+            imageUrl = "https://picsum.photos/200",
+            isScrap = false,
+            scrapCount = 0,
+            showStartDate = "showStartDate",
+            startDate = "startDate",
+            submitEndDate = "submitEndDate",
+            submitStartDate = "submitStartDate",
+            title = "title",
+            viewCount = 0,
+            type = Type.ACTOR,
+        )
 
     val fakeCompetition = Competitions(
         content = listOf(
@@ -161,7 +162,7 @@ class ScrapViewModel @Inject constructor(
             fakeCompetitionContent(),
             fakeCompetitionContent(),
             fakeCompetitionContent(),
-            fakeCompetitionContent()
+            fakeCompetitionContent(),
         ),
         empty = false,
         first = false,
@@ -170,12 +171,12 @@ class ScrapViewModel @Inject constructor(
         numberOfElements = 0,
         pageable = fakePageable,
         size = 0,
-        sort = fakeSort
+        sort = fakeSort,
     )
 
     val fakeCompetitionsResponse = CompetitionsResponse(
         competitions = fakeCompetition,
-        totalCount = 1
+        totalCount = 1,
     )
 
     init {
@@ -189,12 +190,12 @@ class ScrapViewModel @Inject constructor(
             combine(
                 jobOpeningsActorResponse,
                 jobOpeningsStaffResponse,
-                competitionsResponse
+                competitionsResponse,
             ) { actorResult, staffResult, competitionsResult ->
                 ScarpViewModelState(
                     actorJobOpenings = actorResult?.jobOpenings,
                     staffJobOpenings = staffResult?.jobOpenings,
-                    competitionsResponse = competitionsResult
+                    competitionsResponse = competitionsResult,
                 )
             }.onEach { combinedViewModelState ->
                 viewModelState.update { combinedViewModelState }
@@ -232,7 +233,7 @@ private data class ScarpViewModelState(
                     period = content.dday,
 //                    jobType = JobType.PART, // TODO 어떤 값을 써야하는지 찾아야함.
                     jobType = JobType.values()[Random.nextInt(JobType.values().lastIndex)],
-                    casting = content.casting
+                    casting = content.casting,
                 )
             } ?: emptyList(),
             competitions = competitionsResponse?.competitions?.content?.map { content ->
@@ -241,16 +242,16 @@ private data class ScarpViewModelState(
                     title = content.title,
                     host = content.agency,
                     dday = content.dday,
-                    vieweCount = content.viewCount.toString()
+                    vieweCount = content.viewCount.toString(),
                 )
-            } ?: emptyList()
+            } ?: emptyList(),
         )
     }
 }
 
 data class ScrapUiState(
     val jobOpenings: List<JobOpeningUiModel>,
-    val competitions: List<CompetitionUiModel>
+    val competitions: List<CompetitionUiModel>,
 )
 
 data class JobOpeningUiModel(
@@ -262,7 +263,7 @@ data class JobOpeningUiModel(
     val gender: Gender,
     val period: String,
     val jobType: JobType,
-    val casting: String
+    val casting: String?,
 )
 
 data class CompetitionUiModel(
@@ -270,5 +271,5 @@ data class CompetitionUiModel(
     val title: String,
     val host: String,
     val dday: String,
-    val vieweCount: String
+    val vieweCount: String,
 )

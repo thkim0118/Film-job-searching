@@ -12,12 +12,12 @@ import com.fone.filmone.domain.repository.JobOpeningsRepository
 import javax.inject.Inject
 
 class JobOpeningsRepositoryImpl @Inject constructor(
-    private val jobOpeningsApi: JobOpeningsApi
+    private val jobOpeningsApi: JobOpeningsApi,
 ) : JobOpeningsRepository {
     override suspend fun getJobOpeningsScraps(
         page: Int,
         size: Int,
-        type: Type
+        type: Type,
     ): DataResult<JobOpeningsPagingResponse> {
         return handleNetwork { jobOpeningsApi.getScraps(page = page, size = size, type = type) }
     }
@@ -47,12 +47,12 @@ class JobOpeningsRepositoryImpl @Inject constructor(
 
     override suspend fun getJobOpeningDetail(
         jobOpeningId: Int,
-        type: Type
+        type: Type,
     ): DataResult<JobOpeningResponse> {
         return handleNetwork {
             jobOpeningsApi.getJobOpeningDetail(
                 jobOpeningId = jobOpeningId,
-                type = type
+                type = type,
             )
         }
     }
@@ -60,6 +60,24 @@ class JobOpeningsRepositoryImpl @Inject constructor(
     override suspend fun registerJobOpening(jobOpeningsRegisterRequest: JobOpeningsRegisterRequest): DataResult<JobOpeningResponse> {
         return handleNetwork {
             jobOpeningsApi.registerJobOpening(jobOpeningsRegisterRequest)
+        }
+    }
+
+    override suspend fun removeContent(jobOpeningId: Int): DataResult<Unit> {
+        return handleNetwork {
+            jobOpeningsApi.removeContent(jobOpeningId = jobOpeningId)
+        }
+    }
+
+    override suspend fun modifyContent(
+        jobOpeningId: Int,
+        jobOpeningsRegisterRequest: JobOpeningsRegisterRequest,
+    ): DataResult<JobOpeningResponse> {
+        return handleNetwork {
+            jobOpeningsApi.modifyContent(
+                jobOpeningId = jobOpeningId,
+                jobOpeningsRegisterRequest = jobOpeningsRegisterRequest,
+            )
         }
     }
 }

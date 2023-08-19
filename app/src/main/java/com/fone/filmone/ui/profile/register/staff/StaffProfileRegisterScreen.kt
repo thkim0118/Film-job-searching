@@ -49,7 +49,7 @@ import com.fone.filmone.ui.profile.register.NameInputComponent
 import com.fone.filmone.ui.profile.register.PictureComponent
 import com.fone.filmone.ui.profile.register.RegisterButton
 import com.fone.filmone.ui.profile.register.SnsInputComponent
-import com.fone.filmone.ui.recruiting.register.staff.DomainSelectDialog
+import com.fone.filmone.ui.recruiting.common.staff.DomainSelectDialog
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 

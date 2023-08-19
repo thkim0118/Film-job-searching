@@ -32,7 +32,7 @@ class ActorRecruitingDetailViewModel @Inject constructor(
         .stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
-            viewModelState.value.toUiState()
+            viewModelState.value.toUiState(),
         )
 
     fun contact() {
@@ -47,7 +47,7 @@ class ActorRecruitingDetailViewModel @Inject constructor(
 
             getJobOpeningDetailUseCase(
                 jobOpeningId = competitionId,
-                type = Type.ACTOR
+                type = Type.ACTOR,
             ).onSuccess { response ->
                 if (response == null) {
                     showToast(R.string.toast_empty_data)
@@ -65,7 +65,7 @@ class ActorRecruitingDetailViewModel @Inject constructor(
 }
 
 private data class ActorRecruitingDetailViewModelState(
-    val jobOpeningResponse: JobOpeningResponse? = null
+    val jobOpeningResponse: JobOpeningResponse? = null,
 ) {
     fun toUiState(): ActorRecruitingDetailUiState = if (jobOpeningResponse != null) {
         ActorRecruitingDetailUiState(
@@ -78,7 +78,7 @@ private data class ActorRecruitingDetailViewModelState(
             articleTitle = jobOpeningResponse.jobOpening.title,
             deadline = jobOpeningResponse.jobOpening.deadline,
             dday = jobOpeningResponse.jobOpening.dday,
-            role = jobOpeningResponse.jobOpening.casting,
+            casting = jobOpeningResponse.jobOpening.casting,
             numberOfRecruits = jobOpeningResponse.jobOpening.numberOfRecruits.toString(),
             ageRange = jobOpeningResponse.jobOpening.ageMin.toString() + jobOpeningResponse.jobOpening.ageMax.toString(),
             career = jobOpeningResponse.jobOpening.career.name,
@@ -92,7 +92,7 @@ private data class ActorRecruitingDetailViewModelState(
             pay = jobOpeningResponse.jobOpening.work.pay ?: "",
             detailInfo = jobOpeningResponse.jobOpening.work.details,
             manager = jobOpeningResponse.jobOpening.work.manager,
-            email = jobOpeningResponse.jobOpening.work.email
+            email = jobOpeningResponse.jobOpening.work.email,
         )
     } else {
         ActorRecruitingDetailUiState(
@@ -105,7 +105,7 @@ private data class ActorRecruitingDetailViewModelState(
             articleTitle = "",
             deadline = "",
             dday = "",
-            role = "",
+            casting = "",
             numberOfRecruits = "",
             ageRange = "",
             career = "",
@@ -134,7 +134,7 @@ data class ActorRecruitingDetailUiState(
     val articleTitle: String,
     val deadline: String,
     val dday: String,
-    val role: String,
+    val casting: String?,
     val numberOfRecruits: String,
     val ageRange: String,
     val career: String,
@@ -148,5 +148,5 @@ data class ActorRecruitingDetailUiState(
     val pay: String,
     val detailInfo: String,
     val manager: String,
-    val email: String
+    val email: String,
 )

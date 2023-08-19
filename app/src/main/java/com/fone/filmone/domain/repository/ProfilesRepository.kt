@@ -15,7 +15,7 @@ interface ProfilesRepository {
     suspend fun getFavoriteProfiles(
         page: Int,
         size: Int = 20,
-        type: Type
+        type: Type,
     ): DataResult<ProfilesPagingResponse>
 
     suspend fun getMyRegistrations(
@@ -26,11 +26,15 @@ interface ProfilesRepository {
     suspend fun getProfileList(jobTabFilterVo: JobTabFilterVo): DataResult<ProfilesPagingResponse>
 
     suspend fun registerProfile(
-        profileRegisterRequest: ProfileRegisterRequest
+        profileRegisterRequest: ProfileRegisterRequest,
     ): DataResult<ProfileDetailResponse>
 
     suspend fun getProfileDetail(
         profileId: Int,
-        type: Type
+        type: Type,
     ): DataResult<ProfileDetailResponse>
+
+    suspend fun removeContent(
+        profileId: Int,
+    ): DataResult<Unit>
 }

@@ -1,18 +1,23 @@
 package com.fone.filmone.ui.recruiting.register.actor
 
 import androidx.lifecycle.viewModelScope
-import com.fone.filmone.R
-import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.jobopenings.Work
 import com.fone.filmone.data.datamodel.common.user.Career
-import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.data.datamodel.request.jobopening.JobOpeningsRegisterRequest
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.RegisterJobOpeningUseCase
-import com.fone.filmone.ui.common.base.BaseViewModel
+import com.fone.filmone.ui.recruiting.common.actor.ActorRecruitingViewModel
+import com.fone.filmone.ui.recruiting.common.actor.model.ActorRecruitingFocusEvent
+import com.fone.filmone.ui.recruiting.common.actor.model.ActorRecruitingStep1UiModel
+import com.fone.filmone.ui.recruiting.common.actor.model.ActorRecruitingStep2UiModel
+import com.fone.filmone.ui.recruiting.common.actor.model.ActorRecruitingStep3UiModel
+import com.fone.filmone.ui.recruiting.common.actor.model.ActorRecruitingStep4UiModel
+import com.fone.filmone.ui.recruiting.common.actor.model.ActorRecruitingStep5UiModel
+import com.fone.filmone.ui.recruiting.common.actor.model.ActorRecruitingUiEvent
+import com.fone.filmone.ui.recruiting.common.actor.model.ActorRecruitingViewModelState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,30 +29,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ActorRecruitingRegisterViewModel @Inject constructor(
-    private val registerJobOpeningUseCase: RegisterJobOpeningUseCase
-) : BaseViewModel() {
+    private val registerJobOpeningUseCase: RegisterJobOpeningUseCase,
+) : ActorRecruitingViewModel() {
 
-    private val viewModelState = MutableStateFlow(ActorRecruitingRegisterViewModelState())
+    override val viewModelState: MutableStateFlow<ActorRecruitingViewModelState> =
+        MutableStateFlow(ActorRecruitingRegisterViewModelState())
 
-    val uiState = viewModelState
-        .map(ActorRecruitingRegisterViewModelState::toUiState)
+    override val uiState = viewModelState
+        .map(ActorRecruitingViewModelState::toUiState)
         .stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
-            viewModelState.value.toUiState()
+            viewModelState.value.toUiState(),
         )
 
-    fun registerJobOpening() {
-        val isValidationPassed = checkValidation()
-
-        if (isValidationPassed) {
-            register()
-        } else {
-            return
-        }
-    }
-
-    private fun register() = viewModelScope.launch {
+    override fun register() = viewModelScope.launch {
         val step1UiModel = uiState.value.actorRecruitingStep1UiModel
         val step2UiModel = uiState.value.actorRecruitingStep2UiModel
         val step3UiModel = uiState.value.actorRecruitingStep3UiModel
@@ -79,537 +75,46 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
                     details = step4UiModel.detailInfo,
                     manager = step5UiModel.manager,
                     email = step5UiModel.email,
-                )
-            )
+                ),
+            ),
         ).onSuccess { response ->
             if (response == null) {
                 return@onSuccess
             }
 
             viewModelState.update {
-                it.copy(actorRecruitingRegisterUiEvent = ActorRecruitingRegisterUiEvent.RegisterComplete)
+                it.copy(actorRecruitingUiEvent = ActorRecruitingUiEvent.RegisterComplete)
             }
         }.onFail {
             showToast(it.message)
         }
     }
-
-    private fun checkValidation(): Boolean {
-        if (isInvalidateStep1()) {
-            return false
-        }
-
-        if (isInvalidateStep2()) {
-            return false
-        }
-
-        if (isInvalidateStep4()) {
-            return false
-        }
-
-        if (isInvalidateStep5()) {
-            return false
-        }
-
-        return true
-    }
-
-    private fun isInvalidateStep1(): Boolean {
-        val step1UiModel = uiState.value.actorRecruitingStep1UiModel
-
-        if (step1UiModel.deadlineDateTagEnable.not() && step1UiModel.deadlineDate.isEmpty()) {
-            showToast(R.string.toast_recruiting_register_fail)
-            return true
-        }
-
-        if (step1UiModel.deadlineDateTagEnable && PatternUtil.isValidDate(step1UiModel.deadlineDate)
-            .not()
-        ) {
-            showToast(R.string.toast_recruiting_register_fail)
-            return true
-        }
-
-        if (step1UiModel.categories.isEmpty()) {
-            showToast(R.string.toast_recruiting_register_fail)
-            return true
-        }
-
-        if (step1UiModel.recruitmentNumber.isEmpty()) {
-            showToast(R.string.toast_recruiting_register_fail)
-            return true
-        }
-
-        return false
-    }
-
-    private fun isInvalidateStep2(): Boolean {
-        val step2UiModel = uiState.value.actorRecruitingStep2UiModel
-
-        if (step2UiModel.production.isEmpty()) {
-            showToast(R.string.toast_recruiting_register_fail)
-            return true
-        }
-
-        if (step2UiModel.workTitle.isEmpty()) {
-            showToast(R.string.toast_recruiting_register_fail)
-            return true
-        }
-
-        if (step2UiModel.directorName.isEmpty()) {
-            showToast(R.string.toast_recruiting_register_fail)
-            return true
-        }
-
-        if (step2UiModel.genre.isEmpty()) {
-            showToast(R.string.toast_recruiting_register_fail)
-            return true
-        }
-
-        return false
-    }
-
-    private fun isInvalidateStep4(): Boolean {
-        val step4UiModel = uiState.value.actorRecruitingStep4UiModel
-
-        if (step4UiModel.detailInfo.isEmpty()) {
-            showToast(R.string.toast_recruiting_register_fail)
-            return true
-        }
-
-        return false
-    }
-
-    private fun isInvalidateStep5(): Boolean {
-        val step5UiModel = uiState.value.actorRecruitingStep5UiModel
-
-        if (step5UiModel.manager.isEmpty()) {
-            showToast(R.string.toast_recruiting_register_fail)
-            return true
-        }
-
-        if (step5UiModel.email.isEmpty()) {
-            showToast(R.string.toast_recruiting_register_fail)
-            return true
-        }
-
-        return false
-    }
-
-    fun updateTitle(title: String) {
-        viewModelState.update {
-            it.copy(
-                actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(titleText = title)
-            )
-        }
-    }
-
-    fun updateCategory(category: Category, enable: Boolean) {
-        viewModelState.update { state ->
-            val currentCategories = state.actorRecruitingStep1UiModel.categories
-
-            if (enable) {
-                val newCategories = if (currentCategories.size < 2) {
-                    currentCategories + setOf(category)
-                } else {
-                    listOf(currentCategories[1], category)
-                }
-
-                state.copy(
-                    actorRecruitingStep1UiModel = state.actorRecruitingStep1UiModel.copy(
-                        categories = newCategories
-                    )
-                )
-            } else {
-                val updatedCategories = currentCategories.filterNot { it == category }
-                if (currentCategories.size == 2 && updatedCategories.size == 1) {
-                    val firstCategory = currentCategories.first()
-                    updatedCategories + firstCategory
-                }
-
-                state.copy(
-                    actorRecruitingStep1UiModel = state.actorRecruitingStep1UiModel.copy(
-                        categories = updatedCategories
-                    )
-                )
-            }
-        }
-    }
-
-    fun updateDeadlineDate(deadlineDate: String) {
-        viewModelState.update {
-            it.copy(
-                actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(
-                    deadlineDate = deadlineDate,
-                    deadlineDateTagEnable = if (it.actorRecruitingStep1UiModel.deadlineDateTagEnable && deadlineDate.isNotEmpty()) {
-                        false
-                    } else {
-                        it.actorRecruitingStep1UiModel.deadlineDateTagEnable
-                    }
-                )
-            )
-        }
-    }
-
-    fun updateDeadlineTag(enable: Boolean) {
-        viewModelState.update {
-            it.copy(
-                actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(
-                    deadlineDateTagEnable = enable,
-                    deadlineDate = if (enable) {
-                        ""
-                    } else {
-                        it.actorRecruitingStep1UiModel.deadlineDate
-                    }
-                )
-            )
-        }
-    }
-
-    fun updateRecruitmentActor(actor: String) {
-        viewModelState.update {
-            it.copy(
-                actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(recruitmentActor = actor)
-            )
-        }
-    }
-
-    fun updateRecruitmentNumber(number: String) {
-        viewModelState.update {
-            it.copy(
-                actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(recruitmentNumber = number)
-            )
-        }
-    }
-
-    fun updateRecruitmentGender(gender: Gender, enable: Boolean) {
-        viewModelState.update {
-            it.copy(
-                actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(
-                    recruitmentGender = if (enable) {
-                        gender
-                    } else {
-                        null
-                    },
-                    genderTagEnable = enable.not()
-                )
-            )
-        }
-    }
-
-    fun updateGenderTag(enable: Boolean) {
-        viewModelState.update {
-            it.copy(
-                actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(
-                    genderTagEnable = enable,
-                    recruitmentGender = if (enable) {
-                        null
-                    } else {
-                        it.actorRecruitingStep1UiModel.recruitmentGender
-                    }
-                )
-            )
-        }
-    }
-
-    fun updateAgeRangeReset() {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep1UiModel = state.actorRecruitingStep1UiModel.copy(
-                    ageRange = 1f..70f,
-                    ageTagEnable = true
-                )
-            )
-        }
-    }
-
-    fun updateAgeRange(ageRange: ClosedFloatingPointRange<Float>) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep1UiModel = state.actorRecruitingStep1UiModel.copy(
-                    ageRange = ageRange,
-                    ageTagEnable = ageRange == 1f..70f
-                )
-            )
-        }
-    }
-
-    fun updateCareer(career: Career, enable: Boolean) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep1UiModel = state.actorRecruitingStep1UiModel.copy(
-                    career = if (enable) {
-                        career
-                    } else {
-                        null
-                    },
-                    careerTagEnable = enable.not()
-                )
-            )
-        }
-    }
-
-    fun updateCareerTag(enable: Boolean) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep1UiModel = state.actorRecruitingStep1UiModel.copy(
-                    careerTagEnable = enable,
-                    career = if (enable) {
-                        null
-                    } else {
-                        state.actorRecruitingStep1UiModel.career
-                    }
-                )
-            )
-        }
-    }
-
-    fun updateProduction(production: String) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep2UiModel = state.actorRecruitingStep2UiModel.copy(
-                    production = production
-                )
-            )
-        }
-    }
-
-    fun updateWorkTitle(workTitle: String) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep2UiModel = state.actorRecruitingStep2UiModel.copy(
-                    workTitle = workTitle
-                )
-            )
-        }
-    }
-
-    fun updateDirectorName(directorName: String) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep2UiModel = state.actorRecruitingStep2UiModel.copy(
-                    directorName = directorName
-                )
-            )
-        }
-    }
-
-    fun updateGenre(genre: String) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep2UiModel = state.actorRecruitingStep2UiModel.copy(
-                    genre = genre
-                )
-            )
-        }
-    }
-
-    fun updateLogLine(logLine: String) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep2UiModel = state.actorRecruitingStep2UiModel.copy(
-                    logLine = logLine
-                )
-            )
-        }
-    }
-
-    fun updateLogLineTag(enable: Boolean) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep2UiModel = state.actorRecruitingStep2UiModel.copy(
-                    isLogLineTagEnable = enable
-                )
-            )
-        }
-    }
-
-    fun updateLocation(location: String) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep3UiModel = state.actorRecruitingStep3UiModel.copy(
-                    location = location,
-                    locationTagEnable = if (state.actorRecruitingStep3UiModel.locationTagEnable && location.isNotEmpty()) {
-                        false
-                    } else {
-                        state.actorRecruitingStep3UiModel.locationTagEnable
-                    }
-                )
-            )
-        }
-    }
-
-    fun updatePeriod(period: String) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep3UiModel = state.actorRecruitingStep3UiModel.copy(
-                    period = period,
-                    periodTagEnable = period.isNotEmpty()
-                )
-            )
-        }
-    }
-
-    fun updatePay(pay: String) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep3UiModel = state.actorRecruitingStep3UiModel.copy(
-                    pay = pay,
-                    payTagEnable = pay.isNotEmpty()
-                )
-            )
-        }
-    }
-
-    fun updateLocationTagEnable(enable: Boolean) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep3UiModel = state.actorRecruitingStep3UiModel.copy(
-                    locationTagEnable = enable,
-                    location = if (enable) {
-                        ""
-                    } else {
-                        state.actorRecruitingStep3UiModel.location
-                    }
-                )
-            )
-        }
-    }
-
-    fun updatePeriodTagEnable(enable: Boolean) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep3UiModel = state.actorRecruitingStep3UiModel.copy(
-                    periodTagEnable = enable,
-                    period = if (enable) {
-                        ""
-                    } else {
-                        state.actorRecruitingStep3UiModel.period
-                    }
-                )
-            )
-        }
-    }
-
-    fun updatePayTagEnable(enable: Boolean) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep3UiModel = state.actorRecruitingStep3UiModel.copy(
-                    payTagEnable = enable,
-                    pay = if (enable) {
-                        ""
-                    } else {
-                        state.actorRecruitingStep3UiModel.pay
-                    }
-                )
-            )
-        }
-    }
-
-    fun updateDetailInfo(detailInfo: String) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep4UiModel = state.actorRecruitingStep4UiModel.copy(
-                    detailInfo = detailInfo
-                )
-            )
-        }
-    }
-
-    fun updateManager(manager: String) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep5UiModel = state.actorRecruitingStep5UiModel.copy(
-                    manager = manager
-                )
-            )
-        }
-    }
-
-    fun updateEmail(email: String) {
-        viewModelState.update { state ->
-            state.copy(
-                actorRecruitingStep5UiModel = state.actorRecruitingStep5UiModel.copy(
-                    email = email
-                )
-            )
-        }
-    }
 }
 
-private data class ActorRecruitingRegisterViewModelState(
-    val actorRecruitingStep1UiModel: ActorRecruitingStep1UiModel = ActorRecruitingStep1UiModel(),
-    val actorRecruitingStep2UiModel: ActorRecruitingStep2UiModel = ActorRecruitingStep2UiModel(),
-    val actorRecruitingStep3UiModel: ActorRecruitingStep3UiModel = ActorRecruitingStep3UiModel(),
-    val actorRecruitingStep4UiModel: ActorRecruitingStep4UiModel = ActorRecruitingStep4UiModel(),
-    val actorRecruitingStep5UiModel: ActorRecruitingStep5UiModel = ActorRecruitingStep5UiModel(),
-    val actorRecruitingRegisterUiEvent: ActorRecruitingRegisterUiEvent = ActorRecruitingRegisterUiEvent.Clear
-) {
-    fun toUiState(): ActorRecruitingRegisterUiModel = ActorRecruitingRegisterUiModel(
+private class ActorRecruitingRegisterViewModelState(
+    override val actorRecruitingStep1UiModel: ActorRecruitingStep1UiModel = ActorRecruitingStep1UiModel(),
+    override val actorRecruitingStep2UiModel: ActorRecruitingStep2UiModel = ActorRecruitingStep2UiModel(),
+    override val actorRecruitingStep3UiModel: ActorRecruitingStep3UiModel = ActorRecruitingStep3UiModel(),
+    override val actorRecruitingStep4UiModel: ActorRecruitingStep4UiModel = ActorRecruitingStep4UiModel(),
+    override val actorRecruitingStep5UiModel: ActorRecruitingStep5UiModel = ActorRecruitingStep5UiModel(),
+    override val actorRecruitingUiEvent: ActorRecruitingUiEvent = ActorRecruitingUiEvent.Clear,
+    override val focusEvent: ActorRecruitingFocusEvent? = null,
+) : ActorRecruitingViewModelState() {
+    override fun copy(
+        actorRecruitingStep1UiModel: ActorRecruitingStep1UiModel,
+        actorRecruitingStep2UiModel: ActorRecruitingStep2UiModel,
+        actorRecruitingStep3UiModel: ActorRecruitingStep3UiModel,
+        actorRecruitingStep4UiModel: ActorRecruitingStep4UiModel,
+        actorRecruitingStep5UiModel: ActorRecruitingStep5UiModel,
+        actorRecruitingUiEvent: ActorRecruitingUiEvent,
+        focusEvent: ActorRecruitingFocusEvent?,
+    ): ActorRecruitingViewModelState = ActorRecruitingRegisterViewModelState(
         actorRecruitingStep1UiModel = actorRecruitingStep1UiModel,
         actorRecruitingStep2UiModel = actorRecruitingStep2UiModel,
         actorRecruitingStep3UiModel = actorRecruitingStep3UiModel,
         actorRecruitingStep4UiModel = actorRecruitingStep4UiModel,
         actorRecruitingStep5UiModel = actorRecruitingStep5UiModel,
-        actorRecruitingRegisterUiEvent = actorRecruitingRegisterUiEvent,
+        actorRecruitingUiEvent = actorRecruitingUiEvent,
+        focusEvent = focusEvent,
     )
-}
-
-data class ActorRecruitingRegisterUiModel(
-    val actorRecruitingStep1UiModel: ActorRecruitingStep1UiModel,
-    val actorRecruitingStep2UiModel: ActorRecruitingStep2UiModel,
-    val actorRecruitingStep3UiModel: ActorRecruitingStep3UiModel,
-    val actorRecruitingStep4UiModel: ActorRecruitingStep4UiModel,
-    val actorRecruitingStep5UiModel: ActorRecruitingStep5UiModel,
-    val actorRecruitingRegisterUiEvent: ActorRecruitingRegisterUiEvent,
-)
-
-data class ActorRecruitingStep1UiModel(
-    val titleText: String = "",
-    val titleTextLimit: Int = 50,
-    val categories: List<Category> = emptyList(),
-    val deadlineDate: String = "",
-    val deadlineDateTagEnable: Boolean = true,
-    val recruitmentActor: String = "",
-    val recruitmentNumber: String = "",
-    val recruitmentGender: Gender? = null,
-    val genderTagEnable: Boolean = true,
-    val ageRange: ClosedFloatingPointRange<Float> = 1f..70f,
-    val ageTagEnable: Boolean = true,
-    val defaultAgeRange: ClosedFloatingPointRange<Float> = 1f..70f,
-    val career: Career? = null,
-    val careerTagEnable: Boolean = true,
-)
-
-data class ActorRecruitingStep2UiModel(
-    val production: String = "",
-    val workTitle: String = "",
-    val directorName: String = "",
-    val genre: String = "",
-    val logLine: String = "",
-    val logLineTextLimit: Int = 200,
-    val isLogLineTagEnable: Boolean = false,
-)
-
-data class ActorRecruitingStep3UiModel(
-    val location: String = "",
-    val period: String = "",
-    val pay: String = "",
-    val locationTagEnable: Boolean = true,
-    val periodTagEnable: Boolean = true,
-    val payTagEnable: Boolean = true,
-)
-
-data class ActorRecruitingStep4UiModel(
-    val detailInfo: String = "",
-    val detailInfoTextLimit: Int = 500,
-)
-
-data class ActorRecruitingStep5UiModel(
-    val manager: String = "",
-    val email: String = "",
-)
-
-sealed class ActorRecruitingRegisterUiEvent {
-    object RegisterComplete : ActorRecruitingRegisterUiEvent()
-    object Clear : ActorRecruitingRegisterUiEvent()
 }

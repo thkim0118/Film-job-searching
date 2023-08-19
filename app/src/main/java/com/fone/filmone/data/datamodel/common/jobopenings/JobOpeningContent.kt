@@ -12,7 +12,7 @@ data class JobOpeningContent(
     val title: String,
     val categories: List<Category>,
     val deadline: String,
-    val casting: String,
+    val casting: String?,
     val numberOfRecruits: Int,
     val gender: Gender,
     val ageMax: Int,

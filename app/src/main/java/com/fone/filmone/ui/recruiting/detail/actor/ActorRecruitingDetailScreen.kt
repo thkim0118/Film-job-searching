@@ -67,42 +67,42 @@ fun ActorRecruitingDetailScreen(
             .toastPadding(),
         snackbarHost = {
             FToast(baseViewModel = viewModel, hostState = it)
-        }
-    ) {
+        },
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it)
+                .padding(paddingValues),
         ) {
             TitleComponent(
                 onBackClick = { navController.popBackStack() },
-                onMoreImageClick = {}
+                onMoreImageClick = {},
             )
 
             Column(
                 modifier = Modifier
-                    .verticalScroll(scrollState)
+                    .verticalScroll(scrollState),
             ) {
                 HeaderComponent(
                     date = uiState.date,
                     viewCount = uiState.viewCount,
                     profileImageUrl = uiState.profileImageUrl,
                     username = uiState.userNickname,
-                    userType = uiState.userType
+                    userType = uiState.userType,
                 )
 
                 DetailTitleComponent(
                     categories = uiState.categories.map { it.name },
-                    articleTitle = uiState.articleTitle
+                    articleTitle = uiState.articleTitle,
                 )
 
                 RecruitmentConditionComponent(
                     deadline = uiState.deadline,
                     dday = uiState.dday,
-                    role = uiState.role,
+                    casting = uiState.casting,
                     number = uiState.numberOfRecruits,
                     ageRange = uiState.ageRange,
-                    career = uiState.career
+                    career = uiState.career,
                 )
 
                 Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -112,7 +112,7 @@ fun ActorRecruitingDetailScreen(
                     workTitle = uiState.workTitle,
                     director = uiState.director,
                     genre = uiState.genre,
-                    logLine = uiState.logLine
+                    logLine = uiState.logLine,
                 )
 
                 Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -120,7 +120,7 @@ fun ActorRecruitingDetailScreen(
                 WorkingConditionsComponent(
                     location = uiState.location,
                     period = uiState.period,
-                    pay = uiState.pay
+                    pay = uiState.pay,
                 )
 
                 Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -131,7 +131,7 @@ fun ActorRecruitingDetailScreen(
 
                 ManagerInfoComponent(
                     manager = uiState.manager,
-                    email = uiState.email
+                    email = uiState.email,
                 )
 
                 Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -151,7 +151,7 @@ fun ActorRecruitingDetailScreen(
 private fun TitleComponent(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
-    onMoreImageClick: () -> Unit
+    onMoreImageClick: () -> Unit,
 ) {
     FTitleBar(
         modifier = modifier,
@@ -161,7 +161,7 @@ private fun TitleComponent(
                 modifier = Modifier
                     .clickableSingleWithNoRipple { onBackClick() },
                 imageVector = ImageVector.vectorResource(id = R.drawable.title_bar_back),
-                contentDescription = null
+                contentDescription = null,
             )
         },
         action = {
@@ -169,9 +169,9 @@ private fun TitleComponent(
                 modifier = Modifier
                     .clickableSingleWithNoRipple { onMoreImageClick() },
                 imageVector = ImageVector.vectorResource(id = R.drawable.actor_detail_more_vertical),
-                contentDescription = null
+                contentDescription = null,
             )
-        }
+        },
     )
 }
 
@@ -185,7 +185,7 @@ private fun DetailTitleComponent(
         modifier = modifier
             .fillMaxWidth()
             .background(color = FColor.Divider2)
-            .padding(vertical = 18.dp, horizontal = 16.dp)
+            .padding(vertical = 18.dp, horizontal = 16.dp),
     ) {
         Row(modifier = Modifier) {
             categories.forEachIndexed { index, category ->
@@ -202,7 +202,7 @@ private fun DetailTitleComponent(
         Text(
             text = articleTitle,
             style = LocalTypography.current.h2(),
-            color = FColor.TextPrimary
+            color = FColor.TextPrimary,
         )
     }
 }
@@ -214,15 +214,15 @@ private fun HeaderComponent(
     viewCount: String,
     profileImageUrl: String,
     username: String,
-    userType: String
+    userType: String,
 ) {
     Column(
         modifier = modifier
-            .padding(horizontal = 16.dp, vertical = 16.dp)
+            .padding(horizontal = 16.dp, vertical = 16.dp),
     ) {
         Row(
             modifier = Modifier,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = date,
@@ -230,15 +230,15 @@ private fun HeaderComponent(
                     fontWeight = FontWeight.W500,
                     fontSize = 13.textDp,
                     lineHeight = 16.textDp,
-                    color = FColor.TextSecondary
-                )
+                    color = FColor.TextSecondary,
+                ),
             )
 
             Spacer(modifier = Modifier.weight(1f))
 
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.actor_detail_view_count),
-                contentDescription = null
+                contentDescription = null,
             )
 
             Spacer(modifier = Modifier.width(3.dp))
@@ -249,8 +249,8 @@ private fun HeaderComponent(
                     fontWeight = FontWeight.W400,
                     fontSize = 12.textDp,
                     lineHeight = 17.textDp,
-                    color = FColor.DisablePlaceholder
-                )
+                    color = FColor.DisablePlaceholder,
+                ),
             )
         }
 
@@ -258,7 +258,7 @@ private fun HeaderComponent(
 
         Row(
             modifier = Modifier,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             if (profileImageUrl.isEmpty()) {
                 Image(
@@ -266,7 +266,7 @@ private fun HeaderComponent(
                         .clip(shape = CircleShape)
                         .size(32.dp),
                     imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
-                    contentDescription = null
+                    contentDescription = null,
                 )
             } else {
                 GlideImage(
@@ -278,7 +278,7 @@ private fun HeaderComponent(
                         highlightColor = FColor.Gray700,
                         durationMillis = 350,
                         dropOff = 0.65f,
-                        tilt = 20f
+                        tilt = 20f,
                     ),
                     imageModel = profileImageUrl,
                     contentScale = ContentScale.Crop,
@@ -289,7 +289,7 @@ private fun HeaderComponent(
                                 .clip(shape = CircleShape)
                                 .background(shape = CircleShape, color = FColor.Divider1),
                         )
-                    }
+                    },
                 )
             }
 
@@ -301,8 +301,8 @@ private fun HeaderComponent(
                     fontWeight = FontWeight.W500,
                     fontSize = 15.textDp,
                     lineHeight = 20.textDp,
-                    color = FColor.TextPrimary
-                )
+                    color = FColor.TextPrimary,
+                ),
             )
 
             Spacer(modifier = Modifier.width(6.dp))
@@ -313,8 +313,8 @@ private fun HeaderComponent(
                     fontWeight = FontWeight.W500,
                     fontSize = 14.textDp,
                     lineHeight = 18.textDp,
-                    color = FColor.Primary
-                )
+                    color = FColor.Primary,
+                ),
             )
         }
     }
@@ -325,35 +325,37 @@ private fun RecruitmentConditionComponent(
     modifier: Modifier = Modifier,
     deadline: String,
     dday: String,
-    role: String,
+    casting: String?,
     number: String,
     ageRange: String,
-    career: String
+    career: String,
 ) {
     Column(
         modifier = modifier
-            .padding(vertical = 16.dp, horizontal = 16.dp)
+            .padding(vertical = 16.dp, horizontal = 16.dp),
     ) {
         Text(
             text = stringResource(id = R.string.actor_detail_recruitment_condition_title),
-            style = LocalTypography.current.h3()
+            style = LocalTypography.current.h3(),
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
         DeadlineComponent(
             deadline = deadline,
-            dday = dday
+            dday = dday,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        InfoComponent(
-            title = stringResource(id = R.string.actor_detail_recruitment_role_title),
-            content = role,
-        )
+        if (casting != null) {
+            InfoComponent(
+                title = stringResource(id = R.string.actor_detail_recruitment_role_title),
+                content = casting,
+            )
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+        }
 
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_recruitment_number_of_recruits_title),
@@ -383,51 +385,51 @@ private fun WorkInfoComponent(
     workTitle: String,
     director: String,
     genre: String,
-    logLine: String
+    logLine: String,
 ) {
     Column(
         modifier = modifier
-            .padding(vertical = 16.dp, horizontal = 16.dp)
+            .padding(vertical = 16.dp, horizontal = 16.dp),
     ) {
         Text(
             text = stringResource(id = R.string.actor_detail_work_info_title),
             style = LocalTypography.current.h3(),
-            color = FColor.TextPrimary
+            color = FColor.TextPrimary,
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_work_production_title),
-            content = production
+            content = production,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_work_title),
-            content = workTitle
+            content = workTitle,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_work_director_title),
-            content = director
+            content = director,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_work_genre_title),
-            content = genre
+            content = genre,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_work_log_line_title),
-            content = logLine
+            content = logLine,
         )
     }
 }
@@ -437,37 +439,37 @@ private fun WorkingConditionsComponent(
     modifier: Modifier = Modifier,
     location: String,
     period: String,
-    pay: String
+    pay: String,
 ) {
     Column(
         modifier = modifier
-            .padding(horizontal = 16.dp, vertical = 16.dp)
+            .padding(horizontal = 16.dp, vertical = 16.dp),
     ) {
         Text(
             text = stringResource(id = R.string.actor_detail_working_conditions_title),
             style = LocalTypography.current.h3(),
-            color = FColor.TextPrimary
+            color = FColor.TextPrimary,
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_location_title),
-            content = location
+            content = location,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_period_title),
-            content = period
+            content = period,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_pay_title),
-            content = pay
+            content = pay,
         )
     }
 }
@@ -475,13 +477,13 @@ private fun WorkingConditionsComponent(
 @Composable
 private fun DetailInfoComponent(
     modifier: Modifier = Modifier,
-    detail: String
+    detail: String,
 ) {
     Column(modifier = modifier.padding(vertical = 16.dp, horizontal = 16.dp)) {
         Text(
             text = stringResource(id = R.string.actor_detail_detail_info_title),
             style = LocalTypography.current.h3(),
-            color = FColor.TextPrimary
+            color = FColor.TextPrimary,
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -492,8 +494,8 @@ private fun DetailInfoComponent(
                 fontWeight = FontWeight.W400,
                 fontSize = 14.textDp,
                 lineHeight = 19.textDp,
-                color = FColor.TextPrimary
-            )
+                color = FColor.TextPrimary,
+            ),
         )
     }
 }
@@ -502,61 +504,61 @@ private fun DetailInfoComponent(
 private fun ManagerInfoComponent(
     modifier: Modifier = Modifier,
     manager: String,
-    email: String
+    email: String,
 ) {
     Column(
         modifier = modifier
-            .padding(vertical = 16.dp, horizontal = 16.dp)
+            .padding(vertical = 16.dp, horizontal = 16.dp),
     ) {
         Text(
             text = stringResource(id = R.string.actor_detail_manager_info),
             style = LocalTypography.current.h3(),
-            color = FColor.TextPrimary
+            color = FColor.TextPrimary,
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_manager_name_title),
-            content = manager
+            content = manager,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_email_title),
-            content = email
+            content = email,
         )
     }
 }
 
 @Composable
 private fun GuideComponent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val guideTextStyle = fTextStyle(
         fontWeight = FontWeight.W400,
         fontSize = 12.textDp,
         lineHeight = 17.textDp,
-        color = FColor.DisablePlaceholder
+        color = FColor.DisablePlaceholder,
     )
 
     Column(
         modifier = modifier
             .background(color = FColor.Divider2)
             .padding(horizontal = 16.dp)
-            .padding(top = 16.dp, bottom = 40.dp)
+            .padding(top = 16.dp, bottom = 40.dp),
     ) {
         Text(
             text = stringResource(id = R.string.actor_detail_guide_contents_1),
-            style = guideTextStyle
+            style = guideTextStyle,
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
             text = stringResource(id = R.string.actor_detail_guide_contents_2),
-            style = guideTextStyle
+            style = guideTextStyle,
         )
     }
 }
@@ -565,27 +567,27 @@ private fun GuideComponent(
 private fun ButtonComponent(
     modifier: Modifier = Modifier,
     onScrapClick: () -> Unit,
-    onContactClick: () -> Unit
+    onContactClick: () -> Unit,
 ) {
     Row(
         modifier = modifier
             .padding(horizontal = 16.dp)
-            .padding(top = 16.dp, bottom = 24.dp)
+            .padding(top = 16.dp, bottom = 24.dp),
     ) {
         Box(
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(5.dp))
                 .background(shape = RoundedCornerShape(5.dp), color = FColor.BgGroupedBase)
                 .weight(140f)
-                .clickableSingle { onScrapClick() }
+                .clickableSingle { onScrapClick() },
         ) {
             Row(
                 modifier = Modifier
-                    .align(Alignment.Center)
+                    .align(Alignment.Center),
             ) {
                 Image(
                     imageVector = ImageVector.vectorResource(id = R.drawable.actor_detaile_scrap_disable),
-                    contentDescription = null
+                    contentDescription = null,
                 )
 
                 Spacer(modifier = Modifier.width(5.dp))
@@ -596,8 +598,8 @@ private fun ButtonComponent(
                         fontWeight = FontWeight.W500,
                         fontSize = 16.textDp,
                         lineHeight = 18.textDp,
-                        color = FColor.TextSecondary
-                    )
+                        color = FColor.TextSecondary,
+                    ),
                 )
             }
         }
@@ -609,7 +611,7 @@ private fun ButtonComponent(
                 .clip(shape = RoundedCornerShape(5.dp))
                 .background(shape = RoundedCornerShape(5.dp), color = FColor.BgGroupedBase)
                 .weight(195f)
-                .clickableSingle { onContactClick() }
+                .clickableSingle { onContactClick() },
         ) {
             Text(
                 text = stringResource(id = R.string.actor_detail_contact_button_title),
@@ -617,8 +619,8 @@ private fun ButtonComponent(
                     fontWeight = FontWeight.W500,
                     fontSize = 16.textDp,
                     lineHeight = 18.textDp,
-                    color = FColor.Primary
-                )
+                    color = FColor.Primary,
+                ),
             )
         }
     }
@@ -628,11 +630,11 @@ private fun ButtonComponent(
 private fun DeadlineComponent(
     modifier: Modifier = Modifier,
     deadline: String,
-    dday: String
+    dday: String,
 ) {
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.Top
+        verticalAlignment = Alignment.Top,
     ) {
         Text(
             modifier = Modifier
@@ -642,13 +644,13 @@ private fun DeadlineComponent(
                 fontWeight = FontWeight.W500,
                 fontSize = 14.textDp,
                 lineHeight = 18.textDp,
-                color = FColor.TextSecondary
+                color = FColor.TextSecondary,
             ),
         )
 
         Row(
             modifier = Modifier
-                .weight(268f)
+                .weight(268f),
         ) {
             Text(
                 text = deadline,
@@ -656,8 +658,8 @@ private fun DeadlineComponent(
                     fontWeight = FontWeight.W400,
                     fontSize = 14.textDp,
                     lineHeight = 19.textDp,
-                    color = FColor.TextPrimary
-                )
+                    color = FColor.TextPrimary,
+                ),
             )
 
             Spacer(modifier = Modifier.width(21.dp))
