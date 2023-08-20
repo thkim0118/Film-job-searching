@@ -549,7 +549,7 @@ private fun ActorProfileComponent(
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = homeActorProfileContent.title,
+                text = homeActorProfileContent.hookingComment,
                 style = LocalTypography.current.subtitle1(),
                 color = FColor.TextPrimary,
                 maxLines = 2,

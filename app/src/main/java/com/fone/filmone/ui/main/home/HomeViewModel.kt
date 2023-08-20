@@ -97,6 +97,7 @@ class HomeViewModel @Inject constructor(
                                     ageContent = makeAgeContent(content.birthday, content.age),
                                     gender = content.gender,
                                     imageUrl = content.profileUrl,
+                                    hookingComment = content.hookingComment,
                                 )
                             },
                         ),
@@ -253,7 +254,8 @@ data class HomeActorProfileContent(
     val name: String,
     val ageContent: String,
     val gender: Gender,
-    val imageUrl: String
+    val imageUrl: String,
+    val hookingComment: String,
 )
 
 data class HomeUiEvent(
