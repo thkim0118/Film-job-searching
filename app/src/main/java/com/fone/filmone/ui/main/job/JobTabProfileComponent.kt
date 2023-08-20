@@ -33,7 +33,9 @@ fun JobTabProfileComponent(
                 ProfileItem(
                     imageUrl = it.profileUrl,
                     name = it.name,
-                    info = it.info
+                    info = it.info,
+                    isWant = it.isWant,
+                    onFavoriteImageClick = {},
                 )
             }
         }

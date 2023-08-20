@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -36,9 +37,16 @@ fun ProfileItem(
     modifier: Modifier = Modifier,
     imageUrl: String,
     name: String,
-    info: String
+    info: String,
+    isWant: Boolean,
+    onFavoriteImageClick: () -> Unit,
+    onImageClick: () -> Unit = {},
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .clip(shape = RoundedCornerShape(5.dp))
+            .clickableSingle { onImageClick() }
+    ) {
         Box {
             Box(
                 modifier = modifier
@@ -76,9 +84,16 @@ fun ProfileItem(
             Image(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .clickableSingle { }
+                    .clip(CircleShape)
+                    .clickableSingle { onFavoriteImageClick() }
                     .padding(10.dp),
-                imageVector = ImageVector.vectorResource(id = R.drawable.favorite_selected),
+                imageVector = ImageVector.vectorResource(
+                    id = if (isWant) {
+                        R.drawable.favorite_selected
+                    } else {
+                        R.drawable.favorite_unselected
+                    }
+                ),
                 contentDescription = null
             )
         }

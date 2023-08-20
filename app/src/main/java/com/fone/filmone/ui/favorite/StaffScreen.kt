@@ -14,13 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.R
+import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.ui.common.component.ProfileItem
 import com.fone.filmone.ui.common.empty.EmptyScreen
 
 @Composable
 fun StaffScreen(
     modifier: Modifier = Modifier,
-    staffUiState: ProfileUiState
+    staffUiState: ProfileUiState,
+    onFavoriteClick: (Int, Type) -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -39,7 +41,9 @@ fun StaffScreen(
                         ProfileItem(
                             imageUrl = it.profileUrl,
                             name = it.name,
-                            info = it.info
+                            info = it.info,
+                            isWant = it.isWant,
+                            onFavoriteImageClick = { onFavoriteClick(it.id, Type.STAFF) },
                         )
                     }
                 }

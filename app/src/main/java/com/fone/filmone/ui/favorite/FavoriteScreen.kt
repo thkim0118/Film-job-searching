@@ -97,8 +97,14 @@ fun FavoriteScreen(
 
         HorizontalPager(pageCount = 2, state = pagerState) { page ->
             when (page) {
-                0 -> ActorScreen(actorUiState = uiState.actorUiState)
-                1 -> StaffScreen(staffUiState = uiState.staffUiState)
+                0 -> ActorScreen(
+                    actorUiState = uiState.actorUiState,
+                    onFavoriteClick = viewModel::wantProfile
+                )
+                1 -> StaffScreen(
+                    staffUiState = uiState.staffUiState,
+                    onFavoriteClick = viewModel::wantProfile
+                )
             }
         }
     }

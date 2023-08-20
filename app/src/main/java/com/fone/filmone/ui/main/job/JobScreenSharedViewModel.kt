@@ -200,12 +200,14 @@ private data class JobScreenViewModelState(
                 profileUrl = content.profileUrl,
                 name = content.name,
                 info = "${content.birthday.slice(0..3)}년생 (${content.age}살)",
+                isWant = content.isWant,
             )
         } ?: staffProfiles?.content?.map { content ->
             ProfilesUiModel(
                 profileUrl = content.profileUrl,
                 name = content.name,
                 info = "${content.birthday.slice(0..3)}년생 (${content.age}살)",
+                isWant = content.isWant,
             )
         } ?: emptyList(),
     )
@@ -238,4 +240,5 @@ data class ProfilesUiModel(
     val profileUrl: String,
     val name: String,
     val info: String,
+    val isWant: Boolean,
 )
