@@ -83,7 +83,7 @@ fun JobScreen(
     onProfileFilterClick: () -> Unit,
     onJobPageChanged: (JobTab) -> Unit,
     onUpdateUserType: (Type) -> Unit,
-    viewModel: JobScreenSharedViewModel = hiltViewModel()
+    viewModel: JobScreenSharedViewModel = hiltViewModel(),
 ) {
     val pagerState = rememberPagerState(initialPage = initialJobTab.index)
     val coroutineScope = rememberCoroutineScope()
@@ -187,7 +187,7 @@ private fun JobHeader(
     currentJobSorting: JobSorting,
     onJobSortingClick: () -> Unit,
     onUpdateCurrentJobSorting: (JobTab) -> Unit,
-    onFilterClick: () -> Unit
+    onFilterClick: () -> Unit,
 ) {
     var isTitleFilterClick by remember { mutableStateOf(false) }
 
@@ -308,7 +308,7 @@ private fun JobTitleContents(
 
 @Composable
 private fun JobTitleAlarmImage(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     IconButton(
         modifier = modifier,
@@ -331,7 +331,7 @@ private fun JobFilterHeader(
     currentJobSorting: JobSorting,
     onUpdateCurrentJobSorting: (JobTab) -> Unit,
     onListSortingItemClick: () -> Unit,
-    onFilterIconClick: () -> Unit
+    onFilterIconClick: () -> Unit,
 ) {
     JobTab.values().find { it.index == pagerState.currentPage }?.let { jobTab ->
         onUpdateCurrentJobSorting(jobTab)
@@ -398,7 +398,7 @@ private fun JobFilterHeader(
 @Composable
 private fun JobTab(
     pagerState: PagerState,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
 ) {
     TabRow(
         modifier = Modifier
@@ -408,20 +408,20 @@ private fun JobTab(
         backgroundColor = FColor.White,
         indicator = { tabPositions ->
             Box(
-                modifier = Modifier.padding(3.dp)
+                modifier = Modifier.padding(0.dp)
             ) {
                 TabRowDefaults.Indicator(
                     modifier = Modifier
                         .zIndex(1f)
                         .tabIndicatorOffset(tabPositions[pagerState.currentPage])
                         .fillMaxHeight()
+                        .padding(3.dp)
                         .clip(shape = RoundedCornerShape(5.dp))
                         .background(
                             shape = RoundedCornerShape(5.dp),
                             color = FColor.Primary
-                        )
-                        .padding(3.dp),
-                    color = FColor.Primary
+                        ),
+                    color = FColor.Transparent
                 )
             }
         }
@@ -471,7 +471,7 @@ private fun JobTab(
 private fun JobTitleFilterBox(
     modifier: Modifier = Modifier,
     currentType: Type,
-    onTypeClick: (Type) -> Unit
+    onTypeClick: (Type) -> Unit,
 ) {
     val shape = RoundedCornerShape(5.dp)
 
@@ -536,7 +536,7 @@ private fun JobTitleFilterBox(
 
 enum class JobTab(
     @StringRes val titleRes: Int,
-    val index: Int
+    val index: Int,
 ) {
     JOB_OPENING(
         titleRes = R.string.job_tab_job_opening_title,

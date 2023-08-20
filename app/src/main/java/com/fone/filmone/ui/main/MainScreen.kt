@@ -365,7 +365,6 @@ private fun LogoutBottomSheet(
             hideBottomSheet(coroutineScope, bottomSheetState)
         },
         onRightButtonClick = onLogoutClick,
-
     )
 }
 
