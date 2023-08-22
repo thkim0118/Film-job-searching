@@ -80,4 +80,10 @@ class JobOpeningsRepositoryImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun registerScrap(jobOpeningId: Int): DataResult<Unit> {
+        return handleNetwork {
+            jobOpeningsApi.registerScrap(jobOpeningsId = jobOpeningId)
+        }
+    }
 }

@@ -2,6 +2,7 @@ package com.fone.filmone.ui.main.job
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -21,7 +21,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -29,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.R
-import com.fone.filmone.core.util.LogUtil
+import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.domain.model.jobopenings.JobType
@@ -42,13 +41,14 @@ import com.fone.filmone.ui.theme.LocalTypography
 fun JobTabJobOpeningsComponent(
     modifier: Modifier = Modifier,
     jobTabJobOpeningUiModels: List<JobTabJobOpeningUiModel>,
+    onItemClick: (Int, Type) -> Unit,
+    onScrapClick: (Int) -> Unit,
     onLastItemVisible: () -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         LazyColumnLastItemCallback(
             contentPadding = PaddingValues(top = 11.dp),
             onLastItemCallback = { index ->
-                LogUtil.w("index :: $index")
                 onLastItemVisible()
             },
         ) {
@@ -62,7 +62,9 @@ fun JobTabJobOpeningsComponent(
                     period = it.period,
                     jobType = it.jobType,
                     casting = it.casting,
-                    onScrapClick = {},
+                    isScrap = it.isScrap,
+                    onItemClick = { onItemClick(it.id, it.type) },
+                    onScrapClick = { onScrapClick(it.id) }
                 )
 
                 Divider(
@@ -85,11 +87,14 @@ private fun JobOpeningComponent(
     period: String,
     jobType: JobType,
     casting: String?,
+    isScrap: Boolean,
+    onItemClick: () -> Unit,
     onScrapClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .clickableSingle { onItemClick() }
             .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 10.dp),
     ) {
         Column(
@@ -119,25 +124,19 @@ private fun JobOpeningComponent(
             )
         }
 
-        Box(
+        Image(
             modifier = Modifier
-                .size(32.dp)
                 .clip(shape = CircleShape)
-                .background(
-                    shape = CircleShape,
-                    color = FColor.BgGroupedBase,
-                )
-                .clickableSingle {
-                    onScrapClick()
-                },
-        ) {
-            Image(
-                modifier = Modifier
-                    .align(Alignment.Center),
-                imageVector = ImageVector.vectorResource(id = R.drawable.job_opening_scrap),
-                contentDescription = null,
-            )
-        }
+                .clickable { onScrapClick() },
+            imageVector = ImageVector.vectorResource(
+                id = if (isScrap) {
+                    R.drawable.job_opening_scrap_selected
+                } else {
+                    R.drawable.job_opening_scrap_unselected
+                }
+            ),
+            contentDescription = null,
+        )
     }
 }
 

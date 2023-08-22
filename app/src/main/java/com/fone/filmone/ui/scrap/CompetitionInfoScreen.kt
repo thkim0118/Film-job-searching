@@ -2,6 +2,7 @@ package com.fone.filmone.ui.scrap
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,7 +34,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.empty.EmptyScreen
-import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
@@ -43,7 +43,8 @@ import com.skydoves.landscapist.glide.GlideImage
 @Composable
 fun CompetitionsScreen(
     modifier: Modifier = Modifier,
-    competitionUiModels: List<CompetitionUiModel>
+    competitionUiModels: List<CompetitionUiModel>,
+    onScrapClick: (Int) -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         if (competitionUiModels.isNotEmpty()) {
@@ -58,9 +59,10 @@ fun CompetitionsScreen(
                         title = it.title,
                         host = it.host,
                         dday = it.dday,
-                        viewCount = it.vieweCount
-                    ) {
-                    }
+                        viewCount = it.vieweCount,
+                        isScrap = it.isScrap,
+                        onScrapClick = { onScrapClick(it.id) }
+                    )
 
                     Divider(
                         thickness = 1.dp,
@@ -85,7 +87,8 @@ private fun CompetitionComponent(
     host: String,
     dday: String,
     viewCount: String,
-    onScrapClick: () -> Unit
+    isScrap: Boolean,
+    onScrapClick: () -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -105,7 +108,7 @@ private fun CompetitionComponent(
 
         Spacer(modifier = Modifier.width(18.dp))
 
-        CompetitionScrapImage(onScrapClick)
+        CompetitionScrapImage(isScrap = isScrap, onScrapClick = onScrapClick)
     }
 }
 
@@ -192,26 +195,24 @@ private fun RowScope.CompetitionContent(
 }
 
 @Composable
-private fun CompetitionScrapImage(onScrapClick: () -> Unit) {
-    Box(
+private fun CompetitionScrapImage(
+    isScrap: Boolean,
+    onScrapClick: () -> Unit,
+) {
+
+    Image(
         modifier = Modifier
-            .size(32.dp)
             .clip(shape = CircleShape)
-            .background(
-                shape = CircleShape,
-                color = FColor.BgGroupedBase
-            )
-            .clickableSingle {
-                onScrapClick()
+            .clickable { onScrapClick() },
+        imageVector = ImageVector.vectorResource(
+            id = if (isScrap) {
+                R.drawable.job_opening_scrap_selected
+            } else {
+                R.drawable.job_opening_scrap_unselected
             }
-    ) {
-        Image(
-            modifier = Modifier
-                .align(Alignment.Center),
-            imageVector = ImageVector.vectorResource(id = R.drawable.job_opening_scrap),
-            contentDescription = null
-        )
-    }
+        ),
+        contentDescription = null
+    )
 }
 
 @Preview(showBackground = true)
@@ -237,8 +238,10 @@ private fun CompetitionContentPreview() {
 
             Spacer(modifier = Modifier.width(18.dp))
 
-            CompetitionScrapImage {
-            }
+            CompetitionScrapImage(
+                isScrap = true,
+                onScrapClick = {}
+            )
         }
     }
 }

@@ -3,9 +3,7 @@ package com.fone.filmone.ui.main.job
 import androidx.annotation.StringRes
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
-import com.fone.filmone.data.datamodel.common.jobopenings.JobOpenings
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
-import com.fone.filmone.data.datamodel.common.profile.Profiles
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Domain
 import com.fone.filmone.data.datamodel.common.user.Gender
@@ -14,6 +12,8 @@ import com.fone.filmone.domain.model.jobopenings.JobTabFilterVo
 import com.fone.filmone.domain.model.jobopenings.JobType
 import com.fone.filmone.domain.usecase.GetJobOpeningsListUseCase
 import com.fone.filmone.domain.usecase.GetProfileListUseCase
+import com.fone.filmone.domain.usecase.RegisterScrapUseCase
+import com.fone.filmone.domain.usecase.WantProfileUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,6 +28,8 @@ import javax.inject.Inject
 class JobScreenSharedViewModel @Inject constructor(
     private val getJobOpeningsListUseCase: GetJobOpeningsListUseCase,
     private val getProfileListUseCase: GetProfileListUseCase,
+    private val wantProfileUseCase: WantProfileUseCase,
+    private val registerScrapUseCase: RegisterScrapUseCase,
 ) : BaseViewModel() {
     private val viewModelState = MutableStateFlow(JobScreenViewModelState())
 
@@ -56,70 +58,174 @@ class JobScreenSharedViewModel @Inject constructor(
 
             when (userType) {
                 Type.ACTOR -> {
-                    fetchActorJobOpenings(initJobTabFilterVo)
-                    fetchActorProfile(initJobTabFilterVo)
+                    fetchActorJobOpenings(initJobTabFilterVo, true)
+                    fetchActorProfile(initJobTabFilterVo, true)
                 }
 
                 Type.STAFF -> {
-                    fetchStaffJobOpenings(initJobTabFilterVo)
-                    fetchStaffProfile(initJobTabFilterVo)
+                    fetchStaffJobOpenings(initJobTabFilterVo, true)
+                    fetchStaffProfile(initJobTabFilterVo, true)
                 }
             }
         }
     }
 
-    private fun fetchActorJobOpenings(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
+    private fun fetchActorJobOpenings(
+        jobTabFilterVo: JobTabFilterVo,
+        refresh: Boolean,
+    ) = viewModelScope.launch {
         getJobOpeningsListUseCase(jobTabFilterVo)
             .onSuccess { response ->
                 if (response != null) {
-                    viewModelState.update {
-                        it.copy(
-                            actorJobOpenings = response.jobOpenings,
-                            staffJobOpenings = null,
+                    viewModelState.update { state ->
+                        state.copy(
+                            jobOpeningUiModels = if (refresh) {
+                                emptyList()
+                            } else {
+                                state.jobOpeningUiModels
+                            } + response.jobOpenings.content.map { content ->
+                                JobTabJobOpeningUiModel(
+                                    id = content.id,
+                                    categories = content.categories,
+                                    title = content.title,
+                                    deadline = content.deadline,
+                                    director = content.work.director,
+                                    gender = content.gender,
+                                    period = content.dday,
+                                    jobType = JobType.PART,
+                                    casting = content.casting,
+                                    isScrap = content.isScrap,
+                                    type = content.type,
+                                )
+                            },
                         )
                     }
                 }
             }
     }
 
-    private fun fetchActorProfile(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
+    private fun fetchActorProfile(
+        jobTabFilterVo: JobTabFilterVo,
+        refresh: Boolean,
+    ) = viewModelScope.launch {
         getProfileListUseCase(jobTabFilterVo)
             .onSuccess { response ->
                 if (response != null) {
-                    viewModelState.update {
-                        it.copy(
-                            actorProfiles = response.profiles,
-                            staffProfiles = null,
+                    viewModelState.update { state ->
+                        state.copy(
+                            profileUiModels = if (refresh) {
+                                state.profileUiModels
+                            } else {
+                                emptyList()
+                            } + response.profiles.content.map { content ->
+                                JobTabProfilesUiModel(
+                                    id = content.id,
+                                    profileUrl = content.profileUrl,
+                                    name = content.name,
+                                    info = "${content.birthday.slice(0..3)}년생 (${content.age}살)",
+                                    isWant = content.isWant,
+                                    type = Type.ACTOR
+                                )
+                            }
                         )
                     }
                 }
             }
     }
 
-    private fun fetchStaffJobOpenings(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
+    private fun fetchStaffJobOpenings(
+        jobTabFilterVo: JobTabFilterVo,
+        refresh: Boolean,
+    ) = viewModelScope.launch {
         getJobOpeningsListUseCase(jobTabFilterVo)
             .onSuccess { response ->
                 if (response != null) {
-                    viewModelState.update {
-                        it.copy(
-                            staffJobOpenings = response.jobOpenings,
-                            actorJobOpenings = null,
+                    viewModelState.update { state ->
+                        state.copy(
+                            jobOpeningUiModels = if (refresh) {
+                                emptyList()
+                            } else {
+                                state.jobOpeningUiModels
+                            } + response.jobOpenings.content.map { content ->
+                                JobTabJobOpeningUiModel(
+                                    id = content.id,
+                                    categories = content.categories,
+                                    title = content.title,
+                                    deadline = content.deadline,
+                                    director = content.work.director,
+                                    gender = content.gender,
+                                    period = content.dday,
+                                    jobType = JobType.Field,
+                                    casting = content.casting,
+                                    isScrap = content.isScrap,
+                                    type = content.type,
+                                )
+                            },
                         )
                     }
                 }
             }
     }
 
-    private fun fetchStaffProfile(jobTabFilterVo: JobTabFilterVo) = viewModelScope.launch {
+    private fun fetchStaffProfile(
+        jobTabFilterVo: JobTabFilterVo,
+        refresh: Boolean,
+    ) = viewModelScope.launch {
         getProfileListUseCase(jobTabFilterVo)
             .onSuccess { response ->
                 if (response != null) {
-                    viewModelState.update {
-                        it.copy(
-                            staffProfiles = response.profiles,
-                            actorProfiles = null,
+                    viewModelState.update { state ->
+                        state.copy(
+                            profileUiModels = if (refresh) {
+                                state.profileUiModels
+                            } else {
+                                emptyList()
+                            } + response.profiles.content.map { content ->
+                                JobTabProfilesUiModel(
+                                    id = content.id,
+                                    profileUrl = content.profileUrl,
+                                    name = content.name,
+                                    info = "${content.birthday.slice(0..3)}년생 (${content.age}살)",
+                                    isWant = content.isWant,
+                                    type = Type.STAFF
+                                )
+                            }
                         )
                     }
+                }
+            }
+    }
+
+    fun wantProfile(profileId: Int) = viewModelScope.launch {
+        wantProfileUseCase(profileId = profileId.toLong())
+            .onSuccess {
+                viewModelState.update { state ->
+                    state.copy(
+                        profileUiModels = state.profileUiModels.map { uiModel ->
+                            if (uiModel.id == profileId) {
+                                uiModel.copy(isWant = uiModel.isWant.not())
+                            } else {
+                                uiModel
+                            }
+                        }
+                    )
+                }
+            }
+    }
+
+    fun registerScrap(id: Int) = viewModelScope.launch {
+        registerScrapUseCase(id)
+            .onSuccess {
+                viewModelState.update { state ->
+                    state.copy(
+                        jobOpeningUiModels = state.jobOpeningUiModels.map { uiModel ->
+                            if (uiModel.id == id) {
+                                uiModel.copy(isScrap = uiModel.isScrap.not())
+                            } else {
+                                uiModel
+                            }
+                        }
+                    )
                 }
             }
     }
@@ -133,10 +239,8 @@ class JobScreenSharedViewModel @Inject constructor(
 
 private data class JobScreenViewModelState(
     val userType: Type? = null,
-    val actorJobOpenings: JobOpenings? = null,
-    val actorProfiles: Profiles? = null,
-    val staffJobOpenings: JobOpenings? = null,
-    val staffProfiles: Profiles? = null,
+    val jobOpeningUiModels: List<JobTabJobOpeningUiModel> = emptyList(),
+    val profileUiModels: List<JobTabProfilesUiModel> = emptyList(),
     val actorJobOpeningsFilter: JobTabFilterVo = JobTabFilterVo(
         ageMax = 70,
         ageMin = 0,
@@ -171,52 +275,16 @@ private data class JobScreenViewModelState(
     ),
 ) {
     fun toUiState(): JobScreenUiState = JobScreenUiState(
-        type = userType,
-        jobOpeningsUiModel = actorJobOpenings?.content?.map { content ->
-            JobTabJobOpeningUiModel(
-                categories = content.categories,
-                title = content.title,
-                deadline = content.deadline,
-                director = content.work.director,
-                gender = content.gender,
-                period = content.dday,
-                jobType = JobType.PART,
-                casting = content.casting,
-            )
-        } ?: staffJobOpenings?.content?.map { content ->
-            JobTabJobOpeningUiModel(
-                categories = content.categories,
-                title = content.title,
-                deadline = content.deadline,
-                director = content.work.director,
-                gender = content.gender,
-                period = content.dday,
-                jobType = JobType.Field,
-                casting = content.casting,
-            )
-        } ?: emptyList(),
-        profileUiModels = actorProfiles?.content?.map { content ->
-            ProfilesUiModel(
-                profileUrl = content.profileUrl,
-                name = content.name,
-                info = "${content.birthday.slice(0..3)}년생 (${content.age}살)",
-                isWant = content.isWant,
-            )
-        } ?: staffProfiles?.content?.map { content ->
-            ProfilesUiModel(
-                profileUrl = content.profileUrl,
-                name = content.name,
-                info = "${content.birthday.slice(0..3)}년생 (${content.age}살)",
-                isWant = content.isWant,
-            )
-        } ?: emptyList(),
+        userType = userType,
+        jobOpeningUiModels = jobOpeningUiModels,
+        profileUiModels = profileUiModels,
     )
 }
 
 data class JobScreenUiState(
-    val type: Type?,
-    val jobOpeningsUiModel: List<JobTabJobOpeningUiModel>,
-    val profileUiModels: List<ProfilesUiModel>,
+    val userType: Type?,
+    val jobOpeningUiModels: List<JobTabJobOpeningUiModel>,
+    val profileUiModels: List<JobTabProfilesUiModel>,
 )
 
 enum class JobFilterType(@StringRes val titleRes: Int) {
@@ -226,6 +294,7 @@ enum class JobFilterType(@StringRes val titleRes: Int) {
 }
 
 data class JobTabJobOpeningUiModel(
+    val id: Int,
     val categories: List<Category>,
     val title: String,
     val deadline: String,
@@ -234,11 +303,15 @@ data class JobTabJobOpeningUiModel(
     val period: String,
     val jobType: JobType,
     val casting: String?,
+    val isScrap: Boolean,
+    val type: Type,
 )
 
-data class ProfilesUiModel(
+data class JobTabProfilesUiModel(
+    val id: Int,
     val profileUrl: String,
     val name: String,
     val info: String,
     val isWant: Boolean,
+    val type: Type,
 )

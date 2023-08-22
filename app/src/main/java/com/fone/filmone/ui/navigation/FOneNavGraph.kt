@@ -130,7 +130,10 @@ fun FOneNavGraph(
         ) {
             ActorProfileDetailScreen(navController = navController)
         }
-        composable(FOneDestinations.StaffProfileDetail.route) {
+        composable(
+            route = FOneDestinations.StaffProfileDetail.routeWithArgs,
+            arguments = FOneDestinations.StaffProfileDetail.arguments
+        ) {
             StaffProfileDetailScreen()
         }
         composable(

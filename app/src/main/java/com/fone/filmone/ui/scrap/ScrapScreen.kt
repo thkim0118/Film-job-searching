@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 fun ScrapScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: ScrapViewModel = hiltViewModel()
+    viewModel: ScrapViewModel = hiltViewModel(),
 ) {
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
@@ -97,8 +97,15 @@ fun ScrapScreen(
 
         HorizontalPager(pageCount = 2, state = pagerState) { page ->
             when (page) {
-                0 -> JobOpeningScreen(jobOpeningUiModes = uiState.jobOpenings)
-                1 -> CompetitionsScreen(competitionUiModels = uiState.competitions)
+                0 -> JobOpeningScreen(
+                    jobOpeningUiModes = uiState.jobOpenings,
+                    onScrapClick = viewModel::registerScrap
+                )
+
+                1 -> CompetitionsScreen(
+                    competitionUiModels = uiState.competitions,
+                    onScrapClick = viewModel::registerScrap
+                )
             }
         }
     }
@@ -106,7 +113,7 @@ fun ScrapScreen(
 
 private enum class ScrapTab(
     @StringRes val titleRes: Int,
-    val index: Int
+    val index: Int,
 ) {
     JOB_OPENINGS(R.string.scrap_tab_job_openings_name, 0),
     COMPETITIONS(R.string.scrap_tab_competitions_name, 1)

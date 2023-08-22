@@ -100,7 +100,7 @@ fun JobScreen(
         JobHeader(
             pagerState = pagerState,
             coroutineScope = coroutineScope,
-            type = uiState.type ?: userType,
+            type = uiState.userType ?: userType,
             onTypeClick = {
                 viewModel.updateType(it)
                 onUpdateUserType(it)
@@ -114,7 +114,7 @@ fun JobScreen(
             },
             onUpdateCurrentJobSorting = onUpdateCurrentJobSorting,
             onFilterClick = {
-                val route = when (uiState.type ?: userType) {
+                val route = when (uiState.userType ?: userType) {
                     Type.ACTOR -> FOneDestinations.ActorFilter.route
                     Type.STAFF -> FOneDestinations.StaffFilter.route
                 }
@@ -128,7 +128,7 @@ fun JobScreen(
                 JobTab.JOB_OPENING.index -> {
                     onJobPageChanged(JobTab.JOB_OPENING)
 
-                    if (uiState.jobOpeningsUiModel.isEmpty()) {
+                    if (uiState.jobOpeningUiModels.isEmpty()) {
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -143,7 +143,23 @@ fun JobScreen(
                         }
                     } else {
                         JobTabJobOpeningsComponent(
-                            jobTabJobOpeningUiModels = uiState.jobOpeningsUiModel,
+                            jobTabJobOpeningUiModels = uiState.jobOpeningUiModels,
+                            onScrapClick = viewModel::registerScrap,
+                            onItemClick = { id, type ->
+                                FOneNavigator.navigateTo(
+                                    navDestinationState = NavDestinationState(
+                                        route = when (type) {
+                                            Type.ACTOR -> FOneDestinations.ActorRecruitingDetail.getRouteWithArg(
+                                                id
+                                            )
+
+                                            Type.STAFF -> FOneDestinations.StaffRecruitingDetail.getRouteWithArg(
+                                                id
+                                            )
+                                        }
+                                    )
+                                )
+                            },
                             onLastItemVisible = {
                             }
                         )
@@ -167,7 +183,8 @@ fun JobScreen(
                         }
                     } else {
                         JobTabProfileComponent(
-                            jobTabProfilesUiModels = uiState.profileUiModels
+                            jobTabProfilesUiModels = uiState.profileUiModels,
+                            onFavoriteImageClick = viewModel::wantProfile
                         )
                     }
                 }

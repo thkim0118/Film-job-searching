@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fone.filmone.R
+import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.ui.common.FTitleBar
 import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.ext.clickableSingle
@@ -363,7 +364,7 @@ private fun ProfileListComponent(
 private fun ActorInfoComponent(
     modifier: Modifier = Modifier,
     name: String,
-    gender: String,
+    gender: Gender,
     birthday: String,
     heightWeight: String,
     email: String,
@@ -390,7 +391,7 @@ private fun ActorInfoComponent(
 
         InfoComponent(
             title = stringResource(id = R.string.profile_detail_actor_info_gender),
-            content = gender,
+            content = stringResource(gender.stringRes),
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -518,7 +519,7 @@ private fun ButtonComponent(
     modifier: Modifier = Modifier,
     onScrapClick: () -> Unit,
     onContactClick: () -> Unit,
-    uiState: StaffProfileDetailUiState,
+    uiState: StaffProfileDetailUiModel,
 ) {
     Row(
         modifier = modifier

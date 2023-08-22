@@ -2,6 +2,7 @@ package com.fone.filmone.ui.scrap
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -36,7 +36,6 @@ import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.domain.model.jobopenings.JobType
 import com.fone.filmone.ui.common.empty.EmptyScreen
-import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
@@ -45,6 +44,7 @@ import com.fone.filmone.ui.theme.LocalTypography
 fun JobOpeningScreen(
     modifier: Modifier = Modifier,
     jobOpeningUiModes: List<JobOpeningUiModel>,
+    onScrapClick: (Int) -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         if (jobOpeningUiModes.isNotEmpty()) {
@@ -62,7 +62,8 @@ fun JobOpeningScreen(
                         period = it.period,
                         jobType = it.jobType,
                         casting = it.casting,
-                        onScrapClick = {},
+                        isScrap = it.isScrap,
+                        onScrapClick = { onScrapClick(it.id) },
                     )
 
                     Divider(
@@ -92,6 +93,7 @@ private fun JobOpeningComponent(
     period: String,
     jobType: JobType,
     casting: String?,
+    isScrap: Boolean,
     onScrapClick: () -> Unit = {},
 ) {
     Row(
@@ -126,25 +128,19 @@ private fun JobOpeningComponent(
             )
         }
 
-        Box(
+        Image(
             modifier = Modifier
-                .size(32.dp)
                 .clip(shape = CircleShape)
-                .background(
-                    shape = CircleShape,
-                    color = FColor.BgGroupedBase,
-                )
-                .clickableSingle {
-                    onScrapClick()
-                },
-        ) {
-            Image(
-                modifier = Modifier
-                    .align(Alignment.Center),
-                imageVector = ImageVector.vectorResource(id = R.drawable.job_opening_scrap),
-                contentDescription = null,
-            )
-        }
+                .clickable { onScrapClick() },
+            imageVector = ImageVector.vectorResource(
+                id = if (isScrap) {
+                    R.drawable.job_opening_scrap_selected
+                } else {
+                    R.drawable.job_opening_scrap_unselected
+                }
+            ),
+            contentDescription = null,
+        )
     }
 }
 
@@ -339,6 +335,7 @@ fun JobOpeningInfoPreview() {
 fun JobOpeningComponentPreview() {
     FilmOneTheme {
         JobOpeningComponent(
+            onScrapClick = {},
             type = Type.ACTOR,
             categories = listOf(Category.OTT_DRAMA, Category.SHORT_FILM),
             title = "성균관대 영상학과에서 단편영화<Duet>배우 모집합니다.",
@@ -348,6 +345,7 @@ fun JobOpeningComponentPreview() {
             period = "일주일",
             jobType = JobType.PART,
             casting = "수영선수",
+            isScrap = true,
         )
     }
 }

@@ -11,12 +11,17 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.ui.common.component.ProfileItem
+import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 
 @Composable
 fun JobTabProfileComponent(
     modifier: Modifier = Modifier,
-    jobTabProfilesUiModels: List<ProfilesUiModel>
+    jobTabProfilesUiModels: List<JobTabProfilesUiModel>,
+    onFavoriteImageClick: (Int) -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -35,7 +40,21 @@ fun JobTabProfileComponent(
                     name = it.name,
                     info = it.info,
                     isWant = it.isWant,
-                    onFavoriteImageClick = {},
+                    onFavoriteImageClick = { onFavoriteImageClick(it.id) },
+                    onImageClick = {
+                        val route: String = when (it.type) {
+                            Type.ACTOR -> {
+                                FOneDestinations.ActorProfileDetail.getRouteWithArg(it.id)
+                            }
+
+                            Type.STAFF -> {
+                                FOneDestinations.StaffProfileDetail.getRouteWithArg(it.id)
+                            }
+                        }
+                        FOneNavigator.navigateTo(
+                            navDestinationState = NavDestinationState(route = route)
+                        )
+                    }
                 )
             }
         }

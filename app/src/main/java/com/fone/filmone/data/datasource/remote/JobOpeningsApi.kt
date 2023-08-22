@@ -64,4 +64,9 @@ interface JobOpeningsApi {
         @Path("jobOpeningId") jobOpeningId: Int,
         @Body jobOpeningsRegisterRequest: JobOpeningsRegisterRequest,
     ): Response<NetworkResponse<JobOpeningResponse>>
+
+    @POST("${Server.ApiVersion}/job-openings/{jobOpeningsId}/scrap")
+    suspend fun registerScrap(
+        @Path("jobOpeningsId") jobOpeningsId: Int,
+    ): Response<NetworkResponse<Unit>>
 }

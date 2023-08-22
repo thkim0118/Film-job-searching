@@ -40,4 +40,8 @@ interface JobOpeningsRepository {
         jobOpeningId: Int,
         jobOpeningsRegisterRequest: JobOpeningsRegisterRequest,
     ): DataResult<JobOpeningResponse>
+
+    suspend fun registerScrap(
+        jobOpeningId: Int,
+    ): DataResult<Unit>
 }

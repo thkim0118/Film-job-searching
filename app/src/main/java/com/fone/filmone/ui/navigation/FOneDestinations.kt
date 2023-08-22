@@ -146,10 +146,10 @@ sealed class FOneDestinations(val route: String) {
     object ActorProfileRegister : FOneDestinations("actor_profile_register")
     object StaffProfileRegister : FOneDestinations("staff_profile_register")
     object ActorProfileDetail : FOneDestinations("actor_profile_detail") {
-        const val argActorProfileDetail = "arg_actor_profile_detail"
-        val routeWithArgs = "$route/{$argActorProfileDetail}"
+        const val argProfileId = "arg_profileId"
+        val routeWithArgs = "$route/{$argProfileId}"
         val arguments = listOf(
-            navArgument(argActorProfileDetail) { type = NavType.IntType },
+            navArgument(argProfileId) { type = NavType.IntType },
         )
 
         fun getRouteWithArg(profileId: Int): String {
@@ -157,7 +157,17 @@ sealed class FOneDestinations(val route: String) {
         }
     }
 
-    object StaffProfileDetail : FOneDestinations("staff_profile_detail")
+    object StaffProfileDetail : FOneDestinations("staff_profile_detail") {
+        const val argProfileId = "arg_profile_id"
+        val routeWithArgs = "$route/{$argProfileId}"
+        val arguments = listOf(
+            navArgument(argProfileId) { type = NavType.IntType },
+        )
+
+        fun getRouteWithArg(profileId: Int): String {
+            return "$route/$profileId"
+        }
+    }
     object ProfileList : FOneDestinations("profile_list") {
         const val argProfileList = "arg_profile_list"
         val routeWithArgs = "$route/{$argProfileList}"

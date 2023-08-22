@@ -23,12 +23,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.theme.FColor
+import com.fone.filmone.ui.theme.FilmOneTheme
 import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.glide.GlideImage
 
@@ -125,5 +127,35 @@ fun ProfileItem(
                 ),
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ProfileItemTruePreview() {
+    FilmOneTheme {
+        ProfileItem(
+            imageUrl = "",
+            name = "name",
+            info = "info",
+            isWant = true,
+            onFavoriteImageClick = {},
+            onImageClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ProfileItemFalsePreview() {
+    FilmOneTheme {
+        ProfileItem(
+            imageUrl = "",
+            name = "name",
+            info = "info",
+            isWant = false,
+            onFavoriteImageClick = {},
+            onImageClick = {}
+        )
     }
 }

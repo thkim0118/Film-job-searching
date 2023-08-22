@@ -6,7 +6,6 @@ import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Gender
-import com.fone.filmone.data.datamodel.response.profiles.detail.ProfileDetailResponse
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.GetProfileDetailUseCase
@@ -28,7 +27,7 @@ import javax.inject.Inject
 class ActorProfileDetailViewModel @Inject constructor(
     private val getProfileDetailUseCase: GetProfileDetailUseCase,
     private val wantProfileUseCase: WantProfileUseCase,
-    stateHandle: SavedStateHandle
+    stateHandle: SavedStateHandle,
 ) : BaseViewModel() {
     private val viewModelState = MutableStateFlow(ActorProfileDetailViewModelState())
 
@@ -40,31 +39,10 @@ class ActorProfileDetailViewModel @Inject constructor(
             viewModelState.value.toUiState()
         )
 
-    fun contact() {
-        showToast(R.string.service)
-    }
-
-    fun wantProfile() = viewModelScope.launch {
-        val profileId: Long = uiState.value.profileId
-        wantProfileUseCase(profileId)
-            .onSuccess {
-                viewModelState.update {
-                    it.copy(
-                        it.profileDetailResponse?.copy(
-                            profile = it.profileDetailResponse.profile.copy(
-                                isWant = it.profileDetailResponse.profile.isWant.not()
-                            )
-                        )
-                    )
-                }
-            }.onFail {
-            }
-    }
-
     init {
         viewModelScope.launch {
             val profileId =
-                stateHandle.get<Int>(FOneDestinations.ActorProfileDetail.argActorProfileDetail)
+                stateHandle.get<Int>(FOneDestinations.ActorProfileDetail.argProfileId)
                     ?: return@launch
 
             getProfileDetailUseCase(
@@ -76,67 +54,84 @@ class ActorProfileDetailViewModel @Inject constructor(
                     return@onSuccess
                 }
 
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+                val content = profileResponse.profile
+
                 viewModelState.update {
-                    it.copy(profileDetailResponse = profileResponse)
+                    it.copy(
+                        actorProfileDetailUiState = ActorProfileDetailUiState(
+                            profileId = content.id.toLong(),
+                            date = dateFormat.format(content.createdAt),
+                            viewCount = String.format("%,d", content.viewCount),
+                            profileImageUrl = content.profileUrl,
+                            userNickname = content.userNickname,
+                            userType = content.type.name,
+                            articleTitle = content.hookingComment.split('\n').firstOrNull() ?: "",
+                            profileImageUrls = content.profileUrls,
+                            userName = content.name,
+                            gender = content.gender,
+                            birthday = content.birthday,
+                            heightWeight = "${content.height}cm | ${content.weight}kg",
+                            email = content.email,
+                            specialty = content.specialty,
+                            sns = content.sns,
+                            detail = content.details,
+                            mainCareer = content.hookingComment,
+                            categories = content.categories,
+                            isWant = content.isWant,
+                        )
+                    )
                 }
             }.onFail {
                 showToast(it.message)
             }
         }
     }
+
+    fun contact() {
+        showToast(R.string.service)
+    }
+
+    fun wantProfile() = viewModelScope.launch {
+        val profileId: Long = uiState.value.profileId
+        wantProfileUseCase(profileId)
+            .onSuccess {
+                viewModelState.update { state ->
+                    state.copy(
+                        actorProfileDetailUiState = state.actorProfileDetailUiState.copy(
+                            isWant = state.actorProfileDetailUiState.isWant.not()
+                        )
+                    )
+                }
+            }.onFail {
+            }
+    }
 }
 
 private data class ActorProfileDetailViewModelState(
-    val profileDetailResponse: ProfileDetailResponse? = null
+    val actorProfileDetailUiState: ActorProfileDetailUiState = ActorProfileDetailUiState(
+        profileId = 0L,
+        date = "",
+        viewCount = "",
+        profileImageUrl = "",
+        userNickname = "",
+        userType = "",
+        articleTitle = "",
+        profileImageUrls = emptyList(),
+        userName = "",
+        gender = Gender.IRRELEVANT,
+        birthday = "",
+        heightWeight = "",
+        email = "",
+        specialty = "",
+        sns = "",
+        detail = "",
+        mainCareer = "",
+        categories = emptyList(),
+        isWant = false
+    ),
 ) {
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-
-    fun toUiState(): ActorProfileDetailUiState = if (profileDetailResponse != null) {
-        val content = profileDetailResponse.profile
-        ActorProfileDetailUiState(
-            profileId = content.id.toLong(),
-            date = dateFormat.format(content.createdAt),
-            viewCount = String.format("%,d", content.viewCount),
-            profileImageUrl = content.profileUrl,
-            userNickname = content.userNickname,
-            userType = content.type.name,
-            articleTitle = content.hookingComment.split('\n').firstOrNull() ?: "",
-            profileImageUrls = content.profileUrls,
-            userName = content.name,
-            gender = content.gender,
-            birthday = content.birthday,
-            heightWeight = "${content.height}cm | ${content.weight}kg",
-            email = content.email,
-            specialty = content.specialty,
-            sns = content.sns,
-            detail = content.details,
-            mainCareer = content.hookingComment,
-            categories = content.categories,
-            isWant = content.isWant,
-        )
-    } else {
-        ActorProfileDetailUiState(
-            profileId = 0L,
-            date = "",
-            viewCount = "",
-            profileImageUrl = "",
-            userNickname = "",
-            userType = "",
-            articleTitle = "",
-            profileImageUrls = emptyList(),
-            userName = "",
-            gender = Gender.IRRELEVANT,
-            birthday = "",
-            heightWeight = "",
-            email = "",
-            specialty = "",
-            sns = "",
-            detail = "",
-            mainCareer = "",
-            categories = emptyList(),
-            isWant = false
-        )
-    }
+    fun toUiState(): ActorProfileDetailUiState = actorProfileDetailUiState
 }
 
 data class ActorProfileDetailUiState(
