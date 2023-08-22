@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
@@ -381,6 +382,9 @@ private fun RecommendedCompetitionComponent(
                                 ),
                                 maxLines = 3,
                                 overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .widthIn(max = 130.dp)
                             )
 
                             Spacer(modifier = Modifier.height(8.dp))
@@ -407,7 +411,11 @@ private fun RecommendedCompetitionComponent(
 
                             Spacer(modifier = Modifier.height(8.dp))
 
-                            FlowRow(modifier = Modifier) {
+                            FlowRow(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .widthIn(max = 130.dp)
+                            ) {
                                 content.tagStringResources.forEach { tagItem ->
                                     Tag(
                                         modifier = Modifier.padding(end = 6.dp, bottom = 6.dp),
