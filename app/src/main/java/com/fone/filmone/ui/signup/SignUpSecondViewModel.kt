@@ -27,6 +27,9 @@ class SignUpSecondViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SignUpSecondUiState())
     val uiState: StateFlow<SignUpSecondUiState> = _uiState.asStateFlow()
 
+    private val _dialogState = MutableStateFlow<SignUpDialogState>(SignUpDialogState.Clear)
+    val dialogState: StateFlow<SignUpDialogState> = _dialogState.asStateFlow()
+
     fun updateNickname(nickname: String) {
         _uiState.update {
             it.copy(nickname = nickname, isNicknameDuplicated = false)
@@ -45,6 +48,14 @@ class SignUpSecondViewModel @Inject constructor(
         _uiState.update {
             it.copy(isProfileUploading = true)
         }
+    }
+
+    fun updateDialog(dialogState: SignUpDialogState) {
+        _dialogState.value = dialogState
+    }
+
+    fun clearDialog() {
+        _dialogState.value = SignUpDialogState.Clear
     }
 
     fun updateProfileImage(profileEncodedString: String) = viewModelScope.launch {
@@ -122,3 +133,8 @@ data class SignUpSecondUiState(
     val isProfileUploading: Boolean = false,
     val gender: Gender? = null,
 )
+
+sealed interface SignUpDialogState {
+    object ProfileSetting : SignUpDialogState
+    object Clear : SignUpDialogState
+}

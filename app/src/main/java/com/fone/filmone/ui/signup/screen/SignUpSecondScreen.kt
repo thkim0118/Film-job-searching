@@ -1,6 +1,7 @@
 package com.fone.filmone.ui.signup.screen
 
 import android.net.Uri
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -43,7 +44,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -58,6 +58,7 @@ import com.fone.filmone.ui.common.FTextField
 import com.fone.filmone.ui.common.FTitleBar
 import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.TitleType
+import com.fone.filmone.ui.common.dialog.ProfileSettingDialog
 import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.fShadow
@@ -66,13 +67,13 @@ import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
+import com.fone.filmone.ui.signup.SignUpDialogState
 import com.fone.filmone.ui.signup.SignUpSecondUiState
 import com.fone.filmone.ui.signup.SignUpSecondViewModel
 import com.fone.filmone.ui.signup.components.IndicatorType
 import com.fone.filmone.ui.signup.components.SignUpIndicator
 import com.fone.filmone.ui.signup.model.SignUpVo
 import com.fone.filmone.ui.theme.FColor
-import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
 import com.skydoves.landscapist.ShimmerParams
 import com.skydoves.landscapist.glide.GlideImage
@@ -88,7 +89,24 @@ fun SignUpSecondScreen(
     viewModel: SignUpSecondViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val dialogState by viewModel.dialogState.collectAsState()
     val scrollState = rememberScrollState()
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri: Uri? ->
+            imageUri = uri
+            viewModel.updateProfileUploadState()
+            coroutineScope.launch(Dispatchers.IO) {
+                uri?.let {
+                    val encodeString = ImageBase64Util.encodeToString(context, it)
+                    viewModel.updateProfileImage(encodeString)
+                }
+            }
+        }
+    )
 
     Scaffold(
         modifier = Modifier,
@@ -154,8 +172,8 @@ fun SignUpSecondScreen(
                         Spacer(modifier = Modifier.height(40.dp))
 
                         ProfileComponent(
-                            onUpdateProfileEncoding = viewModel::updateProfileUploadState,
-                            onUpdateProfileImage = viewModel::updateProfileImage
+                            viewModel = viewModel,
+                            imageUri = imageUri,
                         )
 
                         Spacer(modifier = Modifier.height(137.dp))
@@ -170,6 +188,15 @@ fun SignUpSecondScreen(
                     Spacer(modifier = Modifier.height(38.dp))
                 }
             }
+
+            DialogScreen(
+                dialogState = dialogState,
+                launcher = launcher,
+                onDefaultImageRequestClick = {
+                    imageUri = null
+                },
+                onDismiss = viewModel::clearDialog
+            )
         }
     }
 }
@@ -351,26 +378,9 @@ private fun BirthdayGenderComponent(
 
 @Composable
 private fun ProfileComponent(
-    onUpdateProfileEncoding: () -> Unit,
-    onUpdateProfileImage: (String) -> Unit
+    viewModel: SignUpSecondViewModel,
+    imageUri: Uri?,
 ) {
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { uri: Uri? ->
-            imageUri = uri
-            onUpdateProfileEncoding()
-            coroutineScope.launch(Dispatchers.IO) {
-                uri?.let {
-                    val encodeString = ImageBase64Util.encodeToString(context, it)
-                    onUpdateProfileImage(encodeString)
-                }
-            }
-        }
-    )
-
     Text(
         text = stringResource(id = R.string.sign_up_second_profile_title),
         style = LocalTypography.current.subtitle1()
@@ -388,23 +398,22 @@ private fun ProfileComponent(
     Box(
         modifier = Modifier
             .clickableWithNoRipple {
-                launcher.launch("image/*")
+                viewModel.updateDialog(SignUpDialogState.ProfileSetting)
             }
     ) {
         Box(
             modifier = Modifier
-                .align(Alignment.Center)
                 .size(108.dp)
                 .fShadow(shape = CircleShape)
         )
         if (imageUri == null) {
             Image(
-                modifier = Modifier
-                    .align(Alignment.Center),
+                modifier = Modifier,
                 imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
                 contentDescription = null
             )
         } else {
+
             GlideImage(
                 modifier = Modifier
                     .size(106.dp)
@@ -421,24 +430,45 @@ private fun ProfileComponent(
                 contentScale = ContentScale.Crop,
                 failure = {
                     Image(
-                        modifier = Modifier
-                            .align(Alignment.Center),
+                        modifier = Modifier,
                         imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
                         contentDescription = null
                     )
                 }
             )
         }
+
         Image(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .fShadow(
-                    shape = CircleShape,
-                    spotColor = FColor.Primary,
-                    ambientColor = FColor.Primary
+                    shape = CircleShape, spotColor = FColor.Primary, ambientColor = FColor.Primary
                 ),
             imageVector = ImageVector.vectorResource(id = R.drawable.default_profile_camera),
             contentDescription = null
+        )
+    }
+}
+
+@Composable
+private fun DialogScreen(
+    dialogState: SignUpDialogState,
+    launcher: ManagedActivityResultLauncher<String, Uri?>,
+    onDefaultImageRequestClick: () -> Unit,
+    onDismiss: () -> Unit
+) {
+    when (dialogState) {
+        SignUpDialogState.Clear -> Unit
+        SignUpDialogState.ProfileSetting -> ProfileSettingDialog(
+            onAlbumClick = {
+                launcher.launch("image/*")
+                onDismiss()
+            },
+            onDefaultProfileClick = {
+                onDefaultImageRequestClick()
+                onDismiss()
+            },
+            onCancelButtonClick = onDismiss
         )
     }
 }
@@ -475,14 +505,4 @@ private fun ColumnScope.NextButton(
             }
         }
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ProfileComponentPreview() {
-    FilmOneTheme {
-        Column {
-            ProfileComponent(onUpdateProfileImage = {}, onUpdateProfileEncoding = {})
-        }
-    }
 }
