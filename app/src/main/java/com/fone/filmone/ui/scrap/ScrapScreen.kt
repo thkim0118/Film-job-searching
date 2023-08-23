@@ -39,7 +39,7 @@ fun ScrapScreen(
     navController: NavHostController,
     viewModel: ScrapViewModel = hiltViewModel(),
 ) {
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(pageCount = { 2 })
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsState()
 
@@ -95,7 +95,7 @@ fun ScrapScreen(
             }
         }
 
-        HorizontalPager(pageCount = 2, state = pagerState) { page ->
+        HorizontalPager(state = pagerState) { page ->
             when (page) {
                 0 -> JobOpeningScreen(
                     jobOpeningUiModes = uiState.jobOpenings,

@@ -37,9 +37,9 @@ import kotlinx.coroutines.launch
 fun FavoriteScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: FavoriteViewModel = hiltViewModel()
+    viewModel: FavoriteViewModel = hiltViewModel(),
 ) {
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(pageCount = { 2 })
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsState()
 
@@ -95,12 +95,13 @@ fun FavoriteScreen(
             }
         }
 
-        HorizontalPager(pageCount = 2, state = pagerState) { page ->
+        HorizontalPager(state = pagerState) { page ->
             when (page) {
                 0 -> ActorScreen(
                     actorUiState = uiState.actorUiState,
                     onFavoriteClick = viewModel::wantProfile
                 )
+
                 1 -> StaffScreen(
                     staffUiState = uiState.staffUiState,
                     onFavoriteClick = viewModel::wantProfile
@@ -112,7 +113,7 @@ fun FavoriteScreen(
 
 private enum class FavoriteTab(
     @StringRes val titleRes: Int,
-    val index: Int
+    val index: Int,
 ) {
     ACTOR(R.string.favorite_tab_actor_title, 0),
     STAFF(R.string.favorite_tab_staff_title, 1)

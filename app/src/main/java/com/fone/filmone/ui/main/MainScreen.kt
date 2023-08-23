@@ -205,7 +205,7 @@ fun MainScreen(
                     MainBottomNavItem.Job -> JobScreen(
                         currentJobSorting = uiState.currentJobSorting,
                         userType = uiState.type,
-                        initialJobTab = jobTabScreen,
+                        initialJobTab = initialJobTab,
                         onUpdateCurrentJobSorting = mainViewModel::updateCurrentJobFilterTab,
                         onJobOpeningsFilterClick = {
                             bottomSheetType = MainBottomSheetType.JobTabJopOpeningsFilter

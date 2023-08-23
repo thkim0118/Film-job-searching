@@ -34,11 +34,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -68,7 +70,7 @@ import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -85,9 +87,12 @@ fun JobScreen(
     onUpdateUserType: (Type) -> Unit,
     viewModel: JobScreenSharedViewModel = hiltViewModel(),
 ) {
-    val pagerState = rememberPagerState(initialPage = initialJobTab.index)
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsState()
+    val pagerState = rememberPagerState(
+        initialPage = initialJobTab.index,
+        pageCount = { JobTab.values().size }
+    )
 
     LaunchedEffect(key1 = userType) {
         viewModel.initUserType(userType)
@@ -99,13 +104,18 @@ fun JobScreen(
     ) {
         JobHeader(
             pagerState = pagerState,
-            coroutineScope = coroutineScope,
             type = uiState.userType ?: userType,
+            onJobPageChanged = onJobPageChanged,
             onTypeClick = {
                 viewModel.updateType(it)
                 onUpdateUserType(it)
             },
             currentJobSorting = currentJobSorting,
+            onTabSelected = { page ->
+                coroutineScope.launch {
+                    pagerState.animateScrollToPage(page)
+                }
+            },
             onJobSortingClick = {
                 when (currentJobSorting) {
                     is JobSorting.JobOpenings -> onJobOpeningsFilterClick()
@@ -123,11 +133,9 @@ fun JobScreen(
             }
         )
 
-        HorizontalPager(pageCount = JobTab.values().size, state = pagerState) { page ->
+        HorizontalPager(state = pagerState) { page ->
             when (page) {
                 JobTab.JOB_OPENING.index -> {
-                    onJobPageChanged(JobTab.JOB_OPENING)
-
                     if (uiState.jobOpeningUiModels.isEmpty()) {
                         Box(
                             modifier = Modifier
@@ -167,8 +175,6 @@ fun JobScreen(
                 }
 
                 JobTab.PROFILE.index -> {
-                    onJobPageChanged(JobTab.PROFILE)
-
                     if (uiState.profileUiModels.isEmpty()) {
                         Box(
                             modifier = Modifier
@@ -198,15 +204,27 @@ fun JobScreen(
 private fun JobHeader(
     modifier: Modifier = Modifier,
     pagerState: PagerState,
-    coroutineScope: CoroutineScope,
     type: Type,
+    onJobPageChanged: (JobTab) -> Unit,
     onTypeClick: (Type) -> Unit,
     currentJobSorting: JobSorting,
+    onTabSelected: (Int) -> Unit,
     onJobSortingClick: () -> Unit,
     onUpdateCurrentJobSorting: (JobTab) -> Unit,
     onFilterClick: () -> Unit,
 ) {
     var isTitleFilterClick by remember { mutableStateOf(false) }
+    var currentPage by remember { mutableIntStateOf(0) }
+
+    LaunchedEffect(key1 = pagerState) {
+        snapshotFlow { pagerState.targetPage }.collectLatest {
+            currentPage = it
+            when (it) {
+                JobTab.JOB_OPENING.index -> onJobPageChanged(JobTab.JOB_OPENING)
+                JobTab.PROFILE.index -> onJobPageChanged(JobTab.PROFILE)
+            }
+        }
+    }
 
     ConstraintLayout(
         modifier = modifier
@@ -251,9 +269,9 @@ private fun JobHeader(
                 .constrainAs(filterHeader) {
                     top.linkTo(titleBar.bottom)
                 },
-            pagerState = pagerState,
-            coroutineScope = coroutineScope,
+            currentPage = currentPage,
             currentJobSorting = currentJobSorting,
+            onTabSelected = onTabSelected,
             onListSortingItemClick = onJobSortingClick,
             onUpdateCurrentJobSorting = onUpdateCurrentJobSorting,
             onFilterIconClick = onFilterClick
@@ -339,18 +357,17 @@ private fun JobTitleAlarmImage(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun JobFilterHeader(
     modifier: Modifier = Modifier,
-    pagerState: PagerState,
-    coroutineScope: CoroutineScope,
+    currentPage: Int,
     currentJobSorting: JobSorting,
+    onTabSelected: (Int) -> Unit,
     onUpdateCurrentJobSorting: (JobTab) -> Unit,
     onListSortingItemClick: () -> Unit,
     onFilterIconClick: () -> Unit,
 ) {
-    JobTab.values().find { it.index == pagerState.currentPage }?.let { jobTab ->
+    JobTab.values().find { it.index == currentPage }?.let { jobTab ->
         onUpdateCurrentJobSorting(jobTab)
     }
 
@@ -362,7 +379,7 @@ private fun JobFilterHeader(
     ) {
         Spacer(modifier = Modifier.height(22.dp))
 
-        JobTab(pagerState, coroutineScope)
+        JobTab(currentPage, onTabSelected)
 
         Spacer(modifier = Modifier.height(14.dp))
 
@@ -411,17 +428,16 @@ private fun JobFilterHeader(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun JobTab(
-    pagerState: PagerState,
-    coroutineScope: CoroutineScope,
+    currentPage: Int,
+    onTabSelected: (Int) -> Unit,
 ) {
     TabRow(
         modifier = Modifier
             .clip(shape = RoundedCornerShape(6.dp))
             .background(color = FColor.White, shape = RoundedCornerShape(6.dp)),
-        selectedTabIndex = pagerState.currentPage,
+        selectedTabIndex = currentPage,
         backgroundColor = FColor.White,
         indicator = { tabPositions ->
             Box(
@@ -430,7 +446,7 @@ private fun JobTab(
                 TabRowDefaults.Indicator(
                     modifier = Modifier
                         .zIndex(1f)
-                        .tabIndicatorOffset(tabPositions[pagerState.currentPage])
+                        .tabIndicatorOffset(tabPositions[currentPage])
                         .fillMaxHeight()
                         .padding(3.dp)
                         .clip(shape = RoundedCornerShape(5.dp))
@@ -445,7 +461,7 @@ private fun JobTab(
     ) {
         repeat(JobTab.values().size) { index ->
             val jobTab = JobTab.values().find { it.index == index } ?: return@repeat
-            val selected = pagerState.currentPage == index
+            val selected = currentPage == index
 
             Tab(
                 modifier = Modifier
@@ -454,9 +470,7 @@ private fun JobTab(
                     .clip(shape = RoundedCornerShape(6.dp)),
                 selected = selected,
                 onClick = {
-                    coroutineScope.launch {
-                        pagerState.scrollToPage(index)
-                    }
+                    onTabSelected(index)
                 }
             ) {
                 Box(

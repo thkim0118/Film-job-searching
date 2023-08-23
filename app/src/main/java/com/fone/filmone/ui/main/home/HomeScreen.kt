@@ -80,7 +80,10 @@ fun HomeScreen(
 ) {
     val scrollState = rememberScrollState()
     val uiState by viewModel.uiState.collectAsState()
-    val pagerState = rememberPagerState(initialPage = uiState.homeUiEvent.currentBannerPage)
+    val pagerState = rememberPagerState(
+        initialPage = uiState.homeUiEvent.currentBannerPage,
+        pageCount = { Int.MAX_VALUE }
+    )
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val lifecycle = lifecycleOwner.lifecycle
@@ -264,7 +267,6 @@ private fun BannerPagerComponent(
 
                     false
                 },
-            pageCount = Int.MAX_VALUE,
             state = pagerState,
         ) { pageCount ->
             Image(

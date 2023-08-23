@@ -41,7 +41,7 @@ fun MyRegisterScreen(
     navController: NavHostController,
     viewModel: MyRegisterViewModel = hiltViewModel(),
 ) {
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(pageCount = { 2 })
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsState()
     val dialogState by viewModel.dialogState.collectAsState()
@@ -103,7 +103,7 @@ fun MyRegisterScreen(
             }
         }
 
-        HorizontalPager(pageCount = 2, state = pagerState) { page ->
+        HorizontalPager(state = pagerState) { page ->
             when (page) {
                 0 -> MyRecruitmentScreen(registerPosts = uiState.registerPosts)
                 1 -> MyProfileScreen(profilePosts = uiState.profilePosts)

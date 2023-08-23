@@ -45,9 +45,9 @@ import kotlinx.coroutines.launch
 fun FindScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    viewModel: FindViewModel = hiltViewModel()
+    viewModel: FindViewModel = hiltViewModel(),
 ) {
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState(pageCount = { FindTab.values().size })
     val coroutineScope = rememberCoroutineScope()
     val dialogState by viewModel.dialogState.collectAsState()
 
@@ -118,7 +118,7 @@ fun FindScreen(
                     }
                 }
 
-                HorizontalPager(pageCount = FindTab.values().size, state = pagerState) { page ->
+                HorizontalPager(state = pagerState) { page ->
                     when (page) {
                         0 -> FindIdScreen(navController = navController)
                         1 -> FindPasswordScreen()
@@ -151,7 +151,7 @@ fun DialogScreen(
 
 @Composable
 private fun PasswordChangingCompleteDialog(
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     LocalFocusManager.current.clearFocus()
 
@@ -165,7 +165,7 @@ private fun PasswordChangingCompleteDialog(
 
 private enum class FindTab(
     @StringRes val titleRes: Int,
-    val index: Int
+    val index: Int,
 ) {
     FIND_ID(R.string.find_id_tab_title, 0),
     FIND_PASSWORD(R.string.find_password_tab_title, 1)
