@@ -83,8 +83,12 @@ class ActorRecruitingEditViewModel @Inject constructor(
                                             content.gender
                                         },
                                         genderTagEnable = content.gender == Gender.IRRELEVANT,
-                                        ageRange = content.ageMin.toFloat()..content.ageMax.toFloat(),
-                                        ageTagEnable = content.ageMin == 1 && content.ageMax == 70,
+                                        ageRange = if (content.ageMin == 0 || content.ageMax == 0) {
+                                            1f..70f
+                                        } else {
+                                            content.ageMin.toFloat()..content.ageMax.toFloat()
+                                        },
+                                        ageTagEnable = content.ageMin == 0 || content.ageMax == 0,
                                         career = if (content.career != Career.IRRELEVANT) {
                                             content.career
                                         } else {
