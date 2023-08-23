@@ -1,47 +1,32 @@
 package com.fone.filmone.framework.drivers
 
-import com.fone.filmone.core.util.LogUtil
 import com.fone.filmone.domain.repository.AuthRepository
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
 import kotlinx.coroutines.runBlocking
-import okhttp3.Interceptor
+import okhttp3.Authenticator
+import okhttp3.Request
 import okhttp3.Response
+import okhttp3.Route
 import java.net.HttpURLConnection
 import javax.inject.Inject
 
-class AuthInterceptor @Inject constructor(
+class RefreshAuthenticator @Inject constructor(
     private val authRepository: AuthRepository,
-) : Interceptor {
-
-    @Synchronized
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
-        val accessToken = runBlocking { authRepository.getAccessToken() }
-
-        val authenticatedRequest = if (accessToken.isNotEmpty()) {
-            request.newBuilder()
-                .header("Authorization", "Bearer $accessToken")
-                .build()
-        } else {
-            request
-        }
-
-        LogUtil.i("Headers :: ${authenticatedRequest.headers.toMultimap()}")
-
-        val response = chain.proceed(authenticatedRequest)
-
+) : Authenticator {
+    override fun authenticate(route: Route?, response: Response): Request {
         if (response.code == HttpURLConnection.HTTP_UNAUTHORIZED) {
             synchronized(this) {
                 val newAccessToken = runBlocking { authRepository.refreshToken() }
 
                 if (newAccessToken.isNotEmpty()) {
-                    val newRequest = request.newBuilder()
-                        .header("Authorization", "Bearer $newAccessToken")
+                    return response
+                        .request
+                        .newBuilder()
+                        .removeHeader("Authorization")
+                        .addHeader("Authorization", "Bearer $newAccessToken")
                         .build()
-
-                    return chain.proceed(newRequest)
                 } else {
                     FOneNavigator.navigateTo(
                         navDestinationState = NavDestinationState(
@@ -53,6 +38,6 @@ class AuthInterceptor @Inject constructor(
             }
         }
 
-        return response
+        return response.request
     }
 }

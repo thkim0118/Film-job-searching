@@ -11,7 +11,8 @@ import com.fone.filmone.data.datasource.remote.SmsApi
 import com.fone.filmone.data.datasource.remote.TokenApi
 import com.fone.filmone.data.datasource.remote.UserApi
 import com.fone.filmone.domain.repository.AuthRepository
-import com.fone.filmone.framework.drivers.AuthInterceptor
+import com.fone.filmone.framework.drivers.HeaderInjectInterceptor
+import com.fone.filmone.framework.drivers.RefreshAuthenticator
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -37,11 +38,18 @@ object NetworkModule {
     val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS").setLenient().create()
 
     @Provides
-    fun provideAuthInterceptor(authRepository: AuthRepository): AuthInterceptor =
-        AuthInterceptor(authRepository = authRepository)
+    fun provideHeaderInjectInterceptor(authRepository: AuthRepository): HeaderInjectInterceptor =
+        HeaderInjectInterceptor(authRepository = authRepository)
 
     @Provides
-    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient =
+    fun provideRefreshAuthenticator(authRepository: AuthRepository): RefreshAuthenticator =
+        RefreshAuthenticator(authRepository = authRepository)
+
+    @Provides
+    fun provideOkHttpClient(
+        headerInjectInterceptor: HeaderInjectInterceptor,
+        refreshAuthenticator: RefreshAuthenticator,
+    ): OkHttpClient =
         OkHttpClient.Builder().apply {
             connectTimeout(connectionTime, TimeUnit.MILLISECONDS)
             if (BuildConfig.DEBUG) {
@@ -52,7 +60,8 @@ object NetworkModule {
                 )
             }
 
-            addInterceptor(authInterceptor)
+            addInterceptor(headerInjectInterceptor)
+            authenticator(refreshAuthenticator)
         }.build()
 
     @AuthOkHttpClient
