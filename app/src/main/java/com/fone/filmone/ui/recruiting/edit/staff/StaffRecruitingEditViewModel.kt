@@ -2,6 +2,7 @@ package com.fone.filmone.ui.recruiting.edit.staff
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.jobopenings.Work
 import com.fone.filmone.data.datamodel.common.user.Career
@@ -73,7 +74,7 @@ class StaffRecruitingEditViewModel @Inject constructor(
                                     staffRecruitingStep1UiModel = StaffRecruitingStep1UiModel(
                                         titleText = content.title,
                                         categories = content.categories.toSet(),
-                                        deadlineDate = content.deadline,
+                                        deadlineDate = content.deadline ?: R.string.always_recruiting.toString(),
                                         deadlineTagEnable = false,
                                         recruitmentDomains = content.domains.toSet(),
                                         recruitmentNumber = content.numberOfRecruits.toString(),

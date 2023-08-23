@@ -77,7 +77,7 @@ private data class StaffRecruitingDetailState(
             userType = jobOpeningResponse.jobOpening.type.name,
             categories = jobOpeningResponse.jobOpening.categories,
             articleTitle = jobOpeningResponse.jobOpening.title,
-            deadline = jobOpeningResponse.jobOpening.deadline,
+            deadline = jobOpeningResponse.jobOpening.deadline ?: R.string.always_recruiting.toString(),
             dday = jobOpeningResponse.jobOpening.dday,
             casting = jobOpeningResponse.jobOpening.casting,
             numberOfRecruits = jobOpeningResponse.jobOpening.numberOfRecruits.toString(),

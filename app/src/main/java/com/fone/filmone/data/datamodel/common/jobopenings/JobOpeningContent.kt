@@ -11,7 +11,7 @@ data class JobOpeningContent(
     val id: Int,
     val title: String,
     val categories: List<Category>,
-    val deadline: String,
+    val deadline: String?,
     val casting: String?,
     val numberOfRecruits: Int,
     val gender: Gender,
