@@ -29,7 +29,7 @@ object PatternUtil {
 
     fun isValidPassword(password: String): Boolean {
         val passwordRegex =
-            Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")
+            Regex("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@\$!%*?&#_])[A-Za-z\\d@\$!%*?&#_]{8,16}\$")
 
         return passwordRegex.matches(password)
     }
