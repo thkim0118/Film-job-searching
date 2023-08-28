@@ -244,16 +244,12 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
         }
     }
 
-    fun updateGenderTag(enable: Boolean) {
+    fun updateGenderTag() {
         viewModelState.update { state ->
             state.copy(
                 staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
-                    genderTagEnable = enable,
-                    recruitmentGender = if (enable) {
-                        null
-                    } else {
-                        state.staffRecruitingStep1UiModel.recruitmentGender
-                    },
+                    genderTagEnable = true,
+                    recruitmentGender = null,
                 ),
             )
         }

@@ -79,7 +79,7 @@ fun ActorRecruitingScreen(
     onUpdateRecruitmentNumber: (String) -> Unit,
     onUpdateGender: (Gender, Boolean) -> Unit,
     onUpdateDeadlineTag: (Boolean) -> Unit,
-    onUpdateGenderTag: (Boolean) -> Unit,
+    onUpdateGenderTag: () -> Unit,
     onUpdateAgeReset: () -> Unit,
     onUpdateAgeRange: (ClosedFloatingPointRange<Float>) -> Unit,
     onUpdateCareer: (Career, Boolean) -> Unit,
@@ -291,7 +291,7 @@ private fun Step1Component(
     onUpdateRecruitmentNumber: (String) -> Unit,
     onUpdateGender: (Gender, Boolean) -> Unit,
     onUpdateDeadlineTag: (Boolean) -> Unit,
-    onUpdateGenderTag: (Boolean) -> Unit,
+    onUpdateGenderTag: () -> Unit,
     onUpdateAgeReset: () -> Unit,
     onUpdateAgeRange: (ClosedFloatingPointRange<Float>) -> Unit,
     onUpdateCareer: (Career, Boolean) -> Unit,
@@ -796,7 +796,7 @@ private fun RecruitmentInputComponent(
     onUpdateRecruitmentActor: (String) -> Unit,
     onUpdateRecruitmentNumber: (String) -> Unit,
     onUpdateGender: (Gender, Boolean) -> Unit,
-    onUpdateGenderTag: (Boolean) -> Unit,
+    onUpdateGenderTag: () -> Unit,
 ) {
     TextWithRequiredTag(
         title = stringResource(id = R.string.recruiting_register_actor_deadline_title),
@@ -876,7 +876,7 @@ private fun RecruitmentInputComponent(
         isRequired = true,
         tagEnable = genderTagEnable,
         onTagClick = {
-            onUpdateGenderTag(genderTagEnable.not())
+            onUpdateGenderTag()
         },
     )
 

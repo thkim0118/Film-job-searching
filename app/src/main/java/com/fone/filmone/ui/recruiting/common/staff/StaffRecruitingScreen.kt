@@ -81,7 +81,7 @@ fun StaffRecruitingScreen(
     onUpdateDomains: () -> Unit,
     onUpdateRecruitmentNumber: (String) -> Unit,
     onUpdateGender: (Gender, Boolean) -> Unit,
-    onUpdateGenderTag: (Boolean) -> Unit,
+    onUpdateGenderTag: () -> Unit,
     onUpdateAgeRange: (ClosedFloatingPointRange<Float>) -> Unit,
     onUpdateAgeTag: (Boolean) -> Unit,
     onUpdateCareer: (Career, Boolean) -> Unit,
@@ -297,7 +297,7 @@ private fun Step1Component(
     onUpdateDomains: () -> Unit,
     onUpdateRecruitmentNumber: (String) -> Unit,
     onUpdateGender: (Gender, Boolean) -> Unit,
-    onUpdateGenderTag: (Boolean) -> Unit,
+    onUpdateGenderTag: () -> Unit,
     onUpdateAgeRange: (ClosedFloatingPointRange<Float>) -> Unit,
     onUpdateAgeTag: (Boolean) -> Unit,
     onUpdateCareer: (Career, Boolean) -> Unit,
@@ -717,7 +717,7 @@ private fun RecruitmentInputComponent(
     onUpdateDomains: () -> Unit,
     onUpdateRecruitmentNumber: (String) -> Unit,
     onUpdateGender: (Gender, Boolean) -> Unit,
-    onUpdateGenderTag: (Boolean) -> Unit,
+    onUpdateGenderTag: () -> Unit,
 ) {
     TextWithRequiredTag(
         modifier = Modifier.padding(horizontal = 20.dp),
@@ -780,7 +780,7 @@ private fun RecruitmentInputComponent(
         isRequired = true,
         tagEnable = genderTagEnable,
         onTagClick = {
-            onUpdateGenderTag(genderTagEnable)
+            onUpdateGenderTag()
         },
     )
 

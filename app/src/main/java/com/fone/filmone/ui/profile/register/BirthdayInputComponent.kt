@@ -27,7 +27,7 @@ fun BirthdayInputComponent(
     genderTagEnable: Boolean,
     currentGender: Gender?,
     onUpdateBirthday: (String) -> Unit,
-    onUpdateGenderTag: (Boolean) -> Unit,
+    onUpdateGenderTag: () -> Unit,
     onUpdateGender: (Gender, Boolean) -> Unit,
 ) {
     Column(
@@ -40,7 +40,7 @@ fun BirthdayInputComponent(
             isRequired = true,
             tagEnable = genderTagEnable,
             onTagClick = {
-                onUpdateGenderTag(genderTagEnable.not())
+                onUpdateGenderTag()
             }
         )
 

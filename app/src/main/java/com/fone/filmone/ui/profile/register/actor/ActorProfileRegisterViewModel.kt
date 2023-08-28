@@ -167,25 +167,21 @@ class ActorProfileRegisterViewModel @Inject constructor(
     fun updateGender(gender: Gender, enable: Boolean) {
         viewModelState.update { state ->
             state.copy(
-                gender = gender,
-                genderTagEnable = if (enable) {
-                    false
+                gender = if (enable) {
+                    gender
                 } else {
-                    state.genderTagEnable
-                }
+                    null
+                },
+                genderTagEnable = enable.not(),
             )
         }
     }
 
-    fun updateGenderTag(enable: Boolean) {
+    fun updateGenderTag() {
         viewModelState.update { state ->
             state.copy(
-                genderTagEnable = enable,
-                gender = if (enable) {
-                    Gender.IRRELEVANT
-                } else {
-                    null
-                }
+                genderTagEnable = true,
+                gender = null,
             )
         }
     }
@@ -329,7 +325,7 @@ private data class ActorProfileRegisterViewModelState(
     val commentsTextLimit: Int = 50,
     val birthday: String = "",
     val gender: Gender? = Gender.IRRELEVANT,
-    val genderTagEnable: Boolean = false,
+    val genderTagEnable: Boolean = true,
     val height: String = "",
     val weight: String = "",
     val email: String = "",

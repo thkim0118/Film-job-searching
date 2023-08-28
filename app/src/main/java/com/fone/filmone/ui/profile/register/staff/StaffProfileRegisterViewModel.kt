@@ -171,25 +171,21 @@ class StaffProfileRegisterViewModel @Inject constructor(
     fun updateGender(gender: Gender, enable: Boolean) {
         viewModelState.update { state ->
             state.copy(
-                gender = gender,
-                genderTagEnable = if (enable) {
-                    false
+                gender = if (enable) {
+                    gender
                 } else {
-                    state.genderTagEnable
-                }
+                    null
+                },
+                genderTagEnable = enable.not()
             )
         }
     }
 
-    fun updateGenderTag(enable: Boolean) {
+    fun updateGenderTag() {
         viewModelState.update { state ->
             state.copy(
-                gender = if (enable) {
-                    Gender.IRRELEVANT
-                } else {
-                    null
-                },
-                genderTagEnable = enable
+                gender = null,
+                genderTagEnable = true,
             )
         }
     }
@@ -326,7 +322,7 @@ private data class StaffProfileRegisterViewModelState(
     val commentsTextLimit: Int = 50,
     val birthday: String = "",
     val gender: Gender? = Gender.IRRELEVANT,
-    val genderTagEnable: Boolean = false,
+    val genderTagEnable: Boolean = true,
     val domains: Set<Domain> = emptySet(),
     val email: String = "",
     val ability: String = "",
@@ -372,7 +368,7 @@ data class StaffProfileRegisterUiModel(
     val commentsTextLimit: Int,
     val birthday: String,
     val gender: Gender?,
-    val genderTagEnable: Boolean,
+    val genderTagEnable: Boolean = true,
     val domains: Set<Domain>,
     val email: String,
     val specialty: String,

@@ -239,7 +239,7 @@ private fun UserInfoInputComponent(
     onNameChanged: (String) -> Unit,
     onUpdateBirthday: (String) -> Unit,
     onUpdateGender: (Gender, Boolean) -> Unit,
-    onUpdateGenderTag: (Boolean) -> Unit,
+    onUpdateGenderTag: () -> Unit,
     onUpdateComments: (String) -> Unit,
     onUpdateDomains: () -> Unit,
     onUpdateEmail: (String) -> Unit,

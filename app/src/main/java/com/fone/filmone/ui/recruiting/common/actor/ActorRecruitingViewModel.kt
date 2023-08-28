@@ -247,16 +247,12 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
         }
     }
 
-    fun updateGenderTag(enable: Boolean) {
+    fun updateGenderTag() {
         viewModelState.update {
             it.copy(
                 actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(
-                    genderTagEnable = enable,
-                    recruitmentGender = if (enable) {
-                        null
-                    } else {
-                        it.actorRecruitingStep1UiModel.recruitmentGender
-                    },
+                    genderTagEnable = true,
+                    recruitmentGender = null,
                 ),
             )
         }
