@@ -2,6 +2,7 @@ package com.fone.filmone.ui.profile.detail.staff
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +36,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.user.Gender
@@ -142,7 +148,7 @@ private fun TitleComponent(
 ) {
     FTitleBar(
         modifier = modifier,
-        titleText = stringResource(id = R.string.profile_detail_actor_title_text),
+        titleText = stringResource(id = R.string.profile_detail_staff_title_text),
         leading = {
             Image(
                 modifier = Modifier
@@ -288,20 +294,73 @@ private fun HeaderComponent(
 }
 
 @Composable
+fun FullScreenPhotoDialog(
+    imageUrl: String,
+    onClose: () -> Unit
+) {
+    Dialog(
+        onDismissRequest = onClose,
+        properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable { onClose() }
+        ) {
+            GlideImage(
+                modifier = Modifier.fillMaxSize()
+                    .aspectRatio(103 / 131f)
+                    .clip(shape = RoundedCornerShape(5.dp))
+                    .background(shape = RoundedCornerShape(5.dp), color = FColor.Divider1),
+                shimmerParams = ShimmerParams(
+                    baseColor = MaterialTheme.colors.background,
+                    highlightColor = FColor.Gray700,
+                    durationMillis = 350,
+                    dropOff = 0.65f,
+                    tilt = 20f
+                ),
+
+                imageModel = imageUrl,
+                contentScale = ContentScale.Crop,
+                failure = {
+                    Image(
+                        modifier = Modifier
+                            .align(Alignment.Center),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.splash_fone_logo),
+                        contentDescription = null
+                    )
+                }
+            )
+        }
+    }
+}
+
+@Composable
 private fun ProfileListComponent(
     modifier: Modifier = Modifier,
     title: String,
     imageUrls: List<String>
 ) {
+    var showDialog by remember { mutableStateOf(false) }
+    var clickedImageUrl by remember { mutableStateOf("") }
+
+    if (showDialog) {
+        com.fone.filmone.ui.profile.detail.actor.FullScreenPhotoDialog(imageUrl = clickedImageUrl) {
+            showDialog = false
+        }
+    }
+
     @Composable
     fun Photo(
         photoModifier: Modifier = Modifier,
-        imageUrl: String
+        imageUrl: String,
+        onPhotoClick: () -> Unit
     ) {
         GlideImage(
             modifier = photoModifier
                 .aspectRatio(103 / 131f)
                 .clip(shape = RoundedCornerShape(5.dp))
+                .clickable { onPhotoClick() }
                 .background(shape = RoundedCornerShape(5.dp), color = FColor.Divider1),
             shimmerParams = ShimmerParams(
                 baseColor = MaterialTheme.colors.background,
@@ -335,21 +394,33 @@ private fun ProfileListComponent(
         Row(modifier = Modifier) {
             Photo(
                 photoModifier = Modifier.weight(1f),
-                imageUrl = imageUrls.getOrNull(0) ?: ""
+                imageUrl = imageUrls.getOrNull(0) ?: "",
+                onPhotoClick = {
+                    showDialog = true
+                    clickedImageUrl = imageUrls.getOrNull(0) ?: ""
+                }
             )
 
             Spacer(modifier = Modifier.width(17.dp))
 
             Photo(
                 photoModifier = Modifier.weight(1f),
-                imageUrl = imageUrls.getOrNull(1) ?: ""
+                imageUrl = imageUrls.getOrNull(1) ?: "",
+                onPhotoClick = {
+                    showDialog = true
+                    clickedImageUrl = imageUrls.getOrNull(1) ?: ""
+                }
             )
 
             Spacer(modifier = Modifier.width(17.dp))
 
             Photo(
                 photoModifier = Modifier.weight(1f),
-                imageUrl = imageUrls.getOrNull(2) ?: ""
+                imageUrl = imageUrls.getOrNull(2) ?: "",
+                onPhotoClick = {
+                    showDialog = true
+                    clickedImageUrl = imageUrls.getOrNull(2) ?: ""
+                }
             )
         }
 
