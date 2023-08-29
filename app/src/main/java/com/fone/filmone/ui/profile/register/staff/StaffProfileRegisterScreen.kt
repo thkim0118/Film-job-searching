@@ -98,11 +98,12 @@ fun StaffProfileRegisterScreen(
                     PictureComponent(
                         pictureList = uiState.pictureEncodedDataList,
                         onUpdateProfileImage = { encodedString ->
-                            viewModel.updateImage(encodedString = encodedString, false)
+                            viewModel.updateImage(encodedString = encodedString, false, limit = 9)
                         },
                         onRemoveImage = { encodedString ->
-                            viewModel.updateImage(encodedString = encodedString, remove = true)
-                        }
+                            viewModel.updateImage(encodedString = encodedString, remove = true, limit = 9)
+                        },
+                        limit = 9,
                     )
 
                     Divider(thickness = 8.dp, color = FColor.Divider2)

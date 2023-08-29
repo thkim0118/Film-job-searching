@@ -288,7 +288,7 @@ class ActorProfileRegisterViewModel @Inject constructor(
         }
     }
 
-    fun updateImage(encodedString: String, remove: Boolean) {
+    fun updateImage(encodedString: String, remove: Boolean, limit: Int) {
         viewModelState.update { state ->
             state.copy(
                 pictureList = if (remove) {
@@ -297,8 +297,10 @@ class ActorProfileRegisterViewModel @Inject constructor(
                     }
 
                     copyList
-                } else {
+                } else if (state.pictureList.size < 9) {
                     state.pictureList + encodedString
+                } else {
+                    state.pictureList
                 }
             )
         }

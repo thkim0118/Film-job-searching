@@ -59,14 +59,14 @@ import kotlinx.coroutines.launch
 fun PictureComponent(
     modifier: Modifier = Modifier,
     pictureList: List<String>,
-    limit: Int = 9,
+    limit: Int,
     onUpdateProfileImage: (String) -> Unit,
     onRemoveImage: (String) -> Unit,
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickMultipleVisualMedia(),
+        contract = ActivityResultContracts.PickMultipleVisualMedia(maxItems = limit),
         onResult = { uris: List<Uri> ->
             coroutineScope.launch(Dispatchers.IO) {
                 uris.forEach {
