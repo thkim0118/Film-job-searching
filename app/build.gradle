@@ -107,6 +107,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation "com.firebaseui:firebase-ui-auth:$firebase_auth_version"
     implementation "com.google.firebase:firebase-crashlytics-ktx"
+    implementation ('com.google.firebase:firebase-auth:17.0.0'){
+        exclude group: 'com.google.android.gms', module: 'play-services-safetynet'
+    }
 
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
 
