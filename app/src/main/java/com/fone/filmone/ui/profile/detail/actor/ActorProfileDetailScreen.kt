@@ -188,13 +188,21 @@ private fun CategoryComponent(
         modifier = modifier
             .padding(vertical = 18.dp, horizontal = 16.dp)
     ) {
-        Row(modifier = Modifier) {
-            categories.forEachIndexed { index, category ->
-                TagComponent(title = category, enable = false, clickable = false)
+        val groupedCategories = categories.chunked(3)
 
-                if (categories.lastIndex != index) {
-                    Spacer(modifier = Modifier.width(4.dp))
+        groupedCategories.forEachIndexed { groupIndex, group ->
+            Row(modifier = Modifier.fillMaxWidth()) {
+                group.forEachIndexed { index, category ->
+                    TagComponent(title = category, enable = false, clickable = false)
+
+                    if (index != group.lastIndex) {
+                        Spacer(modifier = Modifier.width(4.dp))
+                    }
                 }
+            }
+
+            if (groupIndex != groupedCategories.lastIndex) {
+                Spacer(modifier = Modifier.height(4.dp))
             }
         }
     }

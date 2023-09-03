@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -177,13 +178,21 @@ private fun CategoryComponent(
         modifier = modifier
             .padding(vertical = 18.dp, horizontal = 16.dp)
     ) {
-        Row(modifier = Modifier) {
-            categories.forEachIndexed { index, category ->
-                TagComponent(title = category, enable = true, clickable = false)
+        val groupedCategories = categories.chunked(3)
 
-                if (categories.lastIndex != index) {
-                    Spacer(modifier = Modifier.width(4.dp))
+        groupedCategories.forEachIndexed { groupIndex, group ->
+            Row(modifier = Modifier.fillMaxWidth()) {
+                group.forEachIndexed { index, category ->
+                    TagComponent(title = category, enable = false, clickable = false)
+
+                    if (index != group.lastIndex) {
+                        Spacer(modifier = Modifier.width(4.dp))
+                    }
                 }
+            }
+
+            if (groupIndex != groupedCategories.lastIndex) {
+                Spacer(modifier = Modifier.height(4.dp))
             }
         }
     }
@@ -535,7 +544,7 @@ private fun MainCareerInfoComponent(
 ) {
     Column(modifier = modifier.padding(vertical = 16.dp, horizontal = 16.dp)) {
         Text(
-            text = stringResource(id = R.string.profile_detail_actor_main_career_title),
+            text = stringResource(id = R.string.profile_detail_staff_main_career_title),
             style = LocalTypography.current.h3(),
             color = FColor.TextPrimary
         )
