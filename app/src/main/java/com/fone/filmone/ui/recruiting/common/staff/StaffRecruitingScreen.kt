@@ -21,8 +21,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
@@ -48,6 +50,7 @@ import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
+import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
@@ -66,6 +69,7 @@ import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 import java.util.regex.Pattern
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun StaffRecruitingScreen(
     modifier: Modifier = Modifier,
@@ -104,6 +108,7 @@ fun StaffRecruitingScreen(
     onDismiss: (List<Domain>) -> Unit,
 ) {
     val scrollState = rememberScrollState()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(key1 = uiState.staffRecruitingRegisterUiEvent) {
         listenUiEvent(uiState.staffRecruitingRegisterUiEvent, navController)
@@ -121,6 +126,9 @@ fun StaffRecruitingScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .clickableWithNoRipple {
+                    keyboardController?.hide()
+                }
                 .padding(it),
         ) {
             Column(

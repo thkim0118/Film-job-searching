@@ -20,10 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.SpanStyle
@@ -48,6 +50,7 @@ import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
+import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
@@ -65,6 +68,7 @@ import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 import java.util.regex.Pattern
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ActorRecruitingScreen(
     modifier: Modifier = Modifier,
@@ -102,6 +106,7 @@ fun ActorRecruitingScreen(
 ) {
     val scrollState = rememberScrollState()
     val focusEvent = uiState.focusEvent
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     ListenUiEvent(
         uiEvent = uiState.actorRecruitingUiEvent,
@@ -118,6 +123,9 @@ fun ActorRecruitingScreen(
     ) {
         Column(
             modifier = Modifier
+                .clickableWithNoRipple {
+                    keyboardController?.hide()
+                }
                 .padding(it),
         ) {
             TitleComponent(

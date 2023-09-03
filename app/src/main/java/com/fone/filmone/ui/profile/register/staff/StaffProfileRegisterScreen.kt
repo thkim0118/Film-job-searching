@@ -16,8 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -33,6 +35,7 @@ import com.fone.filmone.ui.common.FTitleBar
 import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
+import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
@@ -53,6 +56,7 @@ import com.fone.filmone.ui.recruiting.common.staff.DomainSelectDialog
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun StaffProfileRegisterScreen(
     modifier: Modifier = Modifier,
@@ -62,6 +66,7 @@ fun StaffProfileRegisterScreen(
     val scrollState = rememberScrollState()
     val uiState by viewModel.uiState.collectAsState()
     val dialogState by viewModel.dialogState.collectAsState()
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(key1 = uiState.staffProfileRegisterUiEvent) {
         listenUiEvent(
@@ -85,6 +90,9 @@ fun StaffProfileRegisterScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .clickableWithNoRipple {
+                        keyboardController?.hide()
+                    }
                     .padding(it)
             ) {
                 TitleComponent(
