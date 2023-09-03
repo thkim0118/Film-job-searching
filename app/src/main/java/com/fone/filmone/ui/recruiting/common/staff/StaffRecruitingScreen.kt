@@ -614,6 +614,8 @@ private fun Step4Component(
             text = detailInfo,
             onValueChange = onUpdateDetailInfo,
             textLimit = detailInfoTextLimit,
+            maxLines = Int.MAX_VALUE,
+            singleLine = false,
             fixedHeight = 134.dp,
             placeholder = stringResource(id = R.string.recruiting_register_staff_step_4_placeholder),
             bottomComponent = {
