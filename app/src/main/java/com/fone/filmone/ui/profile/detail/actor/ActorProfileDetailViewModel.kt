@@ -76,7 +76,7 @@ class ActorProfileDetailViewModel @Inject constructor(
                             specialty = content.specialty,
                             sns = content.sns,
                             detail = content.details,
-                            mainCareer = content.hookingComment,
+                            mainCareer = content.careerDetail,
                             categories = content.categories,
                             isWant = content.isWant,
                         )

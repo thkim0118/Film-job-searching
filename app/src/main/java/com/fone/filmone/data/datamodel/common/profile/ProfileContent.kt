@@ -30,6 +30,7 @@ interface DefaultProfileContent {
     val viewCount: Int
     val weight: Int
     val createdAt: Date
+    val careerDetail: String
 }
 
 @Keep
@@ -55,6 +56,7 @@ data class ProfileContent(
     override val viewCount: Int,
     override val weight: Int,
     override val createdAt: Date,
+    override val careerDetail: String,
 ) : DefaultProfileContent
 
 @Keep
@@ -80,5 +82,6 @@ data class ProfileDetailContent(
     override val viewCount: Int,
     override val weight: Int,
     override val createdAt: Date,
+    override val careerDetail: String,
     val userNickname: String
 ) : DefaultProfileContent
