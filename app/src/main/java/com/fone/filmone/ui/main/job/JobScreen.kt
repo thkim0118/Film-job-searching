@@ -125,8 +125,14 @@ fun JobScreen(
             onUpdateCurrentJobSorting = onUpdateCurrentJobSorting,
             onFilterClick = {
                 val route = when (uiState.userType ?: userType) {
-                    Type.ACTOR -> FOneDestinations.ActorFilter.route
-                    Type.STAFF -> FOneDestinations.StaffFilter.route
+                    Type.ACTOR -> {
+                        viewModel.initUserType(Type.ACTOR)
+                        FOneDestinations.ActorFilter.route
+                    }
+                    Type.STAFF -> {
+                        viewModel.initUserType(Type.STAFF)
+                        FOneDestinations.StaffFilter.route
+                    }
                 }
 
                 FOneNavigator.navigateTo(navDestinationState = NavDestinationState(route = route))

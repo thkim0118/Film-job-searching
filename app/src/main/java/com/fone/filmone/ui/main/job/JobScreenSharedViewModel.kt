@@ -42,30 +42,28 @@ class JobScreenSharedViewModel @Inject constructor(
         )
 
     fun initUserType(userType: Type) {
-        if (viewModelState.value.userType == null) {
-            viewModelState.update {
-                it.copy(userType = userType)
+        viewModelState.update {
+            it.copy(userType = userType)
+        }
+
+        val initJobTabFilterVo = JobTabFilterVo(
+            ageMax = 70,
+            ageMin = 1,
+            categories = Category.values().toList(),
+            domains = Domain.values().toList(),
+            genders = Gender.values().toList(),
+            type = userType,
+        )
+
+        when (userType) {
+            Type.ACTOR -> {
+                fetchActorJobOpenings(initJobTabFilterVo, true)
+                fetchActorProfile(initJobTabFilterVo, true)
             }
 
-            val initJobTabFilterVo = JobTabFilterVo(
-                ageMax = 70,
-                ageMin = 1,
-                categories = Category.values().toList(),
-                domains = Domain.values().toList(),
-                genders = Gender.values().toList(),
-                type = userType,
-            )
-
-            when (userType) {
-                Type.ACTOR -> {
-                    fetchActorJobOpenings(initJobTabFilterVo, true)
-                    fetchActorProfile(initJobTabFilterVo, true)
-                }
-
-                Type.STAFF -> {
-                    fetchStaffJobOpenings(initJobTabFilterVo, true)
-                    fetchStaffProfile(initJobTabFilterVo, true)
-                }
+            Type.STAFF -> {
+                fetchStaffJobOpenings(initJobTabFilterVo, true)
+                fetchStaffProfile(initJobTabFilterVo, true)
             }
         }
     }
@@ -114,9 +112,9 @@ class JobScreenSharedViewModel @Inject constructor(
                     viewModelState.update { state ->
                         state.copy(
                             profileUiModels = if (refresh) {
-                                state.profileUiModels
-                            } else {
                                 emptyList()
+                            } else {
+                                state.profileUiModels
                             } + response.profiles.content.map { content ->
                                 JobTabProfilesUiModel(
                                     id = content.id,
@@ -263,7 +261,7 @@ private data class JobScreenViewModelState(
         categories = emptyList(),
         domains = null,
         genders = emptyList(),
-        type = Type.ACTOR,
+        type = Type.STAFF,
     ),
     val staffProfilesFilter: JobTabFilterVo = JobTabFilterVo(
         ageMax = 70,
@@ -271,7 +269,7 @@ private data class JobScreenViewModelState(
         categories = emptyList(),
         domains = null,
         genders = emptyList(),
-        type = Type.ACTOR,
+        type = Type.STAFF,
     ),
 ) {
     fun toUiState(): JobScreenUiState = JobScreenUiState(
