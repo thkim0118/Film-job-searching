@@ -68,6 +68,14 @@ fun ActorRecruitingDetailScreen(
         snackbarHost = {
             FToast(baseViewModel = viewModel, hostState = it)
         },
+        bottomBar = {
+            ButtonComponent(
+                onScrapClick = {
+                    viewModel.scrapRecruiting()
+                },
+                onContactClick = viewModel::contact
+            )
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -138,11 +146,6 @@ fun ActorRecruitingDetailScreen(
 
                 GuideComponent()
             }
-
-            ButtonComponent(
-                onScrapClick = {},
-                onContactClick = viewModel::contact
-            )
         }
     }
 }
@@ -579,7 +582,8 @@ private fun ButtonComponent(
                 .clip(shape = RoundedCornerShape(5.dp))
                 .background(shape = RoundedCornerShape(5.dp), color = FColor.BgGroupedBase)
                 .weight(140f)
-                .clickableSingle { onScrapClick() },
+                .clickableSingle { onScrapClick() }
+                .padding(vertical = 11.dp),
         ) {
             Row(
                 modifier = Modifier
@@ -609,17 +613,20 @@ private fun ButtonComponent(
         Box(
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(5.dp))
-                .background(shape = RoundedCornerShape(5.dp), color = FColor.BgGroupedBase)
+                .background(shape = RoundedCornerShape(5.dp), color = FColor.Primary)
                 .weight(195f)
-                .clickableSingle { onContactClick() },
+                .clickableSingle { onContactClick() }
+                .padding(vertical = 11.dp),
         ) {
             Text(
+                modifier = Modifier
+                    .align(Alignment.Center),
                 text = stringResource(id = R.string.actor_detail_contact_button_title),
                 style = fTextStyle(
                     fontWeight = FontWeight.W500,
                     fontSize = 16.textDp,
                     lineHeight = 18.textDp,
-                    color = FColor.Primary,
+                    color = FColor.White,
                 ),
             )
         }

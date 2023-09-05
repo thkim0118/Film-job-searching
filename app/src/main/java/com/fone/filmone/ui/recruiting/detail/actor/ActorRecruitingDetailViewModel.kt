@@ -9,6 +9,7 @@ import com.fone.filmone.data.datamodel.response.jobopenings.detail.JobOpeningRes
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.GetJobOpeningDetailUseCase
+import com.fone.filmone.domain.usecase.RegisterScrapUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.navigation.FOneDestinations
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +25,7 @@ import javax.inject.Inject
 class ActorRecruitingDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getJobOpeningDetailUseCase: GetJobOpeningDetailUseCase,
+    private val scrapUseCase: RegisterScrapUseCase
 ) : BaseViewModel() {
     private val viewModelState = MutableStateFlow(ActorRecruitingDetailViewModelState())
 
@@ -37,6 +39,18 @@ class ActorRecruitingDetailViewModel @Inject constructor(
 
     fun contact() {
         showToast(R.string.service)
+    }
+
+    fun scrapRecruiting() = viewModelScope.launch {
+        val recruitingId: Int = uiState.value.id.toInt()
+        scrapUseCase(recruitingId)
+            .onSuccess {
+                viewModelState.update { state ->
+                    state.copy( // TODO: scrap 여부 반영 필요, 참고) ActorProfileDetailViewModel
+                    )
+                }
+            }.onFail {
+            }
     }
 
     init {
@@ -69,6 +83,7 @@ private data class ActorRecruitingDetailViewModelState(
 ) {
     fun toUiState(): ActorRecruitingDetailUiState = if (jobOpeningResponse != null) {
         ActorRecruitingDetailUiState(
+            id = jobOpeningResponse.jobOpening.id.toLong(),
             date = "", // TODO
             viewCount = String.format("%,d", jobOpeningResponse.jobOpening.viewCount),
             profileImageUrl = "", // TODO
@@ -96,6 +111,7 @@ private data class ActorRecruitingDetailViewModelState(
         )
     } else {
         ActorRecruitingDetailUiState(
+            id = 0L,
             date = "",
             viewCount = "",
             profileImageUrl = "",
@@ -125,6 +141,7 @@ private data class ActorRecruitingDetailViewModelState(
 }
 
 data class ActorRecruitingDetailUiState(
+    val id: Long,
     val date: String,
     val viewCount: String,
     val profileImageUrl: String,
