@@ -14,11 +14,20 @@ android {
     namespace 'com.fone.filmone'
     compileSdk 34
 
+    signingConfigs {
+        release {
+            storeFile file('../key/fone_signed_key')
+            storePassword 'fonedev0!'
+            keyAlias 'fonedevelop'
+            keyPassword 'fonedev0!'
+        }
+    }
+
     defaultConfig {
         applicationId "com.fone.filmone"
         minSdk 26
         targetSdk 34
-        versionCode 4
+        versionCode 5
         versionName "0.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -39,6 +48,7 @@ android {
                 artifactType="AAB"
                 groups="FOne"
             }
+            signingConfig signingConfigs.release
         }
 
         debug {
