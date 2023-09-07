@@ -8,7 +8,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface SmsApi {
-    @POST("prod/send-sms")
+    @POST("v1/sms/send-sms")
     suspend fun requestSmsVerifyCode(
         @Body smsRequest: SmsRequest
     ): Response<NetworkResponse<SmsTransmitResponse>>

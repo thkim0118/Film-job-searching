@@ -31,7 +31,6 @@ import javax.inject.Singleton
 object NetworkModule {
     private const val connectionTime = 10_000L
     private const val baseUrl = "http://3.39.0.194/api/"
-    private const val smsBaseUrl = "https://du646e9qh1.execute-api.ap-northeast-2.amazonaws.com/"
     private const val imageUploadBaseUrl =
         "https://du646e9qh1.execute-api.ap-northeast-2.amazonaws.com/"
 
@@ -86,7 +85,7 @@ object NetworkModule {
     @SmsRetrofit
     @Provides
     fun provideSmsRetrofit(okHttpClient: OkHttpClient): Retrofit =
-        Retrofit.Builder().baseUrl(smsBaseUrl).client(okHttpClient)
+        Retrofit.Builder().baseUrl(baseUrl).client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson)).build()
 
     @ImageUploadRetrofit
