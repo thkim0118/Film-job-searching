@@ -13,19 +13,13 @@ import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val tokenDataStore: TokenDataStore,
-    private val tokenApi: TokenApi
+    private val tokenApi: TokenApi,
 ) : AuthRepository {
 
     private val refreshTokenMutex = Mutex()
 
     override suspend fun getAccessToken(): String {
-        val accessToken = tokenDataStore.getAccessToken() ?: ""
-
-        if (accessToken.isNotEmpty()) {
-            return accessToken
-        }
-
-        return refreshToken()
+        return tokenDataStore.getAccessToken() ?: ""
     }
 
     override suspend fun refreshToken(): String {
@@ -61,5 +55,9 @@ class AuthRepositoryImpl @Inject constructor(
                 return tokenDataStore.getAccessToken() ?: ""
             }
         }
+    }
+
+    override suspend fun clearToken() {
+        tokenDataStore.clearToken()
     }
 }

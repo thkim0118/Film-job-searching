@@ -1,4 +1,4 @@
-package com.fone.filmone.ui.profile.register
+package com.fone.filmone.ui.profile.common.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -7,18 +7,18 @@ import com.fone.filmone.R
 import com.fone.filmone.ui.main.job.common.LeftTitleTextField
 
 @Composable
-fun AbilityInputComponent(
+fun SnsInputComponent(
     modifier: Modifier = Modifier,
-    ability: String,
-    onUpdateAbility: (String) -> Unit
+    sns: String,
+    onUpdateSns: (String) -> Unit,
 ) {
     LeftTitleTextField(
         modifier = modifier,
-        title = stringResource(id = R.string.profile_register_speciality_title),
+        title = stringResource(id = R.string.profile_register_sns_title),
         titleSpace = 36,
-        placeholder = stringResource(id = R.string.profile_register_speciality_placeholder),
+        placeholder = stringResource(id = R.string.profile_register_sns_placeholder),
         isRequired = false,
-        text = ability,
-        onValueChanged = onUpdateAbility
+        text = sns,
+        onValueChanged = onUpdateSns
     )
 }

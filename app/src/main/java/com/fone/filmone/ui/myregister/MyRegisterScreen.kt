@@ -121,7 +121,7 @@ private fun MyRegisterDialog(
 ) {
     when (dialogState) {
         MyRegisterDialogState.Clear -> Unit
-        is MyRegisterDialogState.RegisterPostDelete -> {
+        is MyRegisterDialogState.RemoveContent -> {
             PairButtonDialog(
                 titleText = stringResource(id = R.string.my_register_dialog_delete_title),
                 leftButtonText = stringResource(id = R.string.no),
@@ -130,7 +130,21 @@ private fun MyRegisterDialog(
                     viewModel.updateDialogState(MyRegisterDialogState.Clear)
                 },
                 onRightButtonClick = {
-                    viewModel.removeRegisterContent(dialogState.profileId)
+                    viewModel.removeJobOpeningContent(dialogState.jobContentId)
+                },
+            )
+        }
+
+        is MyRegisterDialogState.RemoveProfileContent -> {
+            PairButtonDialog(
+                titleText = stringResource(id = R.string.my_register_dialog_delete_title),
+                leftButtonText = stringResource(id = R.string.no),
+                rightButtonText = stringResource(id = R.string.yes),
+                onLeftButtonClick = {
+                    viewModel.updateDialogState(MyRegisterDialogState.Clear)
+                },
+                onRightButtonClick = {
+                    viewModel.removeProfile(dialogState.profileId)
                 },
             )
         }

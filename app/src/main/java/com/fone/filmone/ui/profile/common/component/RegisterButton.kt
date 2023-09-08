@@ -1,4 +1,4 @@
-package com.fone.filmone.ui.profile.register
+package com.fone.filmone.ui.profile.common.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

@@ -14,6 +14,7 @@ import com.fone.filmone.domain.model.jobopenings.JobType
 import com.fone.filmone.domain.usecase.GetMyRegistrationJobOpeningsUseCase
 import com.fone.filmone.domain.usecase.GetMyRegistrationProfileUseCase
 import com.fone.filmone.domain.usecase.RemoveJobOpeningContentUseCase
+import com.fone.filmone.domain.usecase.RemoveProfileContentUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,6 +34,7 @@ class MyRegisterViewModel @Inject constructor(
     private val getMyRegistrationJobOpeningsUseCase: GetMyRegistrationJobOpeningsUseCase,
     private val getMyRegistrationProfileUseCase: GetMyRegistrationProfileUseCase,
     private val removeJobOpeningContentUseCase: RemoveJobOpeningContentUseCase,
+    private val removeProfileContentUseCase: RemoveProfileContentUseCase,
 ) : BaseViewModel() {
 
     private val myRegisterViewModelState = MutableStateFlow(MyRegisterViewModelState())
@@ -71,12 +73,23 @@ class MyRegisterViewModel @Inject constructor(
         _dialogState.value = dialogState
     }
 
-    fun removeRegisterContent(jobOpeningId: Int) = viewModelScope.launch {
+    fun removeJobOpeningContent(jobOpeningId: Int) = viewModelScope.launch {
         removeJobOpeningContentUseCase(jobOpeningId = jobOpeningId)
             .onSuccess {
                 updateDialogState(MyRegisterDialogState.Clear)
                 fetchMyRegisterContents()
             }.onFail {
+                showToast(it.message)
+            }
+    }
+
+    fun removeProfile(contentId: Int) = viewModelScope.launch {
+        removeProfileContentUseCase(contentId)
+            .onSuccess {
+                updateDialogState(MyRegisterDialogState.Clear)
+                fetchMyRegisterContents()
+            }
+            .onFail {
                 showToast(it.message)
             }
     }
@@ -109,6 +122,7 @@ private data class MyRegisterViewModelState(
         } ?: emptyList(),
         profilePosts = profiles?.content?.map { content ->
             RegisterPostProfileUiModel(
+                id = content.id,
                 profileUrl = content.profileUrl,
                 name = content.name,
                 type = content.type,
@@ -140,6 +154,7 @@ data class RegisterPostUiModel(
 )
 
 data class RegisterPostProfileUiModel(
+    val id: Int,
     val profileUrl: String,
     val name: String,
     val type: Type,
@@ -148,5 +163,6 @@ data class RegisterPostProfileUiModel(
 
 sealed interface MyRegisterDialogState {
     object Clear : MyRegisterDialogState
-    data class RegisterPostDelete(val profileId: Int) : MyRegisterDialogState
+    data class RemoveContent(val jobContentId: Int) : MyRegisterDialogState
+    data class RemoveProfileContent(val profileId: Int) : MyRegisterDialogState
 }

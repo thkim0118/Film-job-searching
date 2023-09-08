@@ -31,6 +31,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.ui.common.ext.clickableSingle
@@ -47,6 +48,7 @@ import com.skydoves.landscapist.glide.GlideImage
 fun MyProfileScreen(
     modifier: Modifier = Modifier,
     profilePosts: List<RegisterPostProfileUiModel>,
+    viewModel: MyRegisterViewModel = hiltViewModel(),
 ) {
     Box(
         modifier = modifier
@@ -65,6 +67,27 @@ fun MyProfileScreen(
                         name = it.name,
                         type = it.type,
                         info = it.info,
+                        onModifyClick = {
+                            when (it.type) {
+                                Type.ACTOR -> {
+                                    FOneNavigator.navigateTo(
+                                        navDestinationState = NavDestinationState(
+                                            route = FOneDestinations.ActorProfileEdit.getRouteWithContentId(it.id),
+                                        ),
+                                    )
+                                }
+                                Type.STAFF -> {
+                                    FOneNavigator.navigateTo(
+                                        navDestinationState = NavDestinationState(
+                                            route = FOneDestinations.StaffProfileEdit.getRouteWithContentId(it.id),
+                                        ),
+                                    )
+                                }
+                            }
+                        },
+                        onRemoveClick = {
+                            viewModel.updateDialogState(MyRegisterDialogState.RemoveContent(it.id))
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(18.dp))
@@ -83,6 +106,8 @@ private fun RegisterProfileItem(
     name: String,
     type: Type,
     info: String,
+    onModifyClick: () -> Unit,
+    onRemoveClick: () -> Unit,
 ) {
     val shape = RoundedCornerShape(10.dp)
 
@@ -165,7 +190,7 @@ private fun RegisterProfileItem(
                                 shape = RoundedCornerShape(5.dp),
                                 color = FColor.BgGroupedBase,
                             )
-                            .clickableSingle { }
+                            .clickableSingle { onModifyClick() }
                             .padding(vertical = 10.dp, horizontal = 14.dp),
                     ) {
                         Text(
@@ -184,7 +209,7 @@ private fun RegisterProfileItem(
                                 shape = RoundedCornerShape(5.dp),
                                 color = FColor.BgGroupedBase,
                             )
-                            .clickableSingle { }
+                            .clickableSingle { onRemoveClick() }
                             .padding(vertical = 10.dp, horizontal = 14.dp),
                     ) {
                         Text(

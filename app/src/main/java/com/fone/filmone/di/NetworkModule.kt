@@ -18,6 +18,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -41,8 +42,13 @@ object NetworkModule {
         HeaderInjectInterceptor(authRepository = authRepository)
 
     @Provides
-    fun provideRefreshAuthenticator(authRepository: AuthRepository): RefreshAuthenticator =
-        RefreshAuthenticator(authRepository = authRepository)
+    fun provideRefreshAuthenticator(
+        authRepository: AuthRepository,
+        @IoDispatcher dispatcher: CoroutineDispatcher,
+    ): RefreshAuthenticator = RefreshAuthenticator(
+        authRepository = authRepository,
+        dispatcher = dispatcher
+    )
 
     @Provides
     fun provideOkHttpClient(

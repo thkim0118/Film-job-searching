@@ -1,5 +1,6 @@
-package com.fone.filmone.ui.profile.register.staff
+package com.fone.filmone.ui.profile.edit.staff
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.user.Career
@@ -10,8 +11,10 @@ import com.fone.filmone.data.datamodel.request.imageupload.UploadingImage
 import com.fone.filmone.data.datamodel.request.profile.ProfileRegisterRequest
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.usecase.RegisterProfileUseCase
+import com.fone.filmone.domain.usecase.GetProfileDetailUseCase
+import com.fone.filmone.domain.usecase.ModifyProfileUseCase
 import com.fone.filmone.domain.usecase.UploadImageUseCase
+import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.profile.common.staff.StaffProfileViewModel
 import com.fone.filmone.ui.profile.common.staff.model.StaffProfileUiEvent
 import com.fone.filmone.ui.profile.common.staff.model.StaffProfileViewModelState
@@ -25,12 +28,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class StaffProfileRegisterViewModel @Inject constructor(
-    private val registerProfileUseCase: RegisterProfileUseCase,
+class StaffProfileEditViewModel @Inject constructor(
+    private val modifyProfileUseCase: ModifyProfileUseCase,
     private val uploadImageUseCase: UploadImageUseCase,
+    private val getProfileDetailUseCase: GetProfileDetailUseCase,
+    savedStateHandle: SavedStateHandle,
 ) : StaffProfileViewModel() {
     override val viewModelState: MutableStateFlow<StaffProfileViewModelState> =
-        MutableStateFlow(StaffProfileRegisterViewModelState())
+        MutableStateFlow(StaffProfileEditViewModelState())
 
     override val uiState = viewModelState
         .map(StaffProfileViewModelState::toUiState)
@@ -39,6 +44,46 @@ class StaffProfileRegisterViewModel @Inject constructor(
             SharingStarted.Eagerly,
             viewModelState.value.toUiState()
         )
+
+    val profileId: Int?
+
+    init {
+        profileId = getContentId(savedStateHandle = savedStateHandle)
+
+        fetchInitialContent()
+    }
+
+    private fun getContentId(savedStateHandle: SavedStateHandle) =
+        savedStateHandle.get<Int>(FOneDestinations.StaffProfileEdit.argContentId)
+
+    private fun fetchInitialContent() = viewModelScope.launch {
+        if (profileId != null && profileId > 0) {
+            getProfileDetailUseCase(profileId, Type.STAFF)
+                .onSuccess { response ->
+                    val profileContent = response?.profile ?: return@onSuccess
+
+                    viewModelState.update {
+                        it.copy(
+//                            pictureList = it.pictureList,
+                            name = profileContent.name,
+                            hookingComments = profileContent.hookingComment,
+                            birthday = profileContent.birthday,
+                            gender = profileContent.gender,
+                            genderTagEnable = profileContent.gender == Gender.IRRELEVANT,
+                            domains = profileContent.domains.toSet(),
+                            specialty = profileContent.specialty,
+                            sns = profileContent.sns,
+                            detailInfo = profileContent.details,
+                            career = profileContent.career,
+                            categories = profileContent.categories.toSet(),
+                            categoryTagEnable = profileContent.categories.size == Category.values().size,
+                        )
+                    }
+                }.onFail {
+                    showToast(it.message)
+                }
+        }
+    }
 
     override fun uploadProfileImages() = viewModelScope.launch {
         uploadImageUseCase(
@@ -61,39 +106,42 @@ class StaffProfileRegisterViewModel @Inject constructor(
     }
 
     override fun register(imageUrls: List<String>) = viewModelScope.launch {
-        registerProfileUseCase(
-            profileRegisterRequest = ProfileRegisterRequest(
-                profileUrl = imageUrls.firstOrNull() ?: "",
-                profileUrls = imageUrls,
-                name = uiState.value.name,
-                hookingComment = uiState.value.hookingComments,
-                birthday = uiState.value.birthday,
-                gender = uiState.value.gender?.name ?: Gender.IRRELEVANT.name,
-                domains = uiState.value.domains.map { it.name },
-                email = uiState.value.email,
-                specialty = uiState.value.specialty,
-                sns = uiState.value.sns,
-                details = uiState.value.detailInfo,
-                career = uiState.value.career?.name ?: Career.IRRELEVANT.name,
-                categories = uiState.value.categories.map { it.name },
-                type = Type.ACTOR.name,
-                height = null,
-                weight = null
-            )
-        ).onSuccess { response ->
-            if (response == null) {
-                showToast("response is null")
-                return@onSuccess
-            }
+        if (profileId != null && profileId > 0) {
+            modifyProfileUseCase(
+                profileId = profileId,
+                profileRegisterRequest = ProfileRegisterRequest(
+                    profileUrl = imageUrls.firstOrNull() ?: "",
+                    profileUrls = imageUrls,
+                    name = uiState.value.name,
+                    hookingComment = uiState.value.hookingComments,
+                    birthday = uiState.value.birthday,
+                    gender = uiState.value.gender?.name ?: Gender.IRRELEVANT.name,
+                    domains = uiState.value.domains.map { it.name },
+                    email = uiState.value.email,
+                    specialty = uiState.value.specialty,
+                    sns = uiState.value.sns,
+                    details = uiState.value.detailInfo,
+                    career = uiState.value.career?.name ?: Career.IRRELEVANT.name,
+                    categories = uiState.value.categories.map { it.name },
+                    type = Type.STAFF.name,
+                    height = null,
+                    weight = null
+                )
+            ).onSuccess { response ->
+                if (response == null) {
+                    showToast("response is null")
+                    return@onSuccess
+                }
 
-            viewModelState.update {
-                it.copy(staffProfileUiEvent = StaffProfileUiEvent.RegisterComplete)
+                viewModelState.update {
+                    it.copy(staffProfileUiEvent = StaffProfileUiEvent.RegisterComplete)
+                }
             }
         }
     }
 }
 
-private class StaffProfileRegisterViewModelState(
+private class StaffProfileEditViewModelState(
     override val pictureEncodedDataList: List<String> = emptyList(),
     override val name: String = "",
     override val hookingComments: String = "",
@@ -136,7 +184,7 @@ private class StaffProfileRegisterViewModelState(
         categoryTagEnable: Boolean,
         registerButtonEnable: Boolean,
         staffProfileUiEvent: StaffProfileUiEvent,
-    ): StaffProfileViewModelState = StaffProfileRegisterViewModelState(
+    ): StaffProfileViewModelState = StaffProfileEditViewModelState(
         pictureEncodedDataList = pictureEncodedDataList,
         name = name,
         hookingComments = hookingComments,
@@ -158,39 +206,4 @@ private class StaffProfileRegisterViewModelState(
         registerButtonEnable = registerButtonEnable,
         staffProfileUiEvent = staffProfileUiEvent
     )
-}
-
-data class StaffProfileRegisterUiModel(
-    val pictureEncodedDataList: List<String>,
-    val name: String,
-    val hookingComments: String,
-    val commentsTextLimit: Int,
-    val birthday: String,
-    val gender: Gender?,
-    val genderTagEnable: Boolean,
-    val domains: Set<Domain>,
-    val email: String,
-    val specialty: String,
-    val sns: String,
-    val detailInfo: String,
-    val detailInfoTextLimit: Int,
-    val career: Career?,
-    val careerDetail: String,
-    val careerDetailTextLimit: Int,
-    val categories: Set<Category>,
-    val categoryTagEnable: Boolean,
-    val registerButtonEnable: Boolean,
-    val staffProfileRegisterUiEvent: StaffProfileRegisterUiEvent,
-)
-
-sealed class StaffProfileRegisterDialogState {
-    object Clear : StaffProfileRegisterDialogState()
-    data class DomainSelectDialog(
-        val selectedDomains: List<Domain>
-    ) : StaffProfileRegisterDialogState()
-}
-
-sealed class StaffProfileRegisterUiEvent {
-    object RegisterComplete : StaffProfileRegisterUiEvent()
-    object Clear : StaffProfileRegisterUiEvent()
 }

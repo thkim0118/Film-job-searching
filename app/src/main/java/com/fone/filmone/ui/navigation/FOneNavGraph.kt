@@ -23,6 +23,8 @@ import com.fone.filmone.ui.myinfo.MyInfoScreen
 import com.fone.filmone.ui.myregister.MyRegisterScreen
 import com.fone.filmone.ui.profile.detail.actor.ActorProfileDetailScreen
 import com.fone.filmone.ui.profile.detail.staff.StaffProfileDetailScreen
+import com.fone.filmone.ui.profile.edit.actor.ActorProfileEditScreen
+import com.fone.filmone.ui.profile.edit.staff.StaffProfileEditScreen
 import com.fone.filmone.ui.profile.list.ProfileListScreen
 import com.fone.filmone.ui.profile.register.actor.ActorProfileRegisterScreen
 import com.fone.filmone.ui.profile.register.staff.StaffProfileRegisterScreen
@@ -121,8 +123,20 @@ fun FOneNavGraph(
         composable(FOneDestinations.ActorProfileRegister.route) {
             ActorProfileRegisterScreen(navController = navController)
         }
+        composable(
+            route = FOneDestinations.ActorProfileEdit.routeWithContentId,
+            arguments = FOneDestinations.ActorProfileEdit.contentIdArguments
+        ) {
+            ActorProfileEditScreen(navController = navController)
+        }
         composable(FOneDestinations.StaffProfileRegister.route) {
             StaffProfileRegisterScreen(navController = navController)
+        }
+        composable(
+            route = FOneDestinations.StaffProfileEdit.routeWithContentId,
+            arguments = FOneDestinations.StaffProfileEdit.contentIdArguments,
+        ) {
+            StaffProfileEditScreen(navController = navController)
         }
         composable(
             route = FOneDestinations.ActorProfileDetail.routeWithArgs,

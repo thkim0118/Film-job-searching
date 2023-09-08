@@ -1,6 +1,5 @@
 package com.fone.filmone.ui.main
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -88,14 +87,6 @@ fun MainScreen(
     var selectedScreen by rememberSaveable { mutableStateOf(initialScreen) }
     var jobTabScreen by remember { mutableStateOf(initialJobTab) }
     val uiState by mainViewModel.uiState.collectAsState()
-
-    BackHandler(true) {
-        if (bottomSheetState.isVisible) {
-            hideBottomSheet(coroutineScope, bottomSheetState)
-        } else {
-            navController.popBackStack()
-        }
-    }
 
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,

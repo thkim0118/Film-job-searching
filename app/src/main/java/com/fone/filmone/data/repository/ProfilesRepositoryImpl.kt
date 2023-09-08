@@ -52,6 +52,18 @@ class ProfilesRepositoryImpl @Inject constructor(
         return handleNetwork { profilesApi.registerProfile(profileRegisterRequest = profileRegisterRequest) }
     }
 
+    override suspend fun modifyContent(
+        profileId: Int,
+        profileRegisterRequest: ProfileRegisterRequest,
+    ): DataResult<ProfileDetailResponse> {
+        return handleNetwork {
+            profilesApi.modifyContent(
+                profileId = profileId,
+                profileRegisterRequest = profileRegisterRequest
+            )
+        }
+    }
+
     override suspend fun getProfileDetail(
         profileId: Int,
         type: Type,

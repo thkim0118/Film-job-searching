@@ -78,7 +78,7 @@ fun MyRecruitmentScreen(
                             }
                         },
                         onDeleteClick = {
-                            viewModel.updateDialogState(MyRegisterDialogState.RegisterPostDelete(it.id))
+                            viewModel.updateDialogState(MyRegisterDialogState.RemoveContent(it.id))
                         },
                     )
 

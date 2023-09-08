@@ -12,6 +12,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -48,6 +49,12 @@ interface ProfilesApi {
 
     @POST("${Server.ApiVersion}/profiles")
     suspend fun registerProfile(
+        @Body profileRegisterRequest: ProfileRegisterRequest,
+    ): Response<NetworkResponse<ProfileDetailResponse>>
+
+    @PUT("${Server.ApiVersion}/profiles/{profileId}")
+    suspend fun modifyContent(
+        @Path("profileId") profileId: Int,
         @Body profileRegisterRequest: ProfileRegisterRequest,
     ): Response<NetworkResponse<ProfileDetailResponse>>
 

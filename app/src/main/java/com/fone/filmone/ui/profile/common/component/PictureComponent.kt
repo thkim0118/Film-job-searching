@@ -1,4 +1,4 @@
-package com.fone.filmone.ui.profile.register
+package com.fone.filmone.ui.profile.common.component
 
 import android.graphics.Bitmap
 import android.net.Uri

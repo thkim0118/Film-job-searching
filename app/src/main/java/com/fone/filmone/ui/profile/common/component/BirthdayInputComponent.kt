@@ -1,4 +1,4 @@
-package com.fone.filmone.ui.profile.register
+package com.fone.filmone.ui.profile.common.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +27,7 @@ fun BirthdayInputComponent(
     genderTagEnable: Boolean,
     currentGender: Gender?,
     onUpdateBirthday: (String) -> Unit,
-    onUpdateGenderTag: () -> Unit,
+    onUpdateGenderTag: (Boolean) -> Unit,
     onUpdateGender: (Gender, Boolean) -> Unit,
 ) {
     Column(
@@ -40,7 +40,7 @@ fun BirthdayInputComponent(
             isRequired = true,
             tagEnable = genderTagEnable,
             onTagClick = {
-                onUpdateGenderTag()
+                onUpdateGenderTag(genderTagEnable.not())
             }
         )
 

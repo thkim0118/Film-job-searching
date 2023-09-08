@@ -29,6 +29,11 @@ interface ProfilesRepository {
         profileRegisterRequest: ProfileRegisterRequest,
     ): DataResult<ProfileDetailResponse>
 
+    suspend fun modifyContent(
+        profileId: Int,
+        profileRegisterRequest: ProfileRegisterRequest,
+    ): DataResult<ProfileDetailResponse>
+
     suspend fun getProfileDetail(
         profileId: Int,
         type: Type,

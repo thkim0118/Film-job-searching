@@ -104,6 +104,7 @@ class ActorProfileDetailViewModel @Inject constructor(
                     )
                 }
             }.onFail {
+                showToast(it.message)
             }
     }
 }

@@ -1,29 +1,22 @@
-package com.fone.filmone.ui.profile.register.staff
+package com.fone.filmone.ui.profile.edit.actor
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.fone.filmone.ui.profile.common.staff.StaffProfileScreen
-import com.fone.filmone.ui.profile.common.staff.model.StaffProfileDialogState
+import com.fone.filmone.ui.profile.common.actor.ActorProfileScreen
 
 @Composable
-fun StaffProfileRegisterScreen(
-    modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController(),
-    viewModel: StaffProfileRegisterViewModel = hiltViewModel(),
+fun ActorProfileEditScreen(
+    navController: NavHostController,
+    viewModel: ActorProfileEditViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val dialogState by viewModel.dialogState.collectAsState()
 
-    StaffProfileScreen(
-        modifier = modifier,
+    ActorProfileScreen(
         navController = navController,
         uiState = uiState,
-        dialogState = dialogState,
         baseViewModel = viewModel,
         onRegisterClick = viewModel::registerProfile,
         onUpdateProfileImage = viewModel::updateImage,
@@ -33,24 +26,16 @@ fun StaffProfileRegisterScreen(
         onUpdateGender = viewModel::updateGender,
         onUpdateGenderTag = viewModel::updateGenderTag,
         onUpdateComments = viewModel::updateComments,
-        onUpdateDomains = {
-            viewModel.updateDialogState(
-                StaffProfileDialogState.DomainSelectDialog(
-                    selectedDomains = uiState.domains.toList()
-                )
-            )
-        },
+        onUpdateHeight = viewModel::updateHeight,
+        onUpdateWeight = viewModel::updateWeight,
         onUpdateEmail = viewModel::updateEmail,
-        onUpdateSpecialty = viewModel::updateSpecialty,
+        onUpdateAbility = viewModel::updateAbility,
         onUpdateSns = viewModel::updateSns,
         onUpdateDetailInfo = viewModel::updateDetailInfo,
         onUpdateCareer = viewModel::updateCareer,
         onUpdateCareerDetail = viewModel::updateCareerDetail,
         onCategoryTagClick = viewModel::updateCategoryTag,
         onUpdateCategory = viewModel::updateCategory,
-        onDialogDismiss = { domains ->
-            viewModel.updateRecruitmentDomains(domains.toSet())
-            viewModel.updateDialogState(StaffProfileDialogState.Clear)
-        }
+        onRegisterButtonClick = viewModel::registerProfile,
     )
 }

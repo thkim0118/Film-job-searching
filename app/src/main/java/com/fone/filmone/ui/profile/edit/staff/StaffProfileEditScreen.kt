@@ -1,4 +1,4 @@
-package com.fone.filmone.ui.profile.register.staff
+package com.fone.filmone.ui.profile.edit.staff
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -11,10 +11,10 @@ import com.fone.filmone.ui.profile.common.staff.StaffProfileScreen
 import com.fone.filmone.ui.profile.common.staff.model.StaffProfileDialogState
 
 @Composable
-fun StaffProfileRegisterScreen(
+fun StaffProfileEditScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    viewModel: StaffProfileRegisterViewModel = hiltViewModel(),
+    viewModel: StaffProfileEditViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val dialogState by viewModel.dialogState.collectAsState()

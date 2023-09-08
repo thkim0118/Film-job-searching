@@ -144,7 +144,29 @@ sealed class FOneDestinations(val route: String) {
     }
 
     object ActorProfileRegister : FOneDestinations("actor_profile_register")
+    object ActorProfileEdit : FOneDestinations("actor_profile_edit") {
+        const val argContentId = "arg_content_id"
+        val routeWithContentId = "$route/{$argContentId}"
+        val contentIdArguments = listOf(
+            navArgument(argContentId) { type = NavType.IntType },
+        )
+
+        fun getRouteWithContentId(contentId: Int?): String {
+            return "$route/$contentId"
+        }
+    }
     object StaffProfileRegister : FOneDestinations("staff_profile_register")
+    object StaffProfileEdit : FOneDestinations("staff_profile_edit") {
+        const val argContentId = "arg_content_id"
+        val routeWithContentId = "$route/{$argContentId}"
+        val contentIdArguments = listOf(
+            navArgument(argContentId) { type = NavType.IntType },
+        )
+
+        fun getRouteWithContentId(contentId: Int?): String {
+            return "$route/$contentId"
+        }
+    }
     object ActorProfileDetail : FOneDestinations("actor_profile_detail") {
         const val argProfileId = "arg_profileId"
         val routeWithArgs = "$route/{$argProfileId}"
