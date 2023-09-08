@@ -48,7 +48,7 @@ class JobScreenSharedViewModel @Inject constructor(
 
         val initJobTabFilterVo = JobTabFilterVo(
             ageMax = 70,
-            ageMin = 1,
+            ageMin = 0,
             categories = Category.values().toList(),
             domains = Domain.values().toList(),
             genders = Gender.values().toList(),
@@ -175,9 +175,9 @@ class JobScreenSharedViewModel @Inject constructor(
                     viewModelState.update { state ->
                         state.copy(
                             profileUiModels = if (refresh) {
-                                state.profileUiModels
-                            } else {
                                 emptyList()
+                            } else {
+                                state.profileUiModels
                             } + response.profiles.content.map { content ->
                                 JobTabProfilesUiModel(
                                     id = content.id,
