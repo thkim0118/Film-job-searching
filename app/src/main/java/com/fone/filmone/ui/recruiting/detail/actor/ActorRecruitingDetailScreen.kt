@@ -73,7 +73,8 @@ fun ActorRecruitingDetailScreen(
                 onScrapClick = {
                     viewModel.scrapRecruiting()
                 },
-                onContactClick = viewModel::contact
+                onContactClick = viewModel::contact,
+                uiState = uiState,
             )
         }
     ) { paddingValues ->
@@ -571,6 +572,7 @@ private fun ButtonComponent(
     modifier: Modifier = Modifier,
     onScrapClick: () -> Unit,
     onContactClick: () -> Unit,
+    uiState: ActorRecruitingDetailUiState,
 ) {
     Row(
         modifier = modifier
@@ -589,10 +591,17 @@ private fun ButtonComponent(
                 modifier = Modifier
                     .align(Alignment.Center),
             ) {
-                Image(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.actor_detaile_scrap_disable),
-                    contentDescription = null,
-                )
+                if (uiState.isScrap) {
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.actor_detaile_scrap_enable),
+                        contentDescription = null,
+                    )
+                } else {
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.actor_detaile_scrap_disable),
+                        contentDescription = null,
+                    )
+                }
 
                 Spacer(modifier = Modifier.width(5.dp))
 

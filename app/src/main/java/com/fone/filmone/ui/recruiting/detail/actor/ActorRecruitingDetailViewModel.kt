@@ -46,7 +46,12 @@ class ActorRecruitingDetailViewModel @Inject constructor(
         scrapUseCase(recruitingId)
             .onSuccess {
                 viewModelState.update { state ->
-                    state.copy( // TODO: scrap 여부 반영 필요, 참고) ActorProfileDetailViewModel
+                    state.copy(
+                        jobOpeningResponse = state.jobOpeningResponse?.copy(
+                            jobOpening = state.jobOpeningResponse.jobOpening.copy(
+                                isScrap = state.jobOpeningResponse.jobOpening.isScrap.not()
+                            )
+                        ),
                     )
                 }
             }.onFail {
@@ -108,6 +113,7 @@ private data class ActorRecruitingDetailViewModelState(
             detailInfo = jobOpeningResponse.jobOpening.work.details,
             manager = jobOpeningResponse.jobOpening.work.manager,
             email = jobOpeningResponse.jobOpening.work.email,
+            isScrap = jobOpeningResponse.jobOpening.isScrap,
         )
     } else {
         ActorRecruitingDetailUiState(
@@ -136,6 +142,7 @@ private data class ActorRecruitingDetailViewModelState(
             detailInfo = "",
             manager = "",
             email = "",
+            isScrap = false,
         )
     }
 }
@@ -166,4 +173,5 @@ data class ActorRecruitingDetailUiState(
     val detailInfo: String,
     val manager: String,
     val email: String,
+    val isScrap: Boolean,
 )
