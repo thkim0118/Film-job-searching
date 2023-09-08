@@ -157,7 +157,7 @@ private fun TitleComponent(
 ) {
     FTitleBar(
         modifier = modifier,
-        titleText = stringResource(id = R.string.actor_detail_title_text),
+        titleText = stringResource(id = R.string.staff_detail_title_text),
         leading = {
             Image(
                 modifier = Modifier

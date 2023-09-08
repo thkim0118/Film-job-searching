@@ -84,10 +84,10 @@ private data class ActorRecruitingDetailViewModelState(
     fun toUiState(): ActorRecruitingDetailUiState = if (jobOpeningResponse != null) {
         ActorRecruitingDetailUiState(
             id = jobOpeningResponse.jobOpening.id.toLong(),
-            date = "", // TODO
+            date = jobOpeningResponse.jobOpening.createdAt,
             viewCount = String.format("%,d", jobOpeningResponse.jobOpening.viewCount),
-            profileImageUrl = "", // TODO
-            userNickname = "", // TODO
+            profileImageUrl = jobOpeningResponse.jobOpening.profileUrl,
+            userNickname = jobOpeningResponse.jobOpening.nickname,
             userType = jobOpeningResponse.jobOpening.type.name,
             categories = jobOpeningResponse.jobOpening.categories,
             articleTitle = jobOpeningResponse.jobOpening.title,

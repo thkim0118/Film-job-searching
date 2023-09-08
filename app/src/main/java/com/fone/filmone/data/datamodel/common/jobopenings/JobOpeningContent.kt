@@ -24,5 +24,8 @@ data class JobOpeningContent(
     val scrapCount: Int,
     val work: Work,
     val isScrap: Boolean,
-    val dday: String
+    val dday: String,
+    val nickname: String,
+    val profileUrl: String,
+    val createdAt: String,
 )
