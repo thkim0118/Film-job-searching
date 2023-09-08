@@ -112,13 +112,16 @@ fun ActorFilterScreen(
                     onUpdateInterestsAll = viewModel::updateInterestSelectAll,
                     onUpdateInterests = viewModel::updateInterest
                 )
+
+                NextButton(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    onCloseClick = {
+                        navController.popBackStack()
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(38.dp))
             }
-
-            NextButton(
-                modifier = Modifier.padding(horizontal = 16.dp),
-            )
-
-            Spacer(modifier = Modifier.height(38.dp))
         }
     }
 }
@@ -394,8 +397,9 @@ private fun FilterComponentTitle(
 @Composable
 private fun ColumnScope.NextButton(
     modifier: Modifier = Modifier,
+    onCloseClick: () -> Unit
 ) {
-    val enable = false
+    val enable = true
 
     Spacer(modifier = Modifier.weight(1f))
 
@@ -403,9 +407,6 @@ private fun ColumnScope.NextButton(
         modifier = modifier,
         title = stringResource(id = R.string.job_filter_button_title),
         enable = enable,
-        onClick = {
-            if (enable) {
-            }
-        }
+        onClick = { onCloseClick() },
     )
 }
