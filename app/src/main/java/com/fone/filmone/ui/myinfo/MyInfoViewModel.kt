@@ -190,10 +190,7 @@ class MyInfoViewModel @Inject constructor(
                 return@launch
             },
             nickname = currentUiState.nickname,
-            profileUrl = profileUrl ?: currentUiState.profileUrl ?: run {
-                showToast(R.string.toast_empty_data)
-                return@launch
-            }
+            profileUrl = profileUrl ?: "",
         ).onSuccess {
             onSuccess()
         }.onFail {
