@@ -122,7 +122,7 @@ class JobScreenSharedViewModel @Inject constructor(
                                     name = content.name,
                                     info = "${content.birthday.slice(0..3)}년생 (${content.age}살)",
                                     isWant = content.isWant,
-                                    type = Type.ACTOR
+                                    type = content.type,
                                 )
                             }
                         )
@@ -185,7 +185,7 @@ class JobScreenSharedViewModel @Inject constructor(
                                     name = content.name,
                                     info = "${content.birthday.slice(0..3)}년생 (${content.age}살)",
                                     isWant = content.isWant,
-                                    type = Type.STAFF
+                                    type = content.type
                                 )
                             }
                         )

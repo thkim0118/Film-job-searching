@@ -48,7 +48,7 @@ class StaffRecruitingDetailViewModel @Inject constructor(
 
             getJobOpeningDetailUseCase(
                 jobOpeningId = competitionId,
-                type = Type.ACTOR,
+                type = Type.STAFF,
             ).onSuccess { response ->
                 if (response == null) {
                     showToast(R.string.toast_empty_data)
