@@ -3,7 +3,6 @@ package com.fone.filmone.data.datasource.remote
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.network.NetworkResponse
 import com.fone.filmone.data.datamodel.common.network.Server
-import com.fone.filmone.data.datamodel.common.paging.SortType
 import com.fone.filmone.data.datamodel.request.profile.ProfileRegisterRequest
 import com.fone.filmone.data.datamodel.response.profiles.ProfilesPagingResponse
 import com.fone.filmone.data.datamodel.response.profiles.detail.ProfileDetailResponse
@@ -25,7 +24,7 @@ interface ProfilesApi {
         @Query("genders") genders: List<String>,
         @Query("page") page: Int,
         @Query("size") size: Int,
-        @Query("sort") sort: SortType,
+        @Query("sort") sort: String,
         @Query("type") type: Type,
     ): Response<NetworkResponse<ProfilesPagingResponse>>
 

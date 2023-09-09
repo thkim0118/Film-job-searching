@@ -34,7 +34,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -80,7 +79,6 @@ fun JobScreen(
     currentJobSorting: JobSorting,
     userType: Type,
     initialJobTab: JobTab = JobTab.JOB_OPENING,
-    onUpdateCurrentJobSorting: (JobTab) -> Unit,
     onJobOpeningsFilterClick: () -> Unit,
     onProfileFilterClick: () -> Unit,
     onJobPageChanged: (JobTab) -> Unit,
@@ -93,9 +91,20 @@ fun JobScreen(
         initialPage = initialJobTab.index,
         pageCount = { JobTab.values().size }
     )
+    var currentPage by remember { mutableStateOf(initialJobTab.index) }
 
-    LaunchedEffect(key1 = userType) {
-        viewModel.initUserType(userType)
+    LaunchedEffect(key1 = pagerState) {
+        snapshotFlow { pagerState.targetPage }.collectLatest {
+            currentPage = it
+            when (it) {
+                JobTab.JOB_OPENING.index -> onJobPageChanged(JobTab.JOB_OPENING)
+                JobTab.PROFILE.index -> onJobPageChanged(JobTab.PROFILE)
+            }
+        }
+    }
+
+    LaunchedEffect(key1 = userType, key2 = currentJobSorting.currentJobFilterType) {
+        viewModel.initUserType(userType, currentJobSorting.currentJobFilterType)
     }
 
     Column(
@@ -103,6 +112,7 @@ fun JobScreen(
             .fillMaxSize()
     ) {
         JobHeader(
+            currentPage = currentPage,
             pagerState = pagerState,
             type = uiState.userType ?: userType,
             onJobPageChanged = onJobPageChanged,
@@ -117,20 +127,26 @@ fun JobScreen(
                 }
             },
             onJobSortingClick = {
-                when (currentJobSorting) {
-                    is JobSorting.JobOpenings -> onJobOpeningsFilterClick()
-                    is JobSorting.Profile -> onProfileFilterClick()
+                if (currentPage == 0) {
+                    onJobOpeningsFilterClick()
+                } else {
+                    onProfileFilterClick()
                 }
             },
-            onUpdateCurrentJobSorting = onUpdateCurrentJobSorting,
             onFilterClick = {
                 val route = when (uiState.userType ?: userType) {
                     Type.ACTOR -> {
-                        viewModel.initUserType(Type.ACTOR)
+                        viewModel.initUserType(
+                            Type.ACTOR,
+                            currentJobSorting.currentJobFilterType
+                        )
                         FOneDestinations.ActorFilter.route
                     }
                     Type.STAFF -> {
-                        viewModel.initUserType(Type.STAFF)
+                        viewModel.initUserType(
+                            Type.STAFF,
+                            currentJobSorting.currentJobFilterType
+                        )
                         FOneDestinations.StaffFilter.route
                     }
                 }
@@ -216,21 +232,10 @@ private fun JobHeader(
     currentJobSorting: JobSorting,
     onTabSelected: (Int) -> Unit,
     onJobSortingClick: () -> Unit,
-    onUpdateCurrentJobSorting: (JobTab) -> Unit,
     onFilterClick: () -> Unit,
+    currentPage: Int,
 ) {
     var isTitleFilterClick by remember { mutableStateOf(false) }
-    var currentPage by remember { mutableIntStateOf(0) }
-
-    LaunchedEffect(key1 = pagerState) {
-        snapshotFlow { pagerState.targetPage }.collectLatest {
-            currentPage = it
-            when (it) {
-                JobTab.JOB_OPENING.index -> onJobPageChanged(JobTab.JOB_OPENING)
-                JobTab.PROFILE.index -> onJobPageChanged(JobTab.PROFILE)
-            }
-        }
-    }
 
     ConstraintLayout(
         modifier = modifier
@@ -279,7 +284,6 @@ private fun JobHeader(
             currentJobSorting = currentJobSorting,
             onTabSelected = onTabSelected,
             onListSortingItemClick = onJobSortingClick,
-            onUpdateCurrentJobSorting = onUpdateCurrentJobSorting,
             onFilterIconClick = onFilterClick
         )
 
@@ -369,13 +373,9 @@ private fun JobFilterHeader(
     currentPage: Int,
     currentJobSorting: JobSorting,
     onTabSelected: (Int) -> Unit,
-    onUpdateCurrentJobSorting: (JobTab) -> Unit,
     onListSortingItemClick: () -> Unit,
     onFilterIconClick: () -> Unit,
 ) {
-    JobTab.values().find { it.index == currentPage }?.let { jobTab ->
-        onUpdateCurrentJobSorting(jobTab)
-    }
 
     Column(
         modifier = modifier

@@ -11,7 +11,6 @@ import com.fone.filmone.domain.usecase.LogoutUseCase
 import com.fone.filmone.domain.usecase.SignOutUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.main.job.JobFilterType
-import com.fone.filmone.ui.main.job.JobTab
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
@@ -37,7 +36,7 @@ class MainViewModel @Inject constructor(
         .map(MainViewModelState::toUiState)
         .stateIn(
             viewModelScope,
-            SharingStarted.Eagerly,
+            SharingStarted.Lazily,
             viewModelState.value.toUiState()
         )
 
@@ -133,36 +132,18 @@ class MainViewModel @Inject constructor(
                     when (it.type) {
                         Type.STAFF -> {
                             it.copy(
-                                staffJobOpeningsSorting = JobSorting.JobOpenings(jobFilterType),
-                                currentJobSortingTab = JobSorting.JobOpenings(jobFilterType)
+                                staffJobOpeningsSorting = JobSorting.Profile(jobFilterType),
+                                currentJobSortingTab = JobSorting.Profile(jobFilterType)
                             )
                         }
 
                         else -> {
                             it.copy(
-                                actorJobOpeningsSorting = JobSorting.JobOpenings(jobFilterType),
-                                currentJobSortingTab = JobSorting.JobOpenings(jobFilterType)
+                                actorJobOpeningsSorting = JobSorting.Profile(jobFilterType),
+                                currentJobSortingTab = JobSorting.Profile(jobFilterType)
                             )
                         }
                     }
-                }
-            }
-        }
-    }
-
-    fun updateCurrentJobFilterTab(jobTab: JobTab) {
-        viewModelState.update {
-            when (jobTab) {
-                JobTab.JOB_OPENING -> {
-                    it.copy(
-                        currentJobSortingTab = it.actorJobOpeningsSorting
-                    )
-                }
-
-                JobTab.PROFILE -> {
-                    it.copy(
-                        currentJobSortingTab = it.actorProfileSorting
-                    )
                 }
             }
         }
@@ -185,14 +166,16 @@ private data class MainViewModelState(
     val staffJobOpeningsSorting: JobSorting = JobSorting.JobOpenings(JobFilterType.Recent),
     val staffProfileSorting: JobSorting = JobSorting.Profile(JobFilterType.Recent),
 ) {
-    fun toUiState() = MainUiState(
-        type = type,
-        mainDialogState = mainDialogState,
-        isFloatingClick = isFloatingClick,
-        currentJobSorting = currentJobSortingTab,
-        actorJobOpeningsSorting = actorJobOpeningsSorting,
-        actorProfileSorting = actorProfileSorting,
-    )
+    fun toUiState(): MainUiState {
+        return MainUiState(
+            type = type,
+            mainDialogState = mainDialogState,
+            isFloatingClick = isFloatingClick,
+            currentJobSorting = currentJobSortingTab,
+            actorJobOpeningsSorting = actorJobOpeningsSorting,
+            actorProfileSorting = actorProfileSorting,
+        )
+    }
 }
 
 data class MainUiState(

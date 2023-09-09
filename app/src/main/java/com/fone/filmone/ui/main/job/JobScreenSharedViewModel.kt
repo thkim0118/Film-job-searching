@@ -41,11 +41,18 @@ class JobScreenSharedViewModel @Inject constructor(
             viewModelState.value.toUiState(),
         )
 
-    fun initUserType(userType: Type) {
+    fun initUserType(userType: Type, sortingType: JobFilterType) {
         viewModelState.update {
             it.copy(userType = userType)
         }
 
+        val sort = if (sortingType == JobFilterType.Recent) {
+            "createdAt,DESC"
+        } else if (sortingType == JobFilterType.View) {
+            "viewCount,DESC"
+        } else {
+            "deadline,ASC"
+        }
         val initJobTabFilterVo = JobTabFilterVo(
             ageMax = 70,
             ageMin = 0,
@@ -53,6 +60,7 @@ class JobScreenSharedViewModel @Inject constructor(
             domains = Domain.values().toList(),
             genders = Gender.values().toList(),
             type = userType,
+            sort = sort
         )
 
         when (userType) {
@@ -246,6 +254,7 @@ private data class JobScreenViewModelState(
         domains = null,
         genders = emptyList(),
         type = Type.ACTOR,
+        sort = "createdAt,DESC"
     ),
     val actorProfilesFilter: JobTabFilterVo = JobTabFilterVo(
         ageMax = 70,
@@ -254,6 +263,7 @@ private data class JobScreenViewModelState(
         domains = null,
         genders = emptyList(),
         type = Type.ACTOR,
+        sort = "createdAt,DESC"
     ),
     val staffJobOpeningsFilter: JobTabFilterVo = JobTabFilterVo(
         ageMax = 70,
@@ -262,6 +272,7 @@ private data class JobScreenViewModelState(
         domains = null,
         genders = emptyList(),
         type = Type.STAFF,
+        sort = "createdAt,DESC"
     ),
     val staffProfilesFilter: JobTabFilterVo = JobTabFilterVo(
         ageMax = 70,
@@ -270,6 +281,7 @@ private data class JobScreenViewModelState(
         domains = null,
         genders = emptyList(),
         type = Type.STAFF,
+        sort = "createdAt,DESC"
     ),
 ) {
     fun toUiState(): JobScreenUiState = JobScreenUiState(

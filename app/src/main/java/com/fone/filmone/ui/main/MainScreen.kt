@@ -197,7 +197,6 @@ fun MainScreen(
                         currentJobSorting = uiState.currentJobSorting,
                         userType = uiState.type,
                         initialJobTab = initialJobTab,
-                        onUpdateCurrentJobSorting = mainViewModel::updateCurrentJobFilterTab,
                         onJobOpeningsFilterClick = {
                             bottomSheetType = MainBottomSheetType.JobTabJopOpeningsFilter
                             coroutineScope.launch { bottomSheetState.show() }
