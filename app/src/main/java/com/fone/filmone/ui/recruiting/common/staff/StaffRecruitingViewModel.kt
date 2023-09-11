@@ -75,8 +75,7 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
             return true
         }
 
-        if (step1UiModel.deadlineTagEnable && PatternUtil.isValidDate(step1UiModel.deadlineDate)
-            .not()
+        if (step1UiModel.deadlineTagEnable.not() && PatternUtil.isValidDate(step1UiModel.deadlineDate)
         ) {
             return true
         }

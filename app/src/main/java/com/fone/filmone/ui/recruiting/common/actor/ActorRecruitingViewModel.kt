@@ -69,8 +69,7 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
             return true
         }
 
-        if (step1UiModel.deadlineTagEnable && PatternUtil.isValidDate(step1UiModel.deadlineDate)
-            .not()
+        if (step1UiModel.deadlineTagEnable.not() && PatternUtil.isValidDate(step1UiModel.deadlineDate)
         ) {
             updateFocusEvent(ActorRecruitingFocusEvent.Deadline)
             return true
