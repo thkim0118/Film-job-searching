@@ -191,6 +191,9 @@ private fun EmailComponent(
 
             Spacer(modifier = Modifier.height(6.dp))
         },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email,
+        ),
         rightComponents = {
             Spacer(modifier = Modifier.width(4.dp))
 

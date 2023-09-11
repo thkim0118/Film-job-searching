@@ -669,6 +669,9 @@ private fun Step5Component(
             titleSpace = 13,
             text = email,
             onValueChanged = onUpdateEmail,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+            ),
         )
 
         Spacer(modifier = Modifier.height(56.dp))

@@ -25,6 +25,6 @@ fun EmailInputComponent(
             imeAction = ImeAction.Next,
             keyboardType = KeyboardType.Email,
         ),
-        onValueChanged = onUpdateEmail
+        onValueChanged = onUpdateEmail,
     )
 }
