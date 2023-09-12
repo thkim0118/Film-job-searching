@@ -40,6 +40,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.ui.common.FTitleBar
@@ -60,7 +62,8 @@ import com.skydoves.landscapist.glide.GlideImage
 @Composable
 fun StaffProfileDetailScreen(
     modifier: Modifier = Modifier,
-    viewModel: StaffProfileDetailViewModel = hiltViewModel()
+    viewModel: StaffProfileDetailViewModel = hiltViewModel(),
+    navController: NavHostController = rememberNavController()
 ) {
     val scrollState = rememberScrollState()
     val uiState by viewModel.uiState.collectAsState()
@@ -80,7 +83,7 @@ fun StaffProfileDetailScreen(
                 .padding(it)
         ) {
             TitleComponent(
-                onBackClick = {},
+                onBackClick = { navController.popBackStack() },
                 onMoreImageClick = {}
             )
 

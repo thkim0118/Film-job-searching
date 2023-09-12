@@ -148,7 +148,7 @@ fun FOneNavGraph(
             route = FOneDestinations.StaffProfileDetail.routeWithArgs,
             arguments = FOneDestinations.StaffProfileDetail.arguments
         ) {
-            StaffProfileDetailScreen()
+            StaffProfileDetailScreen(navController = navController)
         }
         composable(
             route = FOneDestinations.ProfileList.routeWithArgs,
