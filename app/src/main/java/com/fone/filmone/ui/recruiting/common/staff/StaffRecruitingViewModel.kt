@@ -157,14 +157,23 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
 
     fun updateCategory(category: Category, enable: Boolean) {
         viewModelState.update { state ->
+            var updatedCategories = state.staffRecruitingStep1UiModel.categories
+
+            if (enable) {
+                if (updatedCategories.size < 2) {
+                    updatedCategories = updatedCategories + setOf(category)
+                } else {
+                    val firstSelected = updatedCategories.first()
+                    updatedCategories = updatedCategories.filterNot { it == firstSelected }.toSet()
+                    updatedCategories = updatedCategories + setOf(category)
+                }
+            } else {
+                updatedCategories = updatedCategories.filterNot { it == category }.toSet()
+            }
+
             state.copy(
                 staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
-                    categories = if (enable) {
-                        state.staffRecruitingStep1UiModel.categories + setOf(category)
-                    } else {
-                        state.staffRecruitingStep1UiModel.categories.filterNot { it == category }
-                            .toSet()
-                    },
+                    categories = updatedCategories
                 ),
             )
         }
