@@ -59,19 +59,47 @@ fun MyRecruitmentScreen(
                         period = it.period,
                         jobType = it.jobType,
                         casting = it.casting,
+                        onItemClick = {
+                            when (it.type) {
+                                Type.ACTOR -> {
+                                    FOneNavigator.navigateTo(
+                                        navDestinationState = NavDestinationState(
+                                            route = FOneDestinations.ActorRecruitingDetail.getRouteWithArg(
+                                                it.id
+                                            )
+                                        )
+                                    )
+                                }
+
+                                Type.STAFF -> {
+                                    FOneNavigator.navigateTo(
+                                        navDestinationState = NavDestinationState(
+                                            route = FOneDestinations.StaffRecruitingDetail.getRouteWithArg(
+                                                it.id
+                                            )
+                                        )
+                                    )
+                                }
+                            }
+                        },
                         onEditClick = {
                             when (it.type) {
                                 Type.ACTOR -> {
                                     FOneNavigator.navigateTo(
                                         navDestinationState = NavDestinationState(
-                                            route = FOneDestinations.ActorRecruitingEdit.getRouteWithContentId(it.id),
+                                            route = FOneDestinations.ActorRecruitingEdit.getRouteWithContentId(
+                                                it.id
+                                            ),
                                         ),
                                     )
                                 }
+
                                 Type.STAFF -> {
                                     FOneNavigator.navigateTo(
                                         navDestinationState = NavDestinationState(
-                                            route = FOneDestinations.StaffRecruitingEdit.getRouteWithContentId(it.id),
+                                            route = FOneDestinations.StaffRecruitingEdit.getRouteWithContentId(
+                                                it.id
+                                            ),
                                         ),
                                     )
                                 }
@@ -103,12 +131,14 @@ private fun RegisterItem(
     period: String,
     jobType: JobType,
     casting: String?,
+    onItemClick: () -> Unit,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit,
 ) {
     Column(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickableSingle { onItemClick() },
     ) {
         Column(
             modifier = Modifier

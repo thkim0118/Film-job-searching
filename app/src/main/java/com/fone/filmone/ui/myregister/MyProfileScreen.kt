@@ -67,19 +67,47 @@ fun MyProfileScreen(
                         name = it.name,
                         type = it.type,
                         info = it.info,
+                        onItemClick = {
+                            when (it.type) {
+                                Type.ACTOR -> {
+                                    FOneNavigator.navigateTo(
+                                        navDestinationState = NavDestinationState(
+                                            route = FOneDestinations.ActorProfileDetail.getRouteWithArg(
+                                                it.id
+                                            ),
+                                        ),
+                                    )
+                                }
+
+                                Type.STAFF -> {
+                                    FOneNavigator.navigateTo(
+                                        navDestinationState = NavDestinationState(
+                                            route = FOneDestinations.StaffProfileDetail.getRouteWithArg(
+                                                it.id
+                                            ),
+                                        ),
+                                    )
+                                }
+                            }
+                        },
                         onModifyClick = {
                             when (it.type) {
                                 Type.ACTOR -> {
                                     FOneNavigator.navigateTo(
                                         navDestinationState = NavDestinationState(
-                                            route = FOneDestinations.ActorProfileEdit.getRouteWithContentId(it.id),
+                                            route = FOneDestinations.ActorProfileEdit.getRouteWithContentId(
+                                                it.id
+                                            ),
                                         ),
                                     )
                                 }
+
                                 Type.STAFF -> {
                                     FOneNavigator.navigateTo(
                                         navDestinationState = NavDestinationState(
-                                            route = FOneDestinations.StaffProfileEdit.getRouteWithContentId(it.id),
+                                            route = FOneDestinations.StaffProfileEdit.getRouteWithContentId(
+                                                it.id
+                                            ),
                                         ),
                                     )
                                 }
@@ -106,15 +134,18 @@ private fun RegisterProfileItem(
     name: String,
     type: Type,
     info: String,
+    onItemClick: () -> Unit,
     onModifyClick: () -> Unit,
     onRemoveClick: () -> Unit,
 ) {
     val shape = RoundedCornerShape(10.dp)
 
     Card(
-        modifier = modifier,
+        modifier = modifier
+            .clickableSingle { onItemClick() },
         shape = shape,
         backgroundColor = FColor.White,
+        elevation = 4.dp
     ) {
         Row(modifier = Modifier.padding(12.dp)) {
             GlideImage(
