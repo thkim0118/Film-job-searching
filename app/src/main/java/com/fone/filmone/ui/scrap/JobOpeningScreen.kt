@@ -36,6 +36,10 @@ import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.domain.model.jobopenings.JobType
 import com.fone.filmone.ui.common.empty.EmptyScreen
+import com.fone.filmone.ui.common.ext.clickableSingle
+import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
@@ -63,6 +67,29 @@ fun JobOpeningScreen(
                         jobType = it.jobType,
                         casting = it.casting,
                         isScrap = it.isScrap,
+                        onItemClick = {
+                            when (it.type) {
+                                Type.ACTOR -> {
+                                    FOneNavigator.navigateTo(
+                                        navDestinationState = NavDestinationState(
+                                            route = FOneDestinations.ActorRecruitingDetail.getRouteWithArg(
+                                                it.id
+                                            )
+                                        )
+                                    )
+                                }
+
+                                Type.STAFF -> {
+                                    FOneNavigator.navigateTo(
+                                        navDestinationState = NavDestinationState(
+                                            route = FOneDestinations.StaffRecruitingDetail.getRouteWithArg(
+                                                it.id
+                                            )
+                                        )
+                                    )
+                                }
+                            }
+                        },
                         onScrapClick = { onScrapClick(it.id) },
                     )
 
@@ -95,10 +122,12 @@ private fun JobOpeningComponent(
     casting: String?,
     isScrap: Boolean,
     onScrapClick: () -> Unit = {},
+    onItemClick: () -> Unit,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .clickableSingle { onItemClick() }
             .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 10.dp),
     ) {
         Column(
@@ -346,6 +375,7 @@ fun JobOpeningComponentPreview() {
             jobType = JobType.PART,
             casting = "수영선수",
             isScrap = true,
+            onItemClick = {}
         )
     }
 }

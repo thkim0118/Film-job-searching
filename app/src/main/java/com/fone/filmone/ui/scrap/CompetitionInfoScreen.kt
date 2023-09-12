@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.empty.EmptyScreen
+import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
 import com.fone.filmone.ui.theme.LocalTypography
@@ -61,6 +62,7 @@ fun CompetitionsScreen(
                         dday = it.dday,
                         viewCount = it.vieweCount,
                         isScrap = it.isScrap,
+                        onItemClick = {},
                         onScrapClick = { onScrapClick(it.id) }
                     )
 
@@ -89,10 +91,12 @@ private fun CompetitionComponent(
     viewCount: String,
     isScrap: Boolean,
     onScrapClick: () -> Unit,
+    onItemClick: () -> Unit,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .clickableSingle { onItemClick() }
             .padding(vertical = 10.dp)
     ) {
         CompetitionImage(modifier, imageUrl)

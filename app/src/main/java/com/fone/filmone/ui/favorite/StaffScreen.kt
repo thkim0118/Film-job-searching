@@ -17,6 +17,9 @@ import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.ui.common.component.ProfileItem
 import com.fone.filmone.ui.common.empty.EmptyScreen
+import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
 
 @Composable
 fun StaffScreen(
@@ -44,6 +47,15 @@ fun StaffScreen(
                             info = it.info,
                             isWant = it.isWant,
                             onFavoriteImageClick = { onFavoriteClick(it.id, Type.STAFF) },
+                            onImageClick = {
+                                FOneNavigator.navigateTo(
+                                    navDestinationState = NavDestinationState(
+                                        route = FOneDestinations.StaffProfileDetail.getRouteWithArg(
+                                            it.id
+                                        )
+                                    )
+                                )
+                            }
                         )
                     }
                 }
