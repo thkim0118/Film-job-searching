@@ -3,6 +3,7 @@ package com.fone.filmone.ui.profile.detail.staff
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -53,6 +55,10 @@ import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.main.job.common.TagComponent
+import com.fone.filmone.ui.navigation.FOneDestinations
+import com.fone.filmone.ui.navigation.FOneNavigator
+import com.fone.filmone.ui.navigation.NavDestinationState
+import com.fone.filmone.ui.profile.list.model.ProfileListArguments
 import com.fone.filmone.ui.recruiting.detail.InfoComponent
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
@@ -101,7 +107,8 @@ fun StaffProfileDetailScreen(
 
                 ProfileListComponent(
                     title = uiState.articleTitle,
-                    imageUrls = uiState.profileImageUrls
+                    imageUrls = uiState.profileImageUrls,
+                    userName = uiState.userName
                 )
 
                 ActorInfoComponent(
@@ -351,7 +358,8 @@ fun FullScreenPhotoDialog(
 private fun ProfileListComponent(
     modifier: Modifier = Modifier,
     title: String,
-    imageUrls: List<String>
+    imageUrls: List<String>,
+    userName: String,
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var clickedImageUrl by remember { mutableStateOf("") }
@@ -395,7 +403,12 @@ private fun ProfileListComponent(
         )
     }
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(color = FColor.Divider2)
+            .padding(top = 18.dp, bottom = 20.dp, start = 16.dp, end = 16.dp),
+    ) {
         Text(
             text = title,
             style = LocalTypography.current.h2()
@@ -438,7 +451,38 @@ private fun ProfileListComponent(
 
         Spacer(modifier = Modifier.height(6.dp))
 
-        Row(modifier = Modifier) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickableSingleWithNoRipple {
+                    FOneNavigator.navigateTo(
+                        NavDestinationState(
+                            route = FOneDestinations.ProfileList.getRouteWithArg(
+                                profileListArgument = ProfileListArguments(
+                                    userName,
+                                    imageUrls
+                                )
+                            )
+                        )
+                    )
+                },
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(id = R.string.profile_detail_actor_picture_more_text),
+                style = fTextStyle(
+                    fontWeight = FontWeight.W500,
+                    fontSize = 12.textDp,
+                    lineHeight = 18.textDp,
+                    color = FColor.TextSecondary
+                )
+            )
+
+            Image(
+                painter = painterResource(id = R.drawable.actor_profile_detail_arrow_right),
+                contentDescription = null
+            )
         }
     }
 }
