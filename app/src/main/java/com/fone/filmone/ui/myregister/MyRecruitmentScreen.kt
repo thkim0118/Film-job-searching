@@ -53,7 +53,7 @@ fun MyRecruitmentScreen(
                         type = it.type,
                         categories = it.categories,
                         title = it.title,
-                        deadline = it.deadline,
+                        deadline = it.deadline ?: stringResource(id = R.string.always_recruiting),
                         director = it.director,
                         gender = it.gender,
                         period = it.period,

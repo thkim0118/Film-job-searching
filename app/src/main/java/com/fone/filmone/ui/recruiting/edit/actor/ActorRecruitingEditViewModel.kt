@@ -2,7 +2,6 @@ package com.fone.filmone.ui.recruiting.edit.actor
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.jobopenings.Work
 import com.fone.filmone.data.datamodel.common.user.Career
@@ -74,7 +73,7 @@ class ActorRecruitingEditViewModel @Inject constructor(
                                     actorRecruitingStep1UiModel = ActorRecruitingStep1UiModel(
                                         titleText = content.title,
                                         categories = content.categories,
-                                        deadlineDate = content.deadline ?: R.string.always_recruiting.toString(),
+                                        deadlineDate = content.deadline,
                                         deadlineTagEnable = false,
                                         recruitmentActor = content.casting ?: "",
                                         recruitmentNumber = content.numberOfRecruits.toString(),
@@ -142,7 +141,7 @@ class ActorRecruitingEditViewModel @Inject constructor(
                 career = step1UiModel.career ?: Career.IRRELEVANT,
                 casting = step1UiModel.recruitmentActor.ifEmpty { null },
                 categories = step1UiModel.categories.map { it.name },
-                deadline = step1UiModel.deadlineDate,
+                deadline = step1UiModel.deadlineDate ?: "상시모집",
                 domains = null,
                 gender = step1UiModel.recruitmentGender ?: Gender.IRRELEVANT,
                 numberOfRecruits = step1UiModel.recruitmentNumber.toInt(),
