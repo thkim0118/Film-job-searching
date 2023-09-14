@@ -59,6 +59,7 @@ import androidx.lifecycle.Lifecycle
 import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.ui.common.ext.clickableSingle
+import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
@@ -77,6 +78,7 @@ import com.skydoves.landscapist.glide.GlideImage
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
+    onJobButtonClick: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
     val uiState by viewModel.uiState.collectAsState()
@@ -159,6 +161,7 @@ fun HomeScreen(
                         ),
                     )
                 },
+                onJobButtonClick = onJobButtonClick,
             )
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -195,6 +198,7 @@ fun HomeScreen(
                         ),
                     )
                 },
+                onJobButtonClick = onJobButtonClick,
             )
         }
     }
@@ -303,6 +307,7 @@ private fun RecommendedCompetitionComponent(
     modifier: Modifier = Modifier,
     recommendedContents: List<RecommendedContent>,
     onItemClick: (competitionId: Int, type: Type) -> Unit,
+    onJobButtonClick: () -> Unit,
 ) {
     val backgroundContents = listOf(
         R.drawable.home_card1 to FColor.Divider2,
@@ -351,6 +356,9 @@ private fun RecommendedCompetitionComponent(
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.home_recommended_right_arrow),
                 contentDescription = null,
+                modifier = Modifier.clickableWithNoRipple {
+                    onJobButtonClick()
+                }
             )
         }
 
@@ -535,6 +543,7 @@ private fun ActorProfileComponent(
     modifier: Modifier = Modifier,
     homeActorProfileContents: List<HomeActorProfileContent>,
     onItemClick: (profileId: Int) -> Unit,
+    onJobButtonClick: () -> Unit,
 ) {
     @Composable
     fun ActorProfile(
@@ -639,6 +648,9 @@ private fun ActorProfileComponent(
             Image(
                 imageVector = ImageVector.vectorResource(id = R.drawable.home_recommended_right_arrow),
                 contentDescription = null,
+                modifier = Modifier.clickableWithNoRipple {
+                    onJobButtonClick()
+                }
             )
         }
 
