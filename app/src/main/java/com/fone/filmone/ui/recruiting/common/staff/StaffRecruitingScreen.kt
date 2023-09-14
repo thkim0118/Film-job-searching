@@ -287,7 +287,7 @@ private fun Step1Component(
     titleText: String,
     titleTextLimit: Int,
     currentCategories: List<Category>,
-    deadlineDate: String?,
+    deadlineDate: String,
     deadlineTagEnable: Boolean,
     selectedDomains: List<Domain>,
     recruitmentNumber: String,
@@ -341,7 +341,7 @@ private fun Step1Component(
     Spacer(modifier = Modifier.height(20.dp))
 
     RecruitmentInputComponent(
-        deadlineDate = deadlineDate ?: stringResource(id = R.string.always_recruiting),
+        deadlineDate = deadlineDate,
         deadlineTagEnable = deadlineTagEnable,
         selectedDomains = selectedDomains,
         recruitmentNumber = recruitmentNumber,

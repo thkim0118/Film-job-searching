@@ -1,6 +1,7 @@
 package com.fone.filmone.ui.scrap
 
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Gender
@@ -67,7 +68,7 @@ class ScrapViewModel @Inject constructor(
                                 type = content.type,
                                 categories = content.categories,
                                 title = content.title,
-                                deadline = content.deadline,
+                                deadline = content.deadline ?: R.string.always_recruiting.toString(),
                                 director = content.work.director,
                                 gender = content.gender,
                                 period = content.dday,
@@ -139,7 +140,7 @@ data class JobOpeningUiModel(
     val type: Type,
     val categories: List<Category>,
     val title: String,
-    val deadline: String?,
+    val deadline: String,
     val director: String,
     val gender: Gender,
     val period: String,

@@ -1,6 +1,7 @@
 package com.fone.filmone.ui.myregister
 
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.JobOpenings
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.profile.Profiles
@@ -105,10 +106,10 @@ private data class MyRegisterViewModelState(
                 type = content.type,
                 categories = content.categories,
                 title = content.title,
-                deadline = content.deadline?.replace(
+                deadline = if (content.deadline != null) content.deadline.replace(
                     "-",
                     ". "
-                ),
+                ) else R.string.always_recruiting.toString(),
                 director = content.work.produce,
                 gender = content.gender,
                 period = content.dday,
@@ -144,7 +145,7 @@ data class RegisterPostUiModel(
     val type: Type,
     val categories: List<Category>,
     val title: String,
-    val deadline: String?,
+    val deadline: String,
     val director: String,
     val gender: Gender,
     val period: String,

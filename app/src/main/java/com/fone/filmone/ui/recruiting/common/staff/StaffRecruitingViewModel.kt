@@ -71,12 +71,11 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
             return true
         }
 
-        if (step1UiModel.deadlineTagEnable.not() && step1UiModel.deadlineDate.isNullOrEmpty()) {
+        if (step1UiModel.deadlineTagEnable.not() && step1UiModel.deadlineDate.isEmpty()) {
             return true
         }
 
-        if (step1UiModel.deadlineTagEnable.not() &&
-            (PatternUtil.isValidDate(step1UiModel.deadlineDate!!) || step1UiModel.deadlineDate == "상시모집")
+        if (step1UiModel.deadlineTagEnable.not() && PatternUtil.isValidDate(step1UiModel.deadlineDate)
         ) {
             return true
         }
@@ -205,7 +204,7 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
                 staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
                     deadlineTagEnable = enable,
                     deadlineDate = if (enable) {
-                        null
+                        ""
                     } else {
                         state.staffRecruitingStep1UiModel.deadlineDate
                     },
@@ -519,7 +518,7 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
 
         val enable =
             modelState.staffRecruitingStep1UiModel.titleText.isNotEmpty() && modelState.staffRecruitingStep1UiModel.categories.isNotEmpty() &&
-                (PatternUtil.isValidDate(modelState.staffRecruitingStep1UiModel.deadlineDate!!) || modelState.staffRecruitingStep1UiModel.deadlineDate == "상시모집") &&
+                PatternUtil.isValidDate(modelState.staffRecruitingStep1UiModel.deadlineDate) &&
                 modelState.staffRecruitingStep1UiModel.recruitmentDomains.isNotEmpty() && modelState.staffRecruitingStep1UiModel.recruitmentNumber.isNotEmpty() &&
                 modelState.staffRecruitingStep2UiModel.production.isNotEmpty() && modelState.staffRecruitingStep2UiModel.workTitle.isNotEmpty() &&
                 modelState.staffRecruitingStep2UiModel.directorName.isNotEmpty() && modelState.staffRecruitingStep2UiModel.genre.isNotEmpty() &&

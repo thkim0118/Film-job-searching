@@ -143,8 +143,7 @@ fun ActorRecruitingScreen(
                     titleText = uiState.actorRecruitingStep1UiModel.titleText,
                     titleTextLimit = uiState.actorRecruitingStep1UiModel.titleTextLimit,
                     currentCategories = uiState.actorRecruitingStep1UiModel.categories,
-                    deadlineDate = uiState.actorRecruitingStep1UiModel.deadlineDate
-                        ?: stringResource(id = R.string.always_recruiting),
+                    deadlineDate = uiState.actorRecruitingStep1UiModel.deadlineDate,
                     deadlineDateTagEnable = uiState.actorRecruitingStep1UiModel.deadlineTagEnable,
                     recruitmentActor = uiState.actorRecruitingStep1UiModel.recruitmentActor,
                     recruitmentNumber = uiState.actorRecruitingStep1UiModel.recruitmentNumber,
@@ -648,9 +647,7 @@ private fun Step4Component(
     }
 
     Column(
-        modifier = modifier
-            .padding(horizontal = 20.dp)
-            .focusRequester(detailFocusRequester),
+        modifier = modifier.padding(horizontal = 20.dp).focusRequester(detailFocusRequester),
     ) {
         Spacer(modifier = Modifier.height(20.dp))
 

@@ -57,7 +57,7 @@ class ActorRecruitingRegisterViewModel @Inject constructor(
                 career = step1UiModel.career ?: Career.IRRELEVANT,
                 casting = step1UiModel.recruitmentActor.ifEmpty { null },
                 categories = step1UiModel.categories.map { it.name },
-                deadline = step1UiModel.deadlineDate ?: "상시모집",
+                deadline = step1UiModel.deadlineDate,
                 domains = null,
                 gender = step1UiModel.recruitmentGender ?: Gender.IRRELEVANT,
                 numberOfRecruits = step1UiModel.recruitmentNumber.toInt(),

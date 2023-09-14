@@ -78,7 +78,7 @@ data class ActorRecruitingStep1UiModel(
     val titleText: String = "",
     val titleTextLimit: Int = 50,
     val categories: List<Category> = emptyList(),
-    val deadlineDate: String? = null,
+    val deadlineDate: String = "",
     val deadlineTagEnable: Boolean = true,
     val recruitmentActor: String = "",
     val recruitmentNumber: String = "",

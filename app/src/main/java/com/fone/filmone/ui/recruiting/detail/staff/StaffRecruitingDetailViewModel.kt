@@ -10,7 +10,6 @@ import com.fone.filmone.data.datamodel.response.jobopenings.detail.JobOpeningRes
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.GetJobOpeningDetailUseCase
-import com.fone.filmone.domain.usecase.RegisterScrapUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.navigation.FOneDestinations
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +25,6 @@ import javax.inject.Inject
 class StaffRecruitingDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getJobOpeningDetailUseCase: GetJobOpeningDetailUseCase,
-    private val scrapUseCase: RegisterScrapUseCase,
 ) : BaseViewModel() {
     private val viewModelState = MutableStateFlow(StaffRecruitingDetailState())
 
@@ -40,24 +38,6 @@ class StaffRecruitingDetailViewModel @Inject constructor(
 
     fun contact() {
         showToast(R.string.service)
-    }
-
-    fun scrapRecruiting() = viewModelScope.launch {
-        val recruitingId: Int = uiState.value.id.toInt()
-        scrapUseCase(recruitingId)
-            .onSuccess {
-                viewModelState.update { state ->
-                    state.copy(
-                        jobOpeningResponse = state.jobOpeningResponse?.copy(
-                            jobOpening = state.jobOpeningResponse.jobOpening.copy(
-                                isScrap = state.jobOpeningResponse.jobOpening.isScrap.not()
-                            )
-                        ),
-                    )
-                }
-            }.onFail {
-                showToast(it.message)
-            }
     }
 
     init {
@@ -90,7 +70,6 @@ private data class StaffRecruitingDetailState(
 ) {
     fun toUiState(): StaffRecruitingDetailUiState = if (jobOpeningResponse != null) {
         StaffRecruitingDetailUiState(
-            id = jobOpeningResponse.jobOpening.id.toLong(),
             date = jobOpeningResponse.jobOpening.createdAt,
             viewCount = String.format("%,d", jobOpeningResponse.jobOpening.viewCount),
             profileImageUrl = jobOpeningResponse.jobOpening.profileUrl,
@@ -98,7 +77,7 @@ private data class StaffRecruitingDetailState(
             userType = jobOpeningResponse.jobOpening.type.name,
             categories = jobOpeningResponse.jobOpening.categories,
             articleTitle = jobOpeningResponse.jobOpening.title,
-            deadline = jobOpeningResponse.jobOpening.deadline,
+            deadline = jobOpeningResponse.jobOpening.deadline ?: R.string.always_recruiting.toString(),
             dday = jobOpeningResponse.jobOpening.dday,
             casting = jobOpeningResponse.jobOpening.casting,
             numberOfRecruits = jobOpeningResponse.jobOpening.numberOfRecruits.toString(),
@@ -116,11 +95,9 @@ private data class StaffRecruitingDetailState(
             detailInfo = jobOpeningResponse.jobOpening.work.details,
             manager = jobOpeningResponse.jobOpening.work.manager,
             email = jobOpeningResponse.jobOpening.work.email,
-            isScrap = jobOpeningResponse.jobOpening.isScrap,
         )
     } else {
         StaffRecruitingDetailUiState(
-            id = 0L,
             date = "",
             viewCount = "",
             profileImageUrl = "",
@@ -128,7 +105,7 @@ private data class StaffRecruitingDetailState(
             userType = "",
             categories = emptyList(),
             articleTitle = "",
-            deadline = null,
+            deadline = "",
             dday = "",
             casting = "",
             numberOfRecruits = "",
@@ -146,13 +123,11 @@ private data class StaffRecruitingDetailState(
             detailInfo = "",
             manager = "",
             email = "",
-            isScrap = false,
         )
     }
 }
 
 data class StaffRecruitingDetailUiState(
-    val id: Long,
     val date: String,
     val viewCount: String,
     val profileImageUrl: String,
@@ -160,7 +135,7 @@ data class StaffRecruitingDetailUiState(
     val userType: String,
     val categories: List<Category>,
     val articleTitle: String,
-    val deadline: String?,
+    val deadline: String,
     val dday: String,
     val casting: String?,
     val numberOfRecruits: String,
@@ -178,5 +153,4 @@ data class StaffRecruitingDetailUiState(
     val detailInfo: String,
     val manager: String,
     val email: String,
-    val isScrap: Boolean,
 )

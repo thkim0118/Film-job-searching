@@ -106,7 +106,7 @@ fun ActorRecruitingDetailScreen(
                 )
 
                 RecruitmentConditionComponent(
-                    deadline = uiState.deadline ?: stringResource(id = R.string.always_recruiting),
+                    deadline = uiState.deadline,
                     dday = uiState.dday,
                     casting = uiState.casting,
                     number = uiState.numberOfRecruits,
@@ -593,12 +593,12 @@ private fun ButtonComponent(
             ) {
                 if (uiState.isScrap) {
                     Image(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.recruiting_detaile_scrap_enable),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.actor_detaile_scrap_enable),
                         contentDescription = null,
                     )
                 } else {
                     Image(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.recruiting_detaile_scrap_disable),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.actor_detaile_scrap_disable),
                         contentDescription = null,
                     )
                 }
