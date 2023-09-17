@@ -5,6 +5,7 @@ import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Domain
 import com.fone.filmone.data.datamodel.common.user.Gender
+import java.util.Date
 
 @Keep
 data class JobOpeningContent(
@@ -27,5 +28,5 @@ data class JobOpeningContent(
     val dday: String,
     val nickname: String,
     val profileUrl: String,
-    val createdAt: String,
+    val createdAt: Date,
 )

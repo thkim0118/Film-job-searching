@@ -19,6 +19,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -69,8 +71,10 @@ private data class StaffRecruitingDetailState(
     val jobOpeningResponse: JobOpeningResponse? = null,
 ) {
     fun toUiState(): StaffRecruitingDetailUiState = if (jobOpeningResponse != null) {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+
         StaffRecruitingDetailUiState(
-            date = jobOpeningResponse.jobOpening.createdAt,
+            date = dateFormat.format(jobOpeningResponse.jobOpening.createdAt),
             viewCount = String.format("%,d", jobOpeningResponse.jobOpening.viewCount),
             profileImageUrl = jobOpeningResponse.jobOpening.profileUrl,
             userNickname = jobOpeningResponse.jobOpening.nickname,
