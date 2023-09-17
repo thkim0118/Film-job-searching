@@ -162,10 +162,6 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
             if (enable) {
                 if (updatedCategories.size < 2) {
                     updatedCategories = updatedCategories + setOf(category)
-                } else {
-                    val firstSelected = updatedCategories.first()
-                    updatedCategories = updatedCategories.filterNot { it == firstSelected }.toSet()
-                    updatedCategories = updatedCategories + setOf(category)
                 }
             } else {
                 updatedCategories = updatedCategories.filterNot { it == category }.toSet()

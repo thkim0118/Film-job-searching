@@ -161,7 +161,7 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
                 val newCategories = if (currentCategories.size < 2) {
                     currentCategories + setOf(category)
                 } else {
-                    listOf(currentCategories[1], category)
+                    currentCategories
                 }
 
                 state.copy(
