@@ -16,10 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
+          ref: main
           token: ${{ secrets.KD_PAT }}
       - name: Reset release branch
-        with:
-          token: ${{ secrets.KD_PAT }}
         run: |
           git fetch origin develop:develop
           git reset --hard develop
