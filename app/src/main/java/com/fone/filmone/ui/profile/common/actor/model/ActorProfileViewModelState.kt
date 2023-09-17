@@ -26,6 +26,7 @@ abstract class ActorProfileViewModelState(
     open val categoryTagEnable: Boolean = false,
     open val registerButtonEnable: Boolean = false,
     open val actorProfileUiEvent: ActorProfileUiEvent = ActorProfileUiEvent.Clear,
+    open val focusEvent: ActorProfileFocusEvent? = null,
 ) {
     fun toUiState(): ActorProfileUiModel = ActorProfileUiModel(
         pictureList = pictureList,
@@ -49,6 +50,7 @@ abstract class ActorProfileViewModelState(
         categoryTagEnable = categoryTagEnable,
         registerButtonEnable = registerButtonEnable,
         actorProfileUiEvent = actorProfileUiEvent,
+        focusEvent = focusEvent,
     )
 
     abstract fun copy(
@@ -73,6 +75,7 @@ abstract class ActorProfileViewModelState(
         categoryTagEnable: Boolean = this.categoryTagEnable,
         registerButtonEnable: Boolean = this.registerButtonEnable,
         actorProfileUiEvent: ActorProfileUiEvent = this.actorProfileUiEvent,
+        focusEvent: ActorProfileFocusEvent? = this.focusEvent,
     ): ActorProfileViewModelState
 
     override fun equals(other: Any?): Boolean {
@@ -100,6 +103,7 @@ abstract class ActorProfileViewModelState(
         if (categoryTagEnable != other.categoryTagEnable) return false
         if (registerButtonEnable != other.registerButtonEnable) return false
         if (actorProfileUiEvent != other.actorProfileUiEvent) return false
+        if (focusEvent != other.focusEvent) return false
 
         return true
     }
@@ -130,7 +134,7 @@ abstract class ActorProfileViewModelState(
     }
 
     override fun toString(): String {
-        return "ActorProfileViewModelState(pictureList=$pictureList, name='$name', hookingComments='$hookingComments', commentsTextLimit=$commentsTextLimit, birthday='$birthday', gender=$gender, genderTagEnable=$genderTagEnable, height='$height', weight='$weight', email='$email', ability='$specialty', sns='$sns', detailInfo='$detailInfo', detailInfoTextLimit=$detailInfoTextLimit, career=$career, careerDetail='$careerDetail', careerDetailTextLimit=$careerDetailTextLimit, categories=$categories, categoryTagEnable=$categoryTagEnable, registerButtonEnable=$registerButtonEnable, actorProfileUiEvent=$actorProfileUiEvent)"
+        return "ActorProfileViewModelState(pictureList=$pictureList, name='$name', hookingComments='$hookingComments', commentsTextLimit=$commentsTextLimit, birthday='$birthday', gender=$gender, genderTagEnable=$genderTagEnable, height='$height', weight='$weight', email='$email', ability='$specialty', sns='$sns', detailInfo='$detailInfo', detailInfoTextLimit=$detailInfoTextLimit, career=$career, careerDetail='$careerDetail', careerDetailTextLimit=$careerDetailTextLimit, categories=$categories, categoryTagEnable=$categoryTagEnable, registerButtonEnable=$registerButtonEnable, actorProfileUiEvent=$actorProfileUiEvent, focusEvent=$focusEvent)"
     }
 }
 
@@ -156,9 +160,23 @@ data class ActorProfileUiModel(
     val categoryTagEnable: Boolean,
     val registerButtonEnable: Boolean,
     val actorProfileUiEvent: ActorProfileUiEvent,
+    val focusEvent: ActorProfileFocusEvent?,
 )
 
 sealed class ActorProfileUiEvent {
     object RegisterComplete : ActorProfileUiEvent()
     object Clear : ActorProfileUiEvent()
+}
+
+sealed interface ActorProfileFocusEvent {
+    object PictureList : ActorProfileFocusEvent
+    object Name : ActorProfileFocusEvent
+    object HookingComment : ActorProfileFocusEvent
+    object Birthday : ActorProfileFocusEvent
+    object Height : ActorProfileFocusEvent
+    object Weight : ActorProfileFocusEvent
+    object Email : ActorProfileFocusEvent
+    object Detail : ActorProfileFocusEvent
+    object Career : ActorProfileFocusEvent
+    object CareerDetail : ActorProfileFocusEvent
 }

@@ -16,8 +16,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -41,6 +44,7 @@ import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.main.job.common.LeftTitleTextField
+import com.fone.filmone.ui.profile.common.actor.model.ActorProfileFocusEvent
 import com.fone.filmone.ui.profile.common.actor.model.ActorProfileUiEvent
 import com.fone.filmone.ui.profile.common.actor.model.ActorProfileUiModel
 import com.fone.filmone.ui.profile.common.component.AbilityInputComponent
@@ -86,6 +90,7 @@ fun ActorProfileScreen(
     onRegisterButtonClick: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
+    val focusEvent = uiState.focusEvent
     val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(key1 = uiState.actorProfileUiEvent) {
@@ -124,13 +129,15 @@ fun ActorProfileScreen(
             ) {
                 PictureComponent(
                     pictureList = uiState.pictureList,
+                    limit = 9,
                     onUpdateProfileImage = { encodedString ->
-                        onUpdateProfileImage(encodedString, true)
+                        onUpdateProfileImage(encodedString, false)
                     },
                     onRemoveImage = { encodedString ->
                         onRemoveImage(encodedString, true)
                     },
-                    limit = 9
+                    actorFocusEvent = focusEvent,
+                    staffFocusEvent = null,
                 )
 
                 Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -156,7 +163,8 @@ fun ActorProfileScreen(
                     onUpdateWeight = onUpdateWeight,
                     onUpdateEmail = onUpdateEmail,
                     onUpdateAbility = onUpdateAbility,
-                    onUpdateSns = onUpdateSns
+                    onUpdateSns = onUpdateSns,
+                    focusEvent = focusEvent,
                 )
 
                 Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -164,7 +172,9 @@ fun ActorProfileScreen(
                 DetailInputComponent(
                     detailInfo = uiState.detailInfo,
                     detailInfoTextLimit = uiState.detailInfoTextLimit,
-                    onUpdateDetailInfo = onUpdateDetailInfo
+                    onUpdateDetailInfo = onUpdateDetailInfo,
+                    actorFocusEvent = focusEvent,
+                    staffFocusEvent = null,
                 )
 
                 Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -174,7 +184,9 @@ fun ActorProfileScreen(
                     careerDetail = uiState.careerDetail,
                     careerDetailTextLimit = uiState.careerDetailTextLimit,
                     onUpdateCareer = onUpdateCareer,
-                    onUpdateCareerDetail = onUpdateCareerDetail
+                    onUpdateCareerDetail = onUpdateCareerDetail,
+                    actorFocusEvent = focusEvent,
+                    staffFocusEvent = null,
                 )
 
                 Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -262,21 +274,46 @@ private fun UserInfoInputComponent(
     onUpdateEmail: (String) -> Unit,
     onUpdateAbility: (String) -> Unit,
     onUpdateSns: (String) -> Unit,
+    focusEvent: ActorProfileFocusEvent?,
 ) {
+    val nameFocusRequester = remember { FocusRequester() }
+    val hookingCommentRequester = remember { FocusRequester() }
+    val birthdayRequester = remember { FocusRequester() }
+    val heightRequester = remember { FocusRequester() }
+    val weightRequester = remember { FocusRequester() }
+    val emailRequester = remember { FocusRequester() }
+
+    LaunchedEffect(focusEvent) {
+        when (focusEvent) {
+            ActorProfileFocusEvent.Name -> nameFocusRequester.requestFocus()
+            ActorProfileFocusEvent.HookingComment -> hookingCommentRequester.requestFocus()
+            ActorProfileFocusEvent.Birthday -> birthdayRequester.requestFocus()
+            ActorProfileFocusEvent.Height -> heightRequester.requestFocus()
+            ActorProfileFocusEvent.Weight -> weightRequester.requestFocus()
+            ActorProfileFocusEvent.Email -> emailRequester.requestFocus()
+            else -> Unit
+        }
+    }
+
     Column(
         modifier = modifier
             .padding(horizontal = 16.dp)
     ) {
         Spacer(modifier = Modifier.height(20.dp))
 
-        NameInputComponent(name = name, onNameChanged = onNameChanged)
+        NameInputComponent(
+            name = name,
+            onNameChanged = onNameChanged,
+            modifier = Modifier.focusRequester(nameFocusRequester)
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         HookingCommentsComponent(
             hookingComments = hookingComments,
             commentsTextLimit = commentsTextLimit,
-            onUpdateComments = onUpdateComments
+            onUpdateComments = onUpdateComments,
+            modifier = Modifier.focusRequester(hookingCommentRequester)
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -288,6 +325,7 @@ private fun UserInfoInputComponent(
             onUpdateBirthday = onUpdateBirthday,
             onUpdateGender = onUpdateGender,
             onUpdateGenderTag = onUpdateGenderTag,
+            modifier = Modifier.focusRequester(birthdayRequester)
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -296,12 +334,18 @@ private fun UserInfoInputComponent(
             height = height,
             weight = weight,
             onUpdateHeight = onUpdateHeight,
-            onUpdateWeight = onUpdateWeight
+            onUpdateWeight = onUpdateWeight,
+            heightModifier = Modifier.focusRequester(heightRequester),
+            weightModifier = Modifier.focusRequester(weightRequester),
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        EmailInputComponent(email = email, onUpdateEmail = onUpdateEmail)
+        EmailInputComponent(
+            email = email,
+            onUpdateEmail = onUpdateEmail,
+            modifier = Modifier.focusRequester(emailRequester)
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -322,6 +366,8 @@ private fun HeightWeightInputComponent(
     weight: String,
     onUpdateHeight: (String) -> Unit,
     onUpdateWeight: (String) -> Unit,
+    heightModifier: Modifier,
+    weightModifier: Modifier,
 ) {
     val rightComponentTextStyle = fTextStyle(
         fontWeight = FontWeight.W400,
@@ -335,7 +381,7 @@ private fun HeightWeightInputComponent(
 
     ) {
         LeftTitleTextField(
-            modifier = Modifier.weight(1f),
+            modifier = heightModifier.weight(1f),
             title = stringResource(id = R.string.profile_register_height_title),
             titleSpace = 12,
             text = height,
@@ -354,7 +400,7 @@ private fun HeightWeightInputComponent(
         Spacer(modifier = Modifier.width(34.dp))
 
         LeftTitleTextField(
-            modifier = Modifier.weight(1f),
+            modifier = weightModifier.weight(1f),
             title = stringResource(id = R.string.profile_register_weight_title),
             titleSpace = 12,
             text = weight,

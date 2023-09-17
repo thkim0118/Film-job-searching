@@ -26,6 +26,7 @@ abstract class StaffProfileViewModelState(
     open val categoryTagEnable: Boolean = false,
     open val registerButtonEnable: Boolean = false,
     open val staffProfileUiEvent: StaffProfileUiEvent = StaffProfileUiEvent.Clear,
+    open val focusEvent: StaffProfileFocusEvent? = null,
 ) {
     fun toUiState(): StaffProfileUiModel = StaffProfileUiModel(
         pictureEncodedDataList = pictureEncodedDataList,
@@ -47,7 +48,8 @@ abstract class StaffProfileViewModelState(
         categories = categories,
         categoryTagEnable = categoryTagEnable,
         registerButtonEnable = registerButtonEnable,
-        staffProfileUiEvent = staffProfileUiEvent
+        staffProfileUiEvent = staffProfileUiEvent,
+        focusEvent = focusEvent,
     )
 
     abstract fun copy(
@@ -71,6 +73,7 @@ abstract class StaffProfileViewModelState(
         categoryTagEnable: Boolean = this.categoryTagEnable,
         registerButtonEnable: Boolean = this.registerButtonEnable,
         staffProfileUiEvent: StaffProfileUiEvent = this.staffProfileUiEvent,
+        focusEvent: StaffProfileFocusEvent? = this.focusEvent,
     ): StaffProfileViewModelState
 
     override fun equals(other: Any?): Boolean {
@@ -97,6 +100,7 @@ abstract class StaffProfileViewModelState(
         if (categoryTagEnable != other.categoryTagEnable) return false
         if (registerButtonEnable != other.registerButtonEnable) return false
         if (staffProfileUiEvent != other.staffProfileUiEvent) return false
+        if (focusEvent != other.focusEvent) return false
 
         return true
     }
@@ -122,11 +126,12 @@ abstract class StaffProfileViewModelState(
         result = 31 * result + categoryTagEnable.hashCode()
         result = 31 * result + registerButtonEnable.hashCode()
         result = 31 * result + staffProfileUiEvent.hashCode()
+        result = 31 * result + focusEvent.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "StaffProfileViewModelState(pictureEncodedDataList=$pictureEncodedDataList, name='$name', hookingComments='$hookingComments', commentsTextLimit=$commentsTextLimit, birthday='$birthday', gender=$gender, genderTagEnable=$genderTagEnable, domains=$domains, email='$email', specialty='$specialty', sns='$sns', detailInfo='$detailInfo', detailInfoTextLimit=$detailInfoTextLimit, career=$career, careerDetail='$careerDetail', careerDetailTextLimit=$careerDetailTextLimit, categories=$categories, categoryTagEnable=$categoryTagEnable, registerButtonEnable=$registerButtonEnable, staffProfileUiEvent=$staffProfileUiEvent)"
+        return "StaffProfileViewModelState(pictureEncodedDataList=$pictureEncodedDataList, name='$name', hookingComments='$hookingComments', commentsTextLimit=$commentsTextLimit, birthday='$birthday', gender=$gender, genderTagEnable=$genderTagEnable, domains=$domains, email='$email', specialty='$specialty', sns='$sns', detailInfo='$detailInfo', detailInfoTextLimit=$detailInfoTextLimit, career=$career, careerDetail='$careerDetail', careerDetailTextLimit=$careerDetailTextLimit, categories=$categories, categoryTagEnable=$categoryTagEnable, registerButtonEnable=$registerButtonEnable, staffProfileUiEvent=$staffProfileUiEvent, focusEvent=$focusEvent)"
     }
 }
 
@@ -151,6 +156,7 @@ data class StaffProfileUiModel(
     val categoryTagEnable: Boolean,
     val registerButtonEnable: Boolean,
     val staffProfileUiEvent: StaffProfileUiEvent,
+    val focusEvent: StaffProfileFocusEvent?,
 )
 
 sealed class StaffProfileDialogState {
@@ -163,4 +169,16 @@ sealed class StaffProfileDialogState {
 sealed class StaffProfileUiEvent {
     object RegisterComplete : StaffProfileUiEvent()
     object Clear : StaffProfileUiEvent()
+}
+
+sealed interface StaffProfileFocusEvent {
+    object PictureList : StaffProfileFocusEvent
+    object Name : StaffProfileFocusEvent
+    object HookingComment : StaffProfileFocusEvent
+    object Birthday : StaffProfileFocusEvent
+    object Domain : StaffProfileFocusEvent
+    object Email : StaffProfileFocusEvent
+    object Detail : StaffProfileFocusEvent
+    object Career : StaffProfileFocusEvent
+    object CareerDetail : StaffProfileFocusEvent
 }

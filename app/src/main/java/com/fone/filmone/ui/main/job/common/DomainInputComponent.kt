@@ -42,6 +42,7 @@ fun DomainInputComponent(
         Spacer(modifier = Modifier.width(28.dp))
 
         SelectedDomainComponent(
+            modifier = modifier,
             selectedDomains = selectedDomains,
             onDomainClick = onUpdateDomains
         )

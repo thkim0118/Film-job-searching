@@ -7,6 +7,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -33,6 +34,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -48,6 +51,8 @@ import com.fone.filmone.core.image.ImageBase64Util
 import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.fTextStyle
+import com.fone.filmone.ui.profile.common.actor.model.ActorProfileFocusEvent
+import com.fone.filmone.ui.profile.common.staff.model.StaffProfileFocusEvent
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.Pretendard
 import com.skydoves.landscapist.ShimmerParams
@@ -62,6 +67,8 @@ fun PictureComponent(
     limit: Int,
     onUpdateProfileImage: (String) -> Unit,
     onRemoveImage: (String) -> Unit,
+    actorFocusEvent: ActorProfileFocusEvent?,
+    staffFocusEvent: StaffProfileFocusEvent?,
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -76,6 +83,21 @@ fun PictureComponent(
             }
         }
     )
+    val pictureListFocusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(actorFocusEvent) {
+        when (actorFocusEvent) {
+            ActorProfileFocusEvent.PictureList -> pictureListFocusRequester.requestFocus()
+            else -> Unit
+        }
+    }
+
+    LaunchedEffect(staffFocusEvent) {
+        when (staffFocusEvent) {
+            StaffProfileFocusEvent.PictureList -> pictureListFocusRequester.requestFocus()
+            else -> Unit
+        }
+    }
 
     @Composable
     fun PictureRegisterItem(
@@ -98,6 +120,9 @@ fun PictureComponent(
                 modifier = Modifier.align(Alignment.Center)
             ) {
                 Image(
+                    modifier = Modifier
+                        .focusRequester(pictureListFocusRequester)
+                        .focusable(),
                     imageVector = ImageVector.vectorResource(id = R.drawable.profile_register_camera_image),
                     contentDescription = null
                 )

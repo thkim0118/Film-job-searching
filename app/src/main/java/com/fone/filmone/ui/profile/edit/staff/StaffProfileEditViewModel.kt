@@ -16,6 +16,7 @@ import com.fone.filmone.domain.usecase.ModifyProfileUseCase
 import com.fone.filmone.domain.usecase.UploadImageUseCase
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.profile.common.staff.StaffProfileViewModel
+import com.fone.filmone.ui.profile.common.staff.model.StaffProfileFocusEvent
 import com.fone.filmone.ui.profile.common.staff.model.StaffProfileUiEvent
 import com.fone.filmone.ui.profile.common.staff.model.StaffProfileViewModelState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -162,6 +163,7 @@ private class StaffProfileEditViewModelState(
     override val categoryTagEnable: Boolean = false,
     override val registerButtonEnable: Boolean = false,
     override val staffProfileUiEvent: StaffProfileUiEvent = StaffProfileUiEvent.Clear,
+    override val focusEvent: StaffProfileFocusEvent? = null,
 ) : StaffProfileViewModelState() {
     override fun copy(
         pictureEncodedDataList: List<String>,
@@ -184,6 +186,7 @@ private class StaffProfileEditViewModelState(
         categoryTagEnable: Boolean,
         registerButtonEnable: Boolean,
         staffProfileUiEvent: StaffProfileUiEvent,
+        focusEvent: StaffProfileFocusEvent?,
     ): StaffProfileViewModelState = StaffProfileEditViewModelState(
         pictureEncodedDataList = pictureEncodedDataList,
         name = name,
@@ -204,6 +207,7 @@ private class StaffProfileEditViewModelState(
         categories = categories,
         categoryTagEnable = categoryTagEnable,
         registerButtonEnable = registerButtonEnable,
-        staffProfileUiEvent = staffProfileUiEvent
+        staffProfileUiEvent = staffProfileUiEvent,
+        focusEvent = focusEvent,
     )
 }

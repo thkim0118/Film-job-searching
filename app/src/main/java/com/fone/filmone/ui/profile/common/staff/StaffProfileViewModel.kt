@@ -1,5 +1,6 @@
 package com.fone.filmone.ui.profile.common.staff
 
+import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
 import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.data.datamodel.common.user.Career
@@ -8,13 +9,16 @@ import com.fone.filmone.data.datamodel.common.user.Domain
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.profile.common.staff.model.StaffProfileDialogState
+import com.fone.filmone.ui.profile.common.staff.model.StaffProfileFocusEvent
 import com.fone.filmone.ui.profile.common.staff.model.StaffProfileUiModel
 import com.fone.filmone.ui.profile.common.staff.model.StaffProfileViewModelState
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 abstract class StaffProfileViewModel : BaseViewModel() {
     abstract val viewModelState: MutableStateFlow<StaffProfileViewModelState>
@@ -32,15 +36,9 @@ abstract class StaffProfileViewModel : BaseViewModel() {
     }
 
     fun registerProfile() {
-        val state = viewModelState.value
+        val isInValidationPassed = checkValidation()
 
-        if (state.registerButtonEnable.not()) {
-            return
-        }
-
-        val isValidationPassed = checkValidation()
-
-        if (isValidationPassed) {
+        if (!isInValidationPassed) {
             uploadProfileImages()
         } else {
             showToast(R.string.toast_recruiting_register_fail)
@@ -52,34 +50,64 @@ abstract class StaffProfileViewModel : BaseViewModel() {
         val state = uiState.value
 
         if (state.pictureEncodedDataList.isEmpty()) {
-            return false
+            updateFocusEvent(StaffProfileFocusEvent.PictureList)
+            return true
         }
 
         if (state.name.isEmpty()) {
-            return false
+            updateFocusEvent(StaffProfileFocusEvent.Name)
+            return true
         }
 
         if (state.hookingComments.isEmpty()) {
-            return false
+            updateFocusEvent(StaffProfileFocusEvent.HookingComment)
+            return true
         }
 
         if (state.birthday.isEmpty()) {
-            return false
+            updateFocusEvent(StaffProfileFocusEvent.Birthday)
+            return true
         }
 
         if (state.domains.isEmpty()) {
-            return false
+            updateFocusEvent(StaffProfileFocusEvent.Domain)
+            return true
         }
 
         if (state.email.isEmpty()) {
-            return false
+            updateFocusEvent(StaffProfileFocusEvent.Email)
+            return true
         }
 
         if (state.detailInfo.isEmpty()) {
-            return false
+            updateFocusEvent(StaffProfileFocusEvent.Detail)
+            return true
         }
 
-        return true
+        if (state.career == null) {
+            updateFocusEvent(StaffProfileFocusEvent.Career)
+            return true
+        }
+
+        if (state.careerDetail.isEmpty()) {
+            updateFocusEvent(StaffProfileFocusEvent.CareerDetail)
+            return true
+        }
+
+        return false
+    }
+
+    private fun updateFocusEvent(staffProfileFocusEvent: StaffProfileFocusEvent) {
+        viewModelState.update { state ->
+            state.copy(focusEvent = staffProfileFocusEvent)
+        }
+
+        viewModelScope.launch {
+            delay(1000)
+            viewModelState.update { state ->
+                state.copy(focusEvent = null)
+            }
+        }
     }
 
     fun updateName(name: String) {

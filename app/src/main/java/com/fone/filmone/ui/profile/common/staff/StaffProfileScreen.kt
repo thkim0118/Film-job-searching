@@ -1,6 +1,7 @@
 package com.fone.filmone.ui.profile.common.staff
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +15,10 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -48,6 +52,7 @@ import com.fone.filmone.ui.profile.common.component.PictureComponent
 import com.fone.filmone.ui.profile.common.component.RegisterButton
 import com.fone.filmone.ui.profile.common.component.SnsInputComponent
 import com.fone.filmone.ui.profile.common.staff.model.StaffProfileDialogState
+import com.fone.filmone.ui.profile.common.staff.model.StaffProfileFocusEvent
 import com.fone.filmone.ui.profile.common.staff.model.StaffProfileUiEvent
 import com.fone.filmone.ui.profile.common.staff.model.StaffProfileUiModel
 import com.fone.filmone.ui.recruiting.common.staff.DomainSelectDialog
@@ -80,6 +85,7 @@ fun StaffProfileScreen(
     onDialogDismiss: (List<Domain>) -> Unit,
 ) {
     val scrollState = rememberScrollState()
+    val focusEvent = uiState.focusEvent
 
     LaunchedEffect(key1 = uiState.staffProfileUiEvent) {
         listenUiEvent(
@@ -122,6 +128,8 @@ fun StaffProfileScreen(
                             onRemoveImage(encodedString, true)
                         },
                         limit = 9,
+                        actorFocusEvent = null,
+                        staffFocusEvent = focusEvent,
                     )
 
                     Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -145,7 +153,8 @@ fun StaffProfileScreen(
                         onUpdateDomains = onUpdateDomains,
                         onUpdateEmail = onUpdateEmail,
                         onUpdateAbility = onUpdateSpecialty,
-                        onUpdateSns = onUpdateSns
+                        onUpdateSns = onUpdateSns,
+                        focusEvent = focusEvent,
                     )
 
                     Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -153,7 +162,9 @@ fun StaffProfileScreen(
                     DetailInputComponent(
                         detailInfo = uiState.detailInfo,
                         detailInfoTextLimit = uiState.detailInfoTextLimit,
-                        onUpdateDetailInfo = onUpdateDetailInfo
+                        onUpdateDetailInfo = onUpdateDetailInfo,
+                        actorFocusEvent = null,
+                        staffFocusEvent = focusEvent,
                     )
 
                     Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -163,7 +174,9 @@ fun StaffProfileScreen(
                         careerDetail = uiState.careerDetail,
                         careerDetailTextLimit = uiState.careerDetailTextLimit,
                         onUpdateCareer = onUpdateCareer,
-                        onUpdateCareerDetail = onUpdateCareerDetail
+                        onUpdateCareerDetail = onUpdateCareerDetail,
+                        actorFocusEvent = null,
+                        staffFocusEvent = focusEvent,
                     )
 
                     Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -255,21 +268,44 @@ private fun UserInfoInputComponent(
     onUpdateEmail: (String) -> Unit,
     onUpdateAbility: (String) -> Unit,
     onUpdateSns: (String) -> Unit,
+    focusEvent: StaffProfileFocusEvent?,
 ) {
+    val nameFocusRequester = remember { FocusRequester() }
+    val hookingCommentRequester = remember { FocusRequester() }
+    val birthdayRequester = remember { FocusRequester() }
+    val domainRequester = remember { FocusRequester() }
+    val emailRequester = remember { FocusRequester() }
+
+    LaunchedEffect(focusEvent) {
+        when (focusEvent) {
+            StaffProfileFocusEvent.Name -> nameFocusRequester.requestFocus()
+            StaffProfileFocusEvent.HookingComment -> hookingCommentRequester.requestFocus()
+            StaffProfileFocusEvent.Birthday -> birthdayRequester.requestFocus()
+            StaffProfileFocusEvent.Domain -> domainRequester.requestFocus()
+            StaffProfileFocusEvent.Email -> emailRequester.requestFocus()
+            else -> Unit
+        }
+    }
+
     Column(
         modifier = modifier
             .padding(horizontal = 16.dp)
     ) {
         Spacer(modifier = Modifier.height(20.dp))
 
-        NameInputComponent(name = name, onNameChanged = onNameChanged)
+        NameInputComponent(
+            name = name,
+            onNameChanged = onNameChanged,
+            modifier = Modifier.focusRequester(nameFocusRequester)
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         HookingCommentsComponent(
             hookingComments = hookingComments,
             commentsTextLimit = commentsTextLimit,
-            onUpdateComments = onUpdateComments
+            onUpdateComments = onUpdateComments,
+            modifier = Modifier.focusRequester(hookingCommentRequester)
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -281,6 +317,7 @@ private fun UserInfoInputComponent(
             onUpdateBirthday = onUpdateBirthday,
             onUpdateGender = onUpdateGender,
             onUpdateGenderTag = onUpdateGenderTag,
+            modifier = Modifier.focusRequester(birthdayRequester)
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -288,7 +325,10 @@ private fun UserInfoInputComponent(
 
     DomainInputComponent(
         selectedDomains = selectedDomains,
-        onUpdateDomains = onUpdateDomains
+        onUpdateDomains = onUpdateDomains,
+        modifier = Modifier
+            .focusRequester(domainRequester)
+            .focusable()
     )
 
     Column(
@@ -297,7 +337,11 @@ private fun UserInfoInputComponent(
     ) {
         Spacer(modifier = Modifier.height(20.dp))
 
-        EmailInputComponent(email = email, onUpdateEmail = onUpdateEmail)
+        EmailInputComponent(
+            email = email,
+            onUpdateEmail = onUpdateEmail,
+            modifier = Modifier.focusRequester(emailRequester)
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 

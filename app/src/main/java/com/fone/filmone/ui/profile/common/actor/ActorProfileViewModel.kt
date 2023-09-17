@@ -1,17 +1,21 @@
 package com.fone.filmone.ui.profile.common.actor
 
+import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
 import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.ui.common.base.BaseViewModel
+import com.fone.filmone.ui.profile.common.actor.model.ActorProfileFocusEvent
 import com.fone.filmone.ui.profile.common.actor.model.ActorProfileUiModel
 import com.fone.filmone.ui.profile.common.actor.model.ActorProfileViewModelState
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 abstract class ActorProfileViewModel : BaseViewModel() {
     abstract val viewModelState: MutableStateFlow<ActorProfileViewModelState>
@@ -22,15 +26,9 @@ abstract class ActorProfileViewModel : BaseViewModel() {
     abstract fun uploadProfileImages(): Job
 
     fun registerProfile() {
-        val state = viewModelState.value
+        val isInValidationPassed = checkValidation()
 
-        if (state.registerButtonEnable.not()) {
-            return
-        }
-
-        val isValidationPassed = checkValidation()
-
-        if (isValidationPassed) {
+        if (!isInValidationPassed) {
             uploadProfileImages()
         } else {
             showToast(R.string.toast_recruiting_register_fail)
@@ -42,38 +40,69 @@ abstract class ActorProfileViewModel : BaseViewModel() {
         val state = uiState.value
 
         if (state.pictureList.isEmpty()) {
-            return false
+            updateFocusEvent(ActorProfileFocusEvent.PictureList)
+            return true
         }
 
         if (state.name.isEmpty()) {
-            return false
+            updateFocusEvent(ActorProfileFocusEvent.Name)
+            return true
         }
 
         if (state.hookingComments.isEmpty()) {
-            return false
+            updateFocusEvent(ActorProfileFocusEvent.HookingComment)
+            return true
         }
 
         if (state.birthday.isEmpty()) {
-            return false
+            updateFocusEvent(ActorProfileFocusEvent.Birthday)
+            return true
         }
 
         if (state.height.isEmpty()) {
-            return false
+            updateFocusEvent(ActorProfileFocusEvent.Height)
+            return true
         }
 
         if (state.weight.isEmpty()) {
-            return false
+            updateFocusEvent(ActorProfileFocusEvent.Weight)
+            return true
         }
 
         if (state.email.isEmpty()) {
-            return false
+            updateFocusEvent(ActorProfileFocusEvent.Email)
+            return true
         }
 
         if (state.detailInfo.isEmpty()) {
-            return false
+            updateFocusEvent(ActorProfileFocusEvent.Detail)
+            return true
         }
 
-        return true
+        if (state.career == null) {
+            updateFocusEvent(ActorProfileFocusEvent.Career)
+            return true
+        }
+
+        if (state.careerDetail.isEmpty()) {
+            updateFocusEvent(ActorProfileFocusEvent.CareerDetail)
+            return true
+        }
+
+        return false
+    }
+
+    private fun updateFocusEvent(actorProfileFocusEvent: ActorProfileFocusEvent) {
+        viewModelState.update { state ->
+            state.copy(focusEvent = actorProfileFocusEvent)
+        }
+
+        viewModelScope.launch {
+            delay(1000)
+            viewModelState.update { state ->
+                state.copy(focusEvent = null)
+            }
+        }
     }
 
     fun updateName(name: String) {
@@ -229,8 +258,10 @@ abstract class ActorProfileViewModel : BaseViewModel() {
                     }
 
                     copyList
-                } else {
+                } else if (state.pictureList.size < 9) {
                     state.pictureList + encodedString
+                } else {
+                    state.pictureList
                 }
             )
         }

@@ -12,6 +12,7 @@ import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.RegisterProfileUseCase
 import com.fone.filmone.domain.usecase.UploadImageUseCase
 import com.fone.filmone.ui.profile.common.actor.ActorProfileViewModel
+import com.fone.filmone.ui.profile.common.actor.model.ActorProfileFocusEvent
 import com.fone.filmone.ui.profile.common.actor.model.ActorProfileUiEvent
 import com.fone.filmone.ui.profile.common.actor.model.ActorProfileViewModelState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -117,6 +118,7 @@ private class ActorProfileRegisterViewModelState(
     override val categoryTagEnable: Boolean = false,
     override val registerButtonEnable: Boolean = false,
     override val actorProfileUiEvent: ActorProfileUiEvent = ActorProfileUiEvent.Clear,
+    override val focusEvent: ActorProfileFocusEvent? = null,
 ) : ActorProfileViewModelState() {
     override fun copy(
         pictureList: List<String>,
@@ -140,6 +142,7 @@ private class ActorProfileRegisterViewModelState(
         categoryTagEnable: Boolean,
         registerButtonEnable: Boolean,
         actorProfileUiEvent: ActorProfileUiEvent,
+        focusEvent: ActorProfileFocusEvent?,
     ): ActorProfileViewModelState =
         ActorProfileRegisterViewModelState(
             pictureList = pictureList,
@@ -162,6 +165,7 @@ private class ActorProfileRegisterViewModelState(
             categories = categories,
             categoryTagEnable = categoryTagEnable,
             registerButtonEnable = registerButtonEnable,
-            actorProfileUiEvent = actorProfileUiEvent
+            actorProfileUiEvent = actorProfileUiEvent,
+            focusEvent = focusEvent,
         )
 }
