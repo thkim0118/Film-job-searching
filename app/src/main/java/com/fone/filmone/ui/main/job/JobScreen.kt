@@ -37,7 +37,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -264,6 +263,7 @@ private fun JobHeader(
                 isTitleFilterClick = isTitleFilterClick.not()
             },
             type = type,
+            isTitleFilterClick = isTitleFilterClick,
         )
 
         JobTitleAlarmImage(
@@ -321,14 +321,13 @@ private fun JobTitleContents(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     type: Type,
+    isTitleFilterClick: Boolean,
 ) {
-    var isArrowExpanded by rememberSaveable { mutableStateOf(false) }
 
     Row(
         modifier = modifier
             .clickableWithNoRipple {
                 onClick()
-                isArrowExpanded = !isArrowExpanded
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -342,7 +341,7 @@ private fun JobTitleContents(
 
         Image(
             imageVector =
-            if (isArrowExpanded)
+            if (isTitleFilterClick)
                 ImageVector.vectorResource(id = R.drawable.job_tab_arrow_up)
             else
                 ImageVector.vectorResource(id = R.drawable.job_tab_arrow_down),
