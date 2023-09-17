@@ -1,0 +1,34 @@
+name: Create Deploy To Main Pull Request
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: main
+          token: ${{ secrets.KD_PAT }}
+      - name: Reset release branch
+        run: |
+          git fetch origin develop:develop
+          git reset --hard develop
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.KD_PAT }}
+          title: Release data repo (develop => main)
+          body: |
+            This is a pull request to deploy the develop data repo.
+            # 🔥Please Merge Commit! 🔥
+          branch: develop
+          base: main
