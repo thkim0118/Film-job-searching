@@ -241,7 +241,7 @@ private fun NicknameComponent(
             text = uiState.nickname,
             placeholder = stringResource(id = R.string.sign_up_second_nickname_placeholder),
             onValueChange = onUpdateNickname,
-            pattern = Pattern.compile("^[ㄱ-ㅣ가-힣a-zA-Z\\d\\s]+$"),
+            pattern = Pattern.compile("^[ㄱ-ㅣㆍ가-힣a-zA-Z\\d\\s]+$"),
             topComponent = {
                 Row {
                     Text(
