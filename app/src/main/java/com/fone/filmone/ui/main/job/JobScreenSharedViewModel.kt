@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.user.Category
-import com.fone.filmone.data.datamodel.common.user.Domain
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.model.jobopenings.JobTabFilterVo
@@ -56,9 +55,9 @@ class JobScreenSharedViewModel @Inject constructor(
         val initJobTabFilterVo = JobTabFilterVo(
             ageMax = 70,
             ageMin = 0,
-            categories = Category.values().toList(),
-            domains = Domain.values().toList(),
-            genders = Gender.values().toList(),
+            categories = null,
+            domains = null,
+            genders = null,
             type = userType,
             sort = sort
         )

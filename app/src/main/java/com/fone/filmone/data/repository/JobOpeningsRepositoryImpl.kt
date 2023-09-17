@@ -34,9 +34,9 @@ class JobOpeningsRepositoryImpl @Inject constructor(
             jobOpeningsApi.fetchJobOpeningList(
                 jobTabFilterVo.ageMax,
                 jobTabFilterVo.ageMin,
-                jobTabFilterVo.categories.map { it.name },
+                jobTabFilterVo.categories?.map { it.name },
                 jobTabFilterVo.domains?.map { it.name },
-                jobTabFilterVo.genders.map { it.name },
+                jobTabFilterVo.genders?.map { it.name },
                 jobTabFilterVo.page,
                 jobTabFilterVo.size,
                 jobTabFilterVo.sort,

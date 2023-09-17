@@ -20,9 +20,9 @@ interface JobOpeningsApi {
     suspend fun fetchJobOpeningList(
         @Query("ageMax") ageMax: Int,
         @Query("ageMin") ageMin: Int,
-        @Query("categories") categories: List<String>,
+        @Query("categories") categories: List<String>?,
         @Query("domains") domains: List<String>?,
-        @Query("genders") genders: List<String>,
+        @Query("genders") genders: List<String>?,
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("sort") sort: String,

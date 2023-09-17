@@ -38,8 +38,8 @@ class ProfilesRepositoryImpl @Inject constructor(
             profilesApi.getProfileList(
                 jobTabFilterVo.ageMax,
                 jobTabFilterVo.ageMin,
-                jobTabFilterVo.categories.map { it.name },
-                jobTabFilterVo.genders.map { it.name },
+                jobTabFilterVo.categories?.map { it.name },
+                jobTabFilterVo.genders?.map { it.name },
                 jobTabFilterVo.page,
                 jobTabFilterVo.size,
                 jobTabFilterVo.sort,

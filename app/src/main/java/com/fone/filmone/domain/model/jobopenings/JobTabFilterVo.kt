@@ -8,9 +8,9 @@ import com.fone.filmone.data.datamodel.common.user.Gender
 data class JobTabFilterVo(
     val ageMax: Int,
     val ageMin: Int,
-    val categories: List<Category>,
+    val categories: List<Category>?,
     val domains: List<Domain>?,
-    val genders: List<Gender>,
+    val genders: List<Gender>?,
     val page: Int = 0,
     val size: Int = 20,
     val sort: String,
