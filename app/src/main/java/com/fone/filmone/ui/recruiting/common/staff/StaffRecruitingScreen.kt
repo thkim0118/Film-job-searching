@@ -1,6 +1,7 @@
 package com.fone.filmone.ui.recruiting.common.staff
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,9 +21,12 @@ import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -63,6 +67,7 @@ import com.fone.filmone.ui.main.job.common.TextLimitComponent
 import com.fone.filmone.ui.main.job.common.TextWithRequired
 import com.fone.filmone.ui.main.job.common.TextWithRequiredTag
 import com.fone.filmone.ui.recruiting.common.staff.model.StaffRecruitingDialogState
+import com.fone.filmone.ui.recruiting.common.staff.model.StaffRecruitingFocusEvent
 import com.fone.filmone.ui.recruiting.common.staff.model.StaffRecruitingUiEvent
 import com.fone.filmone.ui.recruiting.common.staff.model.StaffRecruitingUiModel
 import com.fone.filmone.ui.theme.FColor
@@ -108,6 +113,7 @@ fun StaffRecruitingScreen(
     onDismiss: (List<Domain>) -> Unit,
 ) {
     val scrollState = rememberScrollState()
+    val focusEvent = uiState.focusEvent
     val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(key1 = uiState.staffRecruitingRegisterUiEvent) {
@@ -161,6 +167,7 @@ fun StaffRecruitingScreen(
                         ageTagEnable = uiState.staffRecruitingStep1UiModel.ageTagEnable,
                         currentCareers = uiState.staffRecruitingStep1UiModel.career,
                         careerTagEnable = uiState.staffRecruitingStep1UiModel.careerTagEnable,
+                        focusEvent = focusEvent,
                         onUpdateTitleText = onUpdateTitleText,
                         onUpdateCategories = onUpdateCategories,
                         onUpdateDeadlineDate = onUpdateDeadlineDate,
@@ -185,6 +192,7 @@ fun StaffRecruitingScreen(
                         logLine = uiState.staffRecruitingStep2UiModel.logLine,
                         logLineTextLimit = uiState.staffRecruitingStep2UiModel.logLineTextLimit,
                         isLogLinePrivate = uiState.staffRecruitingStep2UiModel.isLogLinePrivate,
+                        focusEvent = focusEvent,
                         onUpdateProduction = onUpdateProduction,
                         onUpdateWorkTitle = onUpdateWorkTitle,
                         onUpdateDirectorName = onUpdateDirectorName,
@@ -215,6 +223,7 @@ fun StaffRecruitingScreen(
                     Step4Component(
                         detailInfo = uiState.staffRecruitingStep4UiModel.detailInfo,
                         detailInfoTextLimit = uiState.staffRecruitingStep4UiModel.detailInfoTextLimit,
+                        focusEvent = focusEvent,
                         onUpdateDetailInfo = onUpdateDetailInfo,
                     )
 
@@ -224,6 +233,7 @@ fun StaffRecruitingScreen(
                         manager = uiState.staffRecruitingStep5UiModel.manager,
                         email = uiState.staffRecruitingStep5UiModel.email,
                         registerButtonEnable = uiState.registerButtonEnable,
+                        focusEvent = focusEvent,
                         onUpdateManager = onUpdateManager,
                         onUpdateEmail = onUpdateEmail,
                         onRegisterClick = onRegisterClick,
@@ -298,6 +308,7 @@ private fun Step1Component(
     ageTagEnable: Boolean,
     currentCareers: Career?,
     careerTagEnable: Boolean,
+    focusEvent: StaffRecruitingFocusEvent?,
     onUpdateTitleText: (String) -> Unit,
     onUpdateCategories: (Category, Boolean) -> Unit,
     onUpdateDeadlineDate: (String) -> Unit,
@@ -311,6 +322,23 @@ private fun Step1Component(
     onUpdateCareer: (Career, Boolean) -> Unit,
     onUpdateCareerTag: (Boolean) -> Unit,
 ) {
+    val titleFocusRequester = remember { FocusRequester() }
+    val categoryFocusRequester = remember { FocusRequester() }
+    val deadlineFocusRequester = remember { FocusRequester() }
+    val recruitmentNumberFocusRequester = remember { FocusRequester() }
+    val domainFocusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(focusEvent) {
+        when (focusEvent) {
+            StaffRecruitingFocusEvent.Title -> titleFocusRequester.requestFocus()
+            StaffRecruitingFocusEvent.Category -> categoryFocusRequester.requestFocus()
+            StaffRecruitingFocusEvent.Deadline -> deadlineFocusRequester.requestFocus()
+            StaffRecruitingFocusEvent.RecruitmentNumber -> recruitmentNumberFocusRequester.requestFocus()
+            StaffRecruitingFocusEvent.Domain -> domainFocusRequester.requestFocus()
+            else -> Unit
+        }
+    }
+
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -323,6 +351,7 @@ private fun Step1Component(
         Spacer(modifier = Modifier.height(9.dp))
 
         ContentTitleInputComponent(
+            modifier = Modifier.focusRequester(titleFocusRequester),
             titleText = titleText,
             titleTextLimit = titleTextLimit,
             onUpdateTitleText = onUpdateTitleText,
@@ -331,6 +360,8 @@ private fun Step1Component(
         Spacer(modifier = Modifier.height(20.dp))
 
         CategorySelectComponent(
+            modifier = Modifier
+                .focusRequester(categoryFocusRequester),
             currentCategories = currentCategories,
             onUpdateCategories = onUpdateCategories,
         )
@@ -347,6 +378,15 @@ private fun Step1Component(
         recruitmentNumber = recruitmentNumber,
         currentGenders = currentGenders,
         genderTagEnable = genderTagEnable,
+        modifier = Modifier
+            .focusable()
+            .focusRequester(deadlineFocusRequester),
+        recruitmentNumberModifier = Modifier
+            .focusable()
+            .focusRequester(recruitmentNumberFocusRequester),
+        domainModifier = Modifier
+            .focusable()
+            .focusRequester(domainFocusRequester),
         onUpdateDeadlineDate = onUpdateDeadlineDate,
         onUpdateDeadlineTag = onUpdateDeadlineTag,
         onUpdateDomains = onUpdateDomains,
@@ -390,6 +430,7 @@ private fun Step2Component(
     logLine: String,
     logLineTextLimit: Int,
     isLogLinePrivate: Boolean,
+    focusEvent: StaffRecruitingFocusEvent?,
     onUpdateProduction: (String) -> Unit,
     onUpdateWorkTitle: (String) -> Unit,
     onUpdateDirectorName: (String) -> Unit,
@@ -397,6 +438,21 @@ private fun Step2Component(
     onUpdateLogLine: (String) -> Unit,
     onLogLineTagClick: () -> Unit,
 ) {
+    val productionFocusRequester = remember { FocusRequester() }
+    val workTitleFocusRequester = remember { FocusRequester() }
+    val directorNameFocusRequester = remember { FocusRequester() }
+    val genreFocusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(focusEvent) {
+        when (focusEvent) {
+            StaffRecruitingFocusEvent.Production -> productionFocusRequester.requestFocus()
+            StaffRecruitingFocusEvent.WorkTitle -> workTitleFocusRequester.requestFocus()
+            StaffRecruitingFocusEvent.DirectorName -> directorNameFocusRequester.requestFocus()
+            StaffRecruitingFocusEvent.Genre -> genreFocusRequester.requestFocus()
+            else -> Unit
+        }
+    }
+
     Column(
         modifier = Modifier.padding(horizontal = 20.dp),
     ) {
@@ -411,6 +467,7 @@ private fun Step2Component(
         Spacer(modifier = Modifier.height(9.dp))
 
         LeftTitleTextField(
+            modifier = Modifier.focusRequester(productionFocusRequester),
             title = stringResource(id = R.string.recruiting_register_staff_production_title),
             titleSpace = 28,
             placeholder = stringResource(id = R.string.recruiting_register_staff_production_placeholder),
@@ -421,6 +478,7 @@ private fun Step2Component(
         Spacer(modifier = Modifier.height(10.dp))
 
         LeftTitleTextField(
+            modifier = Modifier.focusRequester(workTitleFocusRequester),
             title = stringResource(id = R.string.recruiting_register_staff_work_title),
             titleSpace = 28,
             placeholder = stringResource(id = R.string.recruiting_register_staff_work_placeholder),
@@ -431,6 +489,7 @@ private fun Step2Component(
         Spacer(modifier = Modifier.height(10.dp))
 
         LeftTitleTextField(
+            modifier = Modifier.focusRequester(directorNameFocusRequester),
             title = stringResource(id = R.string.recruiting_register_staff_director_title),
             titleSpace = 28,
             placeholder = stringResource(id = R.string.recruiting_register_staff_director_placeholder),
@@ -441,6 +500,7 @@ private fun Step2Component(
         Spacer(modifier = Modifier.height(10.dp))
 
         LeftTitleTextField(
+            modifier = Modifier.focusRequester(genreFocusRequester),
             title = stringResource(id = R.string.recruiting_register_staff_genre_title),
             titleSpace = 28,
             placeholder = stringResource(id = R.string.recruiting_register_staff_genre_placeholder),
@@ -580,10 +640,20 @@ private fun Step4Component(
     modifier: Modifier = Modifier,
     detailInfo: String,
     detailInfoTextLimit: Int,
+    focusEvent: StaffRecruitingFocusEvent?,
     onUpdateDetailInfo: (String) -> Unit,
 ) {
+    val detailFocusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(focusEvent) {
+        when (focusEvent) {
+            StaffRecruitingFocusEvent.Detail -> detailFocusRequester.requestFocus()
+            else -> Unit
+        }
+    }
+
     Column(
-        modifier = modifier.padding(horizontal = 20.dp),
+        modifier = modifier.padding(horizontal = 20.dp).focusRequester(detailFocusRequester),
     ) {
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -637,11 +707,23 @@ private fun Step5Component(
     modifier: Modifier = Modifier,
     manager: String,
     email: String,
+    focusEvent: StaffRecruitingFocusEvent?,
     registerButtonEnable: Boolean,
     onUpdateManager: (String) -> Unit,
     onUpdateEmail: (String) -> Unit,
     onRegisterClick: () -> Unit,
 ) {
+    val managerFocusRequester = remember { FocusRequester() }
+    val emailFocusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(focusEvent) {
+        when (focusEvent) {
+            StaffRecruitingFocusEvent.Manager -> managerFocusRequester.requestFocus()
+            StaffRecruitingFocusEvent.Email -> emailFocusRequester.requestFocus()
+            else -> Unit
+        }
+    }
+
     Column(
         modifier = modifier.padding(horizontal = 20.dp),
     ) {
@@ -656,6 +738,7 @@ private fun Step5Component(
         Spacer(modifier = Modifier.height(13.dp))
 
         LeftTitleTextField(
+            modifier = Modifier.focusRequester(managerFocusRequester),
             title = stringResource(id = R.string.recruiting_register_staff_manager_title),
             titleSpace = 13,
             text = manager,
@@ -665,6 +748,7 @@ private fun Step5Component(
         Spacer(modifier = Modifier.height(20.dp))
 
         LeftTitleTextField(
+            modifier = Modifier.focusRequester(emailFocusRequester),
             title = stringResource(id = R.string.recruiting_register_staff_email_title),
             titleSpace = 13,
             text = email,
@@ -725,6 +809,9 @@ private fun RecruitmentInputComponent(
     recruitmentNumber: String,
     currentGenders: Gender,
     genderTagEnable: Boolean,
+    modifier: Modifier = Modifier,
+    recruitmentNumberModifier: Modifier = Modifier,
+    domainModifier: Modifier,
     onUpdateDeadlineDate: (String) -> Unit,
     onUpdateDeadlineTag: (Boolean) -> Unit,
     onUpdateDomains: () -> Unit,
@@ -746,7 +833,7 @@ private fun RecruitmentInputComponent(
     Spacer(modifier = Modifier.height(6.dp))
 
     FTextField(
-        modifier = Modifier.padding(horizontal = 20.dp),
+        modifier = modifier.padding(horizontal = 20.dp),
         text = deadlineDate,
         placeholder = stringResource(id = R.string.recruiting_register_staff_deadline_placeholder),
         onValueChange = onUpdateDeadlineDate,
@@ -780,6 +867,7 @@ private fun RecruitmentInputComponent(
     Spacer(modifier = Modifier.height(20.dp))
 
     DomainInputComponent(
+        modifier = domainModifier,
         selectedDomains = selectedDomains,
         onUpdateDomains = onUpdateDomains,
     )
@@ -800,7 +888,7 @@ private fun RecruitmentInputComponent(
     Spacer(modifier = Modifier.height(6.dp))
 
     FTextField(
-        modifier = Modifier.padding(horizontal = 20.dp),
+        modifier = recruitmentNumberModifier.padding(horizontal = 20.dp),
         text = recruitmentNumber,
         onValueChange = onUpdateRecruitmentNumber,
         rightComponents = {
@@ -832,11 +920,12 @@ private fun RecruitmentInputComponent(
 
 @Composable
 private fun CategorySelectComponent(
+    modifier: Modifier = Modifier,
     currentCategories: List<Category>,
     onUpdateCategories: (Category, Boolean) -> Unit,
 ) {
     Row(
-        modifier = Modifier,
+        modifier = modifier.focusable(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TextWithRequired(
@@ -869,33 +958,36 @@ private fun CategorySelectComponent(
 
 @Composable
 private fun ContentTitleInputComponent(
+    modifier: Modifier = Modifier,
     titleText: String,
     titleTextLimit: Int,
     onUpdateTitleText: (String) -> Unit,
 ) {
-    TextWithRequired(
-        title = stringResource(id = R.string.recruiting_register_staff_title),
-        isRequired = true,
-    )
+    Column(modifier = modifier) {
+        TextWithRequired(
+            title = stringResource(id = R.string.recruiting_register_staff_title),
+            isRequired = true,
+        )
 
-    Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
-    FTextField(
-        text = titleText,
-        textLimit = titleTextLimit,
-        onValueChange = onUpdateTitleText,
-        tailComponent = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(start = 8.dp),
-            ) {
-                TextLimitComponent(
-                    currentTextSize = titleText.length,
-                    maxTextSize = titleTextLimit,
-                )
-            }
-        },
-    )
+        FTextField(
+            text = titleText,
+            textLimit = titleTextLimit,
+            onValueChange = onUpdateTitleText,
+            tailComponent = {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(start = 8.dp),
+                ) {
+                    TextLimitComponent(
+                        currentTextSize = titleText.length,
+                        maxTextSize = titleTextLimit,
+                    )
+                }
+            },
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterialApi::class)

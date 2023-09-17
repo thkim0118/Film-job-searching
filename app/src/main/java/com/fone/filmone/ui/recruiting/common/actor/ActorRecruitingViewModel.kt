@@ -1,5 +1,6 @@
 package com.fone.filmone.ui.recruiting.common.actor
 
+import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
 import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.data.datamodel.common.user.Career
@@ -10,9 +11,11 @@ import com.fone.filmone.ui.recruiting.common.actor.model.ActorRecruitingFocusEve
 import com.fone.filmone.ui.recruiting.common.actor.model.ActorRecruitingUiModel
 import com.fone.filmone.ui.recruiting.common.actor.model.ActorRecruitingViewModelState
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 abstract class ActorRecruitingViewModel : BaseViewModel() {
     abstract val viewModelState: MutableStateFlow<ActorRecruitingViewModelState>
@@ -140,8 +143,12 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
         viewModelState.update { state ->
             state.copy(focusEvent = actorRecruitingFocusEvent)
         }
-        viewModelState.update { state ->
-            state.copy(focusEvent = null)
+
+        viewModelScope.launch {
+            delay(1000)
+            viewModelState.update { state ->
+                state.copy(focusEvent = null)
+            }
         }
     }
 

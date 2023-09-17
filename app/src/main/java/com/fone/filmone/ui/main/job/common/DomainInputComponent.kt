@@ -1,6 +1,7 @@
 package com.fone.filmone.ui.main.job.common
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,6 +31,7 @@ fun DomainInputComponent(
 ) {
     Row(
         modifier = modifier
+            .focusable()
             .background(color = FColor.BgGroupedBase)
             .padding(vertical = 13.dp, horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically

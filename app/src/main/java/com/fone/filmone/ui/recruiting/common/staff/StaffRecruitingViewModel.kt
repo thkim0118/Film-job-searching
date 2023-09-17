@@ -1,5 +1,6 @@
 package com.fone.filmone.ui.recruiting.common.staff
 
+import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
 import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.data.datamodel.common.user.Career
@@ -8,13 +9,16 @@ import com.fone.filmone.data.datamodel.common.user.Domain
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.recruiting.common.staff.model.StaffRecruitingDialogState
+import com.fone.filmone.ui.recruiting.common.staff.model.StaffRecruitingFocusEvent
 import com.fone.filmone.ui.recruiting.common.staff.model.StaffRecruitingUiModel
 import com.fone.filmone.ui.recruiting.common.staff.model.StaffRecruitingViewModelState
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 abstract class StaffRecruitingViewModel : BaseViewModel() {
     abstract val viewModelState: MutableStateFlow<StaffRecruitingViewModelState>
@@ -26,12 +30,6 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
     val dialogState: StateFlow<StaffRecruitingDialogState> = _dialogState.asStateFlow()
 
     fun registerJobOpening() {
-        val state = viewModelState.value
-
-        if (state.registerButtonEnable.not()) {
-            return
-        }
-
         val isValidationPassed = checkValidation()
 
         if (isValidationPassed) {
@@ -68,27 +66,33 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
         val step1UiModel = uiState.value.staffRecruitingStep1UiModel
 
         if (step1UiModel.titleText.isEmpty()) {
+            updateFocusEvent(StaffRecruitingFocusEvent.Title)
+            return true
+        }
+
+        if (step1UiModel.categories.isEmpty()) {
+            updateFocusEvent(StaffRecruitingFocusEvent.Category)
             return true
         }
 
         if (step1UiModel.deadlineTagEnable.not() && step1UiModel.deadlineDate.isEmpty()) {
+            updateFocusEvent(StaffRecruitingFocusEvent.Deadline)
             return true
         }
 
         if (step1UiModel.deadlineTagEnable.not() && PatternUtil.isValidDate(step1UiModel.deadlineDate)
         ) {
-            return true
-        }
-
-        if (step1UiModel.categories.isEmpty()) {
+            updateFocusEvent(StaffRecruitingFocusEvent.Deadline)
             return true
         }
 
         if (step1UiModel.recruitmentDomains.isEmpty()) {
+            updateFocusEvent(StaffRecruitingFocusEvent.Domain)
             return true
         }
 
         if (step1UiModel.recruitmentNumber.isEmpty()) {
+            updateFocusEvent(StaffRecruitingFocusEvent.RecruitmentNumber)
             return true
         }
 
@@ -99,18 +103,22 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
         val step2UiModel = uiState.value.staffRecruitingStep2UiModel
 
         if (step2UiModel.production.isEmpty()) {
+            updateFocusEvent(StaffRecruitingFocusEvent.Production)
             return true
         }
 
         if (step2UiModel.workTitle.isEmpty()) {
+            updateFocusEvent(StaffRecruitingFocusEvent.WorkTitle)
             return true
         }
 
         if (step2UiModel.directorName.isEmpty()) {
+            updateFocusEvent(StaffRecruitingFocusEvent.DirectorName)
             return true
         }
 
         if (step2UiModel.genre.isEmpty()) {
+            updateFocusEvent(StaffRecruitingFocusEvent.Genre)
             return true
         }
 
@@ -121,6 +129,7 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
         val step4UiModel = uiState.value.staffRecruitingStep4UiModel
 
         if (step4UiModel.detailInfo.isEmpty()) {
+            updateFocusEvent(StaffRecruitingFocusEvent.Detail)
             return true
         }
 
@@ -131,10 +140,12 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
         val step5UiModel = uiState.value.staffRecruitingStep5UiModel
 
         if (step5UiModel.manager.isEmpty()) {
+            updateFocusEvent(StaffRecruitingFocusEvent.Manager)
             return true
         }
 
         if (step5UiModel.email.isEmpty()) {
+            updateFocusEvent(StaffRecruitingFocusEvent.Email)
             return true
         }
 
@@ -143,6 +154,19 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
 
     fun updateDialogState(dialogState: StaffRecruitingDialogState) {
         _dialogState.value = dialogState
+    }
+
+    private fun updateFocusEvent(staffRecruitingFocusEvent: StaffRecruitingFocusEvent) {
+        viewModelState.update { state ->
+            state.copy(focusEvent = staffRecruitingFocusEvent)
+        }
+
+        viewModelScope.launch {
+            delay(1000)
+            viewModelState.update { state ->
+                state.copy(focusEvent = null)
+            }
+        }
     }
 
     fun updateTitle(title: String) {

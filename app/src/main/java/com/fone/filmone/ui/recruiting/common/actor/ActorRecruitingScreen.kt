@@ -1,6 +1,7 @@
 package com.fone.filmone.ui.recruiting.common.actor
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -324,7 +325,6 @@ private fun Step1Component(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            modifier = Modifier.focusRequester(titleFocusRequester),
             text = stringResource(id = R.string.recruiting_register_actor_step_1_title),
             style = LocalTypography.current.h4(),
             color = FColor.Secondary1Light,
@@ -333,6 +333,7 @@ private fun Step1Component(
         Spacer(modifier = Modifier.height(9.dp))
 
         ContentTitleInputComponent(
+            modifier = Modifier.focusRequester(titleFocusRequester),
             titleText = titleText,
             titleTextLimit = titleTextLimit,
             onUpdateTitleText = onUpdateTitleText,
@@ -341,7 +342,8 @@ private fun Step1Component(
         Spacer(modifier = Modifier.height(20.dp))
 
         CategorySelectComponent(
-            modifier = Modifier.focusRequester(categoryFocusRequester),
+            modifier = Modifier
+                .focusRequester(categoryFocusRequester),
             currentCategories = currentCategories,
             onUpdateCategories = onUpdateCategories,
         )
@@ -359,8 +361,12 @@ private fun Step1Component(
             currentGender = currentGender,
             deadlineDateTagEnable = deadlineDateTagEnable,
             genderTagEnable = genderTagEnable,
-            modifier = Modifier.focusRequester(deadlineFocusRequester),
-            recruitmentNumberModifier = Modifier.focusRequester(recruitmentNumberFocusRequester),
+            modifier = Modifier
+                .focusable()
+                .focusRequester(deadlineFocusRequester),
+            recruitmentNumberModifier = Modifier
+                .focusable()
+                .focusRequester(recruitmentNumberFocusRequester),
             onUpdateDeadlineDate = onUpdateDeadlineDate,
             onUpdateRecruitmentActor = onUpdateRecruitmentActor,
             onUpdateRecruitmentNumber = onUpdateRecruitmentNumber,
@@ -909,7 +915,7 @@ private fun CategorySelectComponent(
     onUpdateCategories: (Category, Boolean) -> Unit,
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier.focusable(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TextWithRequired(

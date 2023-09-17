@@ -13,6 +13,7 @@ abstract class StaffRecruitingViewModelState(
     open val staffRecruitingStep5UiModel: StaffRecruitingStep5UiModel = StaffRecruitingStep5UiModel(),
     open val registerButtonEnable: Boolean = false,
     open val staffRecruitingRegisterUiEvent: StaffRecruitingUiEvent = StaffRecruitingUiEvent.Clear,
+    open val focusEvent: StaffRecruitingFocusEvent? = null,
 ) {
     fun toUiState(): StaffRecruitingUiModel =
         StaffRecruitingUiModel(
@@ -23,6 +24,7 @@ abstract class StaffRecruitingViewModelState(
             staffRecruitingStep5UiModel = staffRecruitingStep5UiModel,
             registerButtonEnable = registerButtonEnable,
             staffRecruitingRegisterUiEvent = staffRecruitingRegisterUiEvent,
+            focusEvent = focusEvent,
         )
 
     abstract fun copy(
@@ -33,6 +35,7 @@ abstract class StaffRecruitingViewModelState(
         staffRecruitingStep5UiModel: StaffRecruitingStep5UiModel = this.staffRecruitingStep5UiModel,
         registerButtonEnable: Boolean = this.registerButtonEnable,
         staffRecruitingRegisterUiEvent: StaffRecruitingUiEvent = this.staffRecruitingRegisterUiEvent,
+        focusEvent: StaffRecruitingFocusEvent? = this.focusEvent,
     ): StaffRecruitingViewModelState
 
     override fun equals(other: Any?): Boolean {
@@ -46,6 +49,7 @@ abstract class StaffRecruitingViewModelState(
         if (staffRecruitingStep5UiModel != other.staffRecruitingStep5UiModel) return false
         if (registerButtonEnable != other.registerButtonEnable) return false
         if (staffRecruitingRegisterUiEvent != other.staffRecruitingRegisterUiEvent) return false
+        if (focusEvent != other.focusEvent) return false
 
         return true
     }
@@ -58,11 +62,12 @@ abstract class StaffRecruitingViewModelState(
         result = 31 * result + staffRecruitingStep5UiModel.hashCode()
         result = 31 * result + registerButtonEnable.hashCode()
         result = 31 * result + staffRecruitingRegisterUiEvent.hashCode()
+        result = 31 * result + (focusEvent?.hashCode() ?: 0)
         return result
     }
 
     override fun toString(): String {
-        return "StaffRecruitingViewModelState(staffRecruitingStep1UiModel=$staffRecruitingStep1UiModel, staffRecruitingStep2UiModel=$staffRecruitingStep2UiModel, staffRecruitingStep3UiModel=$staffRecruitingStep3UiModel, staffRecruitingStep4UiModel=$staffRecruitingStep4UiModel, staffRecruitingStep5UiModel=$staffRecruitingStep5UiModel, registerButtonEnable=$registerButtonEnable, staffRecruitingRegisterUiEvent=$staffRecruitingRegisterUiEvent)"
+        return "StaffRecruitingViewModelState(staffRecruitingStep1UiModel=$staffRecruitingStep1UiModel, staffRecruitingStep2UiModel=$staffRecruitingStep2UiModel, staffRecruitingStep3UiModel=$staffRecruitingStep3UiModel, staffRecruitingStep4UiModel=$staffRecruitingStep4UiModel, staffRecruitingStep5UiModel=$staffRecruitingStep5UiModel, registerButtonEnable=$registerButtonEnable, staffRecruitingRegisterUiEvent=$staffRecruitingRegisterUiEvent, focusEvent=$focusEvent)"
     }
 }
 
@@ -74,6 +79,7 @@ data class StaffRecruitingUiModel(
     val staffRecruitingStep5UiModel: StaffRecruitingStep5UiModel,
     val registerButtonEnable: Boolean,
     val staffRecruitingRegisterUiEvent: StaffRecruitingUiEvent,
+    val focusEvent: StaffRecruitingFocusEvent?,
 )
 
 data class StaffRecruitingStep1UiModel(
@@ -132,4 +138,19 @@ sealed class StaffRecruitingDialogState {
 sealed class StaffRecruitingUiEvent {
     object RegisterComplete : StaffRecruitingUiEvent()
     object Clear : StaffRecruitingUiEvent()
+}
+
+sealed interface StaffRecruitingFocusEvent {
+    object Title : StaffRecruitingFocusEvent
+    object Category : StaffRecruitingFocusEvent
+    object Deadline : StaffRecruitingFocusEvent
+    object Domain : StaffRecruitingFocusEvent
+    object RecruitmentNumber : StaffRecruitingFocusEvent
+    object Production : StaffRecruitingFocusEvent
+    object WorkTitle : StaffRecruitingFocusEvent
+    object DirectorName : StaffRecruitingFocusEvent
+    object Genre : StaffRecruitingFocusEvent
+    object Detail : StaffRecruitingFocusEvent
+    object Manager : StaffRecruitingFocusEvent
+    object Email : StaffRecruitingFocusEvent
 }

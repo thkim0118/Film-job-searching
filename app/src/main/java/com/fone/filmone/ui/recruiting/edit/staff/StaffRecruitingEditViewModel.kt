@@ -14,6 +14,7 @@ import com.fone.filmone.domain.usecase.GetJobOpeningDetailUseCase
 import com.fone.filmone.domain.usecase.ModifyJobOpeningContentUseCase
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.recruiting.common.staff.StaffRecruitingViewModel
+import com.fone.filmone.ui.recruiting.common.staff.model.StaffRecruitingFocusEvent
 import com.fone.filmone.ui.recruiting.common.staff.model.StaffRecruitingStep1UiModel
 import com.fone.filmone.ui.recruiting.common.staff.model.StaffRecruitingStep2UiModel
 import com.fone.filmone.ui.recruiting.common.staff.model.StaffRecruitingStep3UiModel
@@ -184,6 +185,7 @@ private class StaffRecruitingEditViewModelState(
     override val staffRecruitingStep5UiModel: StaffRecruitingStep5UiModel = StaffRecruitingStep5UiModel(),
     override val registerButtonEnable: Boolean = false,
     override val staffRecruitingRegisterUiEvent: StaffRecruitingUiEvent = StaffRecruitingUiEvent.Clear,
+    override val focusEvent: StaffRecruitingFocusEvent? = null,
 ) : StaffRecruitingViewModelState() {
     override fun copy(
         staffRecruitingStep1UiModel: StaffRecruitingStep1UiModel,
@@ -193,6 +195,7 @@ private class StaffRecruitingEditViewModelState(
         staffRecruitingStep5UiModel: StaffRecruitingStep5UiModel,
         registerButtonEnable: Boolean,
         staffRecruitingRegisterUiEvent: StaffRecruitingUiEvent,
+        focusEvent: StaffRecruitingFocusEvent?,
     ): StaffRecruitingViewModelState = StaffRecruitingEditViewModelState(
         staffRecruitingStep1UiModel = staffRecruitingStep1UiModel,
         staffRecruitingStep2UiModel = staffRecruitingStep2UiModel,
@@ -201,5 +204,6 @@ private class StaffRecruitingEditViewModelState(
         staffRecruitingStep5UiModel = staffRecruitingStep5UiModel,
         registerButtonEnable = registerButtonEnable,
         staffRecruitingRegisterUiEvent = staffRecruitingRegisterUiEvent,
+        focusEvent = focusEvent,
     )
 }
