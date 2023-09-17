@@ -1,5 +1,6 @@
 package com.fone.filmone.ui.signup.screen
 
+import android.telephony.PhoneNumberUtils
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,6 +52,7 @@ import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.phone.PhoneVerificationComponent
+import com.fone.filmone.ui.common.phone.PhoneVerificationState
 import com.fone.filmone.ui.signup.AgreeState
 import com.fone.filmone.ui.signup.SignUpThirdDialogState
 import com.fone.filmone.ui.signup.SignUpThirdUiState
@@ -70,6 +73,10 @@ fun SignUpThirdScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val dialogState by viewModel.dialogState.collectAsState()
+
+    LaunchedEffect(signUpVo) {
+        viewModel.updateSavedSignupVo(signUpVo)
+    }
 
     Scaffold(
         modifier = modifier
@@ -97,7 +104,8 @@ fun SignUpThirdScreen(
                 onVerificationCheckClick = viewModel::checkVerificationCode,
                 onUpdateAllAgreeState = viewModel::updateAllAgreeState,
                 onUpdateAgreeState = viewModel::updateAgreeState,
-                onSignUpClick = { viewModel.signUp(signUpVo) }
+                onSignUpClick = { viewModel.signUp(signUpVo) },
+                signUpVo = signUpVo
             )
 
             DialogScreen(
@@ -118,7 +126,8 @@ private fun SignUpMainScreen(
     onVerificationCheckClick: (String) -> Unit,
     onUpdateAllAgreeState: () -> Unit,
     onUpdateAgreeState: (AgreeState) -> Unit,
-    onSignUpClick: () -> Unit
+    onSignUpClick: () -> Unit,
+    signUpVo: SignUpVo
 ) {
     val scrollState = rememberScrollState()
 
@@ -130,6 +139,23 @@ private fun SignUpMainScreen(
             titleType = TitleType.Back,
             titleText = stringResource(id = R.string.sign_up_title_text),
             onBackClick = {
+                val number = uiState.phoneNumber
+                val state = uiState.phoneVerificationState
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set(
+                        "savedSignupVo",
+                        SignUpVo.toJson(
+                            signUpVo.copy(
+                                phoneNumber = if (number != "")
+                                    PhoneNumberUtils.formatNumber(
+                                        number,
+                                        "KR"
+                                    ) else "",
+                                phoneVerificationState = state is PhoneVerificationState.Complete
+                            )
+                        )
+                    )
                 navController.popBackStack()
             }
         )

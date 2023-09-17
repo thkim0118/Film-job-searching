@@ -54,7 +54,8 @@ import com.fone.filmone.ui.theme.LocalTypography
 fun EmailJoinScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    viewModel: EmailJoinViewModel = hiltViewModel()
+    viewModel: EmailJoinViewModel = hiltViewModel(),
+    signUpVo: SignUpVo
 ) {
     val scrollState = rememberScrollState()
     val uiState by viewModel.uiState.collectAsState()
@@ -130,7 +131,7 @@ fun EmailJoinScreen(
                         FOneNavigator.navigateTo(
                             NavDestinationState(
                                 route = FOneDestinations.SignUpFirst.getRouteWithArg(
-                                    SignUpVo(
+                                    signUpVo.copy(
                                         email = uiState.email,
                                         loginType = LoginType.PASSWORD,
                                         password = uiState.confirmedPassword,

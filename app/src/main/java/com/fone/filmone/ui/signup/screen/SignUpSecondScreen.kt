@@ -108,6 +108,10 @@ fun SignUpSecondScreen(
         }
     )
 
+    LaunchedEffect(signUpVo) {
+        viewModel.updateSavedSignupVo(signUpVo)
+    }
+
     Scaffold(
         modifier = Modifier,
         snackbarHost = {
@@ -128,6 +132,23 @@ fun SignUpSecondScreen(
                     titleType = TitleType.Back,
                     titleText = stringResource(id = R.string.sign_up_title_text),
                     onBackClick = {
+                        navController.previousBackStackEntry
+                            ?.savedStateHandle
+                            ?.set(
+                                "savedSignupVo",
+                                SignUpVo.toJson(
+                                    signUpVo.copy(
+                                        nickname = uiState.nickname,
+                                        birthday = uiState.birthday,
+                                        gender = uiState.gender?.name ?: Gender.IRRELEVANT.name,
+                                        profileUrl = uiState.profileUrl,
+                                        isProfileUploading = uiState.isProfileUploading,
+                                        isNicknameDuplicated = uiState.isNicknameDuplicated,
+                                        isNicknameChecked = uiState.isNicknameChecked,
+                                        isBirthDayChecked = uiState.isBirthDayChecked
+                                    )
+                                )
+                            )
                         navController.popBackStack()
                     }
                 )
@@ -172,8 +193,8 @@ fun SignUpSecondScreen(
                         Spacer(modifier = Modifier.height(40.dp))
 
                         ProfileComponent(
-                            viewModel = viewModel,
-                            imageUri = imageUri,
+                            uiState = uiState,
+                            viewModel = viewModel
                         )
 
                         Spacer(modifier = Modifier.height(137.dp))
@@ -378,8 +399,8 @@ private fun BirthdayGenderComponent(
 
 @Composable
 private fun ProfileComponent(
-    viewModel: SignUpSecondViewModel,
-    imageUri: Uri?,
+    uiState: SignUpSecondUiState,
+    viewModel: SignUpSecondViewModel
 ) {
     Text(
         text = stringResource(id = R.string.sign_up_second_profile_title),
@@ -406,7 +427,7 @@ private fun ProfileComponent(
                 .size(108.dp)
                 .fShadow(shape = CircleShape)
         )
-        if (imageUri == null) {
+        if (uiState.profileUrl.isEmpty()) {
             Image(
                 modifier = Modifier,
                 imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
@@ -426,7 +447,7 @@ private fun ProfileComponent(
                     tilt = 20f
                 ),
 
-                imageModel = imageUri,
+                imageModel = uiState.profileUrl,
                 contentScale = ContentScale.Crop,
                 failure = {
                     Image(
@@ -497,7 +518,11 @@ private fun ColumnScope.NextButton(
                                 nickname = uiState.nickname,
                                 birthday = uiState.birthday,
                                 gender = uiState.gender?.name ?: Gender.IRRELEVANT.name,
-                                profileUrl = uiState.profileUrl
+                                profileUrl = uiState.profileUrl,
+                                isBirthDayChecked = true,
+                                isNicknameChecked = true,
+                                isNicknameDuplicated = uiState.isNicknameDuplicated,
+                                isProfileUploading = uiState.isProfileUploading
                             )
                         )
                     )

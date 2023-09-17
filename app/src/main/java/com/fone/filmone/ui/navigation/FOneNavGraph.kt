@@ -35,6 +35,7 @@ import com.fone.filmone.ui.recruiting.edit.staff.StaffRecruitingEditScreen
 import com.fone.filmone.ui.recruiting.register.actor.ActorRecruitingRegisterScreen
 import com.fone.filmone.ui.recruiting.register.staff.StaffRecruitingRegisterScreen
 import com.fone.filmone.ui.scrap.ScrapScreen
+import com.fone.filmone.ui.signup.model.SignUpVo
 import com.fone.filmone.ui.signup.signUpNavGraph
 import com.fone.filmone.ui.splash.SplashScreen
 import kotlinx.coroutines.flow.launchIn
@@ -169,7 +170,15 @@ fun FOneNavGraph(
         composable(
             route = FOneDestinations.EmailJoin.route,
         ) {
-            EmailJoinScreen(navController = navController)
+            val savedSignupVo = it.savedStateHandle
+                .get<String?>("savedSignupVo")
+                ?.let(SignUpVo::fromJson)
+                ?: SignUpVo()
+
+            EmailJoinScreen(
+                navController = navController,
+                signUpVo = savedSignupVo
+            )
         }
     }
 }

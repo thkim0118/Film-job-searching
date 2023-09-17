@@ -3,6 +3,7 @@ package com.fone.filmone.ui.signup
 import androidx.lifecycle.ViewModel
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.response.user.Job
+import com.fone.filmone.ui.signup.model.SignUpVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,6 +30,21 @@ class SignUpFirstViewModel @Inject constructor() : ViewModel() {
                 } else {
                     uiState.interests.filterNot { it == interest }
                 }
+            )
+        }
+    }
+
+    fun updateSavedSignupVo(signUpVo: SignUpVo) {
+        _uiState.update { uiState ->
+            uiState.copy(
+                job = Job.values().find { job ->
+                    job.name == signUpVo.job
+                },
+                interests = signUpVo.interests.map { interest ->
+                    Category.values().find { category ->
+                        category.name == interest
+                    } ?: Category.ETC
+                }.toList()
             )
         }
     }

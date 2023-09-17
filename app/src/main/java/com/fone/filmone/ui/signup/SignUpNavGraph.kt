@@ -20,7 +20,8 @@ fun NavGraphBuilder.signUpNavGraph(
         arguments = FOneDestinations.SignUpFirst.arguments
     ) { navBackStackEntry ->
         val signUpVo =
-            navBackStackEntry.arguments?.getString(FOneDestinations.SignUpFirst.argSignUpVo)
+            navBackStackEntry.savedStateHandle.get<String?>("savedSignupVo")
+                ?: navBackStackEntry.arguments?.getString(FOneDestinations.SignUpFirst.argSignUpVo)
                 ?: return@composable
 
         SignUpFirstScreen(
@@ -34,7 +35,8 @@ fun NavGraphBuilder.signUpNavGraph(
         arguments = FOneDestinations.SignUpSecond.arguments
     ) { navBackStackEntry ->
         val signUpVo =
-            navBackStackEntry.arguments?.getString(FOneDestinations.SignUpSecond.argSignUpVo)
+            navBackStackEntry.savedStateHandle.get<String?>("savedSignupVo")
+                ?: navBackStackEntry.arguments?.getString(FOneDestinations.SignUpSecond.argSignUpVo)
                 ?: return@composable
 
         SignUpSecondScreen(

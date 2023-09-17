@@ -240,6 +240,17 @@ class SignUpThirdViewModel @Inject constructor(
         verificationTimer.finishVerificationTimer()
         retransmitTimer.cancel()
     }
+
+    fun updateSavedSignupVo(signUpVo: SignUpVo) {
+        _uiState.update { uiState ->
+            uiState.copy(
+                phoneNumber = signUpVo.phoneNumber,
+                phoneVerificationState = if (signUpVo.phoneVerificationState)
+                    PhoneVerificationState.Complete
+                else PhoneVerificationState.ShouldVerify
+            )
+        }
+    }
 }
 
 data class SignUpThirdUiState(

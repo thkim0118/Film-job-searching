@@ -13,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -57,6 +58,10 @@ fun SignUpFirstScreen(
     val uiState by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
 
+    LaunchedEffect(signUpVo) {
+        viewModel.updateSavedSignupVo(signUpVo)
+    }
+
     Column(
         modifier = modifier
             .defaultSystemBarPadding()
@@ -66,6 +71,17 @@ fun SignUpFirstScreen(
             titleType = TitleType.Back,
             titleText = stringResource(id = R.string.sign_up_title_text),
             onBackClick = {
+                navController.previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.set(
+                        "savedSignupVo",
+                        SignUpVo.toJson(
+                            signUpVo.copy(
+                                job = uiState.job?.name ?: "",
+                                interests = uiState.interests.map { it.name }
+                            )
+                        )
+                    )
                 navController.popBackStack()
             }
         )

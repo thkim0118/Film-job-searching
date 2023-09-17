@@ -24,6 +24,11 @@ data class SignUpVo(
     val agreeToPersonalInformation: Boolean = false,
     val agreeToTermsOfServiceTermsOfUse: Boolean = false,
     val isReceiveMarketing: Boolean = false,
+    val isNicknameChecked: Boolean = false,
+    val isNicknameDuplicated: Boolean = false,
+    val isBirthDayChecked: Boolean = false,
+    val isProfileUploading: Boolean = false,
+    val phoneVerificationState: Boolean = false
 ) : Serializable {
     companion object {
         fun toJson(signUpVo: SignUpVo): String = Gson().toJson(signUpVo).toEncoding()

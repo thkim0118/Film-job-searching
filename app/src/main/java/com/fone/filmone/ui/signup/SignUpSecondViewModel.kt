@@ -11,6 +11,7 @@ import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.CheckNicknameDuplicationUseCase
 import com.fone.filmone.domain.usecase.UploadImageUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
+import com.fone.filmone.ui.signup.model.SignUpVo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -120,6 +121,23 @@ class SignUpSecondViewModel @Inject constructor(
                     }
                 }
             }
+    }
+
+    fun updateSavedSignupVo(signUpVo: SignUpVo) {
+        _uiState.update { uiState ->
+            uiState.copy(
+                nickname = signUpVo.nickname,
+                birthday = signUpVo.birthday,
+                gender = Gender.values().find {
+                    it.name == signUpVo.gender
+                },
+                profileUrl = signUpVo.profileUrl,
+                isBirthDayChecked = signUpVo.isBirthDayChecked,
+                isNicknameChecked = signUpVo.isNicknameChecked,
+                isNicknameDuplicated = signUpVo.isNicknameDuplicated,
+                isProfileUploading = signUpVo.isProfileUploading
+            )
+        }
     }
 }
 
