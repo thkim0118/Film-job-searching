@@ -21,10 +21,10 @@ object PatternUtil {
     }
 
     // ex) 2023-06-14
-    fun isValidDate(birthday: String): Boolean {
+    fun isValidDate(date: String): Boolean {
         val birthDayPattern = Pattern.compile("^(\\d{4})-(0[1-9]|1[0-2])-(0\\d|[1-2]\\d|3[0-1])+$")
 
-        return birthDayPattern.matcher(birthday).matches()
+        return birthDayPattern.matcher(date).matches()
     }
 
     fun isValidPassword(password: String): Boolean {
