@@ -86,7 +86,7 @@ data class StaffRecruitingStep1UiModel(
     val titleText: String = "",
     val titleTextLimit: Int = 50,
     val categories: Set<Category> = emptySet(),
-    val deadlineDate: String = "",
+    val deadlineDate: String? = null,
     val deadlineTagEnable: Boolean = true,
     val recruitmentDomains: Set<Domain> = emptySet(),
     val recruitmentNumber: String = "",
