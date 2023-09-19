@@ -4,6 +4,7 @@ import androidx.annotation.Keep
 
 @Keep
 data class EmailSignUpRequest(
+    val name: String,
     val agreeToPersonalInformation: Boolean,
     val agreeToTermsOfServiceTermsOfUse: Boolean,
     val birthday: String,

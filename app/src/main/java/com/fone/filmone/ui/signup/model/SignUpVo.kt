@@ -9,6 +9,7 @@ import com.google.gson.Gson
 import java.io.Serializable
 
 data class SignUpVo(
+    val name: String = "",
     val accessToken: String = "",
     val loginType: LoginType? = null,
     val email: String = "",
@@ -58,6 +59,7 @@ data class SignUpVo(
 
         fun SignUpVo.mapToEmailSignUpRequest(): EmailSignUpRequest {
             return EmailSignUpRequest(
+                name = name,
                 email = email,
                 job = job,
                 interests = interests,
