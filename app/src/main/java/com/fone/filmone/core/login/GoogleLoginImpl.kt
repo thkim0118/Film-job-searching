@@ -30,12 +30,14 @@ class GoogleLoginImpl(
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(context.getString(R.string.google_sign_in_client_id))
+            .requestEmail()
             .build()
 
         val googleSignInClient = GoogleSignIn.getClient(context, gso)
 
         signIn(googleSignInClient)
     }
+
 
     private fun signIn(googleSignInClient: GoogleSignInClient) {
         val signInIntent = googleSignInClient.signInIntent
