@@ -119,10 +119,11 @@ fun LoginScreen(
 
             NaverLoginButton(
                 onClick = {
-                    snsLoginUtil.login(
-                        context,
-                        LoginType.NAVER
-                    )
+                    viewModel.showToast("서비스 준비 중입니다")
+//                    snsLoginUtil.login(
+//                        context,
+//                        LoginType.NAVER
+//                    )
                 }
             )
 
@@ -142,7 +143,7 @@ fun LoginScreen(
 
             AppleLoginButton(
                 onClick = {
-                    viewModel.showToast("애플 로그인은 추후 제공 예정입니다.")
+                    viewModel.showToast("서비스 준비 중입니다")
                     //                snsLoginUtil.login(
                     //                    context,
                     //                    LoginType.APPLE,
