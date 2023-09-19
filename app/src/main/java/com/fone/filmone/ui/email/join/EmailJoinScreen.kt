@@ -132,6 +132,7 @@ fun EmailJoinScreen(
                             NavDestinationState(
                                 route = FOneDestinations.SignUpFirst.getRouteWithArg(
                                     signUpVo.copy(
+                                        name = uiState.name,
                                         email = uiState.email,
                                         loginType = LoginType.PASSWORD,
                                         password = uiState.confirmedPassword,
