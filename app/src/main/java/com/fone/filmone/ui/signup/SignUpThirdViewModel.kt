@@ -83,11 +83,11 @@ class SignUpThirdViewModel @Inject constructor(
             FOneNavigator.navigateTo(
                 NavDestinationState(
                     route = FOneDestinations.SignUpComplete.getRouteWithArg(
-                        accessToken = signUpVo.accessToken.ifEmpty { null },
+                        accessToken = signUpVo.accessToken.ifEmpty { "test" },
                         email = signUpVo.email,
                         socialLoginType = signUpVo.loginType?.name ?: "",
                         nickname = signUpVo.nickname,
-                        password = signUpVo.password.ifEmpty { null }
+                        password = signUpVo.password,
                     )
                 )
             )
