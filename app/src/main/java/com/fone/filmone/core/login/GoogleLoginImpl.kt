@@ -22,7 +22,7 @@ class GoogleLoginImpl(
         if (account != null && account.idToken != null) {
             loginCallback.onSuccess(
                 account.idToken ?: return,
-                "",
+                account.email ?: return,
                 LoginType.GOOGLE
             )
             return
@@ -37,7 +37,6 @@ class GoogleLoginImpl(
 
         signIn(googleSignInClient)
     }
-
 
     private fun signIn(googleSignInClient: GoogleSignInClient) {
         val signInIntent = googleSignInClient.signInIntent
