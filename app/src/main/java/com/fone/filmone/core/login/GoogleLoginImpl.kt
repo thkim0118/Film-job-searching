@@ -22,7 +22,7 @@ class GoogleLoginImpl(
         if (account != null && account.idToken != null) {
             loginCallback.onSuccess(
                 account.idToken ?: return,
-                "",
+                account.email ?: return,
                 LoginType.GOOGLE
             )
             return
