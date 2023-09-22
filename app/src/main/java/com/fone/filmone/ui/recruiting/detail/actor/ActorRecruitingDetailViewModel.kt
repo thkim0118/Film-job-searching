@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
+import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.response.jobopenings.detail.JobOpeningResponse
 import com.fone.filmone.domain.model.common.onFail
@@ -104,8 +105,8 @@ private data class ActorRecruitingDetailViewModelState(
             dday = jobOpeningResponse.jobOpening.dday,
             casting = jobOpeningResponse.jobOpening.casting,
             numberOfRecruits = jobOpeningResponse.jobOpening.numberOfRecruits.toString(),
-            ageRange = jobOpeningResponse.jobOpening.ageMin.toString() + jobOpeningResponse.jobOpening.ageMax.toString(),
-            career = jobOpeningResponse.jobOpening.career.name,
+            ageRange = jobOpeningResponse.jobOpening.ageMin.toString() + "~" + jobOpeningResponse.jobOpening.ageMax.toString(),
+            career = jobOpeningResponse.jobOpening.career,
             production = jobOpeningResponse.jobOpening.work.produce,
             workTitle = jobOpeningResponse.jobOpening.work.workTitle,
             director = jobOpeningResponse.jobOpening.work.director,
@@ -134,7 +135,7 @@ private data class ActorRecruitingDetailViewModelState(
             casting = "",
             numberOfRecruits = "",
             ageRange = "",
-            career = "",
+            career = Career.IRRELEVANT,
             production = "",
             workTitle = "",
             director = "",
@@ -165,7 +166,7 @@ data class ActorRecruitingDetailUiState(
     val casting: String?,
     val numberOfRecruits: String,
     val ageRange: String,
-    val career: String,
+    val career: Career,
     val production: String,
     val workTitle: String,
     val director: String,
