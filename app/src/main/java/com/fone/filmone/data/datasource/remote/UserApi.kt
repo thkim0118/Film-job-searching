@@ -3,6 +3,7 @@ package com.fone.filmone.data.datasource.remote
 import com.fone.filmone.data.datamodel.common.network.NetworkResponse
 import com.fone.filmone.data.datamodel.common.network.Server
 import com.fone.filmone.data.datamodel.request.user.ChangePasswordRequest
+import com.fone.filmone.data.datamodel.request.user.CheckEmailDuplicationRequest
 import com.fone.filmone.data.datamodel.request.user.EmailSignInRequest
 import com.fone.filmone.data.datamodel.request.user.EmailSignUpRequest
 import com.fone.filmone.data.datamodel.request.user.EmailValidationRequest
@@ -12,6 +13,7 @@ import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
 import com.fone.filmone.data.datamodel.request.user.ValidatePasswordRequest
+import com.fone.filmone.data.datamodel.response.user.CheckEmailDuplicationResponse
 import com.fone.filmone.data.datamodel.response.user.CheckNicknameDuplicationResponse
 import com.fone.filmone.data.datamodel.response.user.EmailSignInResponse
 import com.fone.filmone.data.datamodel.response.user.EmailSignUpResponse
@@ -33,6 +35,11 @@ interface UserApi {
     suspend fun checkNicknameDuplication(
         @Query("nickname") nickname: String
     ): Response<NetworkResponse<CheckNicknameDuplicationResponse>>
+
+    @POST("${Server.ApiVersion}/users/email/duplicate")
+    suspend fun checkEmailDuplication(
+        @Body checkEmailDuplicationRequest: CheckEmailDuplicationRequest
+    ): Response<NetworkResponse<CheckEmailDuplicationResponse>>
 
     @POST("${Server.ApiVersion}/users/social/sign-up")
     suspend fun signUp(
