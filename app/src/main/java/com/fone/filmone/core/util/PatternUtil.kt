@@ -22,14 +22,14 @@ object PatternUtil {
 
     // ex) 2023-06-14
     fun isValidDate(date: String): Boolean {
-        val birthDayPattern = Pattern.compile("^(\\d{4})-(0[1-9]|1[0-2])-(0\\d|[1-2]\\d|3[0-1])+$")
+        val birthDayPattern = Pattern.compile("^(\\d{4})-(0[1-9]|1[0-2])-(0\\d|[1-2]\\d|3[0-1])$")
 
         return birthDayPattern.matcher(date).matches()
     }
 
     fun isValidPassword(password: String): Boolean {
         val passwordRegex =
-            Regex("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@\$!%*?&#_])[A-Za-z\\d@\$!%*?&#_]{8,16}\$")
+            Regex("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[\\W_])[A-Za-z\\d\\W_]{8,16}\$")
 
         return passwordRegex.matches(password)
     }

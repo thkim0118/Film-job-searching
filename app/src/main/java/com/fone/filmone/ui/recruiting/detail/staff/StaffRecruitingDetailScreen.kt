@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -58,6 +59,7 @@ fun StaffRecruitingDetailScreen(
     viewModel: StaffRecruitingDetailViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
 ) {
+    val context = LocalContext.current
     val scrollState = rememberScrollState()
     val uiState by viewModel.uiState.collectAsState()
 
@@ -111,7 +113,7 @@ fun StaffRecruitingDetailScreen(
                     number = uiState.numberOfRecruits,
                     gender = uiState.gender,
                     ageRange = uiState.ageRange,
-                    career = uiState.career,
+                    career = context.getString(uiState.career.titleRes),
                 )
 
                 Divider(thickness = 8.dp, color = FColor.Divider2)

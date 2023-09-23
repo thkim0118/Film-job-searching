@@ -87,7 +87,7 @@ class SignUpThirdViewModel @Inject constructor(
                         email = signUpVo.email,
                         socialLoginType = signUpVo.loginType?.name ?: "",
                         nickname = signUpVo.nickname,
-                        password = signUpVo.password,
+                        password = signUpVo.password.ifEmpty { "test" },
                     )
                 )
             )

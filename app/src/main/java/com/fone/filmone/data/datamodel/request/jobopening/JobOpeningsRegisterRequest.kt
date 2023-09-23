@@ -13,7 +13,7 @@ data class JobOpeningsRegisterRequest(
     val career: Career,
     val casting: String?,
     val categories: List<String>,
-    val deadline: String,
+    val deadline: String?,
     val domains: List<String>?,
     val gender: Gender,
     val numberOfRecruits: Int,

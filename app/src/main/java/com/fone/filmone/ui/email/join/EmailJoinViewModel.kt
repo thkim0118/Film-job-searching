@@ -5,7 +5,7 @@ import com.fone.filmone.R
 import com.fone.filmone.core.util.PatternUtil
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
-import com.fone.filmone.domain.usecase.ValidateEmailUseCase
+import com.fone.filmone.domain.usecase.CheckEmailDuplicationUseCase
 import com.fone.filmone.ui.common.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EmailJoinViewModel @Inject constructor(
-    private val validateEmailUseCase: ValidateEmailUseCase
+    private val checkEmailDuplicationUseCase: CheckEmailDuplicationUseCase
 ) : BaseViewModel() {
     private val viewModelState = MutableStateFlow(EmailJoinViewModelState())
 
@@ -51,17 +51,17 @@ class EmailJoinViewModel @Inject constructor(
         }
     }
 
-    fun checkDuplicateEmail(code: String = "") = viewModelScope.launch {
+    fun checkDuplicateEmail() = viewModelScope.launch {
         val email = uiState.value.email
-        validateEmailUseCase(code, email)
+        checkEmailDuplicationUseCase(email)
             .onSuccess { response ->
                 if (response == null) {
                     showToast(R.string.toast_empty_data)
                     return@onSuccess
                 }
 
-                viewModelState.update {
-                    it.copy(
+                viewModelState.update { uiState ->
+                    uiState.copy(
                         isEmailChecked = true,
                         isEmailDuplicated = false
                     )
@@ -69,8 +69,8 @@ class EmailJoinViewModel @Inject constructor(
 
                 updateNextButtonEnable()
             }.onFail {
-                viewModelState.update {
-                    it.copy(
+                viewModelState.update { uiState ->
+                    uiState.copy(
                         isEmailDuplicated = true
                     )
                 }

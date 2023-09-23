@@ -67,13 +67,13 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
             return true
         }
 
-        if (step1UiModel.deadlineTagEnable.not() && step1UiModel.deadlineDate.isNullOrEmpty()) {
+        if (step1UiModel.deadlineTagEnable.not() && step1UiModel.deadlineDate.isEmpty()) {
             updateFocusEvent(ActorRecruitingFocusEvent.Deadline)
             return true
         }
 
         if (step1UiModel.deadlineTagEnable.not() &&
-            (PatternUtil.isValidDate(step1UiModel.deadlineDate!!) || step1UiModel.deadlineDate == "상시모집")
+            (!PatternUtil.isValidDate(step1UiModel.deadlineDate) || step1UiModel.deadlineDate == "상시모집")
         ) {
             updateFocusEvent(ActorRecruitingFocusEvent.Deadline)
             return true
@@ -213,11 +213,7 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
             it.copy(
                 actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(
                     deadlineTagEnable = enable,
-                    deadlineDate = if (enable) {
-                        null
-                    } else {
-                        it.actorRecruitingStep1UiModel.deadlineDate
-                    },
+                    deadlineDate = if (enable) { "상시모집" } else { "" },
                 ),
             )
         }

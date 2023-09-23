@@ -75,13 +75,13 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
             return true
         }
 
-        if (step1UiModel.deadlineTagEnable.not() && step1UiModel.deadlineDate.isNullOrEmpty()) {
+        if (step1UiModel.deadlineTagEnable.not() && step1UiModel.deadlineDate.isEmpty()) {
             updateFocusEvent(StaffRecruitingFocusEvent.Deadline)
             return true
         }
 
         if (step1UiModel.deadlineTagEnable.not() &&
-            (PatternUtil.isValidDate(step1UiModel.deadlineDate!!) || step1UiModel.deadlineDate == "상시모집")
+            (!PatternUtil.isValidDate(step1UiModel.deadlineDate) || step1UiModel.deadlineDate == "상시모집")
         ) {
             updateFocusEvent(StaffRecruitingFocusEvent.Deadline)
             return true
@@ -207,7 +207,7 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
             state.copy(
                 staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
                     deadlineDate = deadlineDate,
-                    deadlineTagEnable = if (deadlineDate.isNotEmpty()) {
+                    deadlineTagEnable = if (state.staffRecruitingStep1UiModel.deadlineTagEnable && deadlineDate.isNotEmpty()) {
                         false
                     } else {
                         state.staffRecruitingStep1UiModel.deadlineTagEnable
@@ -224,11 +224,7 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
             state.copy(
                 staffRecruitingStep1UiModel = state.staffRecruitingStep1UiModel.copy(
                     deadlineTagEnable = enable,
-                    deadlineDate = if (enable) {
-                        null
-                    } else {
-                        state.staffRecruitingStep1UiModel.deadlineDate
-                    },
+                    deadlineDate = if (enable) { "상시모집" } else { "" },
                 ),
             )
         }

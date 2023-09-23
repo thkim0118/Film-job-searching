@@ -2,6 +2,7 @@ package com.fone.filmone.data.repository
 
 import com.fone.filmone.data.datamodel.common.network.handleNetwork
 import com.fone.filmone.data.datamodel.request.user.ChangePasswordRequest
+import com.fone.filmone.data.datamodel.request.user.CheckEmailDuplicationRequest
 import com.fone.filmone.data.datamodel.request.user.EmailSignInRequest
 import com.fone.filmone.data.datamodel.request.user.EmailSignUpRequest
 import com.fone.filmone.data.datamodel.request.user.EmailValidationRequest
@@ -11,6 +12,7 @@ import com.fone.filmone.data.datamodel.request.user.SignUpRequest
 import com.fone.filmone.data.datamodel.request.user.SigninRequest
 import com.fone.filmone.data.datamodel.request.user.UserUpdateRequest
 import com.fone.filmone.data.datamodel.request.user.ValidatePasswordRequest
+import com.fone.filmone.data.datamodel.response.user.CheckEmailDuplicationResponse
 import com.fone.filmone.data.datamodel.response.user.CheckNicknameDuplicationResponse
 import com.fone.filmone.data.datamodel.response.user.EmailSignInResponse
 import com.fone.filmone.data.datamodel.response.user.EmailSignUpResponse
@@ -110,6 +112,10 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun validateEmail(emailValidationRequest: EmailValidationRequest): DataResult<EmailValidationResponse> {
         return handleNetwork { userApi.validateEmail(emailValidationRequest) }
+    }
+
+    override suspend fun checkEmailDuplication(checkEmailDuplicationRequest: CheckEmailDuplicationRequest): DataResult<CheckEmailDuplicationResponse> {
+        return handleNetwork { userApi.checkEmailDuplication(checkEmailDuplicationRequest) }
     }
 
     private suspend fun saveUserToken(

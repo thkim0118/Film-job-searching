@@ -72,20 +72,20 @@ class HomeViewModel @Inject constructor(
                                 )
                             }
                         ),
-                        popularityCompetition = PopularityCompetition(
-                            title = response.competition.title,
-                            subtitle = response.competition.subTitle,
-                            popularityContents = response.competition.competitions.content.map { content ->
-                                PopularityContent(
-                                    id = content.id,
-                                    type = content.type,
-                                    imageUrl = content.imageUrl,
-                                    title = content.title,
-                                    dday = content.dday,
-                                    viewCount = String.format("%,d", content.viewCount)
-                                )
-                            }
-                        ),
+//                        popularityCompetition = PopularityCompetition(
+//                            title = response.competition.title,
+//                            subtitle = response.competition.subTitle,
+//                            popularityContents = response.competition.competitions.content.map { content ->
+//                                PopularityContent(
+//                                    id = content.id,
+//                                    type = content.type,
+//                                    imageUrl = content.imageUrl,
+//                                    title = content.title,
+//                                    dday = content.dday,
+//                                    viewCount = String.format("%,d", content.viewCount)
+//                                )
+//                            }
+//                        ),
                         homeActorProfile = HomeActorProfile(
                             title = response.profile.title,
                             subtitle = response.profile.subTitle,
