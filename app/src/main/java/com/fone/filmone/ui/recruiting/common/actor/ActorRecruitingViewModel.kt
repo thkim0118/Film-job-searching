@@ -213,11 +213,7 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
             it.copy(
                 actorRecruitingStep1UiModel = it.actorRecruitingStep1UiModel.copy(
                     deadlineTagEnable = enable,
-                    deadlineDate = if (enable) {
-                        ""
-                    } else {
-                        it.actorRecruitingStep1UiModel.deadlineDate
-                    },
+                    deadlineDate = if (enable) { "상시모집" } else { "" },
                 ),
             )
         }
