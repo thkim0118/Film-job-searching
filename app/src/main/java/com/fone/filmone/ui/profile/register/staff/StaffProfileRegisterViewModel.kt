@@ -77,7 +77,7 @@ class StaffProfileRegisterViewModel @Inject constructor(
                 details = uiState.value.detailInfo,
                 career = uiState.value.career?.name ?: Career.IRRELEVANT.name,
                 categories = uiState.value.categories.map { it.name },
-                type = Type.ACTOR.name,
+                type = Type.STAFF.name,
                 height = null,
                 weight = null
             )
