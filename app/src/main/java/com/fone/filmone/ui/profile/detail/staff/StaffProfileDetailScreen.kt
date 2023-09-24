@@ -81,6 +81,15 @@ fun StaffProfileDetailScreen(
             .toastPadding(),
         snackbarHost = {
             FToast(baseViewModel = viewModel, hostState = it)
+        },
+        bottomBar = {
+            ButtonComponent(
+                onScrapClick = {
+                    viewModel.wantProfile()
+                },
+                onContactClick = viewModel::contact,
+                uiState = uiState,
+            )
         }
     ) {
         Column(
@@ -139,14 +148,6 @@ fun StaffProfileDetailScreen(
 
                 GuideComponent()
             }
-
-            ButtonComponent(
-                onScrapClick = {
-                    viewModel.wantProfile()
-                },
-                onContactClick = viewModel::contact,
-                uiState = uiState,
-            )
         }
     }
 }
@@ -659,6 +660,7 @@ private fun ButtonComponent(
                 .background(shape = RoundedCornerShape(5.dp), color = FColor.BgGroupedBase)
                 .weight(140f)
                 .clickableSingle { onScrapClick() }
+                .padding(vertical = 11.dp)
         ) {
             Row(
                 modifier = Modifier
@@ -695,17 +697,20 @@ private fun ButtonComponent(
         Box(
             modifier = Modifier
                 .clip(shape = RoundedCornerShape(5.dp))
-                .background(shape = RoundedCornerShape(5.dp), color = FColor.BgGroupedBase)
+                .background(shape = RoundedCornerShape(5.dp), color = FColor.Primary)
                 .weight(195f)
                 .clickableSingle { onContactClick() }
+                .padding(vertical = 11.dp)
         ) {
             Text(
+                modifier = Modifier
+                    .align(Alignment.Center),
                 text = stringResource(id = R.string.profile_detail_staff_contact_button_title),
                 style = fTextStyle(
                     fontWeight = FontWeight.W500,
                     fontSize = 16.textDp,
                     lineHeight = 18.textDp,
-                    color = FColor.Primary
+                    color = FColor.White
                 )
             )
         }
