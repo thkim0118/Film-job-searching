@@ -1,10 +1,12 @@
 package com.fone.filmone.domain.model.jobopenings
 
+import androidx.annotation.Keep
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Domain
 import com.fone.filmone.data.datamodel.common.user.Gender
 
+@Keep
 data class JobTabFilterVo(
     val ageMax: Int,
     val ageMin: Int,
