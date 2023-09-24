@@ -7,6 +7,7 @@ import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.data.datamodel.request.imageupload.UploadingImage
 import com.fone.filmone.domain.model.common.getOrNull
 import com.fone.filmone.domain.model.common.isFail
+import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.usecase.CheckNicknameDuplicationUseCase
 import com.fone.filmone.domain.usecase.UploadImageUseCase
@@ -104,7 +105,6 @@ class SignUpSecondViewModel @Inject constructor(
     }
 
     fun checkNicknameDuplication() = viewModelScope.launch {
-        // TODO Throttling.
         checkNicknameDuplicationUseCase(uiState.value.nickname)
             .onSuccess { isDuplicated ->
                 if (isDuplicated == null) {
@@ -120,6 +120,9 @@ class SignUpSecondViewModel @Inject constructor(
                         uiState.copy(isNicknameChecked = true, isNicknameDuplicated = false)
                     }
                 }
+            }
+            .onFail {
+                showToast(it.message)
             }
     }
 

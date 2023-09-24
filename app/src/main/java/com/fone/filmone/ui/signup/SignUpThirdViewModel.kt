@@ -92,7 +92,11 @@ class SignUpThirdViewModel @Inject constructor(
                 )
             )
         }.onFail {
-            updateDialogState(SignUpThirdDialogState.SignUpFail)
+            if (it.errorCode == "DuplicatePhoneNumberException") {
+                showToast(it.message)
+            } else {
+                updateDialogState(SignUpThirdDialogState.SignUpFail)
+            }
         }
     }
 

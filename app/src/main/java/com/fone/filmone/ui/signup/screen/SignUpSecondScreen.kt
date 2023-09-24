@@ -276,7 +276,7 @@ private fun NicknameComponent(
                     enable = if (uiState.isNicknameChecked) {
                         false
                     } else {
-                        uiState.nickname.isNotEmpty()
+                        uiState.nickname.length in 3..8
                     },
                     onClick = {
                         if (uiState.isNicknameChecked.not()) {
