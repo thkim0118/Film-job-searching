@@ -107,7 +107,7 @@ private fun ServiceNotReadyComponent(
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = "빠르고 편리한 서비스를 위해 최선을 다하겠습니다.\n9월 오픈 예정",
+                text = "빠르고 편리한 서비스를 위해 최선을 다하겠습니다.\n11월 오픈 예정",
                 style = fTextStyle(
                     fontWeight = FontWeight.W400,
                     fontSize = 14.textDp,
