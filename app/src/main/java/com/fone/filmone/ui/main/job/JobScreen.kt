@@ -83,6 +83,7 @@ fun JobScreen(
     onJobPageChanged: (JobTab) -> Unit,
     onUpdateUserType: (Type) -> Unit,
     viewModel: JobScreenSharedViewModel = hiltViewModel(),
+    key: Long,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsState()
@@ -102,7 +103,7 @@ fun JobScreen(
         }
     }
 
-    LaunchedEffect(key1 = userType, key2 = currentJobSorting.currentJobFilterType) {
+    LaunchedEffect(setOf(userType, currentJobSorting.currentJobFilterType, key, currentPage)) {
         viewModel.initUserType(userType, currentJobSorting.currentJobFilterType)
     }
 

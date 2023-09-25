@@ -213,6 +213,7 @@ fun MainScreen(
                         onUpdateUserType = { type ->
                             mainViewModel.updateJobTabUserType(type)
                         },
+                        key = System.currentTimeMillis(),
                     )
 
                     MainBottomNavItem.Chat -> ChatScreen()
