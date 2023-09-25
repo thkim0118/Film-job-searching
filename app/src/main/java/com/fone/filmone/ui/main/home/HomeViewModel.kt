@@ -45,7 +45,7 @@ class HomeViewModel @Inject constructor(
         }
     )
 
-    init {
+    fun getHome() {
         viewModelScope.launch {
             getHomeItemsUseCase().onSuccess { response ->
                 if (response == null) {
@@ -109,6 +109,10 @@ class HomeViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    init {
+        getHome()
     }
 
     fun startTimer() {

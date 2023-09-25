@@ -192,9 +192,12 @@ fun MainScreen(
         ) {
             Box(modifier = modifier.padding(it)) {
                 when (selectedScreen) {
-                    MainBottomNavItem.Home -> HomeScreen(onJobButtonClick = {
-                        selectedScreen = MainBottomNavItem.Job
-                    })
+                    MainBottomNavItem.Home -> HomeScreen(
+                        onJobButtonClick = {
+                            selectedScreen = MainBottomNavItem.Job
+                        },
+                        key = System.currentTimeMillis(),
+                    )
                     MainBottomNavItem.Job -> JobScreen(
                         currentJobSorting = uiState.currentJobSorting,
                         userType = uiState.type,
