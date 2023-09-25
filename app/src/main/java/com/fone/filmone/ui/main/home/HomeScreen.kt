@@ -79,6 +79,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
     onJobButtonClick: () -> Unit,
+    key: Long,
 ) {
     val scrollState = rememberScrollState()
     val uiState by viewModel.uiState.collectAsState()
@@ -109,6 +110,10 @@ fun HomeScreen(
 
     LaunchedEffect(key1 = true) {
         viewModel.startTimer()
+    }
+
+    LaunchedEffect(key) {
+        viewModel.getHome()
     }
 
     Column(
