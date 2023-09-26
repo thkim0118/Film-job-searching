@@ -111,7 +111,6 @@ class SignUpSecondViewModel @Inject constructor(
                     return@onSuccess
                 }
 
-
                 _uiState.update { uiState ->
                     uiState.copy(isNicknameChecked = true, isNicknameDuplicated = false)
                 }
