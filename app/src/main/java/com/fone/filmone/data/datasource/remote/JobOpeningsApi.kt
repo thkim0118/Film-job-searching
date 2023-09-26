@@ -40,6 +40,7 @@ interface JobOpeningsApi {
     suspend fun getMyRegistrations(
         @Query("page") page: Int,
         @Query("size") size: Int,
+        @Query("sort") sort: String
     ): Response<NetworkResponse<JobOpeningsPagingResponse>>
 
     @GET("${Server.ApiVersion}/job-openings/{jobOpeningId}")

@@ -26,9 +26,9 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.KD_PAT }}
-          title: Release data repo (develop => main)
+          title: Release android repo (develop => main)
           body: |
-            This is a pull request to deploy the develop data repo.
+            This is a pull request to deploy the develop android repo.
             # 🔥Please Merge Commit! 🔥
           branch: develop
           base: main

@@ -111,18 +111,19 @@ class SignUpSecondViewModel @Inject constructor(
                     return@onSuccess
                 }
 
-                if (isDuplicated) {
+
+                _uiState.update { uiState ->
+                    uiState.copy(isNicknameChecked = true, isNicknameDuplicated = false)
+                }
+            }
+            .onFail {
+                if (it.errorCode == "DuplicateUserNicknameException") {
                     _uiState.update { uiState ->
                         uiState.copy(isNicknameChecked = false, isNicknameDuplicated = true)
                     }
                 } else {
-                    _uiState.update { uiState ->
-                        uiState.copy(isNicknameChecked = true, isNicknameDuplicated = false)
-                    }
+                    showToast(it.message)
                 }
-            }
-            .onFail {
-                showToast(it.message)
             }
     }
 

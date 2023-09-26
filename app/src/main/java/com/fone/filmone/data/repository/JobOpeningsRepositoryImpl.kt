@@ -26,7 +26,7 @@ class JobOpeningsRepositoryImpl @Inject constructor(
         page: Int,
         size: Int,
     ): DataResult<JobOpeningsPagingResponse> {
-        return handleNetwork { jobOpeningsApi.getMyRegistrations(page = page, size = size) }
+        return handleNetwork { jobOpeningsApi.getMyRegistrations(page = page, size = size, sort = "createdAt,DESC") }
     }
 
     override suspend fun getJobOpeningsList(jobTabFilterVo: JobTabFilterVo): DataResult<JobOpeningsPagingResponse> {

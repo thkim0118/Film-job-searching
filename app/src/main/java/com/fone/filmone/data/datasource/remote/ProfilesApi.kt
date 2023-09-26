@@ -44,6 +44,7 @@ interface ProfilesApi {
     suspend fun getMyRegistrations(
         @Query("page") page: Int,
         @Query("size") size: Int,
+        @Query("sort") sort: String,
     ): Response<NetworkResponse<ProfilesPagingResponse>>
 
     @POST("${Server.ApiVersion}/profiles")

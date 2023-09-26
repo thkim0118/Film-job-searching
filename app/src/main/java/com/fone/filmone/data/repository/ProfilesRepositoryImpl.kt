@@ -30,7 +30,7 @@ class ProfilesRepositoryImpl @Inject constructor(
         page: Int,
         size: Int,
     ): DataResult<ProfilesPagingResponse> {
-        return handleNetwork { profilesApi.getMyRegistrations(page, size) }
+        return handleNetwork { profilesApi.getMyRegistrations(page = page, size = size, sort = "createdAt,DESC") }
     }
 
     override suspend fun getProfileList(jobTabFilterVo: JobTabFilterVo): DataResult<ProfilesPagingResponse> {
