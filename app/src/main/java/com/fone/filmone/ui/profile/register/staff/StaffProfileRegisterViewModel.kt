@@ -76,6 +76,7 @@ class StaffProfileRegisterViewModel @Inject constructor(
                 sns = uiState.value.sns,
                 details = uiState.value.detailInfo,
                 career = uiState.value.career?.name ?: Career.IRRELEVANT.name,
+                careerDetail = uiState.value.careerDetail,
                 categories = uiState.value.categories.map { it.name },
                 type = Type.STAFF.name,
                 height = null,

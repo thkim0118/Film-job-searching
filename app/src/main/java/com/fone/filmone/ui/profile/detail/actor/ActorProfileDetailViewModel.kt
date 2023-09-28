@@ -76,7 +76,7 @@ class ActorProfileDetailViewModel @Inject constructor(
                             specialty = content.specialty,
                             sns = content.sns,
                             detail = content.details,
-                            mainCareer = content.careerDetail,
+                            careerDetail = content.careerDetail,
                             categories = content.categories,
                             isWant = content.isWant,
                         )
@@ -127,7 +127,7 @@ private data class ActorProfileDetailViewModelState(
         specialty = "",
         sns = "",
         detail = "",
-        mainCareer = "",
+        careerDetail = "",
         categories = emptyList(),
         isWant = false
     ),
@@ -152,7 +152,7 @@ data class ActorProfileDetailUiState(
     val specialty: String,
     val sns: String,
     val detail: String,
-    val mainCareer: String,
+    val careerDetail: String,
     val categories: List<Category>,
     val isWant: Boolean,
 )

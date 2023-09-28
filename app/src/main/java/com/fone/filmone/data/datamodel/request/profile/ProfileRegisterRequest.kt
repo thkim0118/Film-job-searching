@@ -6,6 +6,7 @@ import androidx.annotation.Keep
 data class ProfileRegisterRequest(
     val birthday: String,
     val career: String,
+    val careerDetail: String,
     val categories: List<String>,
     val details: String,
     val domains: List<String>?,
@@ -19,5 +20,5 @@ data class ProfileRegisterRequest(
     val sns: String,
     val specialty: String,
     val type: String,
-    val weight: Int?
+    val weight: Int?,
 )

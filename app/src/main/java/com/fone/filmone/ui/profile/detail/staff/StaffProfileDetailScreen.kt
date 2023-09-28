@@ -136,7 +136,7 @@ fun StaffProfileDetailScreen(
 
                 Divider(thickness = 8.dp, color = FColor.Divider2)
 
-                MainCareerInfoComponent(mainCareer = uiState.mainCareer)
+                MainCareerInfoComponent(mainCareer = uiState.careerDetail)
 
                 Divider(thickness = 8.dp, color = FColor.Divider2)
 

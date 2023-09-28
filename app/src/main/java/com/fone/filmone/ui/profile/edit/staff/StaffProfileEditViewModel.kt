@@ -111,22 +111,23 @@ class StaffProfileEditViewModel @Inject constructor(
             modifyProfileUseCase(
                 profileId = profileId,
                 profileRegisterRequest = ProfileRegisterRequest(
-                    profileUrl = imageUrls.firstOrNull() ?: "",
-                    profileUrls = imageUrls,
-                    name = uiState.value.name,
-                    hookingComment = uiState.value.hookingComments,
                     birthday = uiState.value.birthday,
-                    gender = uiState.value.gender?.name ?: Gender.IRRELEVANT.name,
-                    domains = uiState.value.domains.map { it.name },
-                    email = uiState.value.email,
-                    specialty = uiState.value.specialty,
-                    sns = uiState.value.sns,
-                    details = uiState.value.detailInfo,
                     career = uiState.value.career?.name ?: Career.IRRELEVANT.name,
                     categories = uiState.value.categories.map { it.name },
-                    type = Type.STAFF.name,
+                    details = uiState.value.detailInfo,
+                    domains = uiState.value.domains.map { it.name },
+                    email = uiState.value.email,
+                    gender = uiState.value.gender?.name ?: Gender.IRRELEVANT.name,
                     height = null,
-                    weight = null
+                    hookingComment = uiState.value.hookingComments,
+                    name = uiState.value.name,
+                    profileUrl = imageUrls.firstOrNull() ?: "",
+                    profileUrls = imageUrls,
+                    sns = uiState.value.sns,
+                    specialty = uiState.value.specialty,
+                    type = Type.STAFF.name,
+                    weight = null,
+                    careerDetail = uiState.value.careerDetail
                 )
             ).onSuccess { response ->
                 if (response == null) {
