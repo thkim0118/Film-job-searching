@@ -7,6 +7,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -190,7 +191,7 @@ fun PictureComponent(
                     .align(Alignment.TopEnd)
                     .padding(top = 4.dp, end = 4.dp)
                     .clip(shape = CircleShape)
-                    .clickableSingle { onRemoveImage(encodedImageString) },
+                    .clickable { onRemoveImage(encodedImageString) },
                 imageVector = ImageVector.vectorResource(id = R.drawable.profile_register_close_button_16px),
                 contentDescription = null
             )

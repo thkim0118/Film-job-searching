@@ -417,36 +417,18 @@ private fun ProfileListComponent(
         Spacer(modifier = Modifier.height(8.dp))
 
         Row(modifier = Modifier.fillMaxWidth()) {
-            Photo(
-                photoModifier = Modifier.weight(1f),
-                imageUrl = imageUrls.getOrNull(0) ?: "",
-                onPhotoClick = {
-                    showDialog = true
-                    clickedImageUrl = imageUrls.getOrNull(0) ?: ""
-                }
-            )
+            imageUrls.take(3).forEachIndexed { index, imageUrl ->
+                if (index > 0) Spacer(modifier = Modifier.width(17.dp))
 
-            Spacer(modifier = Modifier.width(17.dp))
-
-            Photo(
-                photoModifier = Modifier.weight(1f),
-                imageUrl = imageUrls.getOrNull(1) ?: "",
-                onPhotoClick = {
-                    showDialog = true
-                    clickedImageUrl = imageUrls.getOrNull(1) ?: ""
-                }
-            )
-
-            Spacer(modifier = Modifier.width(17.dp))
-
-            Photo(
-                photoModifier = Modifier.weight(1f),
-                imageUrl = imageUrls.getOrNull(2) ?: "",
-                onPhotoClick = {
-                    showDialog = true
-                    clickedImageUrl = imageUrls.getOrNull(3) ?: ""
-                }
-            )
+                Photo(
+                    photoModifier = Modifier.weight(1f),
+                    imageUrl = imageUrl ?: "",
+                    onPhotoClick = {
+                        showDialog = true
+                        clickedImageUrl = imageUrl ?: ""
+                    }
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(6.dp))
