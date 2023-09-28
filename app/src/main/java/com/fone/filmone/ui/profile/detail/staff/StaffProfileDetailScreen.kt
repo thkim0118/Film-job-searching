@@ -532,13 +532,6 @@ private fun ActorInfoComponent(
         Spacer(modifier = Modifier.height(8.dp))
 
         InfoComponent(
-            title = stringResource(id = R.string.profile_detail_actor_info_height_weight),
-            content = heightWeight,
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        InfoComponent(
             title = stringResource(id = R.string.profile_detail_actor_info_email),
             content = email,
         )
