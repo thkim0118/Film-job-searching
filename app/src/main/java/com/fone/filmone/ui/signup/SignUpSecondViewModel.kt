@@ -33,8 +33,10 @@ class SignUpSecondViewModel @Inject constructor(
     val dialogState: StateFlow<SignUpDialogState> = _dialogState.asStateFlow()
 
     fun updateNickname(nickname: String) {
+        if (nickname == _uiState.value.nickname) return
+
         _uiState.update {
-            it.copy(nickname = nickname, isNicknameDuplicated = false)
+            it.copy(nickname = nickname, isNicknameDuplicated = false, isNicknameChecked = false)
         }
     }
 

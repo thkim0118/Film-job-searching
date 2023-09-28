@@ -219,7 +219,6 @@ private fun EmailComponent(
                 }
             )
         },
-        enabled = isEmailChecked.not(),
         bottomComponent = {
             Spacer(modifier = Modifier.height(3.dp))
 

@@ -285,7 +285,6 @@ private fun NicknameComponent(
                     }
                 )
             },
-            enabled = uiState.isNicknameChecked.not(),
             bottomComponent = {
                 Spacer(modifier = Modifier.height(3.dp))
 
