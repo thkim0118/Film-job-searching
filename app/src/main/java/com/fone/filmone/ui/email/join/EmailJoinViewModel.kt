@@ -39,6 +39,8 @@ class EmailJoinViewModel @Inject constructor(
     }
 
     fun updateEmail(email: String) {
+        if (viewModelState.value.email == email) return
+
         viewModelState.update {
             it.copy(
                 email = email,
@@ -47,8 +49,10 @@ class EmailJoinViewModel @Inject constructor(
                 } else {
                     EmailErrorType.NOT_EMAIL_TYPE
                 },
+                isEmailChecked = false,
             )
         }
+        updateNextButtonEnable()
     }
 
     fun checkDuplicateEmail() = viewModelScope.launch {

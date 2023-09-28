@@ -33,7 +33,6 @@ fun DetailInputComponent(
     staffFocusEvent: StaffProfileFocusEvent?,
 ) {
     val detailFocusRequester = remember { FocusRequester() }
-
     LaunchedEffect(actorFocusEvent) {
         when (actorFocusEvent) {
             ActorProfileFocusEvent.Detail -> detailFocusRequester.requestFocus()
@@ -63,6 +62,8 @@ fun DetailInputComponent(
             placeholder = stringResource(id = R.string.profile_register_detail_placeholder),
             placeholderTextColor = FColor.DisablePlaceholder,
             onValueChange = onUpdateDetailInfo,
+            singleLine = false,
+            maxLines = Int.MAX_VALUE,
             textLimit = detailInfoTextLimit,
             fixedHeight = 138.dp,
             bottomComponent = {

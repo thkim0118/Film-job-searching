@@ -104,6 +104,9 @@ class SignUpThirdViewModel @Inject constructor(
         _uiState.update {
             it.copy(phoneNumber = phoneNumber)
         }
+        _uiState.update {
+            it.copy(phoneVerificationState = PhoneVerificationState.ShouldVerify)
+        }
     }
 
     private fun updateVerificationTime(time: String) {

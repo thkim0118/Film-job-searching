@@ -76,7 +76,7 @@ class StaffProfileDetailViewModel @Inject constructor(
                             specialty = content.specialty,
                             sns = content.sns,
                             detail = content.details,
-                            mainCareer = content.hookingComment,
+                            careerDetail = content.careerDetail,
                             categories = content.categories,
                             isWant = content.isWant,
                         )
@@ -126,7 +126,7 @@ private data class StaffProfileDetailViewModelState(
         specialty = "",
         sns = "",
         detail = "",
-        mainCareer = "",
+        careerDetail = "",
         categories = emptyList(),
         isWant = false,
     ),
@@ -151,7 +151,7 @@ data class StaffProfileDetailUiModel(
     val specialty: String,
     val sns: String,
     val detail: String,
-    val mainCareer: String,
+    val careerDetail: String,
     val categories: List<Category>,
     val isWant: Boolean,
 )

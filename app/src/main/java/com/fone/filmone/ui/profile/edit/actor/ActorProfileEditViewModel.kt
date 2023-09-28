@@ -109,7 +109,8 @@ class ActorProfileEditViewModel @Inject constructor(
                     sns = uiState.value.sns,
                     specialty = uiState.value.specialty,
                     type = Type.ACTOR.name,
-                    weight = uiState.value.weight.toInt()
+                    weight = uiState.value.weight.toInt(),
+                    careerDetail = uiState.value.careerDetail
                 )
             ).onSuccess { response ->
                 if (response == null) {

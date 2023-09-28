@@ -136,7 +136,7 @@ fun StaffProfileDetailScreen(
 
                 Divider(thickness = 8.dp, color = FColor.Divider2)
 
-                MainCareerInfoComponent(mainCareer = uiState.mainCareer)
+                MainCareerInfoComponent(mainCareer = uiState.careerDetail)
 
                 Divider(thickness = 8.dp, color = FColor.Divider2)
 
@@ -527,13 +527,6 @@ private fun ActorInfoComponent(
         InfoComponent(
             title = stringResource(id = R.string.profile_detail_staff_info_birthday),
             content = birthday,
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        InfoComponent(
-            title = stringResource(id = R.string.profile_detail_actor_info_height_weight),
-            content = heightWeight,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
