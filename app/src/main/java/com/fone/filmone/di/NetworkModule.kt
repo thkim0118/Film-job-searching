@@ -14,12 +14,6 @@ import com.fone.filmone.domain.repository.AuthRepository
 import com.fone.filmone.framework.drivers.HeaderInjectInterceptor
 import com.fone.filmone.framework.drivers.RefreshAuthenticator
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializationContext
-import com.google.gson.JsonDeserializer
-import com.google.gson.JsonElement
-import com.google.gson.JsonPrimitive
-import com.google.gson.JsonSerializationContext
-import com.google.gson.JsonSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,10 +23,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.reflect.Type
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -45,29 +35,7 @@ object NetworkModule {
     private const val imageUploadBaseUrl =
         "https://du646e9qh1.execute-api.ap-northeast-2.amazonaws.com/"
 
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS").apply {
-        timeZone = TimeZone.getTimeZone("UTC") // DB 시간대 설정
-    }
-
-    val gson = GsonBuilder()
-        .registerTypeAdapter(
-            Date::class.java,
-            object : JsonSerializer<Date> {
-                override fun serialize(src: Date?, typeOfSrc: Type?, context: JsonSerializationContext?): JsonElement {
-                    return JsonPrimitive(src?.let { dateFormat.format(it) })
-                }
-            }
-        )
-        .registerTypeAdapter(
-            Date::class.java,
-            object : JsonDeserializer<Date> {
-                override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): Date? {
-                    return dateFormat.parse(json?.asString)
-                }
-            }
-        )
-        .setLenient()
-        .create()
+    val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS").setLenient().create()
 
     @Provides
     fun provideHeaderInjectInterceptor(authRepository: AuthRepository): HeaderInjectInterceptor =
