@@ -45,32 +45,49 @@ class JobScreenSharedViewModel @Inject constructor(
             it.copy(userType = userType)
         }
 
-        val sort = if (sortingType == JobFilterType.Recent) {
+        val jobOpeningSort = if (sortingType == JobFilterType.Recent) {
             "createdAt,DESC"
         } else if (sortingType == JobFilterType.View) {
             "viewCount,DESC"
         } else {
             "deadline,ASC"
         }
-        val initJobTabFilterVo = JobTabFilterVo(
+
+        val profileSort = if (sortingType == JobFilterType.Recent) {
+            "createdAt,DESC"
+        } else {
+            "viewCount,DESC"
+        }
+
+        val jobOpeningFilterVo = JobTabFilterVo(
             ageMax = 70,
             ageMin = 0,
             categories = null,
             domains = null,
             genders = null,
             type = userType,
-            sort = sort
+            sort = jobOpeningSort
+        )
+
+        val profileFilterVo = JobTabFilterVo(
+            ageMax = 70,
+            ageMin = 0,
+            categories = null,
+            domains = null,
+            genders = null,
+            type = userType,
+            sort = profileSort
         )
 
         when (userType) {
             Type.ACTOR -> {
-                fetchActorJobOpenings(initJobTabFilterVo, true)
-                fetchActorProfile(initJobTabFilterVo, true)
+                fetchActorJobOpenings(jobOpeningFilterVo, true)
+                fetchActorProfile(profileFilterVo, true)
             }
 
             Type.STAFF -> {
-                fetchStaffJobOpenings(initJobTabFilterVo, true)
-                fetchStaffProfile(initJobTabFilterVo, true)
+                fetchStaffJobOpenings(jobOpeningFilterVo, true)
+                fetchStaffProfile(profileFilterVo, true)
             }
         }
     }

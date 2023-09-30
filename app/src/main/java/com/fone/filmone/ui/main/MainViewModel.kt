@@ -107,6 +107,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun initCurrentJobSorting() {
+        viewModelState.update {
+            it.copy(currentJobSortingTab = JobSorting.JobOpenings(JobFilterType.Recent))
+        }
+    }
+
     fun updateJobFilter(jobFilterType: JobFilterType) {
         viewModelState.update {
             when (it.currentJobSortingTab) {

@@ -6,6 +6,7 @@ import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.data.datamodel.common.user.Category
+import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.data.datamodel.response.jobopenings.detail.JobOpeningResponse
 import com.fone.filmone.domain.model.common.onFail
 import com.fone.filmone.domain.model.common.onSuccess
@@ -119,6 +120,7 @@ private data class ActorRecruitingDetailViewModelState(
             manager = jobOpeningResponse.jobOpening.work.manager,
             email = jobOpeningResponse.jobOpening.work.email,
             isScrap = jobOpeningResponse.jobOpening.isScrap,
+            gender = jobOpeningResponse.jobOpening.gender,
         )
     } else {
         ActorRecruitingDetailUiState(
@@ -148,6 +150,7 @@ private data class ActorRecruitingDetailViewModelState(
             manager = "",
             email = "",
             isScrap = false,
+            gender = Gender.IRRELEVANT,
         )
     }
 }
@@ -179,4 +182,5 @@ data class ActorRecruitingDetailUiState(
     val manager: String,
     val email: String,
     val isScrap: Boolean,
+    val gender: Gender,
 )
