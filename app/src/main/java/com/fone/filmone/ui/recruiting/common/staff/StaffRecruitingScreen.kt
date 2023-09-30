@@ -372,7 +372,7 @@ private fun Step1Component(
     Spacer(modifier = Modifier.height(20.dp))
 
     RecruitmentInputComponent(
-        deadlineDate = deadlineDate ?: stringResource(id = R.string.always_recruiting),
+        deadlineDate = deadlineDate ?: "",
         deadlineTagEnable = deadlineTagEnable,
         selectedDomains = selectedDomains,
         recruitmentNumber = recruitmentNumber,
