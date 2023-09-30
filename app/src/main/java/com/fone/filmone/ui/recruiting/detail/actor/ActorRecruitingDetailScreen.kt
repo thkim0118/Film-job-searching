@@ -37,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
+import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.ui.common.FTitleBar
 import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.ext.clickableSingle
@@ -112,6 +113,7 @@ fun ActorRecruitingDetailScreen(
                     dday = uiState.dday,
                     casting = uiState.casting,
                     number = uiState.numberOfRecruits,
+                    gender = uiState.gender,
                     ageRange = uiState.ageRange,
                     career = context.getString(uiState.career.titleRes),
                 )
@@ -333,6 +335,7 @@ private fun RecruitmentConditionComponent(
     dday: String,
     casting: String?,
     number: String,
+    gender: Gender,
     ageRange: String,
     career: String,
 ) {
@@ -366,6 +369,13 @@ private fun RecruitmentConditionComponent(
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_recruitment_number_of_recruits_title),
             content = number,
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        InfoComponent(
+            title = stringResource(id = R.string.staff_detail_recruitment_gender_title),
+            content = stringResource(id = gender.stringRes),
         )
 
         Spacer(modifier = Modifier.height(8.dp))
