@@ -524,6 +524,8 @@ private fun Step2Component(
             text = logLine,
             onValueChange = onUpdateLogLine,
             fixedHeight = 134.dp,
+            maxLines = Int.MAX_VALUE,
+            singleLine = false,
             placeholder = stringResource(id = R.string.recruiting_register_staff_log_line_placeholder),
             textLimit = logLineTextLimit,
             bottomComponent = {
