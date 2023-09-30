@@ -27,6 +27,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -88,6 +89,10 @@ fun MainScreen(
     var jobTabScreen by remember { mutableStateOf(initialJobTab) }
     val uiState by mainViewModel.uiState.collectAsState()
 
+    LaunchedEffect(jobTabScreen) {
+        mainViewModel.initCurrentJobSorting()
+    }
+
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         sheetShape = RoundedCornerShape(10.dp),
@@ -120,6 +125,7 @@ fun MainScreen(
                     onJobFilterTypeClick = {
                         mainViewModel.updateJobFilter(it)
                     },
+                    jobTabScreen = jobTabScreen,
                 )
 
                 MainBottomSheetType.JobTabProfileFilter -> JobTabProfileFilterBottomSheet(
@@ -412,6 +418,7 @@ private fun JobTabJobOpeningsFilterBottomSheet(
     bottomSheetState: ModalBottomSheetState,
     currentJobFilterType: JobFilterType,
     onJobFilterTypeClick: (JobFilterType) -> Unit,
+    jobTabScreen: JobTab,
 ) {
     Column(
         modifier = modifier
@@ -483,26 +490,28 @@ private fun JobTabJobOpeningsFilterBottomSheet(
             ),
         )
 
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickableSingle {
-                    onJobFilterTypeClick(JobFilterType.Deadline)
-                    hideBottomSheet(coroutineScope, bottomSheetState)
-                }
-                .padding(vertical = 12.dp, horizontal = 22.dp),
-            text = stringResource(id = JobFilterType.Deadline.titleRes),
-            style = fTextStyle(
-                fontWeight = FontWeight.W700,
-                fontSize = 14.textDp,
-                lineHeight = 18.textDp,
-                color = if (currentJobFilterType == JobFilterType.Deadline) {
-                    FColor.Primary
-                } else {
-                    FColor.TextSecondary
-                },
-            ),
-        )
+        if (jobTabScreen == JobTab.JOB_OPENING) {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickableSingle {
+                        onJobFilterTypeClick(JobFilterType.Deadline)
+                        hideBottomSheet(coroutineScope, bottomSheetState)
+                    }
+                    .padding(vertical = 12.dp, horizontal = 22.dp),
+                text = stringResource(id = JobFilterType.Deadline.titleRes),
+                style = fTextStyle(
+                    fontWeight = FontWeight.W700,
+                    fontSize = 14.textDp,
+                    lineHeight = 18.textDp,
+                    color = if (currentJobFilterType == JobFilterType.Deadline) {
+                        FColor.Primary
+                    } else {
+                        FColor.TextSecondary
+                    },
+                ),
+            )
+        }
 
         Spacer(modifier = Modifier.height(50.dp))
     }
