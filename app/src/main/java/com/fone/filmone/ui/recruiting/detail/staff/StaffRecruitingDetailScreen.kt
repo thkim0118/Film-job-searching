@@ -357,7 +357,7 @@ private fun RecruitmentConditionComponent(
 
         if (casting != null) {
             InfoComponent(
-                title = stringResource(id = R.string.actor_detail_recruitment_role_title),
+                title = stringResource(id = R.string.staff_detail_recruitment_role_title),
                 content = casting,
             )
 
@@ -373,7 +373,7 @@ private fun RecruitmentConditionComponent(
 
         InfoComponent(
             title = stringResource(id = R.string.staff_detail_recruitment_gender_title),
-            content = gender.name,
+            content = stringResource(id = gender.stringRes),
         )
 
         Spacer(modifier = Modifier.height(8.dp))
