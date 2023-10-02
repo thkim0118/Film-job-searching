@@ -121,7 +121,7 @@ private data class ActorRecruitingDetailViewModelState(
             email = jobOpeningResponse.jobOpening.work.email,
             isScrap = jobOpeningResponse.jobOpening.isScrap,
             gender = jobOpeningResponse.jobOpening.gender,
-            userJob = jobOpeningResponse.jobOpening.job.name,
+            userJob = jobOpeningResponse.jobOpening.userJob.name,
         )
     } else {
         ActorRecruitingDetailUiState(

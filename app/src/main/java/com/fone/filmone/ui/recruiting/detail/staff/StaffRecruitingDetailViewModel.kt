@@ -100,7 +100,7 @@ private data class StaffRecruitingDetailState(
             viewCount = String.format("%,d", jobOpeningResponse.jobOpening.viewCount),
             profileImageUrl = jobOpeningResponse.jobOpening.profileUrl,
             userNickname = jobOpeningResponse.jobOpening.nickname,
-            userJob = jobOpeningResponse.jobOpening.job.name,
+            userJob = jobOpeningResponse.jobOpening.userJob.name,
             categories = jobOpeningResponse.jobOpening.categories,
             articleTitle = jobOpeningResponse.jobOpening.title,
             deadline = jobOpeningResponse.jobOpening.deadline,
