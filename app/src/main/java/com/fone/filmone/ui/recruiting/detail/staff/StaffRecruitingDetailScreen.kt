@@ -98,7 +98,7 @@ fun StaffRecruitingDetailScreen(
                     viewCount = uiState.viewCount,
                     profileImageUrl = uiState.profileImageUrl,
                     username = uiState.userNickname,
-                    userType = uiState.userType,
+                    userType = uiState.userJob,
                 )
 
                 DetailTitleComponent(

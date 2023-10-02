@@ -29,4 +29,5 @@ data class JobOpeningContent(
     val nickname: String,
     val profileUrl: String,
     val createdAt: Date,
+    val userJob: UserJob,
 )
