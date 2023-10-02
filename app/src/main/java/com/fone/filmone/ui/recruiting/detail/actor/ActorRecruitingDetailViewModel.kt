@@ -121,6 +121,7 @@ private data class ActorRecruitingDetailViewModelState(
             email = jobOpeningResponse.jobOpening.work.email,
             isScrap = jobOpeningResponse.jobOpening.isScrap,
             gender = jobOpeningResponse.jobOpening.gender,
+            userJob = jobOpeningResponse.jobOpening.job.name,
         )
     } else {
         ActorRecruitingDetailUiState(
@@ -151,6 +152,7 @@ private data class ActorRecruitingDetailViewModelState(
             email = "",
             isScrap = false,
             gender = Gender.IRRELEVANT,
+            userJob = "",
         )
     }
 }
@@ -183,4 +185,5 @@ data class ActorRecruitingDetailUiState(
     val email: String,
     val isScrap: Boolean,
     val gender: Gender,
+    val userJob: String,
 )
