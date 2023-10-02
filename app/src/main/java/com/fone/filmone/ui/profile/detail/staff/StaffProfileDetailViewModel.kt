@@ -63,7 +63,7 @@ class StaffProfileDetailViewModel @Inject constructor(
                             profileId = content.id.toLong(),
                             date = dateFormat.format(content.createdAt),
                             viewCount = String.format("%,d", content.viewCount),
-                            profileImageUrl = content.profileUrl,
+                            profileImageUrl = content.userProfileUrl,
                             userNickname = content.userNickname,
                             userType = content.type.name,
                             articleTitle = content.hookingComment.split('\n').firstOrNull() ?: "",
