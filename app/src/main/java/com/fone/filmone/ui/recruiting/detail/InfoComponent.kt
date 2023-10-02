@@ -14,7 +14,8 @@ import com.fone.filmone.ui.theme.FColor
 fun InfoComponent(
     modifier: Modifier = Modifier,
     title: String,
-    content: String
+    content: String,
+    defaultMessage: String = "",
 ) {
     Row(
         modifier = modifier,
@@ -35,7 +36,7 @@ fun InfoComponent(
         Text(
             modifier = Modifier
                 .weight(268f),
-            text = content,
+            text = content.ifEmpty { defaultMessage },
             style = fTextStyle(
                 fontWeight = FontWeight.W400,
                 fontSize = 14.textDp,
