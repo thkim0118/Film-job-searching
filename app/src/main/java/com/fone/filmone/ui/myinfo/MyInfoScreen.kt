@@ -294,7 +294,7 @@ private fun NicknameComponent(
             ) {
                 Text(
                     text = stringResource(id = R.string.my_info_nickname_title),
-                    style = LocalTypography.current.subtitle2(),
+                    style = LocalTypography.current.subtitle1(),
                     color = FColor.TextPrimary
                 )
 
@@ -339,7 +339,7 @@ private fun JobComponent(
 
     Text(
         text = stringResource(id = R.string.my_info_job_choice_title),
-        style = LocalTypography.current.subtitle2(),
+        style = LocalTypography.current.b1(),
         color = FColor.TextPrimary
     )
 

@@ -35,7 +35,7 @@ class FTypography {
     @Composable
     fun h3(): TextStyle = TextStyle(
         fontFamily = Pretendard,
-        fontWeight = FontWeight.W500,
+        fontWeight = FontWeight.W700,
         fontSize = 17.textDp,
         lineHeight = 18.textDp
     )
@@ -45,7 +45,7 @@ class FTypography {
         fontFamily = Pretendard,
         fontWeight = FontWeight.W700,
         fontSize = 16.textDp,
-        lineHeight = 19.2.textDp
+        lineHeight = 20.textDp
     )
 
     @Composable
@@ -53,20 +53,21 @@ class FTypography {
         fontFamily = Pretendard,
         fontWeight = FontWeight.W500,
         fontSize = 16.textDp,
-        lineHeight = 19.2.textDp
+        lineHeight = 18.textDp
     )
 
     @Composable
     fun h6(): TextStyle = TextStyle(
-        fontWeight = FontWeight.Medium,
-        fontSize = 20.textDp,
+        fontWeight = FontWeight.W500,
+        fontSize = 16.textDp,
+        lineHeight = 18.textDp,
         letterSpacing = 0.15.textDp
     )
 
     @Composable
     fun subtitle1(): TextStyle = TextStyle(
         fontFamily = Pretendard,
-        fontWeight = FontWeight.W500,
+        fontWeight = FontWeight.W700,
         fontSize = 15.textDp,
         lineHeight = 20.textDp
     )
@@ -84,7 +85,7 @@ class FTypography {
         fontFamily = Pretendard,
         fontWeight = FontWeight.W700,
         fontSize = 14.textDp,
-        lineHeight = 20.44.textDp
+        lineHeight = 19.6.textDp
     )
 
     @Composable
@@ -92,7 +93,7 @@ class FTypography {
         fontFamily = Pretendard,
         fontWeight = FontWeight.W400,
         fontSize = 14.textDp,
-        lineHeight = 19.textDp
+        lineHeight = 20.textDp
     )
 
     @Composable

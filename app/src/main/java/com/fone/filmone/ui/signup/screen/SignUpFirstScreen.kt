@@ -19,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,8 +31,6 @@ import com.fone.filmone.ui.common.FButton
 import com.fone.filmone.ui.common.FTitleBar
 import com.fone.filmone.ui.common.TitleType
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
-import com.fone.filmone.ui.common.ext.textDp
-import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.tag.categories.CategoryTags
 import com.fone.filmone.ui.common.tag.job.JobTags
 import com.fone.filmone.ui.navigation.FOneDestinations
@@ -193,12 +190,7 @@ private fun ChoiceTitle(
     ) {
         Text(
             text = title,
-            style = fTextStyle(
-                fontWeight = FontWeight.W500,
-                fontSize = 15.textDp,
-                lineHeight = 18.textDp,
-                color = FColor.TextPrimary
-            )
+            style = LocalTypography.current.subtitle1()
         )
 
         Spacer(modifier = Modifier.width(2.dp))
