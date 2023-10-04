@@ -262,29 +262,39 @@ private fun HeaderComponent(
             modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            GlideImage(
-                modifier = modifier
-                    .size(32.dp)
-                    .clip(shape = CircleShape),
-                shimmerParams = ShimmerParams(
-                    baseColor = MaterialTheme.colors.background,
-                    highlightColor = FColor.Gray700,
-                    durationMillis = 350,
-                    dropOff = 0.65f,
-                    tilt = 20f
-                ),
+            if (profileImageUrl.isEmpty()) {
+                Image(
+                    modifier = Modifier
+                        .clip(shape = CircleShape)
+                        .size(32.dp),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.default_profile),
+                    contentDescription = null,
+                )
+            } else {
+                GlideImage(
+                    modifier = modifier
+                        .size(32.dp)
+                        .clip(shape = CircleShape),
+                    shimmerParams = ShimmerParams(
+                        baseColor = MaterialTheme.colors.background,
+                        highlightColor = FColor.Gray700,
+                        durationMillis = 350,
+                        dropOff = 0.65f,
+                        tilt = 20f
+                    ),
 
-                imageModel = profileImageUrl,
-                contentScale = ContentScale.Crop,
-                failure = {
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .clip(shape = CircleShape)
-                            .background(shape = CircleShape, color = FColor.Divider1),
-                    )
-                }
-            )
+                    imageModel = profileImageUrl,
+                    contentScale = ContentScale.Crop,
+                    failure = {
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .clip(shape = CircleShape)
+                                .background(shape = CircleShape, color = FColor.Divider1),
+                        )
+                    }
+                )
+            }
 
             Spacer(modifier = Modifier.width(6.dp))
 

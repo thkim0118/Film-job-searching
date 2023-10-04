@@ -83,5 +83,6 @@ data class ProfileDetailContent(
     override val weight: Int,
     override val createdAt: Date,
     override val careerDetail: String,
-    val userNickname: String
+    val userNickname: String,
+    val userProfileUrl: String,
 ) : DefaultProfileContent

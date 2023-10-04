@@ -190,7 +190,7 @@ class MyInfoViewModel @Inject constructor(
                 return@launch
             },
             nickname = currentUiState.nickname,
-            profileUrl = profileUrl ?: "",
+            profileUrl = profileUrl ?: currentUiState.profileUrl ?: "",
         ).onSuccess {
             onSuccess()
         }.onFail {

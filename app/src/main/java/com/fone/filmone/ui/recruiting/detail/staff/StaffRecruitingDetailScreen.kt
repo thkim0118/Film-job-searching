@@ -98,7 +98,7 @@ fun StaffRecruitingDetailScreen(
                     viewCount = uiState.viewCount,
                     profileImageUrl = uiState.profileImageUrl,
                     username = uiState.userNickname,
-                    userType = uiState.userType,
+                    userType = uiState.userJob,
                 )
 
                 DetailTitleComponent(
@@ -374,6 +374,7 @@ private fun RecruitmentConditionComponent(
         InfoComponent(
             title = stringResource(id = R.string.staff_detail_recruitment_gender_title),
             content = stringResource(id = gender.stringRes),
+            defaultMessage = "성별무관"
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -381,6 +382,7 @@ private fun RecruitmentConditionComponent(
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_recruitment_age_title),
             content = ageRange,
+            defaultMessage = "연령무관"
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -388,6 +390,7 @@ private fun RecruitmentConditionComponent(
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_recruitment_career_title),
             content = career,
+            defaultMessage = "경력무관"
         )
     }
 }
@@ -406,7 +409,7 @@ private fun WorkInfoComponent(
             .padding(vertical = 16.dp, horizontal = 16.dp),
     ) {
         Text(
-            text = stringResource(id = R.string.actor_detail_work_info_title),
+            text = stringResource(id = R.string.staff_detail_work_info_title),
             style = LocalTypography.current.h3(),
             color = FColor.TextPrimary,
         )
@@ -444,6 +447,7 @@ private fun WorkInfoComponent(
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_work_log_line_title),
             content = logLine,
+            defaultMessage = "비공개"
         )
     }
 }
@@ -470,6 +474,7 @@ private fun WorkingConditionsComponent(
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_location_title),
             content = location,
+            defaultMessage = "미정"
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -477,6 +482,7 @@ private fun WorkingConditionsComponent(
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_period_title),
             content = period,
+            defaultMessage = "미정"
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -484,6 +490,7 @@ private fun WorkingConditionsComponent(
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_pay_title),
             content = pay,
+            defaultMessage = "추후협의"
         )
     }
 }

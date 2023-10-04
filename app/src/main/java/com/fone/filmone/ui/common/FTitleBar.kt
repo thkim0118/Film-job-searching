@@ -22,6 +22,7 @@ import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.FilmOneTheme
+import com.fone.filmone.ui.theme.LocalTypography
 
 @Composable
 fun FTitleBar(
@@ -58,12 +59,7 @@ fun FTitleBar(
         Text(
             modifier = Modifier.weight(1f),
             text = titleText,
-            style = fTextStyle(
-                fontWeight = FontWeight.W700,
-                fontSize = 19.textDp,
-                lineHeight = 26.textDp,
-                color = FColor.TextPrimary
-            ),
+            style = LocalTypography.current.h2(),
             textAlign = TextAlign.Center
         )
 
