@@ -74,7 +74,7 @@ class ActorFilterViewModel @Inject constructor() : BaseViewModel() {
 
     fun updateAgeRangeReset() {
         viewModelState.update { state ->
-            state.copy(ageRange = 1f..70f)
+            state.copy(ageRange = 0f..70f)
         }
     }
 
@@ -100,7 +100,7 @@ class ActorFilterViewModel @Inject constructor() : BaseViewModel() {
 private data class ActorFilterViewModelState(
     val genders: Set<Gender> = emptySet(),
     val interests: Set<Category> = emptySet(),
-    val ageRange: ClosedFloatingPointRange<Float> = 1f..70f,
+    val ageRange: ClosedFloatingPointRange<Float> = 0f..70f,
 ) {
     fun toUiState(): ActorFilterUiState = ActorFilterUiState(
         genders = genders,

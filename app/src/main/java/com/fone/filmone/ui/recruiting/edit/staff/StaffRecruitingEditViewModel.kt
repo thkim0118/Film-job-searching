@@ -85,7 +85,7 @@ class StaffRecruitingEditViewModel @Inject constructor(
                                         },
                                         genderTagEnable = content.gender == Gender.IRRELEVANT,
                                         ageRange = if (content.ageMin == 0 || content.ageMax == 0) {
-                                            1f..70f
+                                            0f..70f
                                         } else {
                                             content.ageMin.toFloat()..content.ageMax.toFloat()
                                         },
@@ -143,7 +143,7 @@ class StaffRecruitingEditViewModel @Inject constructor(
                 casting = null,
                 categories = step1UiModel.categories.map { it.name },
                 deadline = if (step1UiModel.deadlineDate == "상시모집") null else step1UiModel.deadlineDate,
-                domains = null,
+                domains = step1UiModel.recruitmentDomains.map { it.name },
                 gender = step1UiModel.recruitmentGender ?: Gender.IRRELEVANT,
                 numberOfRecruits = step1UiModel.recruitmentNumber.toInt(),
                 title = step1UiModel.titleText,

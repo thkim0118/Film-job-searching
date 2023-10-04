@@ -52,9 +52,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
+import com.fone.filmone.ui.common.base.composableActivityViewModel
 import com.fone.filmone.ui.common.empty.EmptyScreen
 import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
@@ -82,9 +82,10 @@ fun JobScreen(
     onProfileFilterClick: () -> Unit,
     onJobPageChanged: (JobTab) -> Unit,
     onUpdateUserType: (Type) -> Unit,
-    viewModel: JobScreenSharedViewModel = hiltViewModel(),
     key: Long,
 ) {
+    val viewModel: JobScreenSharedViewModel = composableActivityViewModel()
+
     val coroutineScope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsState()
     val pagerState = rememberPagerState(

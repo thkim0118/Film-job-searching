@@ -77,7 +77,6 @@ import kotlinx.coroutines.launch
 fun MainScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    initialJobTab: JobTab = JobTab.JOB_OPENING,
     initialScreen: MainBottomNavItem = MainBottomNavItem.Home,
     mainViewModel: MainViewModel = hiltViewModel(),
 ) {
@@ -86,6 +85,7 @@ fun MainScreen(
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     var selectedScreen by rememberSaveable { mutableStateOf(initialScreen) }
+    var initialJobTab: JobTab = JobTab.JOB_OPENING
     var jobTabScreen by remember { mutableStateOf(initialJobTab) }
     val uiState by mainViewModel.uiState.collectAsState()
 
@@ -199,31 +199,34 @@ fun MainScreen(
             Box(modifier = modifier.padding(it)) {
                 when (selectedScreen) {
                     MainBottomNavItem.Home -> HomeScreen(
-                        onJobButtonClick = {
+                        onJobButtonClick = { jobTab: JobTab ->
                             selectedScreen = MainBottomNavItem.Job
+                            initialJobTab = jobTab
                         },
                         key = System.currentTimeMillis(),
                     )
-                    MainBottomNavItem.Job -> JobScreen(
-                        currentJobSorting = uiState.currentJobSorting,
-                        userType = uiState.type,
-                        initialJobTab = initialJobTab,
-                        onJobOpeningsFilterClick = {
-                            bottomSheetType = MainBottomSheetType.JobTabJopOpeningsFilter
-                            coroutineScope.launch { bottomSheetState.show() }
-                        },
-                        onProfileFilterClick = {
-                            bottomSheetType = MainBottomSheetType.JobTabProfileFilter
-                            coroutineScope.launch { bottomSheetState.show() }
-                        },
-                        onJobPageChanged = { jobTab ->
-                            jobTabScreen = jobTab
-                        },
-                        onUpdateUserType = { type ->
-                            mainViewModel.updateJobTabUserType(type)
-                        },
-                        key = System.currentTimeMillis(),
-                    )
+                    MainBottomNavItem.Job -> {
+                        JobScreen(
+                            currentJobSorting = uiState.currentJobSorting,
+                            userType = uiState.type,
+                            initialJobTab = initialJobTab,
+                            onJobOpeningsFilterClick = {
+                                bottomSheetType = MainBottomSheetType.JobTabJopOpeningsFilter
+                                coroutineScope.launch { bottomSheetState.show() }
+                            },
+                            onProfileFilterClick = {
+                                bottomSheetType = MainBottomSheetType.JobTabProfileFilter
+                                coroutineScope.launch { bottomSheetState.show() }
+                            },
+                            onJobPageChanged = { jobTab ->
+                                jobTabScreen = jobTab
+                            },
+                            onUpdateUserType = { type ->
+                                mainViewModel.updateJobTabUserType(type)
+                            },
+                            key = System.currentTimeMillis(),
+                        )
+                    }
 
                     MainBottomNavItem.Chat -> ChatScreen()
                     MainBottomNavItem.My -> MyScreen(

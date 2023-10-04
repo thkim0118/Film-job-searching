@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.user.Category
+import com.fone.filmone.data.datamodel.common.user.Domain
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.domain.model.common.onSuccess
 import com.fone.filmone.domain.model.jobopenings.JobTabFilterVo
@@ -32,6 +33,8 @@ class JobScreenSharedViewModel @Inject constructor(
 ) : BaseViewModel() {
     private val viewModelState = MutableStateFlow(JobScreenViewModelState())
 
+    private var filterModel: ActorFilterModel = ActorFilterModel()
+
     val uiState = viewModelState
         .map(JobScreenViewModelState::toUiState)
         .stateIn(
@@ -39,6 +42,20 @@ class JobScreenSharedViewModel @Inject constructor(
             SharingStarted.Eagerly,
             viewModelState.value.toUiState(),
         )
+
+    fun updateFilterModel(
+        genders: Set<Gender>,
+        interests: Set<Category>,
+        ageRange: ClosedFloatingPointRange<Float>,
+        domains: Set<Domain>? = null
+    ) {
+        filterModel = ActorFilterModel(
+            genders = genders.ifEmpty { null },
+            interests = interests.ifEmpty { null },
+            ageRange = if (ageRange.isEmpty()) filterModel.ageRange else ageRange,
+            domains = domains
+        )
+    }
 
     fun initUserType(userType: Type, sortingType: JobFilterType) {
         viewModelState.update {
@@ -60,21 +77,21 @@ class JobScreenSharedViewModel @Inject constructor(
         }
 
         val jobOpeningFilterVo = JobTabFilterVo(
-            ageMax = 70,
-            ageMin = 0,
-            categories = null,
-            domains = null,
-            genders = null,
+            ageMax = filterModel.ageRange.endInclusive.toInt(),
+            ageMin = filterModel.ageRange.start.toInt(),
+            categories = filterModel.interests?.toList(),
+            domains = filterModel.domains?.toList(),
+            genders = filterModel.genders?.toList(),
             type = userType,
             sort = jobOpeningSort
         )
 
         val profileFilterVo = JobTabFilterVo(
-            ageMax = 70,
-            ageMin = 0,
-            categories = null,
-            domains = null,
-            genders = null,
+            ageMax = filterModel.ageRange.endInclusive.toInt(),
+            ageMin = filterModel.ageRange.start.toInt(),
+            categories = filterModel.interests?.toList(),
+            domains = filterModel.domains?.toList(),
+            genders = filterModel.genders?.toList(),
             type = userType,
             sort = profileSort
         )
@@ -340,4 +357,11 @@ data class JobTabProfilesUiModel(
     val info: String,
     val isWant: Boolean,
     val type: Type,
+)
+
+data class ActorFilterModel(
+    val genders: Set<Gender>? = null,
+    val interests: Set<Category>? = null,
+    val ageRange: ClosedFloatingPointRange<Float> = 0f..70f,
+    val domains: Set<Domain>? = null,
 )

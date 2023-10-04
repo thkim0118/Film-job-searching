@@ -15,7 +15,6 @@ import com.fone.filmone.ui.favorite.FavoriteScreen
 import com.fone.filmone.ui.inquiry.InquiryScreen
 import com.fone.filmone.ui.login.LoginScreen
 import com.fone.filmone.ui.main.MainScreen
-import com.fone.filmone.ui.main.job.JobTab
 import com.fone.filmone.ui.main.job.filter.actor.ActorFilterScreen
 import com.fone.filmone.ui.main.job.filter.staff.StaffFilterScreen
 import com.fone.filmone.ui.main.model.MainBottomNavItem
@@ -199,7 +198,6 @@ private fun NavGraphBuilder.mainNavGraph(
         MainScreen(
             navController = navController,
             initialScreen = MainBottomNavItem.parsePage(initialPage ?: ""),
-            initialJobTab = JobTab.parsePage(jobInitialPage ?: ""),
         )
     }
 }
