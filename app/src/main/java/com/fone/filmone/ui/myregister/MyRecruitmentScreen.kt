@@ -406,30 +406,6 @@ private fun EmptyScreen(
                 color = FColor.Primary,
                 textDecoration = TextDecoration.Underline,
             )
-
-            Text(
-                text = " | ",
-                style = LocalTypography.current.subtitle2(),
-                color = FColor.Primary,
-            )
-
-            Text(
-                modifier = Modifier
-                    .clickableSingle {
-                        FOneNavigator.navigateTo(
-                            navDestinationState = NavDestinationState(
-                                route = FOneDestinations.Main.getRouteWithJobInitialPageArg(
-                                    JobTab.JOB_OPENING.name,
-                                ),
-                                isPopAll = true,
-                            ),
-                        )
-                    },
-                text = stringResource(id = R.string.my_register_recruitment_empty_subtitle_staff),
-                style = LocalTypography.current.subtitle2(),
-                color = FColor.Primary,
-                textDecoration = TextDecoration.Underline,
-            )
             Spacer(modifier = Modifier.weight(1f))
         }
     }
