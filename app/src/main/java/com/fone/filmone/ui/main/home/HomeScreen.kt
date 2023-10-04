@@ -64,6 +64,7 @@ import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
 import com.fone.filmone.ui.common.fTextStyle
+import com.fone.filmone.ui.main.job.JobTab
 import com.fone.filmone.ui.navigation.FOneDestinations
 import com.fone.filmone.ui.navigation.FOneNavigator
 import com.fone.filmone.ui.navigation.NavDestinationState
@@ -78,7 +79,7 @@ import com.skydoves.landscapist.glide.GlideImage
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
-    onJobButtonClick: () -> Unit,
+    onJobButtonClick: (JobTab) -> Unit,
     key: Long,
 ) {
     val scrollState = rememberScrollState()
@@ -312,7 +313,7 @@ private fun RecommendedCompetitionComponent(
     modifier: Modifier = Modifier,
     recommendedContents: List<RecommendedContent>,
     onItemClick: (competitionId: Int, type: Type) -> Unit,
-    onJobButtonClick: () -> Unit,
+    onJobButtonClick: (JobTab) -> Unit,
 ) {
     val backgroundContents = listOf(
         R.drawable.home_card1 to FColor.Divider2,
@@ -362,7 +363,7 @@ private fun RecommendedCompetitionComponent(
                 imageVector = ImageVector.vectorResource(id = R.drawable.home_recommended_right_arrow),
                 contentDescription = null,
                 modifier = Modifier.clickableWithNoRipple {
-                    onJobButtonClick()
+                    onJobButtonClick(JobTab.JOB_OPENING)
                 }
             )
         }
@@ -548,7 +549,7 @@ private fun ActorProfileComponent(
     modifier: Modifier = Modifier,
     homeActorProfileContents: List<HomeActorProfileContent>,
     onItemClick: (profileId: Int) -> Unit,
-    onJobButtonClick: () -> Unit,
+    onJobButtonClick: (JobTab) -> Unit,
 ) {
     @Composable
     fun ActorProfile(
@@ -654,7 +655,7 @@ private fun ActorProfileComponent(
                 imageVector = ImageVector.vectorResource(id = R.drawable.home_recommended_right_arrow),
                 contentDescription = null,
                 modifier = Modifier.clickableWithNoRipple {
-                    onJobButtonClick()
+                    onJobButtonClick(JobTab.PROFILE)
                 }
             )
         }
