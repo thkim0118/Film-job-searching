@@ -152,7 +152,15 @@ class HomeViewModel @Inject constructor(
     private fun makeTagItems(gender: Gender, categories: List<Category>): List<Int> {
         return buildList {
             add(gender.stringRes)
-            addAll(categories.map { it.stringRes })
+            addAll(
+                categories.sortedWith { c1, c2 ->
+                    when {
+                        c1 == Category.OTT_DRAMA -> 1
+                        c2 == Category.OTT_DRAMA -> -1
+                        else -> c1.ordinal.compareTo(c2.ordinal)
+                    }
+                }.map { it.stringRes }
+            )
         }
     }
 

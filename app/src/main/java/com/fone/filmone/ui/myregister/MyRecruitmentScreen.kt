@@ -401,7 +401,7 @@ private fun EmptyScreen(
                             ),
                         )
                     },
-                text = stringResource(id = R.string.my_register_recruitment_empty_subtitle_actor),
+                text = stringResource(id = R.string.my_register_recruitment_empty_subtitle),
                 style = LocalTypography.current.subtitle2(),
                 color = FColor.Primary,
                 textDecoration = TextDecoration.Underline,
