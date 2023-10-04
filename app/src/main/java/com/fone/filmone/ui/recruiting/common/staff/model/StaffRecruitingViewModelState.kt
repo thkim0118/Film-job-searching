@@ -92,9 +92,9 @@ data class StaffRecruitingStep1UiModel(
     val recruitmentNumber: String = "",
     val recruitmentGender: Gender? = null,
     val genderTagEnable: Boolean = true,
-    val ageRange: ClosedFloatingPointRange<Float> = 1f..70f,
+    val ageRange: ClosedFloatingPointRange<Float> = 0f..70f,
     val ageTagEnable: Boolean = true,
-    val defaultAgeRange: ClosedFloatingPointRange<Float> = 1f..70f,
+    val defaultAgeRange: ClosedFloatingPointRange<Float> = 0f..70f,
     val career: Career? = null,
     val careerTagEnable: Boolean = true,
 )

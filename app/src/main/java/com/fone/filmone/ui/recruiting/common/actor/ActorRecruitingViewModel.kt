@@ -265,7 +265,7 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
         viewModelState.update { state ->
             state.copy(
                 actorRecruitingStep1UiModel = state.actorRecruitingStep1UiModel.copy(
-                    ageRange = 1f..70f,
+                    ageRange = 0f..70f,
                     ageTagEnable = true,
                 ),
             )
@@ -277,7 +277,7 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
             state.copy(
                 actorRecruitingStep1UiModel = state.actorRecruitingStep1UiModel.copy(
                     ageRange = ageRange,
-                    ageTagEnable = ageRange == 1f..70f,
+                    ageTagEnable = ageRange == 0f..70f,
                 ),
             )
         }

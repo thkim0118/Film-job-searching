@@ -38,13 +38,13 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.user.Category
 import com.fone.filmone.data.datamodel.common.user.Domain
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.ui.common.FButton
+import com.fone.filmone.ui.common.base.composableActivityViewModel
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
@@ -52,6 +52,7 @@ import com.fone.filmone.ui.common.fTextStyle
 import com.fone.filmone.ui.common.tag.ToggleSelectTag
 import com.fone.filmone.ui.common.tag.categories.CategoryTags
 import com.fone.filmone.ui.common.tag.domain.DomainTags
+import com.fone.filmone.ui.main.job.JobScreenSharedViewModel
 import com.fone.filmone.ui.theme.FColor
 import com.fone.filmone.ui.theme.LocalTypography
 
@@ -59,8 +60,9 @@ import com.fone.filmone.ui.theme.LocalTypography
 fun StaffFilterScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    viewModel: StaffFilterViewModel = hiltViewModel(),
 ) {
+    val viewModel: StaffFilterViewModel = composableActivityViewModel()
+    val jobScreenViewModel: JobScreenSharedViewModel = composableActivityViewModel()
     val state by viewModel.uiState.collectAsState()
     val scrollState = rememberScrollState()
 
@@ -129,6 +131,12 @@ fun StaffFilterScreen(
                 NextButton(
                     modifier = Modifier.padding(horizontal = 16.dp),
                     onCloseClick = {
+                        jobScreenViewModel.updateFilterModel(
+                            state.genders,
+                            state.interests,
+                            state.ageRange,
+                            state.domains,
+                        )
                         navController.popBackStack()
                     }
                 )
@@ -275,7 +283,7 @@ private fun AgeComponent(
             modifier = Modifier.padding(0.dp),
             value = ageRange,
             onValueChange = onUpdateAgeRange,
-            valueRange = 1f..70f,
+            valueRange = 0f..70f,
             steps = 70,
             colors = SliderDefaults.colors(
                 thumbColor = FColor.Primary,
