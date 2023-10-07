@@ -49,7 +49,7 @@ fun PhoneVerificationComponent(
             Spacer(modifier = Modifier.height(8.dp))
         },
         keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Phone
+            keyboardType = KeyboardType.Number
         ),
         rightComponents = {
             Spacer(modifier = Modifier.width(4.dp))

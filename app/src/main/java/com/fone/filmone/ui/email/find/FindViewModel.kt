@@ -2,6 +2,7 @@ package com.fone.filmone.ui.email.find
 
 import android.os.CountDownTimer
 import android.telephony.PhoneNumberUtils
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.BuildConfig
 import com.fone.filmone.R
@@ -90,6 +91,10 @@ class FindViewModel @Inject constructor(
     }
 
     fun updatePhoneNumber(phoneNumber: String) {
+        if (!phoneNumber.isDigitsOnly()) {
+            return
+        }
+
         viewModelState.update {
             it.copy(phoneNumber = phoneNumber)
         }

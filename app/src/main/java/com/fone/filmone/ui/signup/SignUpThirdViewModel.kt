@@ -2,6 +2,7 @@ package com.fone.filmone.ui.signup
 
 import android.os.CountDownTimer
 import android.telephony.PhoneNumberUtils
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewModelScope
 import com.fone.filmone.BuildConfig
 import com.fone.filmone.R
@@ -101,6 +102,10 @@ class SignUpThirdViewModel @Inject constructor(
     }
 
     fun updatePhoneNumber(phoneNumber: String) {
+        if (!phoneNumber.isDigitsOnly()) {
+            return
+        }
+
         _uiState.update {
             it.copy(phoneNumber = phoneNumber)
         }
