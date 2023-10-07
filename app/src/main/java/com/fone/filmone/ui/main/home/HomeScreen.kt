@@ -619,6 +619,8 @@ private fun ActorProfileComponent(
                         text = homeActorProfileContent.name,
                         style = LocalTypography.current.h5(),
                         color = FColor.TextPrimary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
 
                     Spacer(modifier = Modifier.height(3.dp))
