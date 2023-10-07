@@ -765,8 +765,10 @@ private fun Step5Component(
             title = stringResource(id = R.string.recruiting_register_actor_register_button_title),
             enable = true,
             onClick = {
-                onRegisterClick()
             },
+            modifier = Modifier.clickableSingle {
+                onRegisterClick()
+            }
         )
 
         Spacer(modifier = Modifier.height(38.dp))

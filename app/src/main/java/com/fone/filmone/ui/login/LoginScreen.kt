@@ -117,17 +117,17 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            NaverLoginButton(
-                onClick = {
-                    viewModel.showToast("서비스 준비 중입니다")
-//                    snsLoginUtil.login(
-//                        context,
-//                        LoginType.NAVER
-//                    )
-                }
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
+//            NaverLoginButton(
+//                onClick = {
+//                    viewModel.showToast("서비스 준비 중입니다")
+// //                    snsLoginUtil.login(
+// //                        context,
+// //                        LoginType.NAVER
+// //                    )
+//                }
+//            )
+//
+//            Spacer(modifier = Modifier.height(12.dp))
 
             GoogleLoginButton(
                 onClick = {

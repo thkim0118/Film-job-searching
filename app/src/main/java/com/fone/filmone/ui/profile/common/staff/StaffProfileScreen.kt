@@ -16,10 +16,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,6 +37,7 @@ import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
+import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
@@ -58,6 +61,7 @@ import com.fone.filmone.ui.profile.common.staff.model.StaffProfileUiModel
 import com.fone.filmone.ui.recruiting.common.staff.DomainSelectDialog
 import com.fone.filmone.ui.theme.FColor
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun StaffProfileScreen(
     modifier: Modifier,
@@ -86,6 +90,7 @@ fun StaffProfileScreen(
 ) {
     val scrollState = rememberScrollState()
     val focusEvent = uiState.focusEvent
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(key1 = uiState.staffProfileUiEvent) {
         listenUiEvent(
@@ -110,6 +115,9 @@ fun StaffProfileScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it)
+                    .clickableWithNoRipple {
+                        keyboardController?.hide()
+                    }
             ) {
                 TitleComponent(
                     onBackClick = {

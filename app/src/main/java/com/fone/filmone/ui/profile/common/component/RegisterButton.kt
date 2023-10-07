@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.fone.filmone.R
 import com.fone.filmone.ui.common.FButton
+import com.fone.filmone.ui.common.ext.clickableSingle
 
 @Composable
 fun RegisterButton(
@@ -21,7 +22,11 @@ fun RegisterButton(
         FButton(
             title = stringResource(id = R.string.profile_register_register_button),
             enable = buttonEnable,
-            onClick = onRegisterButtonClick
+            onClick = {
+            },
+            modifier = Modifier.clickableSingle {
+                onRegisterButtonClick()
+            }
         )
 
         Spacer(modifier = Modifier.height(38.dp))

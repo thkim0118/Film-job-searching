@@ -328,6 +328,7 @@ private fun RecommendedCompetitionComponent(
     fun Tag(
         modifier: Modifier = Modifier,
         title: String,
+        textColor: Color,
     ) {
         Box(
             modifier = modifier
@@ -345,7 +346,7 @@ private fun RecommendedCompetitionComponent(
                     fontWeight = FontWeight.W500,
                     fontSize = 12.textDp,
                     lineHeight = 18.textDp,
-                    color = FColor.Divider2,
+                    color = textColor,
                 ),
             )
         }
@@ -394,7 +395,7 @@ private fun RecommendedCompetitionComponent(
                                     fontWeight = FontWeight.W500,
                                     fontSize = 14.textDp,
                                     lineHeight = 18.textDp,
-                                    color = FColor.White,
+                                    color = backgroundContents[index % recommendedContents.size].second,
                                 ),
                                 maxLines = 3,
                                 overflow = TextOverflow.Ellipsis,
@@ -436,6 +437,7 @@ private fun RecommendedCompetitionComponent(
                                     Tag(
                                         modifier = Modifier.padding(end = 6.dp, bottom = 6.dp),
                                         title = stringResource(id = tagItem),
+                                        textColor = backgroundContents[index % recommendedContents.size].second,
                                     )
                                 }
                             }
@@ -619,6 +621,8 @@ private fun ActorProfileComponent(
                         text = homeActorProfileContent.name,
                         style = LocalTypography.current.h5(),
                         color = FColor.TextPrimary,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
 
                     Spacer(modifier = Modifier.height(3.dp))
