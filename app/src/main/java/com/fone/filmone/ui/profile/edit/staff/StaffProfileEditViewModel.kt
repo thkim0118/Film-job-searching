@@ -2,6 +2,7 @@ package com.fone.filmone.ui.profile.edit.staff
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.core.image.ImageBase64Util
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.data.datamodel.common.user.Category
@@ -20,6 +21,7 @@ import com.fone.filmone.ui.profile.common.staff.model.StaffProfileFocusEvent
 import com.fone.filmone.ui.profile.common.staff.model.StaffProfileUiEvent
 import com.fone.filmone.ui.profile.common.staff.model.StaffProfileViewModelState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -63,9 +65,20 @@ class StaffProfileEditViewModel @Inject constructor(
                 .onSuccess { response ->
                     val profileContent = response?.profile ?: return@onSuccess
 
+                    launch(Dispatchers.IO) {
+                        viewModelState.update { state ->
+                            state.copy(
+                                pictureEncodedDataList = profileContent.profileUrls.mapNotNull {
+                                    ImageBase64Util.loadBitmap(
+                                        it
+                                    )
+                                }
+                            )
+                        }
+                    }
+
                     viewModelState.update {
                         it.copy(
-//                            pictureList = it.pictureList,
                             name = profileContent.name,
                             hookingComments = profileContent.hookingComment,
                             birthday = profileContent.birthday,
@@ -76,8 +89,10 @@ class StaffProfileEditViewModel @Inject constructor(
                             sns = profileContent.sns,
                             detailInfo = profileContent.details,
                             career = profileContent.career,
+                            careerDetail = profileContent.careerDetail,
                             categories = profileContent.categories.toSet(),
                             categoryTagEnable = profileContent.categories.size == Category.values().size,
+                            email = profileContent.email
                         )
                     }
                 }.onFail {

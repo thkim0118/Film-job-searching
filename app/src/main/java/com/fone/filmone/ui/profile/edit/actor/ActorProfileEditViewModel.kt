@@ -1,7 +1,9 @@
 package com.fone.filmone.ui.profile.edit.actor
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.fone.filmone.core.image.ImageBase64Util.loadBitmap
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.data.datamodel.common.user.Category
@@ -20,6 +22,7 @@ import com.fone.filmone.ui.profile.common.actor.model.ActorProfileUiEvent
 import com.fone.filmone.ui.profile.common.actor.model.ActorProfileUiModel
 import com.fone.filmone.ui.profile.common.actor.model.ActorProfileViewModelState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -65,9 +68,16 @@ class ActorProfileEditViewModel @Inject constructor(
                 .onSuccess { response ->
                     val profileContent = response?.profile ?: return@onSuccess
 
+                    launch(Dispatchers.IO) {
+                        viewModelState.update { state ->
+                            state.copy(
+                                pictureList = profileContent.profileUrls.mapNotNull { loadBitmap(it) }
+                            )
+                        }
+                    }
+
                     viewModelState.update {
                         it.copy(
-//                            pictureList = it.pictureList,
                             name = profileContent.name,
                             hookingComments = profileContent.hookingComment,
                             birthday = profileContent.birthday,
@@ -79,8 +89,10 @@ class ActorProfileEditViewModel @Inject constructor(
                             sns = profileContent.sns,
                             detailInfo = profileContent.details,
                             career = profileContent.career,
+                            careerDetail = profileContent.careerDetail,
                             categories = profileContent.categories.toSet(),
                             categoryTagEnable = profileContent.categories.size == Category.values().size,
+                            email = profileContent.email,
                         )
                     }
                 }.onFail {
@@ -128,6 +140,7 @@ class ActorProfileEditViewModel @Inject constructor(
     }
 
     override fun uploadProfileImages(): Job = viewModelScope.launch {
+        Log.d("Main", "uiState.value.pictureList: ${uiState.value.pictureList}")
         uploadImageUseCase(
             uiState.value.pictureList.map {
                 UploadingImage(
@@ -141,7 +154,7 @@ class ActorProfileEditViewModel @Inject constructor(
                 return@onSuccess
             }
 
-            register(response.map { it.imageUrl })
+            register(response.map { it.imageUrl }.toList())
         }.onFail {
             showToast(it.message)
         }
