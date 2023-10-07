@@ -39,6 +39,7 @@ import com.fone.filmone.ui.common.FToast
 import com.fone.filmone.ui.common.base.BaseViewModel
 import com.fone.filmone.ui.common.ext.clickableSingle
 import com.fone.filmone.ui.common.ext.clickableSingleWithNoRipple
+import com.fone.filmone.ui.common.ext.clickableWithNoRipple
 import com.fone.filmone.ui.common.ext.defaultSystemBarPadding
 import com.fone.filmone.ui.common.ext.textDp
 import com.fone.filmone.ui.common.ext.toastPadding
@@ -111,7 +112,7 @@ fun ActorProfileScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .clickableSingle {
+                .clickableWithNoRipple {
                     keyboardController?.hide()
                 }
                 .padding(it)
