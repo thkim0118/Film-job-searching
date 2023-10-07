@@ -766,10 +766,12 @@ private fun Step5Component(
             title = stringResource(id = R.string.recruiting_register_staff_register_button_title),
             enable = registerButtonEnable,
             onClick = {
+            },
+            modifier = Modifier.clickableSingle {
                 if (registerButtonEnable) {
                     onRegisterClick()
                 }
-            },
+            }
         )
 
         Spacer(modifier = Modifier.height(38.dp))
