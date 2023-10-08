@@ -698,6 +698,9 @@ private fun Step4Component(
                     maxTextSize = detailInfoTextLimit,
                 )
             },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text
+            ),
         )
 
         Spacer(modifier = Modifier.height(20.dp))
