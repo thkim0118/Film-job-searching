@@ -393,7 +393,7 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
             state.copy(
                 actorRecruitingStep3UiModel = state.actorRecruitingStep3UiModel.copy(
                     period = period,
-                    periodTagEnable = period.isNotEmpty(),
+                    periodTagEnable = false,
                 ),
             )
         }
@@ -404,7 +404,7 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
             state.copy(
                 actorRecruitingStep3UiModel = state.actorRecruitingStep3UiModel.copy(
                     pay = pay,
-                    payTagEnable = pay.isNotEmpty(),
+                    payTagEnable = false,
                 ),
             )
         }
