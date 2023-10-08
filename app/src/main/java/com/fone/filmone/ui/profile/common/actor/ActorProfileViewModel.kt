@@ -69,7 +69,7 @@ abstract class ActorProfileViewModel : BaseViewModel() {
             return true
         }
 
-        if (state.email.isEmpty()) {
+        if (state.email.isEmpty() || !PatternUtil.isValidEmail(state.email)) {
             updateFocusEvent(ActorProfileFocusEvent.Email)
             return true
         }

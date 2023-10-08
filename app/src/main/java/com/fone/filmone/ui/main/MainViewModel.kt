@@ -107,49 +107,41 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun initCurrentJobSorting() {
+    fun updateJobOpeningFilter(jobFilterType: JobFilterType) {
         viewModelState.update {
-            it.copy(currentJobSortingTab = JobSorting.JobOpenings(JobFilterType.Recent))
+            when (it.type) {
+                Type.STAFF -> {
+                    it.copy(
+                        staffJobOpeningsSorting = JobSorting.JobOpenings(jobFilterType),
+                        currentJobOpeningSorting = JobSorting.JobOpenings(jobFilterType)
+                    )
+                }
+
+                else -> {
+                    it.copy(
+                        actorJobOpeningsSorting = JobSorting.JobOpenings(jobFilterType),
+                        currentJobOpeningSorting = JobSorting.JobOpenings(jobFilterType)
+                    )
+                }
+            }
         }
     }
 
-    fun updateJobFilter(jobFilterType: JobFilterType) {
+    fun updateProfileFilter(jobFilterType: JobFilterType) {
         viewModelState.update {
-            when (it.currentJobSortingTab) {
-                is JobSorting.JobOpenings -> {
-                    when (it.type) {
-                        Type.STAFF -> {
-                            it.copy(
-                                staffJobOpeningsSorting = JobSorting.JobOpenings(jobFilterType),
-                                currentJobSortingTab = JobSorting.JobOpenings(jobFilterType)
-                            )
-                        }
-
-                        else -> {
-                            it.copy(
-                                actorJobOpeningsSorting = JobSorting.JobOpenings(jobFilterType),
-                                currentJobSortingTab = JobSorting.JobOpenings(jobFilterType)
-                            )
-                        }
-                    }
+            when (it.type) {
+                Type.STAFF -> {
+                    it.copy(
+                        staffJobOpeningsSorting = JobSorting.Profile(jobFilterType),
+                        currentProfileSorting = JobSorting.Profile(jobFilterType)
+                    )
                 }
 
-                is JobSorting.Profile -> {
-                    when (it.type) {
-                        Type.STAFF -> {
-                            it.copy(
-                                staffJobOpeningsSorting = JobSorting.Profile(jobFilterType),
-                                currentJobSortingTab = JobSorting.Profile(jobFilterType)
-                            )
-                        }
-
-                        else -> {
-                            it.copy(
-                                actorJobOpeningsSorting = JobSorting.Profile(jobFilterType),
-                                currentJobSortingTab = JobSorting.Profile(jobFilterType)
-                            )
-                        }
-                    }
+                else -> {
+                    it.copy(
+                        actorJobOpeningsSorting = JobSorting.Profile(jobFilterType),
+                        currentProfileSorting = JobSorting.Profile(jobFilterType)
+                    )
                 }
             }
         }
@@ -166,7 +158,8 @@ private data class MainViewModelState(
     val mainDialogState: MainDialogState = MainDialogState.Clear,
     val isFloatingClick: Boolean = false,
     val type: Type = Type.ACTOR,
-    val currentJobSortingTab: JobSorting = JobSorting.JobOpenings(JobFilterType.Recent),
+    val currentJobOpeningSorting: JobSorting = JobSorting.JobOpenings(JobFilterType.Recent),
+    val currentProfileSorting: JobSorting = JobSorting.Profile(JobFilterType.Recent),
     val actorJobOpeningsSorting: JobSorting = JobSorting.JobOpenings(JobFilterType.Recent),
     val actorProfileSorting: JobSorting = JobSorting.Profile(JobFilterType.Recent),
     val staffJobOpeningsSorting: JobSorting = JobSorting.JobOpenings(JobFilterType.Recent),
@@ -177,9 +170,10 @@ private data class MainViewModelState(
             type = type,
             mainDialogState = mainDialogState,
             isFloatingClick = isFloatingClick,
-            currentJobSorting = currentJobSortingTab,
+            currentJobOpeningSorting = currentJobOpeningSorting,
             actorJobOpeningsSorting = actorJobOpeningsSorting,
             actorProfileSorting = actorProfileSorting,
+            currentProfileSorting = currentProfileSorting,
         )
     }
 }
@@ -188,7 +182,8 @@ data class MainUiState(
     val mainDialogState: MainDialogState,
     val isFloatingClick: Boolean,
     val type: Type,
-    val currentJobSorting: JobSorting,
+    val currentJobOpeningSorting: JobSorting,
+    val currentProfileSorting: JobSorting,
     val actorJobOpeningsSorting: JobSorting,
     val actorProfileSorting: JobSorting,
 )

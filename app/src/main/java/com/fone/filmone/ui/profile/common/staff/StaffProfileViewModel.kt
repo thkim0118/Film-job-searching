@@ -74,7 +74,7 @@ abstract class StaffProfileViewModel : BaseViewModel() {
             return true
         }
 
-        if (state.email.isEmpty()) {
+        if (state.email.isEmpty() || !PatternUtil.isValidEmail(state.email)) {
             updateFocusEvent(StaffProfileFocusEvent.Email)
             return true
         }

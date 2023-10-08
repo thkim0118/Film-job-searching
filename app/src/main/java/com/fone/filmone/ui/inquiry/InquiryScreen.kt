@@ -263,7 +263,10 @@ private fun InquiryDescriptionComponent(
         placeholder = stringResource(id = R.string.inquiry_content_description_placeholder),
         singleLine = false,
         maxLines = Int.MAX_VALUE,
-        fixedHeight = 134.dp
+        fixedHeight = 134.dp,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text
+        ),
     )
 }
 

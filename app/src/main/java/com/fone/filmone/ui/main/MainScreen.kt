@@ -27,7 +27,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -89,10 +88,6 @@ fun MainScreen(
     var jobTabScreen by remember { mutableStateOf(initialJobTab) }
     val uiState by mainViewModel.uiState.collectAsState()
 
-    LaunchedEffect(jobTabScreen) {
-        mainViewModel.initCurrentJobSorting()
-    }
-
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         sheetShape = RoundedCornerShape(10.dp),
@@ -121,9 +116,16 @@ fun MainScreen(
                 MainBottomSheetType.JobTabJopOpeningsFilter -> JobTabJobOpeningsFilterBottomSheet(
                     coroutineScope = coroutineScope,
                     bottomSheetState = bottomSheetState,
-                    currentJobFilterType = uiState.currentJobSorting.currentJobFilterType,
+                    currentJobFilterType = if (jobTabScreen == JobTab.JOB_OPENING)
+                        uiState.currentJobOpeningSorting.currentJobFilterType
+                    else
+                        uiState.currentProfileSorting.currentJobFilterType,
                     onJobFilterTypeClick = {
-                        mainViewModel.updateJobFilter(it)
+                        if (jobTabScreen == JobTab.JOB_OPENING) {
+                            mainViewModel.updateJobOpeningFilter(it)
+                        } else {
+                            mainViewModel.updateProfileFilter(it)
+                        }
                     },
                     jobTabScreen = jobTabScreen,
                 )
@@ -131,9 +133,16 @@ fun MainScreen(
                 MainBottomSheetType.JobTabProfileFilter -> JobTabProfileFilterBottomSheet(
                     coroutineScope = coroutineScope,
                     bottomSheetState = bottomSheetState,
-                    currentJobFilterType = uiState.currentJobSorting.currentJobFilterType,
+                    currentJobFilterType = if (jobTabScreen == JobTab.JOB_OPENING)
+                        uiState.currentJobOpeningSorting.currentJobFilterType
+                    else
+                        uiState.currentProfileSorting.currentJobFilterType,
                     onJobFilterTypeClick = {
-                        mainViewModel.updateJobFilter(it)
+                        if (jobTabScreen == JobTab.JOB_OPENING) {
+                            mainViewModel.updateJobOpeningFilter(it)
+                        } else {
+                            mainViewModel.updateProfileFilter(it)
+                        }
                     },
                 )
             }
@@ -207,7 +216,10 @@ fun MainScreen(
                     )
                     MainBottomNavItem.Job -> {
                         JobScreen(
-                            currentJobSorting = uiState.currentJobSorting,
+                            currentJobSorting = if (jobTabScreen == JobTab.JOB_OPENING)
+                                uiState.currentJobOpeningSorting
+                            else
+                                uiState.currentProfileSorting,
                             userType = uiState.type,
                             initialJobTab = initialJobTab,
                             onJobOpeningsFilterClick = {
@@ -759,6 +771,7 @@ private fun MainDialog(
     when (dialogState) {
         MainDialogState.Clear -> Unit
         MainDialogState.WithdrawalComplete -> WithdrawalCompleteDialog(onDismiss = onDismiss)
+        else -> {}
     }
 }
 

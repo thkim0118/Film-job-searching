@@ -132,7 +132,7 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
             return true
         }
 
-        if (step5UiModel.email.isEmpty()) {
+        if (step5UiModel.email.isEmpty() || !PatternUtil.isValidEmail(step5UiModel.email)) {
             updateFocusEvent(ActorRecruitingFocusEvent.Email)
             return true
         }
@@ -393,7 +393,7 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
             state.copy(
                 actorRecruitingStep3UiModel = state.actorRecruitingStep3UiModel.copy(
                     period = period,
-                    periodTagEnable = period.isNotEmpty(),
+                    periodTagEnable = false,
                 ),
             )
         }
@@ -404,7 +404,7 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
             state.copy(
                 actorRecruitingStep3UiModel = state.actorRecruitingStep3UiModel.copy(
                     pay = pay,
-                    payTagEnable = pay.isNotEmpty(),
+                    payTagEnable = false,
                 ),
             )
         }
