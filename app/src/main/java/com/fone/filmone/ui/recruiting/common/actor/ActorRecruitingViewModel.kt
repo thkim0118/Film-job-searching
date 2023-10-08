@@ -132,7 +132,7 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
             return true
         }
 
-        if (step5UiModel.email.isEmpty()) {
+        if (step5UiModel.email.isEmpty() || !PatternUtil.isValidEmail(step5UiModel.email)) {
             updateFocusEvent(ActorRecruitingFocusEvent.Email)
             return true
         }

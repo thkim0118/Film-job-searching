@@ -145,7 +145,7 @@ abstract class StaffRecruitingViewModel : BaseViewModel() {
             return true
         }
 
-        if (step5UiModel.email.isEmpty()) {
+        if (step5UiModel.email.isEmpty() || !PatternUtil.isValidEmail(step5UiModel.email)) {
             updateFocusEvent(StaffRecruitingFocusEvent.Email)
             return true
         }
