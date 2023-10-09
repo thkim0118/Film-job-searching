@@ -211,6 +211,7 @@ fun MainScreen(
                         onJobButtonClick = { jobTab: JobTab ->
                             selectedScreen = MainBottomNavItem.Job
                             initialJobTab = jobTab
+                            mainViewModel.updateTypeAsActor()
                         },
                         key = System.currentTimeMillis(),
                     )

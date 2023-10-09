@@ -107,6 +107,14 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun updateTypeAsActor() {
+        viewModelState.update {
+            it.copy(
+                type = Type.ACTOR
+            )
+        }
+    }
+
     fun updateJobOpeningFilter(jobFilterType: JobFilterType) {
         viewModelState.update {
             when (it.type) {
