@@ -354,10 +354,17 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
     }
 
     fun updateLogLine(logLine: String) {
+        val logLineTextLimit = uiState.value.actorRecruitingStep2UiModel.logLineTextLimit
+        val adjustedLogLine = if (logLine.length > logLineTextLimit) {
+            logLine.substring(0, logLineTextLimit)
+        } else {
+            logLine
+        }
+
         viewModelState.update { state ->
             state.copy(
                 actorRecruitingStep2UiModel = state.actorRecruitingStep2UiModel.copy(
-                    logLine = logLine,
+                    logLine = adjustedLogLine,
                 ),
             )
         }
@@ -456,10 +463,17 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
     }
 
     fun updateDetailInfo(detailInfo: String) {
+        val logLineTextLimit = uiState.value.actorRecruitingStep4UiModel.detailInfoTextLimit
+        val adjustedDetailInfo = if (detailInfo.length > logLineTextLimit) {
+            detailInfo.substring(0, logLineTextLimit)
+        } else {
+            detailInfo
+        }
+
         viewModelState.update { state ->
             state.copy(
                 actorRecruitingStep4UiModel = state.actorRecruitingStep4UiModel.copy(
-                    detailInfo = detailInfo,
+                    detailInfo = adjustedDetailInfo,
                 ),
             )
         }

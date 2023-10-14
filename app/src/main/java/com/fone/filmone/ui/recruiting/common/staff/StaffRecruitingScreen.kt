@@ -527,7 +527,6 @@ private fun Step2Component(
             maxLines = Int.MAX_VALUE,
             singleLine = false,
             placeholder = stringResource(id = R.string.recruiting_register_staff_log_line_placeholder),
-            textLimit = logLineTextLimit,
             bottomComponent = {
                 TextLimitComponent(
                     modifier = Modifier
@@ -685,7 +684,6 @@ private fun Step4Component(
         FTextField(
             text = detailInfo,
             onValueChange = onUpdateDetailInfo,
-            textLimit = detailInfoTextLimit,
             maxLines = Int.MAX_VALUE,
             singleLine = false,
             fixedHeight = 134.dp,

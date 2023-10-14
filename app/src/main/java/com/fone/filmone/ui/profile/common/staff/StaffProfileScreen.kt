@@ -220,6 +220,8 @@ private fun listenUiEvent(
         StaffProfileUiEvent.RegisterComplete -> {
             navController.popBackStack()
         }
+
+        else -> {}
     }
 }
 
@@ -378,5 +380,7 @@ private fun DialogScreen(
                 }
             )
         }
+
+        else -> {}
     }
 }

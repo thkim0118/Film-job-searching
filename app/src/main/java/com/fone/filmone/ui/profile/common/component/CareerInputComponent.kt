@@ -73,7 +73,6 @@ fun CareerInputComponent(
             text = careerDetail,
             onValueChange = onUpdateCareerDetail,
             placeholder = stringResource(id = R.string.profile_register_career_placeholder),
-            textLimit = careerDetailTextLimit,
             singleLine = false,
             maxLines = Int.MAX_VALUE,
             bottomComponent = {
