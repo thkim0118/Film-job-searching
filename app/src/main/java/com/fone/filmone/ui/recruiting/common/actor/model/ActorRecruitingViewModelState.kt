@@ -77,6 +77,8 @@ data class ActorRecruitingUiModel(
 data class ActorRecruitingStep1UiModel(
     val titleText: String = "",
     val titleTextLimit: Int = 50,
+    val recruitingRoleTextLimit: Int = 50,
+    val recruitingMemberTextLimit: Int = 5,
     val categories: List<Category> = emptyList(),
     val deadlineDate: String = "",
     val deadlineTagEnable: Boolean = true,
@@ -93,9 +95,13 @@ data class ActorRecruitingStep1UiModel(
 
 data class ActorRecruitingStep2UiModel(
     val production: String = "",
+    val productionTextLimit: Int = 20,
     val workTitle: String = "",
+    val workTitleTextLimit: Int = 20,
     val directorName: String = "",
+    val directorNameTextLimit: Int = 20,
     val genre: String = "",
+    val genreTextLimit: Int = 20,
     val logLine: String = "",
     val logLineTextLimit: Int = 200,
     val isLogLineTagEnable: Boolean = false,

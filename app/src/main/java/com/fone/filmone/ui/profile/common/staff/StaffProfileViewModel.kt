@@ -191,8 +191,15 @@ abstract class StaffProfileViewModel : BaseViewModel() {
     }
 
     fun updateDetailInfo(detailInfo: String) {
+        val detailInfoTextLimit = uiState.value.detailInfoTextLimit
+        val adjustedDetailInfo = if (detailInfo.length > detailInfoTextLimit) {
+            detailInfo.substring(0, detailInfoTextLimit)
+        } else {
+            detailInfo
+        }
+
         viewModelState.update { state ->
-            state.copy(detailInfo = detailInfo)
+            state.copy(detailInfo = adjustedDetailInfo)
         }
 
         updateRegisterButtonState()
@@ -211,8 +218,15 @@ abstract class StaffProfileViewModel : BaseViewModel() {
     }
 
     fun updateCareerDetail(careerDetail: String) {
+        val careerDetailTextLimit = uiState.value.careerDetailTextLimit
+        val adjustedCareerDetail = if (careerDetail.length > careerDetailTextLimit) {
+            careerDetail.substring(0, careerDetailTextLimit)
+        } else {
+            careerDetail
+        }
+
         viewModelState.update { state ->
-            state.copy(careerDetail = careerDetail)
+            state.copy(careerDetail = adjustedCareerDetail)
         }
     }
 

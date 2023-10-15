@@ -182,8 +182,10 @@ private fun RegisterProfileItem(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
+                    val displayText = if (name.length > 5) "${name.substring(0, 5)}..." else name
+
                     Text(
-                        text = name,
+                        text = displayText,
                         style = LocalTypography.current.h5(),
                         color = FColor.TextPrimary,
                     )

@@ -155,6 +155,8 @@ fun ActorRecruitingScreen(
                     currentCareer = uiState.actorRecruitingStep1UiModel.career,
                     ageTagEnable = uiState.actorRecruitingStep1UiModel.ageTagEnable,
                     careerTagEnable = uiState.actorRecruitingStep1UiModel.careerTagEnable,
+                    recruitingRoleTextLimit = uiState.actorRecruitingStep1UiModel.recruitingRoleTextLimit,
+                    recruitingMemberTextLimit = uiState.actorRecruitingStep1UiModel.recruitingMemberTextLimit,
                     focusEvent = focusEvent,
                     onUpdateTitleText = onUpdateTitleText,
                     onUpdateCategories = onUpdateCategories,
@@ -187,6 +189,10 @@ fun ActorRecruitingScreen(
                     onUpdateGenre = onUpdateGenre,
                     onUpdateLogLine = onUpdateLogLine,
                     onUpdateLogLineTag = onUpdateLogLineTag,
+                    productionTextLimit = uiState.actorRecruitingStep2UiModel.productionTextLimit,
+                    workTitleTextLimit = uiState.actorRecruitingStep2UiModel.workTitleTextLimit,
+                    directorNameTextLimit = uiState.actorRecruitingStep2UiModel.directorNameTextLimit,
+                    genreTextLimit = uiState.actorRecruitingStep2UiModel.genreTextLimit,
                 )
 
                 Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -305,6 +311,8 @@ private fun Step1Component(
     onUpdateAgeRange: (ClosedFloatingPointRange<Float>) -> Unit,
     onUpdateCareer: (Career, Boolean) -> Unit,
     onUpdateCareerTag: (Boolean) -> Unit,
+    recruitingRoleTextLimit: Int,
+    recruitingMemberTextLimit: Int,
 ) {
     val titleFocusRequester = remember { FocusRequester() }
     val categoryFocusRequester = remember { FocusRequester() }
@@ -373,6 +381,8 @@ private fun Step1Component(
             onUpdateGender = onUpdateGender,
             onUpdateDeadlineTag = onUpdateDeadlineTag,
             onUpdateGenderTag = onUpdateGenderTag,
+            recruitingRoleTextLimit = recruitingRoleTextLimit,
+            recruitingMemberTextLimit = recruitingMemberTextLimit,
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -418,6 +428,10 @@ private fun Step2Component(
     onUpdateGenre: (String) -> Unit,
     onUpdateLogLine: (String) -> Unit,
     onUpdateLogLineTag: (Boolean) -> Unit,
+    productionTextLimit: Int,
+    workTitleTextLimit: Int,
+    directorNameTextLimit: Int,
+    genreTextLimit: Int,
 ) {
     val productionFocusRequester = remember { FocusRequester() }
     val workTitleFocusRequester = remember { FocusRequester() }
@@ -454,6 +468,7 @@ private fun Step2Component(
             placeholder = stringResource(id = R.string.recruiting_register_actor_production_placeholder),
             text = production,
             onValueChanged = onUpdateProduction,
+            textLimit = productionTextLimit,
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -465,6 +480,7 @@ private fun Step2Component(
             placeholder = stringResource(id = R.string.recruiting_register_actor_work_placeholder),
             text = workTitle,
             onValueChanged = onUpdateWorkTitle,
+            textLimit = workTitleTextLimit,
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -476,6 +492,7 @@ private fun Step2Component(
             placeholder = stringResource(id = R.string.recruiting_register_actor_director_placeholder),
             text = directorName,
             onValueChanged = onUpdateDirectorName,
+            textLimit = directorNameTextLimit,
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -487,6 +504,7 @@ private fun Step2Component(
             placeholder = stringResource(id = R.string.recruiting_register_actor_genre_placeholder),
             text = genre,
             onValueChanged = onUpdateGenre,
+            textLimit = genreTextLimit,
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -510,7 +528,6 @@ private fun Step2Component(
             maxLines = Int.MAX_VALUE,
             singleLine = false,
             placeholder = stringResource(id = R.string.recruiting_register_actor_log_line_placeholder),
-            textLimit = logLineTextLimit,
             bottomComponent = {
                 TextLimitComponent(
                     modifier = Modifier
@@ -685,7 +702,6 @@ private fun Step4Component(
         FTextField(
             text = detailInfo,
             onValueChange = onUpdateDetailInfo,
-            textLimit = detailInfoTextLimit,
             maxLines = Int.MAX_VALUE,
             singleLine = false,
             fixedHeight = 134.dp,
@@ -821,6 +837,8 @@ private fun RecruitmentInputComponent(
     onUpdateRecruitmentNumber: (String) -> Unit,
     onUpdateGender: (Gender, Boolean) -> Unit,
     onUpdateGenderTag: () -> Unit,
+    recruitingRoleTextLimit: Int,
+    recruitingMemberTextLimit: Int,
 ) {
     TextWithRequiredTag(
         title = stringResource(id = R.string.recruiting_register_actor_deadline_title),
@@ -890,6 +908,7 @@ private fun RecruitmentInputComponent(
             Spacer(modifier = Modifier.width(19.dp))
         },
         placeholder = stringResource(id = R.string.recruiting_register_actor_target_role_placeholder),
+        textLimit = recruitingRoleTextLimit,
     )
 
     Spacer(modifier = Modifier.height(20.dp))
@@ -912,6 +931,7 @@ private fun RecruitmentInputComponent(
         currentGender = currentGender,
         onUpdateRecruitmentNumber = onUpdateRecruitmentNumber,
         onUpdateGender = onUpdateGender,
+        recruitingMemberTextLimit = recruitingMemberTextLimit,
     )
 }
 
@@ -1048,6 +1068,7 @@ private fun RecruitmentNumberInputComponent(
     currentGender: Gender?,
     onUpdateRecruitmentNumber: (String) -> Unit,
     onUpdateGender: (Gender, Boolean) -> Unit,
+    recruitingMemberTextLimit: Int,
 ) {
     FTextField(
         modifier = modifier,
@@ -1077,5 +1098,6 @@ private fun RecruitmentNumberInputComponent(
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number,
         ),
+        textLimit = recruitingMemberTextLimit
     )
 }

@@ -64,7 +64,6 @@ fun DetailInputComponent(
             onValueChange = onUpdateDetailInfo,
             singleLine = false,
             maxLines = Int.MAX_VALUE,
-            textLimit = detailInfoTextLimit,
             fixedHeight = 138.dp,
             bottomComponent = {
                 Spacer(modifier = Modifier.height(2.dp))

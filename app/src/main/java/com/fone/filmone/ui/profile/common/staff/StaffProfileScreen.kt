@@ -144,6 +144,7 @@ fun StaffProfileScreen(
 
                     UserInfoInputComponent(
                         name = uiState.name,
+                        nameTextLimit = uiState.nameTextLimit,
                         birthday = uiState.birthday,
                         genderTagEnable = uiState.genderTagEnable,
                         currentGender = uiState.gender,
@@ -152,6 +153,7 @@ fun StaffProfileScreen(
                         selectedDomains = uiState.domains.toList(),
                         email = uiState.email,
                         ability = uiState.specialty,
+                        specialtyTextLimit = uiState.specialtyTextLimit,
                         sns = uiState.sns,
                         onNameChanged = onNameChanged,
                         onUpdateBirthday = onUpdateBirthday,
@@ -220,6 +222,8 @@ private fun listenUiEvent(
         StaffProfileUiEvent.RegisterComplete -> {
             navController.popBackStack()
         }
+
+        else -> {}
     }
 }
 
@@ -277,6 +281,8 @@ private fun UserInfoInputComponent(
     onUpdateAbility: (String) -> Unit,
     onUpdateSns: (String) -> Unit,
     focusEvent: StaffProfileFocusEvent?,
+    nameTextLimit: Int,
+    specialtyTextLimit: Int,
 ) {
     val nameFocusRequester = remember { FocusRequester() }
     val hookingCommentRequester = remember { FocusRequester() }
@@ -302,9 +308,10 @@ private fun UserInfoInputComponent(
         Spacer(modifier = Modifier.height(20.dp))
 
         NameInputComponent(
+            modifier = Modifier.focusRequester(nameFocusRequester),
             name = name,
             onNameChanged = onNameChanged,
-            modifier = Modifier.focusRequester(nameFocusRequester)
+            nameTextLimit = nameTextLimit
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -353,7 +360,11 @@ private fun UserInfoInputComponent(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        AbilityInputComponent(ability = ability, onUpdateAbility = onUpdateAbility)
+        AbilityInputComponent(
+            ability = ability,
+            onUpdateAbility = onUpdateAbility,
+            specialtyTextLimit = specialtyTextLimit
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -378,5 +389,7 @@ private fun DialogScreen(
                 }
             )
         }
+
+        else -> {}
     }
 }

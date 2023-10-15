@@ -10,7 +10,8 @@ import com.fone.filmone.ui.main.job.common.LeftTitleTextField
 fun NameInputComponent(
     modifier: Modifier = Modifier,
     name: String,
-    onNameChanged: (String) -> Unit
+    onNameChanged: (String) -> Unit,
+    nameTextLimit: Int
 ) {
     LeftTitleTextField(
         modifier = modifier,
@@ -18,6 +19,7 @@ fun NameInputComponent(
         titleSpace = 28,
         placeholder = stringResource(id = R.string.profile_register_name_placeholder),
         text = name,
-        onValueChanged = onNameChanged
+        onValueChanged = onNameChanged,
+        textLimit = nameTextLimit,
     )
 }

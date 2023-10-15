@@ -138,6 +138,7 @@ abstract class StaffProfileViewModelState(
 data class StaffProfileUiModel(
     val pictureEncodedDataList: List<String>,
     val name: String,
+    val nameTextLimit: Int = 10,
     val hookingComments: String,
     val commentsTextLimit: Int,
     val birthday: String,
@@ -146,6 +147,7 @@ data class StaffProfileUiModel(
     val domains: Set<Domain>,
     val email: String,
     val specialty: String,
+    val specialtyTextLimit: Int = 50,
     val sns: String,
     val detailInfo: String,
     val detailInfoTextLimit: Int,

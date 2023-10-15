@@ -23,7 +23,8 @@ fun LeftTitleTextField(
     ),
     isRequired: Boolean = true,
     tailComponent: @Composable () -> Unit = {},
-    onValueChanged: (String) -> Unit
+    onValueChanged: (String) -> Unit,
+    textLimit: Int = 500,
 ) {
     FTextField(
         modifier = modifier,
@@ -39,6 +40,7 @@ fun LeftTitleTextField(
         },
         tailComponent = tailComponent,
         placeholder = placeholder,
-        keyboardOptions = keyboardOptions
+        keyboardOptions = keyboardOptions,
+        textLimit = textLimit,
     )
 }

@@ -408,12 +408,17 @@ private fun RecommendedCompetitionComponent(
 
                             Text(
                                 text = content.subtitle,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
                                 style = fTextStyle(
                                     fontWeight = FontWeight.W400,
                                     fontSize = 12.textDp,
                                     lineHeight = 17.textDp,
                                     color = backgroundContents[index % recommendedContents.size].second,
                                 ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .widthIn(max = 130.dp)
                             )
 
                             Text(
