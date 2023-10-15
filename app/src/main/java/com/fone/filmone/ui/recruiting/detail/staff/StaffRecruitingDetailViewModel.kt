@@ -6,6 +6,7 @@ import com.fone.filmone.R
 import com.fone.filmone.data.datamodel.common.jobopenings.Type
 import com.fone.filmone.data.datamodel.common.user.Career
 import com.fone.filmone.data.datamodel.common.user.Category
+import com.fone.filmone.data.datamodel.common.user.Domain
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.data.datamodel.response.jobopenings.detail.JobOpeningResponse
 import com.fone.filmone.domain.model.common.onFail
@@ -105,7 +106,6 @@ private data class StaffRecruitingDetailState(
             articleTitle = jobOpeningResponse.jobOpening.title,
             deadline = jobOpeningResponse.jobOpening.deadline,
             dday = jobOpeningResponse.jobOpening.dday,
-            casting = jobOpeningResponse.jobOpening.casting,
             numberOfRecruits = jobOpeningResponse.jobOpening.numberOfRecruits.toString(),
             gender = jobOpeningResponse.jobOpening.gender,
             ageRange = jobOpeningResponse.jobOpening.ageMin.toString() + "~" + jobOpeningResponse.jobOpening.ageMax.toString(),
@@ -122,6 +122,7 @@ private data class StaffRecruitingDetailState(
             manager = jobOpeningResponse.jobOpening.work.manager,
             email = jobOpeningResponse.jobOpening.work.email,
             isScrap = jobOpeningResponse.jobOpening.isScrap,
+            domains = jobOpeningResponse.jobOpening.domains
         )
     } else {
         StaffRecruitingDetailUiState(
@@ -135,7 +136,6 @@ private data class StaffRecruitingDetailState(
             articleTitle = "",
             deadline = null,
             dday = "",
-            casting = "",
             numberOfRecruits = "",
             gender = Gender.IRRELEVANT,
             ageRange = "",
@@ -152,6 +152,7 @@ private data class StaffRecruitingDetailState(
             manager = "",
             email = "",
             isScrap = false,
+            domains = emptyList(),
         )
     }
 }
@@ -167,7 +168,6 @@ data class StaffRecruitingDetailUiState(
     val articleTitle: String,
     val deadline: String?,
     val dday: String,
-    val casting: String?,
     val numberOfRecruits: String,
     val gender: Gender,
     val ageRange: String,
@@ -184,4 +184,5 @@ data class StaffRecruitingDetailUiState(
     val manager: String,
     val email: String,
     val isScrap: Boolean,
+    val domains: List<Domain>,
 )

@@ -37,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.fone.filmone.R
+import com.fone.filmone.data.datamodel.common.user.Domain
 import com.fone.filmone.data.datamodel.common.user.Gender
 import com.fone.filmone.ui.common.FTitleBar
 import com.fone.filmone.ui.common.FToast
@@ -109,11 +110,11 @@ fun StaffRecruitingDetailScreen(
                 RecruitmentConditionComponent(
                     deadline = uiState.deadline,
                     dday = uiState.dday,
-                    casting = uiState.casting,
                     number = uiState.numberOfRecruits,
                     gender = uiState.gender,
                     ageRange = uiState.ageRange,
                     career = context.getString(uiState.career.titleRes),
+                    domains = uiState.domains,
                 )
 
                 Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -331,11 +332,11 @@ private fun RecruitmentConditionComponent(
     modifier: Modifier = Modifier,
     deadline: String?,
     dday: String,
-    casting: String?,
     number: String,
     gender: Gender,
     ageRange: String,
     career: String,
+    domains: List<Domain>,
 ) {
     Column(
         modifier = modifier
@@ -355,14 +356,14 @@ private fun RecruitmentConditionComponent(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        if (casting != null) {
-            InfoComponent(
-                title = stringResource(id = R.string.staff_detail_recruitment_role_title),
-                content = casting,
-            )
+        InfoComponent(
+            title = stringResource(id = R.string.staff_detail_recruitment_role_title),
+            content = domains
+                .map { stringResource(it.stringRes) }
+                .joinToString(", "),
+        )
 
-            Spacer(modifier = Modifier.height(8.dp))
-        }
+        Spacer(modifier = Modifier.height(8.dp))
 
         InfoComponent(
             title = stringResource(id = R.string.actor_detail_recruitment_number_of_recruits_title),
