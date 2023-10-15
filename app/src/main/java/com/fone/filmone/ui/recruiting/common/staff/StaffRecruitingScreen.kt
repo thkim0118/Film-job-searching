@@ -180,6 +180,7 @@ fun StaffRecruitingScreen(
                         onUpdateAgeTag = onUpdateAgeTag,
                         onUpdateCareer = onUpdateCareer,
                         onUpdateCareerTag = onUpdateCareerTag,
+                        recruitingMemberTextLimit = uiState.staffRecruitingStep1UiModel.recruitingMemberTextLimit,
                     )
 
                     Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -199,6 +200,10 @@ fun StaffRecruitingScreen(
                         onUpdateGenre = onUpdateGenre,
                         onUpdateLogLine = onUpdateLogLine,
                         onLogLineTagClick = onLogLineTagClick,
+                        productionTextLimit = uiState.staffRecruitingStep2UiModel.productionTextLimit,
+                        workTitleTextLimit = uiState.staffRecruitingStep2UiModel.workTitleTextLimit,
+                        directorNameTextLimit = uiState.staffRecruitingStep2UiModel.directorNameTextLimit,
+                        genreTextLimit = uiState.staffRecruitingStep2UiModel.genreTextLimit,
                     )
 
                     Divider(thickness = 8.dp, color = FColor.Divider2)
@@ -321,6 +326,7 @@ private fun Step1Component(
     onUpdateAgeTag: (Boolean) -> Unit,
     onUpdateCareer: (Career, Boolean) -> Unit,
     onUpdateCareerTag: (Boolean) -> Unit,
+    recruitingMemberTextLimit: Int,
 ) {
     val titleFocusRequester = remember { FocusRequester() }
     val categoryFocusRequester = remember { FocusRequester() }
@@ -393,6 +399,7 @@ private fun Step1Component(
         onUpdateRecruitmentNumber = onUpdateRecruitmentNumber,
         onUpdateGender = onUpdateGender,
         onUpdateGenderTag = onUpdateGenderTag,
+        recruitingMemberTextLimit = recruitingMemberTextLimit,
     )
 
     Spacer(modifier = Modifier.height(20.dp))
@@ -437,6 +444,10 @@ private fun Step2Component(
     onUpdateGenre: (String) -> Unit,
     onUpdateLogLine: (String) -> Unit,
     onLogLineTagClick: () -> Unit,
+    productionTextLimit: Int,
+    workTitleTextLimit: Int,
+    directorNameTextLimit: Int,
+    genreTextLimit: Int,
 ) {
     val productionFocusRequester = remember { FocusRequester() }
     val workTitleFocusRequester = remember { FocusRequester() }
@@ -473,6 +484,7 @@ private fun Step2Component(
             placeholder = stringResource(id = R.string.recruiting_register_staff_production_placeholder),
             text = production,
             onValueChanged = onUpdateProduction,
+            textLimit = productionTextLimit,
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -484,6 +496,7 @@ private fun Step2Component(
             placeholder = stringResource(id = R.string.recruiting_register_staff_work_placeholder),
             text = workTitle,
             onValueChanged = onUpdateWorkTitle,
+            textLimit = workTitleTextLimit,
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -495,6 +508,7 @@ private fun Step2Component(
             placeholder = stringResource(id = R.string.recruiting_register_staff_director_placeholder),
             text = directorName,
             onValueChanged = onUpdateDirectorName,
+            textLimit = directorNameTextLimit,
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -506,6 +520,7 @@ private fun Step2Component(
             placeholder = stringResource(id = R.string.recruiting_register_staff_genre_placeholder),
             text = genre,
             onValueChanged = onUpdateGenre,
+            textLimit = genreTextLimit,
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -823,6 +838,7 @@ private fun RecruitmentInputComponent(
     onUpdateRecruitmentNumber: (String) -> Unit,
     onUpdateGender: (Gender, Boolean) -> Unit,
     onUpdateGenderTag: () -> Unit,
+    recruitingMemberTextLimit: Int,
 ) {
     TextWithRequiredTag(
         modifier = Modifier.padding(horizontal = 20.dp),
@@ -920,6 +936,7 @@ private fun RecruitmentInputComponent(
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Number,
         ),
+        textLimit = recruitingMemberTextLimit,
     )
 }
 
