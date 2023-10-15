@@ -10,7 +10,8 @@ import com.fone.filmone.ui.main.job.common.LeftTitleTextField
 fun AbilityInputComponent(
     modifier: Modifier = Modifier,
     ability: String,
-    onUpdateAbility: (String) -> Unit
+    onUpdateAbility: (String) -> Unit,
+    specialtyTextLimit: Int
 ) {
     LeftTitleTextField(
         modifier = modifier,
@@ -19,6 +20,7 @@ fun AbilityInputComponent(
         placeholder = stringResource(id = R.string.profile_register_speciality_placeholder),
         isRequired = false,
         text = ability,
-        onValueChanged = onUpdateAbility
+        onValueChanged = onUpdateAbility,
+        textLimit = specialtyTextLimit,
     )
 }
