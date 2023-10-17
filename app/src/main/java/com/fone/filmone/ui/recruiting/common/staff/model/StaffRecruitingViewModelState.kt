@@ -130,6 +130,7 @@ data class StaffRecruitingStep4UiModel(
 
 data class StaffRecruitingStep5UiModel(
     val manager: String = "",
+    val managerTextLimit: Int = 10,
     val email: String = "",
 )
 
