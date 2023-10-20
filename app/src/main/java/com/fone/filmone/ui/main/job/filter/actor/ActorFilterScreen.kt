@@ -357,7 +357,7 @@ private fun FilterComponentTitle(
                     .clip(shape = RoundedCornerShape(100.dp))
                     .background(
                         shape = RoundedCornerShape(100.dp),
-                        color = if (ageRange.start.toInt() == 1 && ageRange.endInclusive.toInt() == 70) FColor.Secondary1 else FColor.Gray300
+                        color = if (ageRange.start.toInt() == 0 && ageRange.endInclusive.toInt() == 70) FColor.Secondary1 else FColor.Gray300
                     )
                     .clickable { onTagClick() }
             ) {
