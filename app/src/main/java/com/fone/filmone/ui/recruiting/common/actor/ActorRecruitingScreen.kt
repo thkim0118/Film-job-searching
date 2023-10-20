@@ -226,6 +226,7 @@ fun ActorRecruitingScreen(
                 Step5Component(
                     manager = uiState.actorRecruitingStep5UiModel.manager,
                     email = uiState.actorRecruitingStep5UiModel.email,
+                    managerTextLimit = uiState.actorRecruitingStep5UiModel.managerTextLimit,
                     focusEvent = focusEvent,
                     onUpdateManager = onUpdateManager,
                     onUpdateEmail = onUpdateEmail,
@@ -732,6 +733,7 @@ private fun Step5Component(
     onUpdateManager: (String) -> Unit,
     onUpdateEmail: (String) -> Unit,
     onRegisterClick: () -> Unit,
+    managerTextLimit: Int,
 ) {
     val managerFocusRequester = remember { FocusRequester() }
     val emailFocusRequester = remember { FocusRequester() }
@@ -763,6 +765,7 @@ private fun Step5Component(
             titleSpace = 13,
             text = manager,
             onValueChanged = onUpdateManager,
+            textLimit = managerTextLimit,
         )
 
         Spacer(modifier = Modifier.height(20.dp))

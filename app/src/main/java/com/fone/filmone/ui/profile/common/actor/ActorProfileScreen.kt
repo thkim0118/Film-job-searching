@@ -157,6 +157,8 @@ fun ActorProfileScreen(
                     ability = uiState.specialty,
                     specialtyTextLimit = uiState.specialtyTextLimit,
                     sns = uiState.sns,
+                    heightTextLimit = uiState.heightTextLimit,
+                    weightTextLimit = uiState.weightTextLimit,
                     onNameChanged = onNameChanged,
                     onUpdateBirthday = onUpdateBirthday,
                     onUpdateGender = onUpdateGender,
@@ -280,6 +282,8 @@ private fun UserInfoInputComponent(
     focusEvent: ActorProfileFocusEvent?,
     nameTextLimit: Int,
     specialtyTextLimit: Int,
+    heightTextLimit: Int,
+    weightTextLimit: Int,
 ) {
     val nameFocusRequester = remember { FocusRequester() }
     val hookingCommentRequester = remember { FocusRequester() }
@@ -339,6 +343,8 @@ private fun UserInfoInputComponent(
         HeightWeightInputComponent(
             height = height,
             weight = weight,
+            heightTextLimit = heightTextLimit,
+            weightTextLimit = weightTextLimit,
             onUpdateHeight = onUpdateHeight,
             onUpdateWeight = onUpdateWeight,
             heightModifier = Modifier.focusRequester(heightRequester),
@@ -378,6 +384,8 @@ private fun HeightWeightInputComponent(
     onUpdateWeight: (String) -> Unit,
     heightModifier: Modifier,
     weightModifier: Modifier,
+    heightTextLimit: Int,
+    weightTextLimit: Int,
 ) {
     val rightComponentTextStyle = fTextStyle(
         fontWeight = FontWeight.W400,
@@ -404,7 +412,8 @@ private fun HeightWeightInputComponent(
             onValueChanged = onUpdateHeight,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
-            )
+            ),
+            textLimit = heightTextLimit,
         )
 
         Spacer(modifier = Modifier.width(34.dp))
@@ -423,7 +432,8 @@ private fun HeightWeightInputComponent(
             onValueChanged = onUpdateWeight,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
-            )
+            ),
+            textLimit = weightTextLimit,
         )
     }
 }

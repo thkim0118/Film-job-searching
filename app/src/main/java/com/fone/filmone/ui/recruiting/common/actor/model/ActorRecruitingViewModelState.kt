@@ -123,6 +123,7 @@ data class ActorRecruitingStep4UiModel(
 
 data class ActorRecruitingStep5UiModel(
     val manager: String = "",
+    val managerTextLimit: Int = 10,
     val email: String = "",
 )
 

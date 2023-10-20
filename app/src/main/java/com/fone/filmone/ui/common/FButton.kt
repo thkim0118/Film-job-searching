@@ -52,7 +52,7 @@ fun FButton(
             .clickableSingle { onClick() },
     ) {
         Text(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .align(Alignment.Center),
             text = title,

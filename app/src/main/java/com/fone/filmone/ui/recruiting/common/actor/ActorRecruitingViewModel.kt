@@ -16,6 +16,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 abstract class ActorRecruitingViewModel : BaseViewModel() {
     abstract val viewModelState: MutableStateFlow<ActorRecruitingViewModelState>
@@ -72,11 +75,28 @@ abstract class ActorRecruitingViewModel : BaseViewModel() {
             return true
         }
 
-        if (step1UiModel.deadlineTagEnable.not() &&
-            (!PatternUtil.isValidDate(step1UiModel.deadlineDate) || step1UiModel.deadlineDate == "상시모집")
-        ) {
-            updateFocusEvent(ActorRecruitingFocusEvent.Deadline)
-            return true
+        if (step1UiModel.deadlineTagEnable.not()) {
+            if (step1UiModel.deadlineDate == "상시모집") {
+                updateFocusEvent(ActorRecruitingFocusEvent.Deadline)
+                return true
+            }
+
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+            try {
+                LocalDate.parse(step1UiModel.deadlineDate, formatter)
+            } catch (e: DateTimeParseException) {
+                updateFocusEvent(ActorRecruitingFocusEvent.Deadline)
+                return true
+            }
+
+            val deadlineDate = LocalDate.parse(step1UiModel.deadlineDate, formatter)
+            val today = LocalDate.now()
+
+            if (deadlineDate <= today) {
+                updateFocusEvent(ActorRecruitingFocusEvent.Deadline)
+                return true
+            }
         }
 
         if (step1UiModel.recruitmentNumber.isEmpty()) {
